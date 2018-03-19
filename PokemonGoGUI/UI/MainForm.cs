@@ -35,7 +35,6 @@ namespace PokemonGoGUI
         private bool _autoupdate = true;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked GoManager Version";
-        private bool _stop = false;
 
         public MainForm()
         {
@@ -262,6 +261,15 @@ namespace PokemonGoGUI
                     if (manager.AccountState == AccountState.Conecting || manager.AccountState == AccountState.HashIssues)
                     {
                         manager.AccountState = AccountState.Good;
+                    }
+
+                    if (String.IsNullOrEmpty(manager.UserSettings.PGPoolEndpoint))
+                    {
+                        manager.UserSettings.PGPoolEndpoint = PGPoolTextBox.Text;
+                    }
+                    else
+                    {
+                        PGPoolTextBox.Text = manager.UserSettings.PGPoolEndpoint;
                     }
 
                     _managers.Add(manager);
@@ -1750,35 +1758,21 @@ namespace PokemonGoGUI
         {
             btnStartAcc.Enabled = false;
             btnStopAcc.Enabled = true;
-            _stop = false;
-            int simultAcc = Convert.ToInt32(numericUpDownSimAcc.Value);
 
-            while (true)
+            while (btnStopAcc.Enabled)
             {
-                var runningCount = 0;
-                foreach (var account in _managers)
-                {
-                    if (account.IsRunning == true)
-                    {
-                        runningCount += 1;
-                    }
-                }
+                var runningCount = _managers.Where(x => x.IsRunning).Count();
+
+                //If up number 5 to 6 this run one more
+
+                int simultAcc = Convert.ToInt32(numericUpDownSimAcc.Value);
 
                 if (runningCount < simultAcc)
                 {
-                    var startAccCount = simultAcc - runningCount;
-
-                    if (startAccCount == 0 || _stop)
-                    {
-                        btnStartAcc.Enabled = true;
-                        btnStopAcc.Enabled = false;
-                        break;
-                    }
-
-                    var hasAccStart = _managers.FirstOrDefault(acc => acc.IsRunning == false &&
+                    var hasAccStart = _managers.FirstOrDefault(acc => !acc.IsRunning &&
                                                                 acc.Level < acc.MaxLevel &&
                                                                 acc.AccountState == AccountState.Good);
-                    if (!(hasAccStart == null))
+                    if (hasAccStart != null)
                     {
                         if (!hasAccStart.IsRunning)
                         {
@@ -1788,19 +1782,28 @@ namespace PokemonGoGUI
                         }
                     }
                 }
+
+                int runState = _managers.Where(x => x.State == BotState.Running).Count();
+
+                if (runState > simultAcc)
+                {
+                    _managers.FirstOrDefault(acc => acc.IsRunning && acc.State == BotState.Running).Stop();
+                }
+
                 await Task.Delay(2000);
             }
+
+            btnStartAcc.Enabled = true;
         }
 
         private void BtnStoptAcc_Click(object sender, EventArgs e)
-        {
-            btnStopAcc.Enabled = false;
-            _stop = true;
-
-            foreach (var manager in _managers)
+        { 
+            foreach (var manager in _managers.Where(x => x.IsRunning))
             {
                 manager.Stop();
             }
+
+            btnStopAcc.Enabled = false;
         }
 
         private void PGPoolEnabled_Click(object sender, EventArgs e)
