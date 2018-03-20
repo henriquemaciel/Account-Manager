@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using PokemonGoGUI.Models.CommandLineUtility;
 
 namespace PokemonGoGUI
 {
@@ -33,9 +34,11 @@ namespace PokemonGoGUI
         private bool _autoupdate = true;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked GoManager Version";
+        private static string[] _args;
 
-        public MainForm()
+        public MainForm(string[] args)
         {
+            _args = args;
             InitializeComponent();
 
             fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
@@ -143,6 +146,26 @@ namespace PokemonGoGUI
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
+            if (_args.Count() > 0)
+            {
+                // Command line parsing
+                var commandLine = new Arguments(_args);
+                // Look for specific arguments values
+                if (commandLine["import"] != null && commandLine["import"].Length > 0)
+                {
+                    //Open file commandLine["import"]
+                    //
+                }
+                if (commandLine["config"] != null && commandLine["config"].Length > 0)
+                {
+                    //Open file commandLine["config"]
+                    //
+                }
+            }
+            //else 
+            // 
+
+            //
             await LoadSettings();
 
             if (_autoupdate)
@@ -237,15 +260,12 @@ namespace PokemonGoGUI
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 _autoupdate = model.AutoUpdate;
-                PGPoolTextBox.Text = !String.IsNullOrEmpty(model.PGPoolEndpoint) ? model.PGPoolEndpoint : PGPoolTextBox.Text;
-                PGPoolEnabled.Checked = model.EnablePGPool;
 
                 foreach (Manager manager in tempManagers)
                 {
                     manager.AddSchedulerEvent();
                     manager.ProxyHandler = _proxyHandler;
                     manager.OnLog += Manager_OnLog;
-                    manager.ManagerExportModel = model;
 
                     //Patch for version upgrade
                     if (String.IsNullOrEmpty(manager.UserSettings.DeviceId))
@@ -301,8 +321,6 @@ namespace PokemonGoGUI
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup,
                     AutoUpdate = _autoupdate,
-                    PGPoolEndpoint = PGPoolTextBox.Text,
-                    EnablePGPool = PGPoolEnabled.Checked
                 };
 
                 string data = Serializer.ToJson(model);
@@ -790,7 +808,6 @@ namespace PokemonGoGUI
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.RemoveProxy();
-
                 manager.UserSettings.ProxyIP = null;
                 manager.UserSettings.ProxyPort = 0;
                 manager.UserSettings.ProxyUsername = null;
@@ -812,7 +829,6 @@ namespace PokemonGoGUI
 
             if (isChecked)
             {
-
                 fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewMain.ForeColor = Color.LightGray;
 
@@ -824,7 +840,6 @@ namespace PokemonGoGUI
 
                 fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewHashKeys.ForeColor = Color.LightGray;
-
             }
             else
             {
@@ -834,13 +849,11 @@ namespace PokemonGoGUI
                 fastObjectListViewProxies.BackColor = SystemColors.Window;
                 fastObjectListViewProxies.ForeColor = SystemColors.WindowText;
 
-
                 fastObjectListViewScheduler.BackColor = SystemColors.Window;
                 fastObjectListViewScheduler.ForeColor = SystemColors.WindowText;
 
                 fastObjectListViewHashKeys.BackColor = SystemColors.Window;
                 fastObjectListViewHashKeys.ForeColor = SystemColors.WindowText;
-
             }
         }
 
@@ -872,7 +885,7 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnExpPerHour)
             {
-                int ExpPerHour = manager.ExpPerHour; // Convert.ToDouble(olvColumnExpPerHour.GetValue(manager));
+                int ExpPerHour = manager.ExpPerHour;
 
                 if (ExpPerHour >= 80000)
                 {
@@ -1799,17 +1812,6 @@ namespace PokemonGoGUI
             btnStopAcc.Enabled = false;
         }
 
-        private void PGPoolEnabled_Click(object sender, EventArgs e)
-        {
-            // Toggle the item
-            PGPoolEnabled.Checked = !PGPoolEnabled.Checked;
-
-            foreach (var m in _managers)
-            {
-                m.ManagerExportModel.EnablePGPool = PGPoolEnabled.Checked;
-            }
-        }
-
         private void PictureBoxAbout_Click(object sender, EventArgs e)
         {
             Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SNATC29B4ZJD4");
@@ -2606,14 +2608,6 @@ namespace PokemonGoGUI
             catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
-            }
-        }
-
-        private void PGPoolTextBox_TextChanged(object sender, EventArgs e)
-        {
-            foreach (var m in _managers)
-            {
-                m.ManagerExportModel.PGPoolEndpoint = PGPoolTextBox.Text;
             }
         }
         #endregion
