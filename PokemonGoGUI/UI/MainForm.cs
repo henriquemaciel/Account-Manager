@@ -1911,7 +1911,11 @@ namespace PokemonGoGUI
         private async void BtnStartAcc_Click(object sender, EventArgs e)
         {
             btnStartAcc.Enabled = false;
+            checkBoxBulkOnly.Enabled = false;
+            numericUpDownStartEveryHours.Enabled = false;
             btnStopAcc.Enabled = true;
+
+            DateTime startNewHour = DateTime.Now.AddHours(Double.Parse(numericUpDownStartEveryHours.Text));
 
             //Close pause and run async..
             await Task.Run(() =>
@@ -1921,7 +1925,8 @@ namespace PokemonGoGUI
                     var runningCount = _managers.Where(x => x.IsRunning).Count();
                     int simultAcc = Convert.ToInt32(numericUpDownSimAcc.Value);
 
-                    if (runningCount < simultAcc)
+                    //Needs optimization
+                    if (runningCount < simultAcc && startNewHour < DateTime.Now && !checkBoxBulkOnly.Checked)
                     {
                         var hasAccStart = _managers.FirstOrDefault(acc => !acc.IsRunning &&
                                                                     acc.Level < acc.MaxLevel &&
@@ -1936,8 +1941,26 @@ namespace PokemonGoGUI
                             }
                         }
                     }
+                    else if (runningCount == 0 && startNewHour < DateTime.Now && checkBoxBulkOnly.Checked)
+                    {
+                        for (var i=0; i < simultAcc; i++)
+                        {
+                            var hasAccStart = _managers.FirstOrDefault(acc => !acc.IsRunning &&
+                                                                    acc.Level < acc.MaxLevel &&
+                                                                    acc.AccountState == AccountState.Good);
+                            if (hasAccStart != null)
+                            {
+                                if (!hasAccStart.IsRunning)
+                                {
+                                    hasAccStart.UserSettings.HashKeys = _hashKeys.Select(x => x.Key).ToList();
+                                    hasAccStart.UserSettings.SPF = _spf;
+                                    hasAccStart.Start();
+                                }
+                            }
+                        }
+                    }
 
-                    int runState = _managers.Where(x => x.State == BotState.Running).Count();
+                        int runState = _managers.Where(x => x.State == BotState.Running).Count();
 
                     if (runState > simultAcc)
                     {
@@ -1964,6 +1987,8 @@ namespace PokemonGoGUI
             }
 
             btnStopAcc.Enabled = false;
+            checkBoxBulkOnly.Enabled = true;
+            numericUpDownStartEveryHours.Enabled = true;
             btnStartAcc.Enabled = true;
         }
 
