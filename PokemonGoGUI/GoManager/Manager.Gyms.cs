@@ -13,6 +13,7 @@ using PokemonGoGUI.Extensions;
 using POGOProtos.Data.Battle;
 using PokemonGoGUI.Enums;
 using POGOProtos.Enums;
+using Google.Protobuf.Collections;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -267,7 +268,7 @@ namespace PokemonGoGUI.GoManager
             return new MethodResult<StartRaidBattleResponse>();
         }
 
-        private async Task<MethodResult<AttackRaidBattleResponse>> AttackRaidBattle(FortData gym, long raidSeed, ulong[] attackingpokemonids, int[] lobbyids)
+        private async Task<MethodResult<AttackRaidBattleResponse>> AttackRaidBattle(FortData gym, RepeatedField<BattleAction> attackeractions, string battleid, BattleAction lastbattleAction, long timestampms)
         {
             if (!_client.LoggedIn)
             {
@@ -285,11 +286,10 @@ namespace PokemonGoGUI.GoManager
                 RequestMessage = new AttackRaidBattleMessage
                 {
                     GymId = gym.Id,
-                    PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                    PlayerLngDegrees = _client.ClientSession.Player.Longitude,
-                    RaidSeed = raidSeed,
-                    AttackingPokemonId = { attackingpokemonids },
-                    LobbyId = { lobbyids }
+                    AttackerActions = { attackeractions },
+                    BattleId = battleid,
+                    LastRetrievedAction = lastbattleAction,
+                    TimestampMs = timestampms
                 }.ToByteString()
             });
 
@@ -350,7 +350,9 @@ namespace PokemonGoGUI.GoManager
                 {
                     GymId = gym.Id,
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                    PlayerLngDegrees = _client.ClientSession.Player.Longitude,
+                    PlayerLngDegrees = _client.ClientSession.Player.Longitude, 
+                    GymLatDegrees = gym.Latitude,
+                    GymLngDegrees = gym.Longitude,
                     Private = _private,
                     RaidSeed = raidSeed,
                     LobbyId = { lobbyids }
@@ -628,7 +630,7 @@ namespace PokemonGoGUI.GoManager
                     ItemId = itemId,
                     GymId = gym.Id,
                     PlayerLatitude = _client.ClientSession.Player.Latitude,
-                    PlayerLongitude = _client.ClientSession.Player.Longitude,
+                    PlayerLongitude = _client.ClientSession.Player.Longitude
                 }.ToByteString()
             });
 
@@ -681,7 +683,7 @@ namespace PokemonGoGUI.GoManager
                     DefendingPokemonId = defendingPokemonId,
                     AttackingPokemonId = { attackingPokemonIds },
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                    PlayerLngDegrees = _client.ClientSession.Player.Longitude,
+                    PlayerLngDegrees = _client.ClientSession.Player.Longitude
                 }.ToByteString()
             });
 
@@ -775,7 +777,7 @@ namespace PokemonGoGUI.GoManager
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
                     PlayerLngDegrees = _client.ClientSession.Player.Longitude,
                     TimestampMs = timestampMs,
-                    AttackActions = { battleActions }
+                    AttackerActions = { battleActions }
                 }.ToByteString()
             });
 
