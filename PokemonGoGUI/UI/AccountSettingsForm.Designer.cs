@@ -299,7 +299,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.EnableShuffleCaptcha = new System.Windows.Forms.CheckBox();
             this.label63 = new System.Windows.Forms.Label();
             this.ShuffleAPIKey = new System.Windows.Forms.TextBox();
@@ -2288,7 +2287,6 @@
             // 
             // ShuffleADSGroupBox
             // 
-            this.ShuffleADSGroupBox.Controls.Add(this.checkBox1);
             this.ShuffleADSGroupBox.Controls.Add(this.ShuffleADSStartAfterGet);
             this.ShuffleADSGroupBox.Controls.Add(this.ShuffleADSGetNewPTC);
             this.ShuffleADSGroupBox.Controls.Add(this.ShuffleADSAPITextBox);
@@ -3411,16 +3409,6 @@
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(220, 39);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(118, 17);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Start after receiving";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // EnableShuffleCaptcha
             // 
             this.EnableShuffleCaptcha.AutoSize = true;
@@ -3888,7 +3876,6 @@
         private System.Windows.Forms.TextBox ShuffleADSAPITextBox;
         private System.Windows.Forms.Label ShuffleADSAPLabel;
         private System.Windows.Forms.CheckBox enableShuffleADSCheckBox;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox ShuffleAPIKey;
         private System.Windows.Forms.Label label63;
         private System.Windows.Forms.CheckBox EnableShuffleCaptcha;
