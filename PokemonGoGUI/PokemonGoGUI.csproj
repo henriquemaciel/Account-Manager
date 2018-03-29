@@ -171,6 +171,7 @@
     <Compile Include="Captcha\Anti-Captcha\HttpHelper.cs" />
     <Compile Include="Captcha\CaptchaManager.cs" />
     <Compile Include="Captcha\CaptchaSolutionClient.cs" />
+    <Compile Include="Captcha\ShuffleCaptchaClient.cs" />
     <Compile Include="Captcha\TwoCaptchaClient.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Enums\AccountState.cs" />
