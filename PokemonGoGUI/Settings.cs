@@ -157,6 +157,10 @@ namespace PokemonGoGUI
             }
         }
 
+        //Shuffle Captcha
+        public string ShuffleCaptcha_API { get; set; }
+        public bool ShuffleCaptcha_Enable { get; set; }
+
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy
@@ -275,6 +279,10 @@ namespace PokemonGoGUI
             ShuffleADS_Enable = false;
             ShuffleADS_GetNewPTC = false;
             ShuffleADS_StartAfterGet = false;
+
+            //Shuffle Captcha
+            ShuffleCaptcha_Enable = false;
+            ShuffleCaptcha_API = String.Empty;
         }
 
         public void LoadCatchSettings()

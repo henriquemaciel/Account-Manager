@@ -235,6 +235,7 @@ namespace PokemonGoGUI.UI
             DisplayOnTop.Checked = settings.DisplayOnTop;
             Enable2Captcha.Checked = settings.Enable2Captcha;
             EnableAntiCaptcha.Checked = settings.EnableAntiCaptcha;
+            EnableShuffleCaptcha.Checked = settings.ShuffleCaptcha_Enable;
             AntiCaptchaAPIKey.Text = settings.AntiCaptchaAPIKey;
             ProxyHostCaptcha.Text = settings.ProxyHostCaptcha;
             ProxyPortCaptcha.Text = settings.ProxyPortCaptcha.ToString();
@@ -244,6 +245,7 @@ namespace PokemonGoGUI.UI
             AutoCaptchaTimeout.Text = settings.AutoCaptchaTimeout.ToString();
             AutoCaptchaRetries.Text = settings.AutoCaptchaRetries.ToString();
             TwoCaptchaAPIKey.Text = settings.TwoCaptchaAPIKey;
+            ShuffleAPIKey.Text = settings.ShuffleCaptcha_API;
             checkBoxAutoFavShiny.Checked = settings.AutoFavoritShiny;
             checkBoxSniperNoInPokedex.Checked = settings.SnipeAllPokemonsNoInPokedex;
             checkBoxTooBalls.Checked = settings.IgnoreStopsIfTooBalls;
@@ -543,6 +545,8 @@ namespace PokemonGoGUI.UI
             userSettings.DisplayOnTop = DisplayOnTop.Checked;
             userSettings.Enable2Captcha = Enable2Captcha.Checked;
             userSettings.EnableAntiCaptcha = EnableAntiCaptcha.Checked;
+            userSettings.ShuffleCaptcha_Enable = EnableShuffleCaptcha.Checked;
+            userSettings.ShuffleCaptcha_API = ShuffleAPIKey.Text;
             userSettings.AntiCaptchaAPIKey = AntiCaptchaAPIKey.Text;
             userSettings.ProxyHostCaptcha = ProxyHostCaptcha.Text;
             int proxyPortCaptcha;

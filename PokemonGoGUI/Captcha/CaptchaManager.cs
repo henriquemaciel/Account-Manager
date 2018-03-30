@@ -59,6 +59,20 @@ namespace PokemonGoGUI.Captcha
                     }
                 }
 
+                //use Shuffle Captcha
+                if (!Resolved && client.ClientManager.UserSettings.ShuffleCaptcha_Enable &&
+                    !string.IsNullOrEmpty(client.ClientManager.UserSettings.ShuffleCaptcha_API))
+                {
+                    if (string.IsNullOrEmpty(captchaUrl)) return true;
+
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using Shuffle Captcha service", LoggerTypes.Captcha));
+                    captchaResponse = await GetCaptchaResponseByShuffleCaptcha(client, captchaUrl);
+                    if (!string.IsNullOrEmpty(captchaResponse))
+                    {
+                        Resolved = await Resolve(client, captchaResponse);
+                    }
+                }
+
                 if (!Resolved && client.ClientManager.UserSettings.EnableAntiCaptcha && !string.IsNullOrEmpty(client.ClientManager.UserSettings.AntiCaptchaAPIKey))
                 {
                     if (string.IsNullOrEmpty(captchaUrl)) return true;
@@ -199,6 +213,27 @@ namespace PokemonGoGUI.Captcha
             if (solved)
             {
                 client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by 2Captcha ", LoggerTypes.Success));
+                return result;
+            }
+            return String.Empty;
+        }
+
+        private async Task<string> GetCaptchaResponseByShuffleCaptcha(Client client, string captchaUrl)
+        {
+            bool solved = false;
+            int retries = client.ClientManager.UserSettings.AutoCaptchaRetries;
+            string result = null;
+
+            while (retries-- > 0 && !solved)
+            {
+                ShuffleCaptchaClient _client = new ShuffleCaptchaClient(client.ClientManager.UserSettings.ShuffleCaptcha_API);
+
+                result = await _client.SolveRecaptchaV2(client, POKEMON_GO_GOOGLE_KEY, captchaUrl);
+                solved = !string.IsNullOrEmpty(result);
+            }
+            if (solved)
+            {
+                client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by ShuffleCaptcha ", LoggerTypes.Success));
                 return result;
             }
             return String.Empty;
