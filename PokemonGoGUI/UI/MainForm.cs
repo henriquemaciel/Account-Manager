@@ -149,6 +149,7 @@ namespace PokemonGoGUI
                 if (commandLine["?"] == null || commandLine["help"] == null)
                 {
                     MessageBox.Show("Help wanted! used /? or /help or -? --help", "Information");
+                    Environment.Exit(0);
                     //
                 }
                 if (commandLine["import"] != null && commandLine["import"].Length > 0)
