@@ -780,7 +780,7 @@ namespace PokemonGoGUI
                 DialogResult dialogResult = f.ShowDialog();
                 if (dialogResult == DialogResult.OK)
                 {
-                    string api = f.api;
+                    string api = f.Api;
                     int amount = f.amount;
                     f.Dispose();
                     List<string> accounts = await ShuffleADSImportAccounts(api, amount);

@@ -38,43 +38,46 @@
             // APILabel
             // 
             this.APILabel.AutoSize = true;
-            this.APILabel.Location = new System.Drawing.Point(37, 21);
-            this.APILabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.APILabel.Location = new System.Drawing.Point(49, 26);
             this.APILabel.Name = "APILabel";
-            this.APILabel.Size = new System.Drawing.Size(30, 13);
+            this.APILabel.Size = new System.Drawing.Size(37, 17);
             this.APILabel.TabIndex = 3;
             this.APILabel.Text = "API: ";
             this.APILabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // APITextBox
             // 
-            this.APITextBox.Location = new System.Drawing.Point(72, 18);
+            this.APITextBox.Location = new System.Drawing.Point(96, 22);
+            this.APITextBox.Margin = new System.Windows.Forms.Padding(4);
             this.APITextBox.Name = "APITextBox";
-            this.APITextBox.Size = new System.Drawing.Size(193, 20);
+            this.APITextBox.Size = new System.Drawing.Size(256, 22);
             this.APITextBox.TabIndex = 4;
             // 
             // AmountLabel
             // 
             this.AmountLabel.AutoSize = true;
-            this.AmountLabel.Location = new System.Drawing.Point(72, 53);
+            this.AmountLabel.Location = new System.Drawing.Point(96, 65);
+            this.AmountLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.AmountLabel.Name = "AmountLabel";
-            this.AmountLabel.Size = new System.Drawing.Size(90, 13);
+            this.AmountLabel.Size = new System.Drawing.Size(119, 17);
             this.AmountLabel.TabIndex = 5;
             this.AmountLabel.Text = "Amount to Import:";
             // 
             // AmountTextBox
             // 
-            this.AmountTextBox.Location = new System.Drawing.Point(168, 50);
+            this.AmountTextBox.Location = new System.Drawing.Point(224, 62);
+            this.AmountTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.AmountTextBox.Name = "AmountTextBox";
-            this.AmountTextBox.Size = new System.Drawing.Size(63, 20);
+            this.AmountTextBox.Size = new System.Drawing.Size(83, 22);
             this.AmountTextBox.TabIndex = 6;
             this.AmountTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AmountTextBox_KeyPress);
             // 
             // ImportButton
             // 
-            this.ImportButton.Location = new System.Drawing.Point(114, 82);
+            this.ImportButton.Location = new System.Drawing.Point(152, 101);
+            this.ImportButton.Margin = new System.Windows.Forms.Padding(4);
             this.ImportButton.Name = "ImportButton";
-            this.ImportButton.Size = new System.Drawing.Size(75, 23);
+            this.ImportButton.Size = new System.Drawing.Size(100, 28);
             this.ImportButton.TabIndex = 7;
             this.ImportButton.Text = "Import";
             this.ImportButton.UseVisualStyleBackColor = true;
@@ -82,14 +85,16 @@
             // 
             // ShuffleADS_ImportForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(302, 118);
+            this.ClientSize = new System.Drawing.Size(403, 145);
             this.Controls.Add(this.ImportButton);
             this.Controls.Add(this.AmountTextBox);
             this.Controls.Add(this.AmountLabel);
             this.Controls.Add(this.APITextBox);
             this.Controls.Add(this.APILabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "ShuffleADS_ImportForm";
             this.Text = "Import Accounts from ShuffleADS";

@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PokemonGoGUI.UI.PluginUI.ShuffleADS
 {
     public partial class ShuffleADS_ImportForm : Form
     {
-        public string api { get; set; }
+        public string Api { get; set; }
         public int amount = 0;
 
         public ShuffleADS_ImportForm()
@@ -26,7 +19,7 @@ namespace PokemonGoGUI.UI.PluginUI.ShuffleADS
             {
                 MessageBox.Show("Please enter amount to import", "Warning");
             }
-            api = APITextBox.Text.Trim();
+            Api = APITextBox.Text.Trim();
             Close();
             DialogResult = DialogResult.OK;
         }
