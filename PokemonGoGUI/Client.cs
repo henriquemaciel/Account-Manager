@@ -45,8 +45,8 @@ namespace PokemonGoGUI
 
         public Client()
         {
-            VersionStr = new Version("0.91.2");
-            AppVersion = 9100;
+            VersionStr = new Version("0.97.2");
+            AppVersion = 9701;
             RessourcesFolder = $"data/{VersionStr.ToString()}/";
         }
 
@@ -128,7 +128,6 @@ namespace PokemonGoGUI
                             }
                             else
                             {
-                                //Need valid keys but this send all
                                 Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.HashKeys.ToArray());
                             }
                         }
