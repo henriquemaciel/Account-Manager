@@ -308,7 +308,7 @@ namespace DraconiusGoGUI.UI
                 return false;
             }
 
-            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ? Enums.AuthType.GOOGLE : Enums.AuthType.DEVICE;
+            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ? AuthType.GOOGLE : AuthType.DEVICE;
 
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();

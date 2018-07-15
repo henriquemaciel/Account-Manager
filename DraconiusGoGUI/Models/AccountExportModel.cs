@@ -2,6 +2,7 @@
 using DraconiusGoGUI.Enums;
 using System;
 using System.Collections.Generic;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.Models
 {

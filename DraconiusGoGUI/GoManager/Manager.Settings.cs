@@ -306,24 +306,7 @@ namespace DraconiusGoGUI.DracoManager
                     userSettings.AccountName = String.Empty;
                     userSettings.Password = String.Empty;
                     userSettings.Username = String.Empty;
-                    userSettings.HashKeys = new List<string>();
-                    userSettings.TwoCaptchaAPIKey = String.Empty;
-                    UserSettings.ShuffleCaptcha_API = string.Empty;
-                    userSettings.CaptchaSolutionAPIKey = String.Empty;
-                    userSettings.CaptchaSolutionsSecretKey = String.Empty;
-                    userSettings.AntiCaptchaAPIKey = String.Empty;
-                    userSettings.AllowManualCaptchaResolve = true;
-                    userSettings.Enable2Captcha = false;
-                    UserSettings.ShuffleCaptcha_Enable = false;
-                    userSettings.EnableCaptchaSolutions = false;
-                    userSettings.EnableAntiCaptcha = false;
                     userSettings.AutoFavoritShiny = true;
-
-                    //ShuffleADS
-                    userSettings.ShuffleADS_API = String.Empty;
-                    userSettings.ShuffleADS_Enable = false;
-                    userSettings.ShuffleADS_GetNewPTC = false;
-                    userSettings.ShuffleADS_StartAfterGet = false;
 
                     // gyms
                     userSettings.DefaultTeam = "Neutral";

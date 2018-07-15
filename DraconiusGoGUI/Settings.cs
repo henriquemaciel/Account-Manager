@@ -6,17 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI
 {
     [Serializable]
     public class Settings
     {
-        public List<string> HashKeys { get; set; }
-        public bool UseOnlyOneKey { get; set; }
-        public string AuthAPIKey { get; set; }
-        public Uri HashHost { get; set; }
-        public string HashEndpoint { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Altitude { get; set; }
@@ -33,21 +29,6 @@ namespace DraconiusGoGUI
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
 
-        public bool AllowManualCaptchaResolve { get; set; }
-        public int ManualCaptchaTimeout { get; set; }
-        public bool PlaySoundOnCaptcha { get; set; }
-        public bool DisplayOnTop { get; set; }
-        public bool Enable2Captcha { get; set; }
-        public bool EnableAntiCaptcha { get; set; }
-        public string AntiCaptchaAPIKey { get; set; }
-        public string ProxyHostCaptcha { get; set; }
-        public int ProxyPortCaptcha { get; set; }
-        public bool EnableCaptchaSolutions { get; set; }
-        public string CaptchaSolutionAPIKey { get; set; }
-        public string CaptchaSolutionsSecretKey { get; set; }
-        public int AutoCaptchaTimeout { get; set; }
-        public int AutoCaptchaRetries { get; set; }
-        public string TwoCaptchaAPIKey { get; set; }
 
         public bool AutoFavoritShiny { get; set; }
         public bool UseIncense { get; set; }
@@ -140,23 +121,6 @@ namespace DraconiusGoGUI
         public string PGPoolEndpoint { get; set; }
         public bool EnablePGPool { get; set; }
 
-        //Shuffle ADS
-        public bool ShuffleADS_Enable { get; set; }
-        public string ShuffleADS_API { get; set; }
-        public bool ShuffleADS_GetNewPTC { get; set; }
-        public bool ShuffleADS_StartAfterGet { get; set; }
-        public string ShuffleADS_AddEndpoint { get { return "https://api.shuffletanker.com/api/v2/Account/AddAccount/"; } }
-        public string ShuffleADS_GetEndpint
-        {
-            get
-            {
-                return String.Format("https://api.shuffletanker.com/api/v2/Account/GetAccounts/{0}/1/0/17520/1?platform=5", ShuffleADS_API);
-            }
-        }
-
-        //Shuffle Captcha
-        public string ShuffleCaptcha_API { get; set; }
-        public bool ShuffleCaptcha_Enable { get; set; }
 
         public AccountState StopAtMinAccountState { get; set; }
 
@@ -225,9 +189,6 @@ namespace DraconiusGoGUI
             PercTransPoke = 40;
             StopOnAPIUpdate = true;
             SpinGyms = false;
-            HashHost = new Uri("https://pokehash.buddyauth.com/");
-            HashEndpoint = "api/v159_1/hash";
-            AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";
             Latitude = 40.764665;
             Longitude = -73.973184;
             Country = "US";
@@ -236,16 +197,6 @@ namespace DraconiusGoGUI
             POSIX = "en-us";
             DisableCatchDelay = 3;
             DownloadResources = false;
-            AllowManualCaptchaResolve = true;
-            ManualCaptchaTimeout = 160;
-            PlaySoundOnCaptcha = true;
-            DisplayOnTop = true;
-            Enable2Captcha = false;
-            EnableAntiCaptcha = false;
-            ProxyPortCaptcha = 3128;
-            EnableCaptchaSolutions = false;
-            AutoCaptchaTimeout = 120;
-            AutoCaptchaRetries = 3;
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
@@ -270,16 +221,6 @@ namespace DraconiusGoGUI
             IgnoreRPCSemafore = false;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";
-
-            //ShuffleADS
-            ShuffleADS_API = String.Empty;
-            ShuffleADS_Enable = false;
-            ShuffleADS_GetNewPTC = false;
-            ShuffleADS_StartAfterGet = false;
-
-            //Shuffle Captcha
-            ShuffleCaptcha_Enable = false;
-            ShuffleCaptcha_API = String.Empty;
         }
 
         public void LoadCatchSettings()

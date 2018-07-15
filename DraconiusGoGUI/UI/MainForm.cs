@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using DraconiusGoGUI.Models.CommandLineUtility;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI
 {
@@ -28,7 +29,6 @@ namespace DraconiusGoGUI
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
-        private List<HashKey> _hashKeys = new List<HashKey>();
         private bool _spf = false;
         private bool _showStartup = true;
         private bool _autoupdate = true;
@@ -305,7 +305,6 @@ namespace DraconiusGoGUI
                     Managers = _managers,
                     ProxyHandler = _proxyHandler,
                     Schedulers = _schedulers,
-                    HashKeys = _hashKeys,
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup,
                     AutoUpdate = _autoupdate,
@@ -472,7 +471,6 @@ namespace DraconiusGoGUI
 
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.HashKeys = _hashKeys.Select(x => x.Key).ToList();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
@@ -1184,21 +1182,6 @@ namespace DraconiusGoGUI
             }
         }
 
-        private async void exportToShuffleADSToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            startToolStripMenuItem.Enabled = false;
-
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                await manager.ExportToShuffleADS();
-                await Task.Delay(200);
-            }
-
-            startToolStripMenuItem.Enabled = true;
-
-            fastObjectListViewMain.RefreshSelectedObjects();
-        }
-
         private void ExportProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (fastObjectListViewMain.SelectedObjects.Count == 0)
@@ -1747,7 +1730,6 @@ namespace DraconiusGoGUI
                         {
                             if (!hasAccStart.IsRunning)
                             {
-                                hasAccStart.UserSettings.HashKeys = _hashKeys.Select(x => x.Key).ToList();
                                 hasAccStart.UserSettings.SPF = _spf;
                                 hasAccStart.Start();
                             }
@@ -1764,7 +1746,6 @@ namespace DraconiusGoGUI
                             {
                                 if (!hasAccStart.IsRunning)
                                 {
-                                    hasAccStart.UserSettings.HashKeys = _hashKeys.Select(x => x.Key).ToList();
                                     hasAccStart.UserSettings.SPF = _spf;
                                     hasAccStart.Start();
                                 }
