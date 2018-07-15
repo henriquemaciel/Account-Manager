@@ -11,6 +11,7 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        /*
         private ConcurrentDictionary<string, InventoryItem> InventoryItems = new ConcurrentDictionary<string, InventoryItem>();
 
         private string GetInventoryItemHashKey(InventoryItem item)
@@ -48,10 +49,10 @@ namespace DraconiusGoGUI.DracoManager
                 return "PlayerStats";
 
             if (delta.PokedexEntry != null)
-                return "PokedexEntry." + delta.PokedexEntry.PokemonId;
+                return "PokedexEntry." + delta.PokedexEntry.CreatureId;
 
-            if (delta.PokemonData != null)
-                return GetPokemonHashKey(delta.PokemonData.Id);
+            if (delta.CreatureData != null)
+                return GetCreatureHashKey(delta.CreatureData.Id);
 
             if (delta.Quest != null)
                 return "Quest." + delta.Quest.QuestType;
@@ -62,9 +63,9 @@ namespace DraconiusGoGUI.DracoManager
             throw new Exception("Unexpected inventory error. Could not generate hash code.");
         }
 
-        private string GetPokemonHashKey(ulong id)
+        private string GetCreatureHashKey(ulong id)
         {
-            return "PokemonData." + id;
+            return "CreatureData." + id;
         }
 
         private IEnumerable<AppliedItem> GetAppliedItems()
@@ -110,17 +111,17 @@ namespace DraconiusGoGUI.DracoManager
                     .Where(i => i != null);
         }
 
-        private IEnumerable<PokemonData> GetEggs()
+        private IEnumerable<CreatureData> GetEggs()
         {
-            return InventoryItems.Select(i => i.Value.InventoryItemData?.PokemonData)
+            return InventoryItems.Select(i => i.Value.InventoryItemData?.CreatureData)
                .Where(p => p != null && p.IsEgg);
         }
 
-        private IEnumerable<PokemonData> GetPokemons()
+        private IEnumerable<CreatureData> GetCreatures()
         {
             return InventoryItems
-                .Select(kvp => kvp.Value.InventoryItemData?.PokemonData)
-                .Where(p => p != null && !p.IsEgg && p.PokemonId > 0);
+                .Select(kvp => kvp.Value.InventoryItemData?.CreatureData)
+                .Where(p => p != null && !p.IsEgg && p.CreatureId > 0);
         }
 
         private IEnumerable<Candy> GetCandies()
@@ -134,12 +135,12 @@ namespace DraconiusGoGUI.DracoManager
         {
             return InventoryItems
                 .Select(kvp => kvp.Value.InventoryItemData?.PokedexEntry)
-                .Where(p => p != null && p.PokemonId > 0);
+                .Where(p => p != null && p.CreatureId > 0);
         }
 
-        private PokemonData GetPokemon(ulong pokemonId)
+        private CreatureData GetCreature(ulong CreatureId)
         {
-            return GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+            return GetCreatures().FirstOrDefault(p => p.Id == CreatureId);
         }
 
         private bool RemoveInventoryItem(string key)
@@ -163,26 +164,6 @@ namespace DraconiusGoGUI.DracoManager
             }
         }
 
-        /*
-         * used if call request
-        public void MergeWith(GetHoloInventoryResponse update)
-        {
-            var delta = update.InventoryDelta;
-
-            if (delta?.InventoryItems == null)
-            {
-                return;
-            }
-
-            foreach (var item in delta.InventoryItems)
-            {
-                AddRemoveOrUpdateItem(item);
-            }
-
-            //OnInventoryUpdated?.Invoke();
-        }
-        */
-
         private bool RemoveInventoryItem(InventoryItem item)
         {
             if (item == null)
@@ -199,9 +180,9 @@ namespace DraconiusGoGUI.DracoManager
             if (item.DeletedItem != null)
             {
                 // Items with DeletedItem have a null InventoryItemData and are not added to inventory.
-                // But we still need to remove the pokemon with Id == item.DeletedItem.PokemonId from the inventory.
-                var pokemonToRemoveKey = $"PokemonData.{item.DeletedItem.PokemonId}"; // Manually construct key.
-                RemoveInventoryItem(pokemonToRemoveKey);
+                // But we still need to remove the Creature with Id == item.DeletedItem.CreatureId from the inventory.
+                var CreatureToRemoveKey = $"CreatureData.{item.DeletedItem.CreatureId}"; // Manually construct key.
+                RemoveInventoryItem(CreatureToRemoveKey);
             }
             else
             {
@@ -241,34 +222,34 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     case InventoryRefresh.All:
                         Items.Clear();
-                        Pokemon.Clear();
+                        Creature.Clear();
                         Pokedex.Clear();
-                        PokemonCandy.Clear();
+                        CreatureCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
                         Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
                         Pokedex = GetPokedex().ToList();
-                        PokemonCandy = GetCandies().ToList();
+                        CreatureCandy = GetCandies().ToList();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
-                        Pokemon = GetPokemons().ToList();
+                        Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Items:
                         Items.Clear();
                         Items = GetItemsData().ToList();
                         break;
-                    case InventoryRefresh.Pokemon:
-                        Pokemon.Clear();
-                        Pokemon = GetPokemons().ToList();
+                    case InventoryRefresh.Creature:
+                        Creature.Clear();
+                        Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Pokedex:
                         Pokedex.Clear();
                         Pokedex = GetPokedex().ToList();
                         break;
-                    case InventoryRefresh.PokemonCandy:
-                        PokemonCandy.Clear();
-                        PokemonCandy = GetCandies().ToList();
+                    case InventoryRefresh.CreatureCandy:
+                        CreatureCandy.Clear();
+                        CreatureCandy = GetCandies().ToList();
                         break;
                     case InventoryRefresh.Incubators:
                         Incubators.Clear();
@@ -475,14 +456,15 @@ namespace DraconiusGoGUI.DracoManager
             return (double)Items.Sum(x => x.Count) / PlayerData.MaxItemStorage * 100;
         }
 
-        public double FilledPokemonStorage()
+        public double FilledCreatureStorage()
         {
-            if (Pokemon == null || PlayerData == null)
+            if (Creature == null || PlayerData == null)
             {
                 return 100;
             }
 
-            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
+            return (double)(Creature.Count + Eggs.Count) / PlayerData.MaxCreatureStorage * 100;
         }
+        */
     }
 }

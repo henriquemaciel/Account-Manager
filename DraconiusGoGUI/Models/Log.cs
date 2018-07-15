@@ -54,9 +54,9 @@ namespace DraconiusGoGUI.DracoManager.Models
                     return Color.Yellow;
                 case LoggerTypes.ProxyIssue:
                     return Color.Yellow;
-                case LoggerTypes.PokemonFlee:
+                case LoggerTypes.CreatureFlee:
                     return Color.Salmon;
-                case LoggerTypes.PokemonEscape:
+                case LoggerTypes.CreatureEscape:
                     return Color.DarkGoldenrod;
                 case LoggerTypes.Transfer:
                     return Color.MediumAquamarine;

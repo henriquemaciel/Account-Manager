@@ -151,15 +151,6 @@
     <Compile Include="AccountScheduler\SchedulerLimiter.cs" />
     <Compile Include="AccountScheduler\Tracker.cs" />
     <Compile Include="AccountScheduler\TrackerValues.cs" />
-    <Compile Include="Captcha\Anti-Captcha\AnticaptchaApiWrapper.cs" />
-    <Compile Include="Captcha\Anti-Captcha\AntiCaptchaClient.cs" />
-    <Compile Include="Captcha\Anti-Captcha\AnticaptchaResult.cs" />
-    <Compile Include="Captcha\Anti-Captcha\AnticaptchaTask.cs" />
-    <Compile Include="Captcha\Anti-Captcha\HttpHelper.cs" />
-    <Compile Include="Captcha\CaptchaManager.cs" />
-    <Compile Include="Captcha\CaptchaSolutionClient.cs" />
-    <Compile Include="Captcha\ShuffleCaptchaClient.cs" />
-    <Compile Include="Captcha\TwoCaptchaClient.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Enums\AccountState.cs" />
     <Compile Include="Models\CommandLineUtility.cs" />
@@ -186,7 +177,7 @@
     <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="Extensions\StringUtil.cs" />
     <Compile Include="Extensions\TimeZone.cs" />
-    <Compile Include="GoManager\Manager.CatchPokemon.cs" />
+    <Compile Include="GoManager\Manager.CatchCreature.cs" />
     <Compile Include="GoManager\Manager.Egg.cs" />
     <Compile Include="GoManager\Manager.Evolution.cs" />
     <Compile Include="GoManager\Manager.Fort.cs" />
@@ -230,12 +221,6 @@
     <Compile Include="UI\AutoUpdateForm.designer.cs">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\CaptchaSolveForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\CaptchaSolveForm.designer.cs">
-      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\DetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -258,12 +243,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="UI\PluginUI\ShuffleADS\ShuffleADS_ImportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\PluginUI\ShuffleADS\ShuffleADS_ImportForm.Designer.cs">
-      <DependentUpon>ShuffleADS_ImportForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\SchedulerSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -289,9 +268,6 @@
     <EmbeddedResource Include="UI\AutoUpdateForm.resx">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CaptchaSolveForm.resx">
-      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\DetailsForm.resx">
       <DependentUpon>DetailsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -311,9 +287,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UI\PluginUI\ShuffleADS\ShuffleADS_ImportForm.resx">
-      <DependentUpon>ShuffleADS_ImportForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\SchedulerSettingForm.resx">
       <DependentUpon>SchedulerSettingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -323,7 +296,6 @@
     <EmbeddedResource Include="UI\TransferSettingsForm.resx">
       <DependentUpon>TransferSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="cert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

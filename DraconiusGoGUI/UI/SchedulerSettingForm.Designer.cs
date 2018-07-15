@@ -35,16 +35,16 @@
             this.numericUpDownStartTime = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownEndTime = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.numericUpDownPokemonMin = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownCreatureMin = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.numericUpDownPokemonMax = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownCreatureMax = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.numericUpDownPokestopsMin = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownPokestopsMax = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
-            this.comboBoxPokemonAction = new System.Windows.Forms.ComboBox();
+            this.comboBoxCreatureAction = new System.Windows.Forms.ComboBox();
             this.comboBoxPokestopAction = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBoxMasterAction = new System.Windows.Forms.ComboBox();
@@ -58,8 +58,8 @@
             this.textBoxChosenColor = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEndTime)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonMin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCreatureMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCreatureMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokestopsMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokestopsMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCheckSpeed)).BeginInit();
@@ -125,17 +125,17 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "to";
             // 
-            // numericUpDownPokemonMin
+            // numericUpDownCreatureMin
             // 
-            this.numericUpDownPokemonMin.Location = new System.Drawing.Point(97, 158);
-            this.numericUpDownPokemonMin.Maximum = new decimal(new int[] {
+            this.numericUpDownCreatureMin.Location = new System.Drawing.Point(97, 158);
+            this.numericUpDownCreatureMin.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
-            this.numericUpDownPokemonMin.Name = "numericUpDownPokemonMin";
-            this.numericUpDownPokemonMin.Size = new System.Drawing.Size(75, 22);
-            this.numericUpDownPokemonMin.TabIndex = 5;
+            this.numericUpDownCreatureMin.Name = "numericUpDownCreatureMin";
+            this.numericUpDownCreatureMin.Size = new System.Drawing.Size(75, 22);
+            this.numericUpDownCreatureMin.TabIndex = 5;
             // 
             // label4
             // 
@@ -144,7 +144,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 16);
             this.label4.TabIndex = 2;
-            this.label4.Text = "Pokemon:";
+            this.label4.Text = "Creature:";
             // 
             // label5
             // 
@@ -164,17 +164,17 @@
             this.label6.TabIndex = 2;
             this.label6.Text = "Maximum";
             // 
-            // numericUpDownPokemonMax
+            // numericUpDownCreatureMax
             // 
-            this.numericUpDownPokemonMax.Location = new System.Drawing.Point(198, 158);
-            this.numericUpDownPokemonMax.Maximum = new decimal(new int[] {
+            this.numericUpDownCreatureMax.Location = new System.Drawing.Point(198, 158);
+            this.numericUpDownCreatureMax.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
-            this.numericUpDownPokemonMax.Name = "numericUpDownPokemonMax";
-            this.numericUpDownPokemonMax.Size = new System.Drawing.Size(75, 22);
-            this.numericUpDownPokemonMax.TabIndex = 6;
+            this.numericUpDownCreatureMax.Name = "numericUpDownCreatureMax";
+            this.numericUpDownCreatureMax.Size = new System.Drawing.Size(75, 22);
+            this.numericUpDownCreatureMax.TabIndex = 6;
             // 
             // label7
             // 
@@ -218,13 +218,13 @@
             this.label8.TabIndex = 5;
             this.label8.Text = "Action";
             // 
-            // comboBoxPokemonAction
+            // comboBoxCreatureAction
             // 
-            this.comboBoxPokemonAction.FormattingEnabled = true;
-            this.comboBoxPokemonAction.Location = new System.Drawing.Point(299, 157);
-            this.comboBoxPokemonAction.Name = "comboBoxPokemonAction";
-            this.comboBoxPokemonAction.Size = new System.Drawing.Size(121, 24);
-            this.comboBoxPokemonAction.TabIndex = 7;
+            this.comboBoxCreatureAction.FormattingEnabled = true;
+            this.comboBoxCreatureAction.Location = new System.Drawing.Point(299, 157);
+            this.comboBoxCreatureAction.Name = "comboBoxCreatureAction";
+            this.comboBoxCreatureAction.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxCreatureAction.TabIndex = 7;
             // 
             // comboBoxPokestopAction
             // 
@@ -337,12 +337,12 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.comboBoxMasterAction);
             this.Controls.Add(this.comboBoxPokestopAction);
-            this.Controls.Add(this.comboBoxPokemonAction);
+            this.Controls.Add(this.comboBoxCreatureAction);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.numericUpDownPokestopsMax);
             this.Controls.Add(this.numericUpDownPokestopsMin);
-            this.Controls.Add(this.numericUpDownPokemonMax);
-            this.Controls.Add(this.numericUpDownPokemonMin);
+            this.Controls.Add(this.numericUpDownCreatureMax);
+            this.Controls.Add(this.numericUpDownCreatureMin);
             this.Controls.Add(this.numericUpDownEndTime);
             this.Controls.Add(this.numericUpDownCheckSpeed);
             this.Controls.Add(this.numericUpDownStartTime);
@@ -361,8 +361,8 @@
             this.Load += new System.EventHandler(this.SchedulerSettingForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEndTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonMin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCreatureMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCreatureMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokestopsMin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokestopsMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCheckSpeed)).EndInit();
@@ -379,16 +379,16 @@
         private System.Windows.Forms.NumericUpDown numericUpDownStartTime;
         private System.Windows.Forms.NumericUpDown numericUpDownEndTime;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown numericUpDownPokemonMin;
+        private System.Windows.Forms.NumericUpDown numericUpDownCreatureMin;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown numericUpDownPokemonMax;
+        private System.Windows.Forms.NumericUpDown numericUpDownCreatureMax;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numericUpDownPokestopsMin;
         private System.Windows.Forms.NumericUpDown numericUpDownPokestopsMax;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox comboBoxPokemonAction;
+        private System.Windows.Forms.ComboBox comboBoxCreatureAction;
         private System.Windows.Forms.ComboBox comboBoxPokestopAction;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxMasterAction;

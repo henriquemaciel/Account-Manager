@@ -71,9 +71,9 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(372, 85);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Welcome to Account Manager! \r\nRight Clicking on the next window will help you get" +
-    " started.\r\n\r\nIf you require any additional help, \r\nyou can always ask questions " +
-    "in our Discord chat.";
+            this.label1.Text = "Welcome to Account Manager (DraconiusGo)! \r\nRight Clicking on the next window wil" +
+    "l help you get started.\r\n\r\nIf you require any additional help, \r\nyou can always " +
+    "ask questions in our Discord chat.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2

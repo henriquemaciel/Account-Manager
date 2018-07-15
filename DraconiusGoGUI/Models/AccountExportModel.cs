@@ -19,8 +19,8 @@ namespace DraconiusGoGUI.Models
         public List<PokedexEntryExportModel> Pokedex { get; set; }
         [JsonProperty("items")]
         public List<ItemDataExportModel> Items { get; set; }
-        [JsonProperty("pokemon")]
-        public List<PokemonDataExportModel> Pokemon { get; set; }
+        [JsonProperty("Creature")]
+        public List<CreatureDataExportModel> Creature { get; set; }
         [JsonProperty("eggs")]
         public List<EggDataExportModel> Eggs { get; set; }
         [JsonProperty("exportTime")]
@@ -43,13 +43,15 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("timesCaught")]
         public int TimesCaught { get; set; }
 
+        /*
         public PokedexEntryExportModel(PokedexEntry entry)
         {
-            Id = (int)entry.PokemonId;
-            Name = entry.PokemonId.ToString();
+            Id = (int)entry.CreatureId;
+            Name = entry.CreatureId.ToString();
             TimesEncountered = entry.TimesEncountered;
             TimesCaught = entry.TimesCaptured;
         }
+        */
     }
 
     public class ItemDataExportModel
@@ -59,31 +61,35 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("count")]
         public int Count { get; set; }
 
+        /*
         public ItemDataExportModel(ItemData itemData)
         {
             ItemName = itemData.ItemId.ToString().Replace("Item", "");
             Count = itemData.Count;
         }
+        */
     }
 
-    public class PokemonDataExportModel
+    public class CreatureDataExportModel
     {
         [JsonProperty("pokedexEntry")]
         public int PokedexEntry { get; set; }
-        [JsonProperty("pokemonName")]
-        public string PokemonName { get; set; }
+        [JsonProperty("CreatureName")]
+        public string CreatureName { get; set; }
         [JsonProperty("cp")]
         public int CP { get; set; }
         [JsonProperty("iv")]
         public double IV { get; set; }
 
-        public PokemonDataExportModel(PokemonData pokemon, double iv)
+        /*
+        public CreatureDataExportModel(CreatureData Creature, double iv)
         {
-            PokedexEntry = (int)pokemon.PokemonId;
-            PokemonName = pokemon.PokemonId.ToString();
-            CP = pokemon.Cp;
+            PokedexEntry = (int)Creature.CreatureId;
+            CreatureName = Creature.CreatureId.ToString();
+            CP = Creature.Cp;
             IV = iv;
         }
+        */
     }
 
     public class EggDataExportModel
@@ -93,10 +99,12 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("id")]
         public ulong Id { get; set; }
 
-        public EggDataExportModel(PokemonData pokemon)
+        /*
+        public EggDataExportModel(CreatureData Creature)
         {
-            TargetDistance = pokemon.EggKmWalkedTarget;
-            Id = pokemon.Id;
+            TargetDistance = Creature.EggKmWalkedTarget;
+            Id = Creature.Id;
         }
+        */
     }
 }

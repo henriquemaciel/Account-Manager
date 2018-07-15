@@ -9,46 +9,47 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        /*
         private ulong _lastPokeSniperId  = 0;
 
         private bool AlreadySnipped { get; set; } = false;
 
-        private MethodResult<List<NearbyPokemon>> RequestPokeSniperRares()
+        private MethodResult<List<NearbyCreature>> RequestPokeSniperRares()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
-                return new MethodResult<List<NearbyPokemon>>();
+                return new MethodResult<List<NearbyCreature>>();
             }
 
             var cells = _client.ClientSession.Map.Cells;
-            List<NearbyPokemon> newNearbyPokemons = cells.SelectMany(x => x.NearbyPokemons).ToList();
+            List<NearbyCreature> newNearbyCreatures = cells.SelectMany(x => x.NearbyCreatures).ToList();
 
-            if (newNearbyPokemons.Count == 0)
+            if (newNearbyCreatures.Count == 0)
             {
-                return new MethodResult<List<NearbyPokemon>>
+                return new MethodResult<List<NearbyCreature>>
                 {
-                    Message = "No pokemon found"
+                    Message = "No Creature found"
                 };
             }
 
-            return new MethodResult<List<NearbyPokemon>>
+            return new MethodResult<List<NearbyCreature>>
             {
-                Data = newNearbyPokemons,
+                Data = newNearbyCreatures,
                 Success = true
             };
         }
 
-        public async Task<MethodResult> SnipeAllNearyPokemon()
+        public async Task<MethodResult> SnipeAllNearyCreature()
         {
-            if (!UserSettings.CatchPokemon)
+            if (!UserSettings.CatchCreature)
             {
                 return new MethodResult
                 {
-                    Message = "Catching pokemon disabled"
+                    Message = "Catching Creature disabled"
                 };
             }
 
-            MethodResult<List<NearbyPokemon>> pokeSniperResult = RequestPokeSniperRares();
+            MethodResult<List<NearbyCreature>> pokeSniperResult = RequestPokeSniperRares();
 
             if (!pokeSniperResult.Success)
             {
@@ -59,50 +60,50 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             //Priorise snipe...
-            /*if (Tracker.PokemonCaught >= UserSettings.CatchPokemonDayLimit)
+            /*if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit)
             {
-                LogCaller(new LoggerEventArgs("Catch pokemon limit actived", LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs("Catch Creature limit actived", LoggerTypes.Info));
                 return new MethodResult
                 {
                     Message = "Limit actived"
                 };
             }*/
+            /*
+            List<NearbyCreature> CreatureToSnipe = pokeSniperResult.Data.Where(x => x.EncounterId != _lastPokeSniperId && UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.CreatureId).Snipe && x.DistanceInMeters < UserSettings.MaxTravelDistance && !LastedEncountersIds.Contains(x.EncounterId)).OrderBy(x => x.DistanceInMeters).ToList();
 
-            List<NearbyPokemon> pokemonToSnipe = pokeSniperResult.Data.Where(x => x.EncounterId != _lastPokeSniperId && UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.PokemonId).Snipe && x.DistanceInMeters < UserSettings.MaxTravelDistance && !LastedEncountersIds.Contains(x.EncounterId)).OrderBy(x => x.DistanceInMeters).ToList();
-
-            if (UserSettings.SnipeAllPokemonsNoInPokedex)
+            if (UserSettings.SnipeAllCreaturesNoInPokedex)
             {
-                LogCaller(new LoggerEventArgs("Search pokemons no into pokedex ...", LoggerTypes.Info));
-                var ids = Pokedex.Select(x => x.PokemonId);
-                pokemonToSnipe = pokeSniperResult.Data.Where(x => x.EncounterId != _lastPokeSniperId && !ids.Contains(x.PokemonId) && x.DistanceInMeters < UserSettings.MaxTravelDistance && !LastedEncountersIds.Contains(x.EncounterId)).OrderBy(x => x.DistanceInMeters).ToList();
+                LogCaller(new LoggerEventArgs("Search Creatures no into pokedex ...", LoggerTypes.Info));
+                var ids = Pokedex.Select(x => x.CreatureId);
+                CreatureToSnipe = pokeSniperResult.Data.Where(x => x.EncounterId != _lastPokeSniperId && !ids.Contains(x.CreatureId) && x.DistanceInMeters < UserSettings.MaxTravelDistance && !LastedEncountersIds.Contains(x.EncounterId)).OrderBy(x => x.DistanceInMeters).ToList();
             }
 
-            if (pokemonToSnipe.Count == 0)
+            if (CreatureToSnipe.Count == 0)
             {
                 return new MethodResult
                 {
-                    Message = "No catchable pokemon found"
+                    Message = "No catchable Creature found"
                 };
             }
 
-            LogCaller(new LoggerEventArgs(String.Format("Sniping {0} pokemon", pokemonToSnipe.Count), LoggerTypes.Snipe));
+            LogCaller(new LoggerEventArgs(String.Format("Sniping {0} Creature", CreatureToSnipe.Count), LoggerTypes.Snipe));
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             //Long running, so can't let this continue
             try
             {
-                while (pokemonToSnipe.Any() && IsRunning && !AlreadySnipped)
+                while (CreatureToSnipe.Any() && IsRunning && !AlreadySnipped)
                 {
                     AlreadySnipped = false;
 
-                    NearbyPokemon nearbyPokemon = pokemonToSnipe.First();
-                    pokemonToSnipe.Remove(nearbyPokemon);
+                    NearbyCreature nearbyCreature = CreatureToSnipe.First();
+                    CreatureToSnipe.Remove(nearbyCreature);
 
                     var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts);
-                    var fortNearby = forts.Where(x => x.Id == nearbyPokemon.FortId).FirstOrDefault();
+                    var fortNearby = forts.Where(x => x.Id == nearbyCreature.FortId).FirstOrDefault();
 
-                    if (fortNearby == null || nearbyPokemon == null || nearbyPokemon.PokemonId == PokemonId.Missingno)
+                    if (fortNearby == null || nearbyCreature == null || nearbyCreature.CreatureId == CreatureId.Missingno)
                     {
                         continue;
                     }
@@ -113,21 +114,21 @@ namespace DraconiusGoGUI.DracoManager
                         Longitude = fortNearby.Longitude
                     };
 
-                    await CaptureSnipePokemon(coords.Latitude, coords.Longitude, nearbyPokemon.PokemonId);
+                    await CaptureSnipeCreature(coords.Latitude, coords.Longitude, nearbyCreature.CreatureId);
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    pokemonToSnipe = pokemonToSnipe.Where(x => UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.PokemonId).Snipe && fortNearby.CooldownCompleteTimestampMs >= DateTime.Now.AddSeconds(30).ToUnixTime() && !LastedEncountersIds.Contains(x.EncounterId) && IsValidLocation(fortNearby.Latitude, fortNearby.Longitude)).OrderBy(x => x.DistanceInMeters).ToList();
+                    CreatureToSnipe = CreatureToSnipe.Where(x => UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.CreatureId).Snipe && fortNearby.CooldownCompleteTimestampMs >= DateTime.Now.AddSeconds(30).ToUnixTime() && !LastedEncountersIds.Contains(x.EncounterId) && IsValidLocation(fortNearby.Latitude, fortNearby.Longitude)).OrderBy(x => x.DistanceInMeters).ToList();
 
-                    if (UserSettings.SnipeAllPokemonsNoInPokedex)
+                    if (UserSettings.SnipeAllCreaturesNoInPokedex)
                     {
-                        LogCaller(new LoggerEventArgs("Search pokemons no into pokedex ...", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Search Creatures no into pokedex ...", LoggerTypes.Debug));
 
-                        var ids = Pokedex.Select(x => x.PokemonId);
-                        pokemonToSnipe = pokemonToSnipe.Where(x => x.EncounterId != _lastPokeSniperId && !ids.Contains(x.PokemonId)).OrderBy(x => x.DistanceInMeters).ToList();
+                        var ids = Pokedex.Select(x => x.CreatureId);
+                        CreatureToSnipe = CreatureToSnipe.Where(x => x.EncounterId != _lastPokeSniperId && !ids.Contains(x.CreatureId)).OrderBy(x => x.DistanceInMeters).ToList();
 
-                        if (pokemonToSnipe.Count > 0)
-                            LogCaller(new LoggerEventArgs("Found pokemons no into pokedex, go to sniping ...", LoggerTypes.Debug));
+                        if (CreatureToSnipe.Count > 0)
+                            LogCaller(new LoggerEventArgs("Found Creatures no into pokedex, go to sniping ...", LoggerTypes.Debug));
                     }
                 }
 
@@ -148,13 +149,13 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
        }
 
-        private async Task<MethodResult> CaptureSnipePokemon(double latitude, double longitude, PokemonId pokemon)
+        private async Task<MethodResult> CaptureSnipeCreature(double latitude, double longitude, CreatureId Creature)
         {
             var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
             var fortLocation = new GeoCoordinate(latitude, longitude);
 
             double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
-            LogCaller(new LoggerEventArgs(String.Format("Going to sniping {0} at location {1}, {2}. Distance {3:0.00}m", pokemon, latitude, longitude, distance), LoggerTypes.Snipe));
+            LogCaller(new LoggerEventArgs(String.Format("Going to sniping {0} at location {1}, {2}. Distance {3:0.00}m", Creature, latitude, longitude, distance), LoggerTypes.Snipe));
 
             // Not nedded this runs on local pos.../
             //GeoCoordinate originalLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, _client.ClientSession.Player.Altitude);
@@ -173,30 +174,30 @@ namespace DraconiusGoGUI.DracoManager
             if (UserSettings.UsePOGOLibHeartbeat)
                 await Task.Delay(10000); //wait for pogolib refreshmapobjects
 
-            //Get catchable pokemon
+            //Get catchable Creature
 
-            MethodResult<List<MapPokemon>> pokemonResult = await GetCatchablePokemonAsync();
+            MethodResult<List<MapCreature>> CreatureResult = await GetCatchableCreatureAsync();
 
-            if(!pokemonResult.Success)
+            if(!CreatureResult.Success)
             {
                 return new MethodResult
                 {
-                    Message = pokemonResult.Message
+                    Message = CreatureResult.Message
                 };
             }
 
-            if (pokemonResult.Data == null || pokemonResult.Data.Count == 0)
+            if (CreatureResult.Data == null || CreatureResult.Data.Count == 0)
                 return new MethodResult();
 
-            MapPokemon pokemonToSnipe = pokemonResult.Data.FirstOrDefault(x => x.PokemonId == pokemon);
+            MapCreature CreatureToSnipe = CreatureResult.Data.FirstOrDefault(x => x.CreatureId == Creature);
 
             //Encounter
-            MethodResult<EncounterResponse> eResponseResult = await EncounterPokemon(pokemonToSnipe);
+            MethodResult<EncounterResponse> eResponseResult = await EncounterCreature(CreatureToSnipe);
 
             if (!eResponseResult.Success)
             {
-                //LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter pokemon {0}. Going back to original location, or already catched", pokemon), LoggerTypes.Info));
-                LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter pokemon {0}, or already catched", pokemon), LoggerTypes.Info));
+                //LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter Creature {0}. Going back to original location, or already catched", Creature), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter Creature {0}, or already catched", Creature), LoggerTypes.Info));
 
                 //Failed, update location back
                 //await UpdateLocation(originalLocation);
@@ -210,7 +211,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (eResponseResult.Data == null || eResponseResult.Data.WildPokemon.PokemonData.PokemonId == PokemonId.Missingno)
+            if (eResponseResult.Data == null || eResponseResult.Data.WildCreature.CreatureData.CreatureId == CreatureId.Missingno)
                 return new MethodResult();
 
             //Update location back
@@ -225,10 +226,11 @@ namespace DraconiusGoGUI.DracoManager
             }
             */
 
-            _lastPokeSniperId = pokemonToSnipe.EncounterId;
+            //_lastPokeSniperId = CreatureToSnipe.EncounterId;
 
-            //Catch pokemon
-            MethodResult catchResult = await CatchPokemon(eResponseResult.Data, pokemonToSnipe, true); //Handles logging
+            /*
+            //Catch Creature
+            MethodResult catchResult = await CatchCreature(eResponseResult.Data, CreatureToSnipe, true); //Handles logging
 
             if (catchResult.Success)
             {
@@ -275,5 +277,6 @@ namespace DraconiusGoGUI.DracoManager
 
             return result;
         }
+        */
     }
 }

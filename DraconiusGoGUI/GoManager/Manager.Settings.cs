@@ -32,6 +32,7 @@ namespace DraconiusGoGUI.DracoManager
 
         public MethodResult<AccountExportModel> GetAccountExport()
         {
+            /*
             if(Stats == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
@@ -52,24 +53,25 @@ namespace DraconiusGoGUI.DracoManager
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
                 Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
-                Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x))).ToList(),
+                Creature = Creature.Select(x => new CreatureDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),
                 ExportTime = DateTime.Now
             };
-
+            */
             return new MethodResult<AccountExportModel>
             {
-                Data = exportModel,
+                //Data = exportModel,
                 Success = true
             };
         }
 
-        private async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
+        private async Task<MethodResult<Dictionary<string, string/*CreatureId, CreatureSettings*/>>> GetItemTemplates()
         {
+            /*
             if (PokeSettings != null && PokeSettings.Count != 0)
             {
-                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                return new MethodResult<Dictionary<CreatureId, CreatureSettings>>
                 {
                     Data = PokeSettings,
                     Message = "Settings already grabbed",
@@ -83,7 +85,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (!result.Success)
                 {
-                    return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                    return new MethodResult<Dictionary<CreatureId, CreatureSettings>>
                     {
                         Message = result.Message
                     };
@@ -91,17 +93,17 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             if (_client.ClientSession.Templates.ItemTemplates == null)
-                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                return new MethodResult<Dictionary<CreatureId, CreatureSettings>>
                 {
                     Message = "Failed to get setting templates"
                 };
 
-            var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
-            var moveSettings = new Dictionary<PokemonMove, MoveSettings>();
+            var CreatureSettings = new Dictionary<CreatureId, CreatureSettings>();
+            var moveSettings = new Dictionary<CreatureMove, MoveSettings>();
             var badgeSettings = new Dictionary<BadgeType, BadgeSettings>();
             var itemSettings = new Dictionary<ItemId, ItemSettings>();
             var battleSettings = new GymBattleSettings();
-            var upgradeSettings = new PokemonUpgradeSettings();
+            var upgradeSettings = new CreatureUpgradeSettings();
             var moveSequenceSettings = new MoveSequenceSettings();
             var encounterSettings = new EncounterSettings();
             var iapItemDisplay = new IapItemDisplay();
@@ -114,7 +116,7 @@ namespace DraconiusGoGUI.DracoManager
             var gymBadgeSettings = new GymBadgeGmtSettings();
             var weatherAffinities = new WeatherAffinity();
             var weatherBonusSettings = new WeatherBonus();
-            var pokemonScaleSettings = new PokemonScaleSetting();
+            var CreatureScaleSettings = new CreatureScaleSetting();
             var typeEffective = new TypeEffectiveSettings();
             var camera = new CameraSettings();
             var gymLevel = new GymLevelSettings();
@@ -128,11 +130,11 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
 
-                if (template.PokemonSettings != null)
+                if (template.CreatureSettings != null)
                 {
-                    if (pokemonSettings.ContainsKey(template.PokemonSettings.PokemonId))
-                        pokemonSettings.Remove(template.PokemonSettings.PokemonId);
-                    pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
+                    if (CreatureSettings.ContainsKey(template.CreatureSettings.CreatureId))
+                        CreatureSettings.Remove(template.CreatureSettings.CreatureId);
+                    CreatureSettings.Add(template.CreatureSettings.CreatureId, template.CreatureSettings);
                 }
                 else if (template.MoveSettings != null)
                 {
@@ -204,9 +206,9 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     weatherBonusSettings = template.WeatherBonusSettings;
                 }
-                else if (template.PokemonScaleSettings != null)
+                else if (template.CreatureScaleSettings != null)
                 {
-                    pokemonScaleSettings = template.PokemonScaleSettings;
+                    CreatureScaleSettings = template.CreatureScaleSettings;
                 }
                 else if (template.TypeEffective != null)
                 {
@@ -220,13 +222,13 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     gymLevel = template.GymLevel;
                 }
-                else if (template.PokemonUpgrades != null)
+                else if (template.CreatureUpgrades != null)
                 {
-                    upgradeSettings = template.PokemonUpgrades;
+                    upgradeSettings = template.CreatureUpgrades;
                 }
             }
 
-            PokeSettings = pokemonSettings;
+            PokeSettings = CreatureSettings;
             MoveSettings = moveSettings;
             BadgeSettings = badgeSettings;
             ItemSettings = itemSettings;
@@ -244,50 +246,51 @@ namespace DraconiusGoGUI.DracoManager
             GetGymBadgeGmtSettings = gymBadgeSettings;
             GetWeatherAffinity = weatherAffinities;
             GetWeatherBonus = weatherBonusSettings;
-            GetPokemonScaleSetting = pokemonScaleSettings;
+            GetCreatureScaleSetting = CreatureScaleSettings;
             GetTypeEffectiveSettings = typeEffective;
             GetCameraSettings = camera;
             GetGymLevelSettings = gymLevel;
-
-            return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+            */
+            return new MethodResult<Dictionary<string, string /*CreatureId, CreatureSettings*/>>
             {
-                Data = pokemonSettings,
+                //Data = CreatureSettings,
                 Message = "Success",
                 Success = true
             };
         }
 
-        public MethodResult<PokemonSettings> GetPokemonSetting(PokemonId pokemon)
+        public MethodResult<string/*CreatureSettings*/> GetCreatureSetting(/*CreatureId Creature*/)
         {
+            /*
             if(PokeSettings == null)
             {
-                return new MethodResult<PokemonSettings>
+                return new MethodResult<CreatureSettings>
                 {
                     Message = "Settings haven't been grabbed yet"
                 };
             }
 
-            if (pokemon == PokemonId.Missingno)
+            if (Creature == CreatureId.Missingno)
             {
-                return new MethodResult<PokemonSettings>
+                return new MethodResult<CreatureSettings>
                 {
                     Message = "No settings on Missingno"
                 };
             }
 
             //Shouldn't happen
-            PokemonSettings pokemonSettings;
-            if (!PokeSettings.TryGetValue(pokemon, out  pokemonSettings))
+            CreatureSettings CreatureSettings;
+            if (!PokeSettings.TryGetValue(Creature, out  CreatureSettings))
             {
-                return new MethodResult<PokemonSettings>()
+                return new MethodResult<CreatureSettings>()
                 {
-                    Message = "Pokemon Id does not exist"
+                    Message = "Creature Id does not exist"
                 };
             }
-
-            return new MethodResult<PokemonSettings>()
+            */
+            return new MethodResult<string/*CreatureSettings*/>()
             {
-                Data = pokemonSettings,
+                //Data = CreatureSettings,
                 Message = "Success",
                 Success = true
             };
@@ -326,7 +329,7 @@ namespace DraconiusGoGUI.DracoManager
                     userSettings.DefaultTeam = "Neutral";
                     userSettings.SpinGyms = false;
                     userSettings.GoOnlyToGyms = false;
-                    userSettings.DeployPokemon = false;
+                    userSettings.DeployCreature = false;
                     //
                 }
 
@@ -370,7 +373,7 @@ namespace DraconiusGoGUI.DracoManager
                     settings.ProxyUsername = UserSettings.ProxyUsername;
                     settings.GroupName = UserSettings.GroupName;
 
-                    //Randomize device id
+                    /*/Randomize device id
                     var device = DeviceInfoUtil.GetRandomDevice();
                     settings.DeviceId = device.DeviceInfo.DeviceId;
                     settings.DeviceBrand = device.DeviceInfo.DeviceBrand;
@@ -380,7 +383,7 @@ namespace DraconiusGoGUI.DracoManager
                     settings.HardwareModel = device.DeviceInfo.HardwareModel;
                     settings.FirmwareBrand = device.DeviceInfo.FirmwareBrand;
                     settings.FirmwareType = device.DeviceInfo.FirmwareType;
-
+                    */
                     UserSettings = settings;
 
                     if (String.IsNullOrEmpty(UserSettings.DeviceBrand))

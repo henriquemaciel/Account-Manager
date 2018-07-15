@@ -6,7 +6,7 @@ namespace DraconiusGoGUI.Models
     [Serializable]
     public class TransferSetting
     {
-        public PokemonId Id { get; set; }
+        //public CreatureId Id { get; set; }
         public bool Transfer { get; set; }
         public TransferType Type { get; set; }
         public int KeepMax { get; set; }
@@ -14,7 +14,7 @@ namespace DraconiusGoGUI.Models
         public int IVPercent { get; set; }
         public TransferSetting()
         {
-            Id = PokemonId.Missingno;
+            //Id = CreatureId.Missingno;
             Type = TransferType.KeepStrongestX;
             KeepMax = 1;
             MinCP = 0;
@@ -25,7 +25,8 @@ namespace DraconiusGoGUI.Models
         {
             get
             {
-                return Id.ToString();
+                return string.Empty;
+                //return Id.ToString();
             }
         }
     }

@@ -7,6 +7,7 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        /*
         protected const double SpeedDownTo = 10 / 3.6;
         private double CurrentWalkingSpeed = 0;
         private Random WalkingRandom = new Random();
@@ -32,10 +33,10 @@ namespace DraconiusGoGUI.DracoManager
                     Func<Task<MethodResult>> walkingFunction = null;
                     Func<Task<MethodResult>> walkingIncenceFunction = null;
 
-                    if (UserSettings.EncounterWhileWalking && UserSettings.CatchPokemon)
+                    if (UserSettings.EncounterWhileWalking && UserSettings.CatchCreature)
                     {
-                        walkingFunction = CatchNeabyPokemon;
-                        walkingIncenceFunction = CatchInsencePokemon;
+                        walkingFunction = CatchNeabyCreature;
+                        walkingIncenceFunction = CatchInsenceCreature;
                     }
 
                     MethodResult walkResponse = await WalkToLocation(location, walkingFunction, walkingIncenceFunction);
@@ -53,22 +54,6 @@ namespace DraconiusGoGUI.DracoManager
 
                     LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
                 }
-                catch (SessionStateException ex)
-                {
-                    throw ex;
-                }
-                catch (PokeHashException ex)
-                {
-                    throw ex;
-                }
-                catch (SessionInvalidatedException ex)
-                {
-                    throw ex;
-                }
-                catch (InvalidPlatformException ex)
-                {
-                    throw ex;
-                }
                 catch (TaskCanceledException ex)
                 {
                     throw ex;
@@ -76,14 +61,6 @@ namespace DraconiusGoGUI.DracoManager
                 catch (OperationCanceledException ex)
                 {
                     throw ex;
-                }
-                catch (APIBadRequestException ex)
-                {
-                    throw ex;
-                }
-                catch (Exception ex)
-                {
-                    throw new SessionStateException($"Failed to walk to location. {ex}");
                 }
                 finally
                 {
@@ -129,7 +106,7 @@ namespace DraconiusGoGUI.DracoManager
             var requestSendDateTime = DateTime.Now;
             var requestVariantDateTime = DateTime.Now;
 
-            MethodResult _result = await UpdateLocation(waypoint);
+            //MethodResult _result = await UpdateLocation(waypoint);
             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
             do
@@ -169,10 +146,10 @@ namespace DraconiusGoGUI.DracoManager
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 if (functionExecutedWhileWalking != null)
-                    await functionExecutedWhileWalking(); // look for pokemon
+                    await functionExecutedWhileWalking(); // look for Creature
 
                 if (functionExecutedWhileIncenseWalking != null)
-                    await functionExecutedWhileIncenseWalking(); // look for incense pokemon
+                    await functionExecutedWhileIncenseWalking(); // look for incense Creature
 
             } while (CalculateDistanceInMeters(sourceLocation, destinaionCoordinate) >= (new Random()).Next(1, 10));
 
@@ -202,11 +179,11 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                await Task.Run(() => _client.ClientSession.Player.SetCoordinates(moveTo));
+                //await Task.Run(() => _client.ClientSession.Player.SetCoordinates(moveTo));
 
-                UserSettings.Latitude = _client.ClientSession.Player.Latitude;
-                UserSettings.Longitude = _client.ClientSession.Player.Longitude;
-                UserSettings.Altitude = _client.ClientSession.Player.Altitude;
+                //UserSettings.Latitude = _client.ClientSession.Player.Latitude;
+                //UserSettings.Longitude = _client.ClientSession.Player.Longitude;
+                //UserSettings.Altitude = _client.ClientSession.Player.Altitude;
 
                 //string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
                 string message = String.Format("Walked distance: {0:0.00}m", distance);
@@ -377,5 +354,6 @@ namespace DraconiusGoGUI.DracoManager
 
             return currentSpeed;
         }
+        */
     }
 }

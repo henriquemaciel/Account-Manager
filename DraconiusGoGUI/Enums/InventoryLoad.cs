@@ -4,9 +4,9 @@
     {
         All,
         Items,
-        Pokemon,
+        Creature,
         Pokedex,
-        PokemonCandy,
+        CreatureCandy,
         Incubators,
         Eggs,
         Stats

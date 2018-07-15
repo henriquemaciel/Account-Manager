@@ -24,7 +24,7 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs("No available proxies left. Will recheck every 5 seconds", LoggerTypes.Warning));
             }
 
-            while (CurrentProxy == null && IsRunning)
+            while (CurrentProxy == null /*&& IsRunning*/)
             {
                 await Task.Delay(5000);
 

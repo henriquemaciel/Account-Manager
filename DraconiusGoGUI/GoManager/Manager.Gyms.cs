@@ -9,17 +9,18 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        /*
         private async Task<MethodResult<GymDeployResponse>> GymDeploy(FortData gym)
         {
             if (gym.OwnedByTeam != PlayerData.Team)
                 return new MethodResult<GymDeployResponse>();
 
-            var pokemon = await GetDeployablePokemon();
+            var Creature = await GetDeployableCreature();
 
-            if (pokemon == null || pokemon.PokemonId == PokemonId.Missingno)
+            if (Creature == null || Creature.CreatureId == CreatureId.Missingno)
                 return new MethodResult<GymDeployResponse>();
 
-            LogCaller(new LoggerEventArgs(String.Format("Try to deploy pokemon {0}.", pokemon.PokemonId), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Try to deploy Creature {0}.", Creature.CreatureId), LoggerTypes.Info));
 
             if (!_client.LoggedIn)
             {
@@ -37,7 +38,7 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new GymDeployMessage
                 {
                     FortId = gym.Id,
-                    PokemonId = pokemon.Id,
+                    CreatureId = Creature.Id,
                     PlayerLatitude = _client.ClientSession.Player.Latitude,
                     PlayerLongitude = _client.ClientSession.Player.Longitude
                 }.ToByteString()
@@ -49,62 +50,62 @@ namespace DraconiusGoGUI.DracoManager
             var gymDeployResponse = GymDeployResponse.Parser.ParseFrom(response);
             switch (gymDeployResponse.Result)
             {
-                case GymDeployResponse.Types.Result.ErrorAlreadyHasPokemonOnFort:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                case GymDeployResponse.Types.Result.ErrorAlreadyHasCreatureOnFort:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorFortDeployLockout:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorFortIsFull:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorInvalidPokemon:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                case GymDeployResponse.Types.Result.ErrorInvalidCreature:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorLegendaryPokemon:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                case GymDeployResponse.Types.Result.ErrorLegendaryCreature:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorNotAPokemon:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                case GymDeployResponse.Types.Result.ErrorNotACreature:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorNotInRange:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorOpposingTeamOwnsFort:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorPlayerBelowMinimumLevel:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorPlayerHasNoNickname:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorPlayerHasNoTeam:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorPoiInaccessible:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorPokemonIsBuddy:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                case GymDeployResponse.Types.Result.ErrorCreatureIsBuddy:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorPokemonNotFullHp:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                case GymDeployResponse.Types.Result.ErrorCreatureNotFullHp:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorRaidActive:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorTeamDeployLockout:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorTooManyDeployed:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorTooManyOfSameKind:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.NoResultSet:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.Success:
                     LogCaller(new LoggerEventArgs("Gym deploy success.", LoggerTypes.Deploy));
@@ -182,7 +183,7 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult<GetRaidDetailsResponse>();
         }
 
-        private async Task<MethodResult<StartRaidBattleResponse>> StartRaidBattle(FortData gym, long raidSeed, ulong[] attackingpokemonids, int[] lobbyids)
+        private async Task<MethodResult<StartRaidBattleResponse>> StartRaidBattle(FortData gym, long raidSeed, ulong[] attackingCreatureids, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -203,7 +204,7 @@ namespace DraconiusGoGUI.DracoManager
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
                     PlayerLngDegrees = _client.ClientSession.Player.Longitude,
                     RaidSeed = raidSeed,
-                    AttackingPokemonId = { attackingpokemonids },
+                    AttackingCreatureId = { attackingCreatureids },
                     LobbyId = { lobbyids }
                 }.ToByteString()
             });
@@ -448,7 +449,7 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult<LeaveLobbyResponse>();
         }
 
-        private async Task<MethodResult<SetLobbyPokemonResponse>> SetLobbyPokemon(FortData gym, long raidSeed, ulong[] pokemonids, int[] lobbyids)
+        private async Task<MethodResult<SetLobbyCreatureResponse>> SetLobbyCreature(FortData gym, long raidSeed, ulong[] Creatureids, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -456,52 +457,52 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (!result.Success)
                 {
-                    return new MethodResult<SetLobbyPokemonResponse>(); ;
+                    return new MethodResult<SetLobbyCreatureResponse>(); ;
                 }
             }
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.SetLobbyPokemon,
-                RequestMessage = new SetLobbyPokemonMessage
+                RequestType = RequestType.SetLobbyCreature,
+                RequestMessage = new SetLobbyCreatureMessage
                 {
                     GymId = gym.Id,
                     RaidSeed = raidSeed,
-                    PokemonId = { pokemonids },
+                    CreatureId = { Creatureids },
                     LobbyId = { lobbyids }
                 }.ToByteString()
             });
 
             if (response == null)
-                return new MethodResult<SetLobbyPokemonResponse>();
+                return new MethodResult<SetLobbyCreatureResponse>();
 
-            var setLobbyPokemonResponse = SetLobbyPokemonResponse.Parser.ParseFrom(response);
+            var setLobbyCreatureResponse = SetLobbyCreatureResponse.Parser.ParseFrom(response);
 
-            switch (setLobbyPokemonResponse.Result)
+            switch (setLobbyCreatureResponse.Result)
             {
-                case SetLobbyPokemonResponse.Types.Result.ErrorInvalidPokemon:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby pokemon {0}.", setLobbyPokemonResponse.Result), LoggerTypes.Warning));
+                case SetLobbyCreatureResponse.Types.Result.ErrorInvalidCreature:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby Creature {0}.", setLobbyCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case SetLobbyPokemonResponse.Types.Result.ErrorLobbyNotFound:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby pokemon {0}.", setLobbyPokemonResponse.Result), LoggerTypes.Warning));
+                case SetLobbyCreatureResponse.Types.Result.ErrorLobbyNotFound:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby Creature {0}.", setLobbyCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case SetLobbyPokemonResponse.Types.Result.ErrorRaidUnavailable:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby pokemon {0}.", setLobbyPokemonResponse.Result), LoggerTypes.Warning));
+                case SetLobbyCreatureResponse.Types.Result.ErrorRaidUnavailable:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby Creature {0}.", setLobbyCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case SetLobbyPokemonResponse.Types.Result.Success:
-                    LogCaller(new LoggerEventArgs("Gym set lobby pokemon success.", LoggerTypes.Success));
-                    return new MethodResult<SetLobbyPokemonResponse>
+                case SetLobbyCreatureResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs("Gym set lobby Creature success.", LoggerTypes.Success));
+                    return new MethodResult<SetLobbyCreatureResponse>
                     {
                         Success = true,
                         Message = "Success",
-                        Data = setLobbyPokemonResponse
+                        Data = setLobbyCreatureResponse
                     };
-                case SetLobbyPokemonResponse.Types.Result.Unset:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby pokemon {0}.", setLobbyPokemonResponse.Result), LoggerTypes.Warning));
+                case SetLobbyCreatureResponse.Types.Result.Unset:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill to set lobby Creature {0}.", setLobbyCreatureResponse.Result), LoggerTypes.Warning));
                     break;
             }
 
-            return new MethodResult<SetLobbyPokemonResponse>();
+            return new MethodResult<SetLobbyCreatureResponse>();
         }
 
         private async Task<MethodResult<SetLobbyVisibilityResponse>> SetLobbyVisibility(FortData gym, long raidSeed, int[] lobbyids)
@@ -652,7 +653,7 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult<UseItemGymResponse>();
         }
 
-        private async Task<MethodResult<GymStartSessionResponse>> GymStartSession(FortData gym, ulong defendingPokemonId, IEnumerable<ulong> attackingPokemonIds)
+        private async Task<MethodResult<GymStartSessionResponse>> GymStartSession(FortData gym, ulong defendingCreatureId, IEnumerable<ulong> attackingCreatureIds)
         {
             if (!_client.LoggedIn)
             {
@@ -670,8 +671,8 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new GymStartSessionMessage
                 {
                     GymId = gym.Id,
-                    DefendingPokemonId = defendingPokemonId,
-                    AttackingPokemonId = { attackingPokemonIds },
+                    DefendingCreatureId = defendingCreatureId,
+                    AttackingCreatureId = { attackingCreatureIds },
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
                     PlayerLngDegrees = _client.ClientSession.Player.Longitude
                 }.ToByteString()
@@ -684,7 +685,7 @@ namespace DraconiusGoGUI.DracoManager
 
             switch (gymStartSessionResponse.Result)
             {
-                case GymStartSessionResponse.Types.Result.ErrorAllPokemonFainted:
+                case GymStartSessionResponse.Types.Result.ErrorAllCreatureFainted:
                     LogCaller(new LoggerEventArgs(String.Format("Faill to gym start session {0}.", gymStartSessionResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymStartSessionResponse.Types.Result.ErrorGymBattleLockout:
@@ -867,10 +868,10 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult<GymGetInfoResponse>();
         }
 
-        private async Task<MethodResult<GymFeedPokemonResponse>> GymFeedPokemon(FortData gym, ItemData item, PokemonData pokemon, int startingQuantity = 1)
+        private async Task<MethodResult<GymFeedCreatureResponse>> GymFeedCreature(FortData gym, ItemData item, CreatureData Creature, int startingQuantity = 1)
         {
             if (gym.OwnedByTeam != PlayerData.Team)
-                return new MethodResult<GymFeedPokemonResponse>();
+                return new MethodResult<GymFeedCreatureResponse>();
 
             if (!_client.LoggedIn)
             {
@@ -878,18 +879,18 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (!result.Success)
                 {
-                    return new MethodResult<GymFeedPokemonResponse>();
+                    return new MethodResult<GymFeedCreatureResponse>();
                 }
             }
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.GymFeedPokemon,
-                RequestMessage = new GymFeedPokemonMessage
+                RequestType = RequestType.GymFeedCreature,
+                RequestMessage = new GymFeedCreatureMessage
                 {
                     GymId = gym.Id,
                     Item = item.ItemId,
-                    PokemonId = pokemon.Id,
+                    CreatureId = Creature.Id,
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
                     PlayerLngDegrees = _client.ClientSession.Player.Longitude,
                     StartingQuantity = startingQuantity
@@ -897,126 +898,126 @@ namespace DraconiusGoGUI.DracoManager
             });
 
             if (response == null)
-                return new MethodResult<GymFeedPokemonResponse>();
+                return new MethodResult<GymFeedCreatureResponse>();
 
-            var gymFeedPokemonResponse = GymFeedPokemonResponse.Parser.ParseFrom(response);
+            var gymFeedCreatureResponse = GymFeedCreatureResponse.Parser.ParseFrom(response);
 
-            switch (gymFeedPokemonResponse.Result)
+            switch (gymFeedCreatureResponse.Result)
             {
-                case GymFeedPokemonResponse.Types.Result.Success:
-                    LogCaller(new LoggerEventArgs(String.Format("Gym Feed Pokemon {0} success.", item.ItemId.ToString().Replace("Item", "")), LoggerTypes.Success));
-                    return new MethodResult<GymFeedPokemonResponse>
+                case GymFeedCreatureResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs(String.Format("Gym Feed Creature {0} success.", item.ItemId.ToString().Replace("Item", "")), LoggerTypes.Success));
+                    return new MethodResult<GymFeedCreatureResponse>
                     {
                         Success = true,
                         Message = "Success",
-                        Data = gymFeedPokemonResponse
+                        Data = gymFeedCreatureResponse
                     };
-                case GymFeedPokemonResponse.Types.Result.ErrorCannotUse:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorCannotUse:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorGymBusy:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorGymBusy:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorGymClosed:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorGymClosed:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorNoBerriesLeft:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorNoBerriesLeft:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorNotInRange:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorNotInRange:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorPokemonFull:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorCreatureFull:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorPokemonNotThere:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorCreatureNotThere:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorRaidActive:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorRaidActive:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorTooFast:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorTooFast:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorTooFrequent:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorTooFrequent:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorWrongCount:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorWrongCount:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.ErrorWrongTeam:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.ErrorWrongTeam:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymFeedPokemonResponse.Types.Result.Unset:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                case GymFeedCreatureResponse.Types.Result.Unset:
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
                 default:
-                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Pokemon {0}.", gymFeedPokemonResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Faill Gym Feed Creature {0}.", gymFeedCreatureResponse.Result), LoggerTypes.Warning));
                     break;
             }
-            return new MethodResult<GymFeedPokemonResponse>();
+            return new MethodResult<GymFeedCreatureResponse>();
         }
 
-        private async Task<PokemonData> GetDeployablePokemon()
+        private async Task<CreatureData> GetDeployableCreature()
         {
             List<ulong> excluded = new List<ulong>();
-            var pokemonList = Pokemon;
-            PokemonData pokemon = null;
+            var CreatureList = Creature;
+            CreatureData Creature = null;
 
-            PokemonData settedbuddy = Pokemon.Where(w => w.Id == PlayerData?.BuddyPokemon?.Id && PlayerData?.BuddyPokemon?.Id > 0).Select(w => w).FirstOrDefault();
-            PokemonData buddy = settedbuddy ?? new PokemonData();
+            CreatureData settedbuddy = Creature.Where(w => w.Id == PlayerData?.BuddyCreature?.Id && PlayerData?.BuddyCreature?.Id > 0).Select(w => w).FirstOrDefault();
+            CreatureData buddy = settedbuddy ?? new CreatureData();
 
-            var defendersFromConfig = pokemonList.Where(w =>
+            var defendersFromConfig = CreatureList.Where(w =>
                 w.Id != buddy?.Id &&
                 string.IsNullOrEmpty(w.DeployedFortId)
             ).ToList();
 
-            foreach (var _pokemon in defendersFromConfig.OrderByDescending(o => o.Cp))
+            foreach (var _Creature in defendersFromConfig.OrderByDescending(o => o.Cp))
             {
-                if (_pokemon.Stamina <= 0)
-                    await RevivePokemon(_pokemon);
+                if (_Creature.Stamina <= 0)
+                    await ReviveCreature(_Creature);
 
-                if (_pokemon.Stamina < _pokemon.StaminaMax && _pokemon.Stamina > 0)
-                    await HealPokemon(_pokemon);
+                if (_Creature.Stamina < _Creature.StaminaMax && _Creature.Stamina > 0)
+                    await HealCreature(_Creature);
 
-                if (_pokemon.Stamina < _pokemon.StaminaMax)
-                    excluded.Add(_pokemon.Id);
+                if (_Creature.Stamina < _Creature.StaminaMax)
+                    excluded.Add(_Creature.Id);
                 else
-                    return _pokemon;
+                    return _Creature;
             }
 
-            while (pokemon == null)
+            while (Creature == null)
             {
-                pokemonList = pokemonList
-                    .Where(w => !excluded.Contains(w.Id) && w.Id != PlayerData.BuddyPokemon?.Id)
+                CreatureList = CreatureList
+                    .Where(w => !excluded.Contains(w.Id) && w.Id != PlayerData.BuddyCreature?.Id)
                     .OrderByDescending(p => p.Cp)
                     .ToList();
 
-                if (pokemonList.Count == 0)
+                if (CreatureList.Count == 0)
                     return null;
 
-                if (pokemonList.Count == 1)
-                    pokemon = pokemonList.FirstOrDefault();
+                if (CreatureList.Count == 1)
+                    Creature = CreatureList.FirstOrDefault();
 
-                pokemon = pokemonList.FirstOrDefault(p => string.IsNullOrEmpty(p.DeployedFortId)
+                Creature = CreatureList.FirstOrDefault(p => string.IsNullOrEmpty(p.DeployedFortId)
                 );
 
-                if (pokemon.Stamina <= 0)
-                    await RevivePokemon(pokemon);
+                if (Creature.Stamina <= 0)
+                    await ReviveCreature(Creature);
 
-                if (pokemon.Stamina < pokemon.StaminaMax && pokemon.Stamina > 0)
-                    await HealPokemon(pokemon);
+                if (Creature.Stamina < Creature.StaminaMax && Creature.Stamina > 0)
+                    await HealCreature(Creature);
 
-                if (pokemon.Stamina < pokemon.StaminaMax)
+                if (Creature.Stamina < Creature.StaminaMax)
                 {
-                    excluded.Add(pokemon.Id);
-                    pokemon = null;
+                    excluded.Add(Creature.Id);
+                    Creature = null;
                 }
             }
-            return pokemon;
+            return Creature;
         }
 
-        private async Task<bool> HealPokemon(PokemonData pokemon)
+        private async Task<bool> HealCreature(CreatureData Creature)
         {
             var normalPotions = Items.Select(x => x.ItemId == ItemId.ItemPotion).Count();
             var superPotions = Items.Select(x => x.ItemId == ItemId.ItemSuperPotion).Count();
@@ -1025,45 +1026,45 @@ namespace DraconiusGoGUI.DracoManager
 
             var healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
 
-            if (healPower < (pokemon.StaminaMax - pokemon.Stamina) && maxPotions > 0)
+            if (healPower < (Creature.StaminaMax - Creature.Stamina) && maxPotions > 0)
             {
-                if (await UseMaxPotion(pokemon, maxPotions))
+                if (await UseMaxPotion(Creature, maxPotions))
                 {
                     UpdateInventory(InventoryRefresh.Items);
                     return true;
                 }
             }
 
-            while (normalPotions + superPotions + hyperPotions > 0 && (pokemon.Stamina < pokemon.StaminaMax))
+            while (normalPotions + superPotions + hyperPotions > 0 && (Creature.Stamina < Creature.StaminaMax))
             {
-                if (((pokemon.StaminaMax - pokemon.Stamina) > 200 || ((normalPotions * 20 + superPotions * 50) < (pokemon.StaminaMax - pokemon.Stamina))) && hyperPotions > 0)
+                if (((Creature.StaminaMax - Creature.Stamina) > 200 || ((normalPotions * 20 + superPotions * 50) < (Creature.StaminaMax - Creature.Stamina))) && hyperPotions > 0)
                 {
-                    if (!await UseHyperPotion(pokemon, hyperPotions))
+                    if (!await UseHyperPotion(Creature, hyperPotions))
                         return false;
                     hyperPotions--;
                     UpdateInventory(InventoryRefresh.Items);
                 }
                 else
-                if (((pokemon.StaminaMax - pokemon.Stamina) > 50 || normalPotions * 20 < (pokemon.StaminaMax - pokemon.Stamina)) && superPotions > 0)
+                if (((Creature.StaminaMax - Creature.Stamina) > 50 || normalPotions * 20 < (Creature.StaminaMax - Creature.Stamina)) && superPotions > 0)
                 {
-                    if (!await UseSuperPotion(pokemon, superPotions))
+                    if (!await UseSuperPotion(Creature, superPotions))
                         return false;
                     superPotions--;
                     UpdateInventory(InventoryRefresh.Items);
                 }
                 else
                 {
-                    if (!await UsePotion(pokemon, normalPotions))
+                    if (!await UsePotion(Creature, normalPotions))
                         return false;
                     normalPotions--;
                     UpdateInventory(InventoryRefresh.Items);
                 }
             }
 
-            return pokemon.Stamina == pokemon.StaminaMax;
+            return Creature.Stamina == Creature.StaminaMax;
         }
 
-        private async Task<bool> UseMaxPotion(PokemonData pokemon, int maxPotions)
+        private async Task<bool> UseMaxPotion(CreatureData Creature, int maxPotions)
         {
             if (!_client.LoggedIn)
             {
@@ -1081,7 +1082,7 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new UseItemPotionMessage
                 {
                     ItemId = ItemId.ItemMaxPotion,
-                    PokemonId = pokemon.Id,
+                    CreatureId = Creature.Id,
                 }.ToByteString()
             });
 
@@ -1093,11 +1094,11 @@ namespace DraconiusGoGUI.DracoManager
             switch (useItemPotionResponse.Result)
             {
                 case UseItemPotionResponse.Types.Result.Success:
-                    pokemon.Stamina = useItemPotionResponse.Stamina;
-                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemMaxPotion.ToString().Replace("Item",""), pokemon.Cp, pokemon.PokemonId), LoggerTypes.Success));
+                    Creature.Stamina = useItemPotionResponse.Stamina;
+                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemMaxPotion.ToString().Replace("Item",""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                    LogCaller(new LoggerEventArgs($"Pokemon: {pokemon.PokemonId.ToString()} (CP: {pokemon.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
@@ -1107,7 +1108,7 @@ namespace DraconiusGoGUI.DracoManager
             return true;
         }
 
-        private async Task<bool> UseHyperPotion(PokemonData pokemon, int hyperPotions)
+        private async Task<bool> UseHyperPotion(CreatureData Creature, int hyperPotions)
         {
             if (!_client.LoggedIn)
             {
@@ -1125,7 +1126,7 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new UseItemPotionMessage
                 {
                     ItemId = ItemId.ItemHyperPotion,
-                    PokemonId = pokemon.Id,
+                    CreatureId = Creature.Id,
                 }.ToByteString()
             });
 
@@ -1137,11 +1138,11 @@ namespace DraconiusGoGUI.DracoManager
             switch (useItemPotionResponse.Result)
             {
                 case UseItemPotionResponse.Types.Result.Success:
-                    pokemon.Stamina = useItemPotionResponse.Stamina;
-                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemHyperPotion.ToString().Replace("Item", ""), pokemon.Cp, pokemon.PokemonId), LoggerTypes.Success));
+                    Creature.Stamina = useItemPotionResponse.Stamina;
+                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemHyperPotion.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                    LogCaller(new LoggerEventArgs($"Pokemon: {pokemon.PokemonId.ToString()} (CP: {pokemon.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
 
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -1153,7 +1154,7 @@ namespace DraconiusGoGUI.DracoManager
             return true;
         }
 
-        private async Task<bool> UseSuperPotion(PokemonData pokemon, int superPotions)
+        private async Task<bool> UseSuperPotion(CreatureData Creature, int superPotions)
         {
             if (!_client.LoggedIn)
             {
@@ -1171,7 +1172,7 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new UseItemPotionMessage
                 {
                     ItemId = ItemId.ItemSuperPotion,
-                    PokemonId = pokemon.Id,
+                    CreatureId = Creature.Id,
                 }.ToByteString()
             });
 
@@ -1183,11 +1184,11 @@ namespace DraconiusGoGUI.DracoManager
             switch (useItemPotionResponse.Result)
             {
                 case UseItemPotionResponse.Types.Result.Success:
-                    pokemon.Stamina = useItemPotionResponse.Stamina;
-                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemSuperPotion.ToString().Replace("Item", ""), pokemon.Cp, pokemon.PokemonId), LoggerTypes.Success));
+                    Creature.Stamina = useItemPotionResponse.Stamina;
+                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemSuperPotion.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                    LogCaller(new LoggerEventArgs($"Pokemon: {pokemon.PokemonId.ToString()} (CP: {pokemon.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
 
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -1199,7 +1200,7 @@ namespace DraconiusGoGUI.DracoManager
             return true;
         }
 
-        private async Task<bool> UsePotion(PokemonData pokemon, int normalPotions)
+        private async Task<bool> UsePotion(CreatureData Creature, int normalPotions)
         {
             if (!_client.LoggedIn)
             {
@@ -1217,7 +1218,7 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new UseItemPotionMessage
                 {
                     ItemId = ItemId.ItemPotion,
-                    PokemonId = pokemon.Id,
+                    CreatureId = Creature.Id,
                 }.ToByteString()
             });
 
@@ -1229,11 +1230,11 @@ namespace DraconiusGoGUI.DracoManager
             switch (useItemPotionResponse.Result)
             {
                 case UseItemPotionResponse.Types.Result.Success:
-                    pokemon.Stamina = useItemPotionResponse.Stamina;
-                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemPotion.ToString().Replace("Item", ""), pokemon.Cp, pokemon.PokemonId), LoggerTypes.Success));
+                    Creature.Stamina = useItemPotionResponse.Stamina;
+                    LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemPotion.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                    LogCaller(new LoggerEventArgs($"Pokemon: {pokemon.PokemonId.ToString()} (CP: {pokemon.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
 
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -1245,7 +1246,7 @@ namespace DraconiusGoGUI.DracoManager
             return true;
         }
 
-        private async Task RevivePokemon(PokemonData pokemon)
+        private async Task ReviveCreature(CreatureData Creature)
         {
             int healPower = 0;
 
@@ -1263,7 +1264,7 @@ namespace DraconiusGoGUI.DracoManager
             var normalRevives = Items.Select(x => x.ItemId == ItemId.ItemRevive).Count();
             var maxRevives = Items.Select(x => x.ItemId == ItemId.ItemMaxRevive).Count();
 
-            if ((healPower >= pokemon.StaminaMax / 2 || maxRevives == 0) && normalRevives > 0 && pokemon.Stamina <= 0)
+            if ((healPower >= Creature.StaminaMax / 2 || maxRevives == 0) && normalRevives > 0 && Creature.Stamina <= 0)
             {
                 if (!_client.LoggedIn)
                 {
@@ -1281,7 +1282,7 @@ namespace DraconiusGoGUI.DracoManager
                     RequestMessage = new UseItemReviveMessage
                     {
                         ItemId = ItemId.ItemRevive,
-                        PokemonId = pokemon.Id,
+                        CreatureId = Creature.Id,
                     }.ToByteString()
                 });
 
@@ -1294,11 +1295,11 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     case UseItemReviveResponse.Types.Result.Success:
                         UpdateInventory(InventoryRefresh.Items);
-                        pokemon.Stamina = useItemRevive.Stamina;
-                        LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemRevive.ToString().Replace("Item", ""), pokemon.Cp, pokemon.PokemonId), LoggerTypes.Success));
+                        Creature.Stamina = useItemRevive.Stamina;
+                        LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemRevive.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                         break;
                     case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
-                        LogCaller(new LoggerEventArgs($"Pokemon: {pokemon.PokemonId.ToString()} (CP: {pokemon.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                         return;
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
                         return;
@@ -1308,7 +1309,7 @@ namespace DraconiusGoGUI.DracoManager
                 return;
             }
 
-            if (maxRevives > 0 && pokemon.Stamina <= 0)
+            if (maxRevives > 0 && Creature.Stamina <= 0)
             {
                 if (!_client.LoggedIn)
                 {
@@ -1326,7 +1327,7 @@ namespace DraconiusGoGUI.DracoManager
                     RequestMessage = new UseItemReviveMessage
                     {
                         ItemId = ItemId.ItemMaxRevive,
-                        PokemonId = pokemon.Id,
+                        CreatureId = Creature.Id,
                     }.ToByteString()
                 });
 
@@ -1339,11 +1340,11 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     case UseItemReviveResponse.Types.Result.Success:
                         UpdateInventory(InventoryRefresh.Items);
-                        pokemon.Stamina = useItemRevive.Stamina;
-                        LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemMaxRevive.ToString().Replace("Item", ""), pokemon.Cp, pokemon.PokemonId), LoggerTypes.Success));
+                        Creature.Stamina = useItemRevive.Stamina;
+                        LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemMaxRevive.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                         break;
                     case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
-                        LogCaller(new LoggerEventArgs($"Pokemon: {pokemon.PokemonId.ToString()} (CP: {pokemon.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                         return;
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
                         return;
@@ -1352,5 +1353,6 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
         }
+        */
     }
 }

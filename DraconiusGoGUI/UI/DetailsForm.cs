@@ -35,8 +35,8 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewPokedex.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewPokedex.ForeColor = Color.LightGray;
 
-            fastObjectListViewPokemon.BackColor = Color.FromArgb(43, 43, 43);
-            fastObjectListViewPokemon.ForeColor = Color.LightGray;
+            fastObjectListViewCreature.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewCreature.ForeColor = Color.LightGray;
 
             fastObjectListViewInventory.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewInventory.ForeColor = Color.LightGray;
@@ -50,85 +50,86 @@ namespace DraconiusGoGUI.UI
             #region Pokedex
 
             //ToString for sorting purposes
-            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).PokemonId;
+            //olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).CreatureId;
 
-            olvColumnPokedexId.AspectGetter = (entry) => (entry as PokedexEntry).PokemonId.ToString();
+            //olvColumnPokedexId.AspectGetter = (entry) => (entry as PokedexEntry).CreatureId.ToString();
 
-            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).PokemonId;
+            //olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).CreatureId;
 
             #endregion
 
-            #region Pokemon
+            #region Creature
 
 
-            olvColumnPokemonId.AspectGetter = (pokemon) => (int)(pokemon as PokemonData).PokemonId;
+            //olvColumnCreatureId.AspectGetter = (Creature) => (int)(Creature as CreatureData).CreatureId;
 
-            olvColumnPokemonFavorite.AspectGetter = (pokemon) => (pokemon as PokemonData).Favorite == 1; 
+            //olvColumnCreatureFavorite.AspectGetter = (Creature) => (Creature as CreatureData).Favorite == 1; 
 
-            olvColumnPokemonShiny.AspectGetter = (pokemon) => (pokemon as PokemonData).PokemonDisplay.Shiny;
+            //olvColumnCreatureShiny.AspectGetter = (Creature) => (Creature as CreatureData).CreatureDisplay.Shiny;
 
-            olvColumnPokemonGender.AspectGetter = (pokemon) => (pokemon as PokemonData).PokemonDisplay.Gender;
+            //olvColumnCreatureGender.AspectGetter = (Creature) => (Creature as CreatureData).CreatureDisplay.Gender;
 
-            olvColumnPokemonRarity.AspectGetter = delegate (object pokemon)
+            /*
+            olvColumnCreatureRarity.AspectGetter = delegate (object Creature)
             {
-                PokemonSettings pokemonSettings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
-                return pokemonSettings == null ? PokemonRarity.Normal : pokemonSettings.Rarity;
+                CreatureSettings CreatureSettings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
+                return CreatureSettings == null ? CreatureRarity.Normal : CreatureSettings.Rarity;
             };
 
-            olvColumnCandyToEvolve.AspectGetter = delegate (object pokemon)
+            olvColumnCandyToEvolve.AspectGetter = delegate (object Creature)
             {
-                PokemonSettings pokemonSettings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
-                return pokemonSettings == null ? 0 : pokemonSettings.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
+                //CreatureSettings CreatureSettings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
+                return CreatureSettings == null ? 0 : CreatureSettings.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
             };
 
-            olvColumnPokemonCandy.AspectGetter = delegate (object pokemon)
+            olvColumnCreatureCandy.AspectGetter = delegate (object Creature)
             {
-                if (!_manager.PokemonCandy.Any())
+                if (!_manager.CreatureCandy.Any())
                 {
                     return 0;
                 }
 
-                PokemonSettings settings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
+                CreatureSettings settings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
 
                 if (settings == null)
                 {
                     return 0;
                 }
 
-                Candy family = _manager.PokemonCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
+                Candy family = _manager.CreatureCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
 
                 return family == null ? 0 : family.Candy_;
             };
 
-            olvColumnPokemonName.AspectGetter = delegate (object pokemon)
+            olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
-               return String.IsNullOrEmpty((pokemon as PokemonData).Nickname) ? (pokemon as PokemonData).PokemonId.ToString() : (pokemon as PokemonData).Nickname;
+               return String.IsNullOrEmpty((Creature as CreatureData).Nickname) ? (Creature as CreatureData).CreatureId.ToString() : (Creature as CreatureData).Nickname;
             };
 
-            olvColumnPrimaryMove.AspectGetter = (pokemon) => ((PokemonMove)(pokemon as PokemonData).Move1).ToString().Replace("Fast", "");
+            olvColumnPrimaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move1).ToString().Replace("Fast", "");
 
-            olvColumnSecondaryMove.AspectGetter = (pokemon) => ((PokemonMove)(pokemon as PokemonData).Move2).ToString();
+            olvColumnSecondaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move2).ToString();
 
-            olvColumnAttack.AspectGetter = (pokemon) => (pokemon as PokemonData).IndividualAttack;
-            olvColumnDefense.AspectGetter = (pokemon) => (pokemon as PokemonData).IndividualDefense;
-            olvColumnStamina.AspectGetter = (pokemon) => (pokemon as PokemonData).IndividualStamina;
+            olvColumnAttack.AspectGetter = (Creature) => (Creature as CreatureData).IndividualAttack;
+            olvColumnDefense.AspectGetter = (Creature) => (Creature as CreatureData).IndividualDefense;
+            olvColumnStamina.AspectGetter = (Creature) => (Creature as CreatureData).IndividualStamina;
 
 
-            olvColumnPerfectPercent.AspectGetter = delegate (object pokemon)
+            olvColumnPerfectPercent.AspectGetter = delegate (object Creature)
             {
-                double settings = Manager.CalculateIVPerfection(pokemon as PokemonData);
+                double settings = Manager.CalculateIVPerfection(Creature as CreatureData);
                 string sDouble = String.Format("{0:0.00}", settings);
                 return double.Parse(sDouble);
             };
 
-            olvColumnPokemonHeight.AspectGetter = delegate (object pokemon)
+            olvColumnCreatureHeight.AspectGetter = delegate (object Creature)
             {
-                return String.Format("{0:0.00}m", (pokemon as PokemonData).HeightM);
+                return String.Format("{0:0.00}m", (Creature as CreatureData).HeightM);
             };
 
-            olvColumnPokemonWeight.AspectGetter = delegate (object pokemon)
+            olvColumnCreatureWeight.AspectGetter = delegate (object Creature)
             {
-                return String.Format("{0:0.00}Kg", (pokemon as PokemonData).WeightKg);
+                return String.Format("{0:0.00}Kg", (Creature as CreatureData).WeightKg);
             };
 
             #endregion
@@ -152,6 +153,7 @@ namespace DraconiusGoGUI.UI
 
                 return item.ItemId.ToString().Replace("Item", "");
             };
+            */
 
             #endregion
         }
@@ -251,30 +253,31 @@ namespace DraconiusGoGUI.UI
             labelExpGained.Text = _manager.ExpGained.ToString();
             labelPokeCoins.Text = _manager.TotalPokeCoins.ToString();
 
+            /*
             if (_manager.Stats != null)
             {
                 labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
-                labelPokemonCaught.Text = _manager.Stats.PokemonsCaptured.ToString();
+                labelCreatureCaught.Text = _manager.Stats.CreaturesCaptured.ToString();
                 labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
-                labelUniquePokemon.Text = _manager.Stats.UniquePokedexEntries.ToString();
+                labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
             }
 
-            if (_manager.Pokemon != null)
+            if (_manager.Creature != null)
             {
-                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
-                labelDeployedPokemons.Text = _manager.Pokemon.Where(i => !string.IsNullOrEmpty(i.DeployedFortId)).Count().ToString();
+                labelCreatureCount.Text = String.Format("{0}/{1}", _manager.Creature.Count + _manager.Eggs.Count, _manager.MaxCreatureStorage);
+                labelDeployedCreatures.Text = _manager.Creature.Where(i => !string.IsNullOrEmpty(i.DeployedFortId)).Count().ToString();
             }
 
             if (_manager.Items != null)
             {
-                labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.Count), _manager.MaxItemStorage);
+                //labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.Count), _manager.MaxItemStorage);
             }
 
             if (_manager.PlayerData != null)
             {
-                BuddyPokemon buddy = _manager.PlayerData.BuddyPokemon ?? new BuddyPokemon();
-                PokemonData myBuddy = _manager.Pokemon.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new PokemonData();
-                labelPokemonBuddy.Text = myBuddy.PokemonId != PokemonId.Missingno ? String.Format("{0}", myBuddy.PokemonId) : "Not set";
+                //BuddyCreature buddy = _manager.PlayerData.BuddyCreature ?? new BuddyCreature();
+                //CreatureData myBuddy = _manager.Creature.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new CreatureData();
+                //labelCreatureBuddy.Text = myBuddy.CreatureId != CreatureId.Missingno ? String.Format("{0}", myBuddy.CreatureId) : "Not set";
                 labelPlayerUsername.Text = _manager.PlayerData.Username;
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
                 labelCreateDate.Text = date.ToString();
@@ -285,14 +288,16 @@ namespace DraconiusGoGUI.UI
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.GymTutorial)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.LegalScreen)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.NameSelection)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.PokemonBerry)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.PokemonCapture)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.CreatureBerry)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.CreatureCapture)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.UseItem)
                     )
                     tutocompleted = "Completed";
+                    
                 labelTutorialState.Text = tutocompleted;
             }
+            */
         }
 
         private void ButtonUpdateStats_Click(object sender, EventArgs e)
@@ -312,17 +317,17 @@ namespace DraconiusGoGUI.UI
             e.Item.ForeColor = log.GetLogColor();
         }
 
-        private void FastObjectListViewPokemon_FormatCell(object sender, FormatCellEventArgs e)
+        private void FastObjectListViewCreature_FormatCell(object sender, FormatCellEventArgs e)
         {
-            var pokemonData = (PokemonData)e.Model;
+           /* var CreatureData = (CreatureData)e.Model;
 
-            if (pokemonData == null)
+            if (CreatureData == null)
                 return;
 
-            if (e.Column == olvColumnPokemonName)
+            if (e.Column == olvColumnCreatureName)
             {
-                bool fav = (bool)olvColumnPokemonFavorite.GetValue(pokemonData);
-                bool bubby = _manager?.PlayerData?.BuddyPokemon?.Id == pokemonData.Id == true;
+                bool fav = (bool)olvColumnCreatureFavorite.GetValue(CreatureData);
+                bool bubby = _manager?.PlayerData?.BuddyCreature?.Id == CreatureData.Id == true;
                 if (fav)
                 {
                     e.SubItem.ForeColor = Color.Gold;
@@ -331,16 +336,16 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = Color.Blue;
                 }
-                else if (!String.IsNullOrEmpty(pokemonData.DeployedFortId))
+                else if (!String.IsNullOrEmpty(CreatureData.DeployedFortId))
                 {
                     //deployed
                     e.SubItem.ForeColor = Color.LightGreen;
                 }
             }
-            else if (e.Column == olvColumnPokemonCandy)
+            else if (e.Column == olvColumnCreatureCandy)
             {
-                int candy = (int)olvColumnPokemonCandy.GetValue(pokemonData);
-                int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(pokemonData);
+                int candy = (int)olvColumnCreatureCandy.GetValue(CreatureData);
+                int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(CreatureData);
 
                 if (candyToEvolve > 0)
                 {
@@ -349,7 +354,7 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnPerfectPercent)
             {
-                double perfectPercent = Convert.ToDouble(olvColumnPerfectPercent.GetValue(pokemonData));
+                double perfectPercent = Convert.ToDouble(olvColumnPerfectPercent.GetValue(CreatureData));
 
                 if (perfectPercent >= 93)
                 {
@@ -366,15 +371,15 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnAttack)
             {
-                if (pokemonData.IndividualAttack >= 13)
+                if (CreatureData.IndividualAttack >= 13)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if (pokemonData.IndividualAttack >= 11)
+                else if (CreatureData.IndividualAttack >= 11)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
-                else if (pokemonData.IndividualAttack >= 9)
+                else if (CreatureData.IndividualAttack >= 9)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
@@ -386,15 +391,15 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnDefense)
             {
-                if (pokemonData.IndividualDefense >= 13)
+                if (CreatureData.IndividualDefense >= 13)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if (pokemonData.IndividualDefense >= 11)
+                else if (CreatureData.IndividualDefense >= 11)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
-                else if (pokemonData.IndividualDefense >= 9)
+                else if (CreatureData.IndividualDefense >= 9)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
@@ -405,15 +410,15 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnStamina)
             {
-                if (pokemonData.IndividualStamina >= 13)
+                if (CreatureData.IndividualStamina >= 13)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if (pokemonData.IndividualStamina >= 11)
+                else if (CreatureData.IndividualStamina >= 11)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
-                else if (pokemonData.IndividualStamina >= 9)
+                else if (CreatureData.IndividualStamina >= 9)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
@@ -422,81 +427,88 @@ namespace DraconiusGoGUI.UI
                     e.SubItem.ForeColor = Color.Red;
                 }
             }
+            */
         }
 
         private async void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
+            /*
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} Creature?", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
-
-            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+           
+            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault() == null)
                 return;
 
-            contextMenuStripPokemonDetails.Enabled = false;
+            contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.UpgradePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+            MethodResult managerResult = await _manager.UpgradeCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
 
             DisplayDetails();
 
-            contextMenuStripPokemonDetails.Enabled = true;
+            contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished upgrade pokemon");
+            MessageBox.Show("Finished upgrade Creature");
+            */
         }
 
         private async void TransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to transfer {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
+            /*
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to transfer {0} Creature?", fastObjectListViewCreature.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault() == null)
                 return;
 
-            contextMenuStripPokemonDetails.Enabled = false;
+            contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.TransferPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+            MethodResult managerResult = await _manager.TransferCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
 
             DisplayDetails();
 
-            contextMenuStripPokemonDetails.Enabled = true;
+            contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished transferring pokemon");
+            MessageBox.Show("Finished transferring Creature");
+            */
         }
 
         private async void EvolveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to evolve {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
+            /*
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to evolve {0} Creature?", fastObjectListViewCreature.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault() == null)
                 return;
 
-            contextMenuStripPokemonDetails.Enabled = false;
+            contextMenuStripCreatureDetails.Enabled = false;
 
-            await _manager.EvolvePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+            await _manager.EvolveCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
 
             DisplayDetails();
 
-            contextMenuStripPokemonDetails.Enabled = true;
+            contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished evolving pokemon");
+            MessageBox.Show("Finished evolving Creature");
+            */
         }
 
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -506,35 +518,35 @@ namespace DraconiusGoGUI.UI
                 _totalLogs = _manager.TotalLogs;
                 tabPageLogs.Text = "Logs";
             }
-            else if (tabControlMain.SelectedTab == tabPagePokemon)
+            else if (tabControlMain.SelectedTab == tabPageCreature)
             {
-                _manager.UpdateInventory(InventoryRefresh.Pokemon);
-                fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+                //_manager.UpdateInventory(InventoryRefresh.Creature);
+                //fastObjectListViewCreature.SetObjects(_manager.Creature);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
-                _manager.UpdateInventory(InventoryRefresh.PokemonCandy);
-                fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
+                //_manager.UpdateInventory(InventoryRefresh.CreatureCandy);
+                //fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
-                _manager.UpdateInventory(InventoryRefresh.Eggs);
-                _manager.UpdateInventory(InventoryRefresh.Incubators);
-                fastObjectListViewEggs.SetObjects(_manager.Eggs);
+                //_manager.UpdateInventory(InventoryRefresh.Eggs);
+                //_manager.UpdateInventory(InventoryRefresh.Incubators);
+                //fastObjectListViewEggs.SetObjects(_manager.Eggs);
             }
             else if (tabControlMain.SelectedTab == tabPageInventory)
             {
-                _manager.UpdateInventory(InventoryRefresh.Items);
-                fastObjectListViewInventory.SetObjects(_manager.Items);
+                //_manager.UpdateInventory(InventoryRefresh.Items);
+                //fastObjectListViewInventory.SetObjects(_manager.Items);
             }
             else if (tabControlMain.SelectedTab == tabPagePokedex)
             {
-                _manager.UpdateInventory(InventoryRefresh.Pokedex);
-                fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
+                //_manager.UpdateInventory(InventoryRefresh.Pokedex);
+                //fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {
-                _manager.UpdateInventory(InventoryRefresh.Stats);
+                //_manager.UpdateInventory(InventoryRefresh.Stats);
                 DisplayDetails();
             }
         }
@@ -575,30 +587,30 @@ namespace DraconiusGoGUI.UI
         {
             favoriteToolStripMenuItem.Enabled = false;
 
-            await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), true);
+            //await _manager.FavoriteCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>(), true);
 
             DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            //fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished favoriting pokemon");
+            MessageBox.Show("Finished favoriting Creature");
         }
 
         private async void SetUnfavoriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             favoriteToolStripMenuItem.Enabled = false;
 
-            await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), false);
+            //await _manager.FavoriteCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>(), false);
 
             DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            //fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished unfavoriting pokemon");
+            MessageBox.Show("Finished unfavoriting Creature");
         }
 
         private async void RecycleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -611,7 +623,7 @@ namespace DraconiusGoGUI.UI
                 return;
             }
 
-            foreach (ItemData item in fastObjectListViewInventory.SelectedObjects)
+            /*foreach (ItemData item in fastObjectListViewInventory.SelectedObjects)
             {
                 int toDelete = amount;
 
@@ -623,11 +635,11 @@ namespace DraconiusGoGUI.UI
                 await _manager.RecycleItem(item, toDelete);
 
                 await Task.Delay(500);
-            }
+            }*/
 
-            _manager.UpdateInventory(InventoryRefresh.Items);
+            //_manager.UpdateInventory(InventoryRefresh.Items);
 
-            fastObjectListViewInventory.SetObjects(_manager.Items);
+            //fastObjectListViewInventory.SetObjects(_manager.Items);
 
             MessageBox.Show("Finished recycling items");
         }
@@ -650,91 +662,96 @@ namespace DraconiusGoGUI.UI
         {
             showFutureTransfersToolStripMenuItem.Enabled = false;
 
-            MethodResult<List<PokemonData>> result = _manager.GetPokemonToTransfer();
+            /*MethodResult<List<CreatureData>> result = _manager.GetCreatureToTransfer();
 
             if (result.Success)
             {
-                fastObjectListViewPokemon.SetObjects(result.Data);
+                fastObjectListViewCreature.SetObjects(result.Data);
             }
             else
             {
-                MessageBox.Show("Failed to get pokemon to be transfered");
-            }
+                MessageBox.Show("Failed to get Creature to be transfered");
+            }*/
 
             showFutureTransfersToolStripMenuItem.Enabled = true;
         }
 
         private void FastObjectListViewEggs_FormatCell(object sender, FormatCellEventArgs e)
         {
-            var egg = (PokemonData)e.Model;
+            /*
+            var egg = (CreatureData)e.Model;
             var eggIncubator = new EggIncubator();
 
             foreach (var inc in _manager.Incubators)
             {
-                if (inc.PokemonId == egg.Id)
+                if (inc.CreatureId == egg.Id)
                     eggIncubator = inc;
             }
 
             if (e.Column == olvColumnEggWalked)
             {
-                if (eggIncubator.PokemonId != 0)
+                if (eggIncubator.CreatureId != 0)
                     e.SubItem.Text = String.Format("{0:0.00} km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
                 else
                     e.SubItem.Text = "0.00 km";
             }
             else if (e.Column == olvColumnEggDistance)
                 e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);
+            */                
         }
 
         private async void SetABuddyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count() > 1)
+            /*if (fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count() > 1)
             {
-                MessageBox.Show(String.Format("Select one pokemon to set a buddy you have set {0} pokemons.", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count()), "Information", MessageBoxButtons.OK);
+                MessageBox.Show(String.Format("Select one Creature to set a buddy you have set {0} Creatures.", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count()), "Information", MessageBoxButtons.OK);
 
                 return;
             }
 
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to set a buddy {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault().PokemonId), "Confirmation", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to set a buddy {0} Creature?", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault().CreatureId), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            contextMenuStripPokemonDetails.Enabled = false;
+            contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.SetBuddyPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault());
+            MethodResult managerResult = await _manager.SetBuddyCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault());
 
             DisplayDetails();
 
-            contextMenuStripPokemonDetails.Enabled = true;
+            contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished set a buddy pokemon");
+            MessageBox.Show("Finished set a buddy Creature");
+            */
         }
 
         private async void RenameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to rename {0} pokemon(s)?", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
+            /*
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to rename {0} Creature(s)?", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            contextMenuStripPokemonDetails.Enabled = false;
+            contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.RenamePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+            MethodResult managerResult = await _manager.RenameCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
 
             DisplayDetails();
 
-            contextMenuStripPokemonDetails.Enabled = true;
+            contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
-            MessageBox.Show("Finished to rename pokemon(s)");
+            MessageBox.Show("Finished to rename Creature(s)");
+            */
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             if (_client.ClientSession.AccessToken.IsExpired)
             {
                 Restart();
@@ -61,9 +61,9 @@ namespace DraconiusGoGUI.DracoManager
             {
                 LogCaller(new LoggerEventArgs("Avatar already set", LoggerTypes.Info));
             }
-
-            if (!completedTutorials.Contains(TutorialState.PokemonCapture))
-            {
+            */
+            //if (!completedTutorials.Contains(/*TutorialState.CreatureCapture*/))
+            //{
                 // TODO:
                 /*
                 getDownloadURLs([
@@ -71,22 +71,22 @@ namespace DraconiusGoGUI.DracoManager
                 this.state.assets.getFullIdFromId('aa8f7687-a022-4773-b900-3a8c170e9aea'),
                 this.state.assets.getFullIdFromId('e89109b0-9a54-40fe-8431-12f7826c8194'),
                 ]);*/
-
-                var pokemon = new List<PokemonId>
+                /*
+                var Creature = new List<CreatureId>
                 {
-                    PokemonId.Charmander,
-                    PokemonId.Bulbasaur,
-                    PokemonId.Squirtle,
-                    PokemonId.Pikachu
+                    CreatureId.Charmander,
+                    CreatureId.Bulbasaur,
+                    CreatureId.Squirtle,
+                    CreatureId.Pikachu
                 };
 
-                PokemonId chosenPokemon = PokemonId.Pikachu;
+                CreatureId chosenCreature = CreatureId.Pikachu;
 
                 lock (_rand)
                 {
-                    chosenPokemon = pokemon[_rand.Next(0, pokemon.Count)];
+                    chosenCreature = Creature[_rand.Next(0, Creature.Count)];
                 }
-                MethodResult result = await CompleteEncounterTutorial(chosenPokemon);
+                MethodResult result = await CompleteEncounterTutorial(chosenCreature);
 
                 if (!result.Success)
                 {
@@ -120,14 +120,14 @@ namespace DraconiusGoGUI.DracoManager
             {
                 LogCaller(new LoggerEventArgs("Error occured when completing tutorial", LoggerTypes.Warning));
             }
-
+            */
             return new MethodResult()
             {
                 Success = true
             };
         }
 
-        private async Task<MethodResult> MarkTutorialsComplete(TutorialState[] tutorials, bool nobuddy = true, bool noinbox = true)
+        private async Task<MethodResult> MarkTutorialsComplete(/*TutorialState[] tutorials,*/ bool nobuddy = true, bool noinbox = true)
         {
             if (!_client.LoggedIn)
             {
@@ -138,7 +138,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.MarkTutorialComplete,
@@ -160,14 +160,14 @@ namespace DraconiusGoGUI.DracoManager
 
             // not nedded pogolib set this auto
             //_client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
-
+            */
             return new MethodResult
             {
                 Success = true
             };
         }
 
-        private async Task<MethodResult> CompleteEncounterTutorial(PokemonId pokemon)
+        private async Task<MethodResult> CompleteEncounterTutorial(/*CreatureId Creature*/)
         {
             if (!_client.LoggedIn)
             {
@@ -178,13 +178,13 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.EncounterTutorialComplete,
                 RequestMessage = new EncounterTutorialCompleteMessage
                 {
-                    PokemonId = pokemon
+                    CreatureId = Creature
                 }.ToByteString()
             });
 
@@ -194,8 +194,8 @@ namespace DraconiusGoGUI.DracoManager
             EncounterTutorialCompleteResponse encounterTutorialCompleteResponse = null;
 
             encounterTutorialCompleteResponse = EncounterTutorialCompleteResponse.Parser.ParseFrom(response);
-            LogCaller(new LoggerEventArgs(String.Format("Caught a {0}", pokemon), LoggerTypes.Success));
-
+            LogCaller(new LoggerEventArgs(String.Format("Caught a {0}", Creature), LoggerTypes.Success));
+            */
             return new MethodResult
             {
                 Success = true
@@ -204,7 +204,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult> SetPlayerAvatar()
         {
-            var avatar = new PlayerAvatar();
+            //var avatar = new PlayerAvatar();
 
             if (!_client.LoggedIn)
             {
@@ -215,7 +215,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetAvatar,
@@ -232,7 +232,7 @@ namespace DraconiusGoGUI.DracoManager
 
             setAvatarResponse = SetAvatarResponse.Parser.ParseFrom(response);
             LogCaller(new LoggerEventArgs("Avatar set to defaults", LoggerTypes.Success));
-
+            */
 
             return new MethodResult
             {
@@ -242,7 +242,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult> ListAvatarCustomizations()
         {
-            var avatar = new PlayerAvatar();
+            //var avatar = new PlayerAvatar();
 
             if (!_client.LoggedIn)
             {
@@ -253,7 +253,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.ListAvatarCustomizations,
@@ -268,7 +268,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var parsedResponse = ListAvatarCustomizationsResponse.Parser.ParseFrom(response);
             LogCaller(new LoggerEventArgs("ListAvatarCustomizations set to defaults", LoggerTypes.Success));
-
+            */
 
             return new MethodResult
             {
@@ -287,7 +287,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetAvatarItemAsViewed,
@@ -305,7 +305,7 @@ namespace DraconiusGoGUI.DracoManager
 
             setAvatarItemAsViewedResponse = SetAvatarItemAsViewedResponse.Parser.ParseFrom(response);
             LogCaller(new LoggerEventArgs("Set avatar item as viewed", LoggerTypes.Success));
-
+            */
             return new MethodResult
             {
                 Success = true
@@ -323,7 +323,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.ClaimCodename,
@@ -339,7 +339,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var parsedResponse = ClaimCodenameResponse.Parser.ParseFrom(response);
             LogCaller(new LoggerEventArgs("Set avatar item as viewed", LoggerTypes.Success));
-
+            */
             return new MethodResult
             {
                 Success = true

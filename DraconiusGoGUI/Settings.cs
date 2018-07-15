@@ -57,7 +57,7 @@ namespace DraconiusGoGUI
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
         public bool GoOnlyToGyms { get; set; }
-        public bool DeployPokemon { get; set; }
+        public bool DeployCreature { get; set; }
         public string GroupName { get; set; }
         public string AccountName { get; set; }
         public AuthType AuthType { get; set; }
@@ -71,12 +71,12 @@ namespace DraconiusGoGUI
         public int MaxTravelDistance { get; set; }
         public bool UseLuckyEgg { get; set; }
         public bool ClaimLevelUpRewards { get; set; }
-        public int MinPokemonBeforeEvolve { get; set; }
+        public int MinCreatureBeforeEvolve { get; set; }
         public bool RecycleItems { get; set; }
-        public bool TransferPokemon { get; set; }
-        public bool EvolvePokemon { get; set; }
-        public bool UpgradePokemon { get; set; }
-        public bool CatchPokemon { get; set; }
+        public bool TransferCreature { get; set; }
+        public bool EvolveCreature { get; set; }
+        public bool UpgradeCreature { get; set; }
+        public bool CatchCreature { get; set; }
         public bool IncubateEggs { get; set; }
         public int MaxLevel { get; set; }
         public int PercTransItems { get; set; }
@@ -84,9 +84,9 @@ namespace DraconiusGoGUI
         public bool SPF { get; set; }
 
         public double SearchFortBelowPercent { get; set; }
-        public int CatchPokemonDayLimit { get; set; }
+        public int CatchCreatureDayLimit { get; set; }
         public int SpinPokestopsDayLimit { get; set; }
-        public bool SnipeAllPokemonsNoInPokedex { get; set; }
+        public bool SnipeAllCreaturesNoInPokedex { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
         public bool UsePOGOLibHeartbeat { get; set; }
@@ -122,7 +122,7 @@ namespace DraconiusGoGUI
         public int MaxFailBeforeReset { get; set; }
         public bool UseBerries { get; set; }
         public bool OnlyUnlimitedIncubator { get; set; }
-        public bool TransferSlashPokemons { get; set; }
+        public bool TransferSlashCreatures { get; set; }
         public bool ShufflePokestops { get; set; }
         public bool GetArBonus { get; set; }
         public decimal ARBonusProximity { get; set; }
@@ -201,15 +201,15 @@ namespace DraconiusGoGUI
         public void LoadDefaults()
         {
             GroupName = "Default";
-            AuthType = AuthType.Ptc;
+            AuthType = AuthType.DEVICE;
             MimicWalking = false;
-            CatchPokemon = true;
+            CatchCreature = true;
             WalkingSpeed = 200;
             MaxTravelDistance = 50000;
             EncounterWhileWalking = true;
             EnableHumanization = false;
             InsideReticuleChance = 100;
-            MinPokemonBeforeEvolve = 0;
+            MinCreatureBeforeEvolve = 0;
             StopAtMinAccountState = AccountState.Unknown;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
@@ -218,7 +218,7 @@ namespace DraconiusGoGUI
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
             SearchFortBelowPercent = 1000;
-            CatchPokemonDayLimit = 500;
+            CatchCreatureDayLimit = 500;
             SpinPokestopsDayLimit = 700;
             ForceEvolveAbovePercent = 1000;
             PercTransItems = 90;
@@ -250,14 +250,14 @@ namespace DraconiusGoGUI
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
             AutoFavoritShiny = true;
-            SnipeAllPokemonsNoInPokedex = false;
+            SnipeAllCreaturesNoInPokedex = false;
             EncounterWhileWalking = true;
             RequestFortDetails = false;
             BallsToIgnoreStops = 80;
             IgnoreStopsIfTooBalls = false;
             UsePOGOLibHeartbeat = false;
             APIThrottles = 1000;
-            MinPokemonBeforeEvolve = 1;
+            MinCreatureBeforeEvolve = 1;
             UseSoftBanBypass = true;
             SoftBanBypassTimes = 40;
             LevelForConstLukky = 9;
@@ -285,27 +285,28 @@ namespace DraconiusGoGUI
         public void LoadCatchSettings()
         {
             CatchSettings = new List<CatchSetting>();
-
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            /*
+            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
             {
-                if (pokemon == PokemonId.Missingno)
+                if (Creature == CreatureId.Missingno)
                 {
                     continue;
                 }
 
                 var cSettings = new CatchSetting
                 {
-                    Id = pokemon
+                    Id = Creature
                 };
 
                 CatchSettings.Add(cSettings);
             }
+            */
         }
 
         public void LoadInventorySettings()
         {
             ItemSettings = new List<InventoryItemSetting>();
-
+            /*
             foreach (ItemId item in Enum.GetValues(typeof(ItemId)))
             {
                 if (item == ItemId.ItemUnknown)
@@ -320,79 +321,86 @@ namespace DraconiusGoGUI
 
                 ItemSettings.Add(itemSetting);
             }
+            */
         }
 
         public void LoadEvolveSettings()
         {
             EvolveSettings = new List<EvolveSetting>();
-
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            /*
+            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
             {
-                if (pokemon == PokemonId.Missingno)
+                if (Creature == CreatureId.Missingno)
                 {
                     continue;
                 }
 
                 var setting = new EvolveSetting
                 {
-                    Id = pokemon,
+                    Id = Creature,
                     Evolve = true
                 };
 
                 EvolveSettings.Add(setting);
             }
+            */
         }
 
         public void LoadTransferSettings()
         {
             TransferSettings = new List<TransferSetting>();
-
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            /*
+            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
             {
-                if (pokemon == PokemonId.Missingno)
+                if (Creature == CreatureId.Missingno)
                 {
                     continue;
                 }
 
                 var setting = new TransferSetting
                 {
-                    Id = pokemon,
+                    Id = Creature,
                     Transfer = true
                 };
 
                 TransferSettings.Add(setting);
             }
+            */
         }
 
         public void LoadUpgradeSettings()
         {
             UpgradeSettings = new List<UpgradeSetting>();
-
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            /*
+            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
             {
-                if (pokemon == PokemonId.Missingno)
+                if (Creature == CreatureId.Missingno)
                 {
                     continue;
                 }
 
                 var setting = new UpgradeSetting
                 {
-                    Id = pokemon,
+                    Id = Creature,
                     //Upgrade = true
                 };
 
                 UpgradeSettings.Add(setting);
             }
+            */
         }
 
         public void RandomizeDeviceId()
         {
+            /*
             var device = DeviceInfoUtil.GetRandomDevice();
             DeviceId = device.DeviceInfo.DeviceId;
+            */
         }
 
         public void RandomizeDevice()
         {
+            /*
             var device = DeviceInfoUtil.GetRandomDevice();
             DeviceId = device.DeviceInfo.DeviceId;
             DeviceBrand = device.DeviceInfo.DeviceBrand;
@@ -402,6 +410,7 @@ namespace DraconiusGoGUI
             HardwareModel = device.DeviceInfo.HardwareModel;
             FirmwareBrand = device.DeviceInfo.FirmwareBrand;
             FirmwareType = device.DeviceInfo.FirmwareType;
+            */
         }
 
         private byte RandomByte()

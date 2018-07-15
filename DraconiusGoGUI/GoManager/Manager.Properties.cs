@@ -18,52 +18,52 @@ namespace DraconiusGoGUI.DracoManager
         public Settings UserSettings { get; set; }
         public Tracker Tracker { get; set; }
         public Scheduler AccountScheduler { get; set; }
-        public PlayerStats Stats { get; set; }
-
-        [JsonIgnore]
-        public Dictionary<PokemonMove, MoveSettings> MoveSettings { get; private set; }
-        [JsonIgnore]
-        public Dictionary<BadgeType, BadgeSettings> BadgeSettings { get; private set; }
-        [JsonIgnore]
-        public Dictionary<ItemId, ItemSettings> ItemSettings { get; private set; }
-        [JsonIgnore]
-        public GymBattleSettings BattleSettings { get; private set; }
-        [JsonIgnore]
-        public PokemonUpgradeSettings UpgradeSettings { get; private set; }
-        [JsonIgnore]
-        public MoveSequenceSettings GetMoveSequenceSettings { get; private set; }
-        [JsonIgnore]
-        public EncounterSettings GetEncounterSettings { get; private set; }
-        [JsonIgnore]
-        public IapItemDisplay GetIapItemDisplay { get; private set; }
-        [JsonIgnore]
-        public IapSettings GetIapSettings { get; private set; }
-        [JsonIgnore]
-        public EquippedBadgeSettings GetEquippedBadgeSettings { get; private set; }
-        [JsonIgnore]
-        public QuestSettings GetQuestSettings { get; private set; }
-        [JsonIgnore]
-        public AvatarCustomizationSettings GetAvatarCustomizationSettings { get; private set; }
-        [JsonIgnore]
-        public FormSettings GetFormSettings { get; private set; }
-        [JsonIgnore]
-        public GenderSettings GetGenderSettings { get; private set; }
-        [JsonIgnore]
-        public GymBadgeGmtSettings GetGymBadgeGmtSettings { get; private set; }
-        [JsonIgnore]
-        public WeatherAffinity GetWeatherAffinity { get; private set; }
-        [JsonIgnore]
-        public WeatherBonus GetWeatherBonus { get; private set; }
-        [JsonIgnore]
-        public PokemonScaleSetting GetPokemonScaleSetting { get; private set; }
-        [JsonIgnore]
-        public TypeEffectiveSettings GetTypeEffectiveSettings { get; private set; }
-        [JsonIgnore]
-        public CameraSettings GetCameraSettings { get; private set; }
-        [JsonIgnore]
-        public GymLevelSettings GetGymLevelSettings { get; private set; }
-        [JsonIgnore]
-        public GetPlayerProfileResponse PlayerProfile { get; private set; }
+        //public PlayerStats Stats { get; set; }
+        
+        //[JsonIgnore]
+        //public Dictionary<CreatureMove, MoveSettings> MoveSettings { get; private set; }
+        //[JsonIgnore]
+        //public Dictionary<BadgeType, BadgeSettings> BadgeSettings { get; private set; }
+        //[JsonIgnore]
+        //public Dictionary<ItemId, ItemSettings> ItemSettings { get; private set; }
+        //[JsonIgnore]
+        //public GymBattleSettings BattleSettings { get; private set; }
+        //[JsonIgnore]
+        //public CreatureUpgradeSettings UpgradeSettings { get; private set; }
+        //[JsonIgnore]
+        //public MoveSequenceSettings GetMoveSequenceSettings { get; private set; }
+        //[JsonIgnore]
+        //public EncounterSettings GetEncounterSettings { get; private set; }
+        //[JsonIgnore]
+        //public IapItemDisplay GetIapItemDisplay { get; private set; }
+        //[JsonIgnore]
+        //public IapSettings GetIapSettings { get; private set; }
+        //[JsonIgnore]
+        //public EquippedBadgeSettings GetEquippedBadgeSettings { get; private set; }
+        //[JsonIgnore]
+        //public QuestSettings GetQuestSettings { get; private set; }
+        //[JsonIgnore]
+        //public AvatarCustomizationSettings GetAvatarCustomizationSettings { get; private set; }
+        //[JsonIgnore]
+        //public FormSettings GetFormSettings { get; private set; }
+        //[JsonIgnore]
+        //public GenderSettings GetGenderSettings { get; private set; }
+        //[JsonIgnore]
+        //public GymBadgeGmtSettings GetGymBadgeGmtSettings { get; private set; }
+        //[JsonIgnore]
+        //public WeatherAffinity GetWeatherAffinity { get; private set; }
+        //[JsonIgnore]
+        //public WeatherBonus GetWeatherBonus { get; private set; }
+        //[JsonIgnore]
+        //public CreatureScaleSetting GetCreatureScaleSetting { get; private set; }
+        //[JsonIgnore]
+        //public TypeEffectiveSettings GetTypeEffectiveSettings { get; private set; }
+        //[JsonIgnore]
+        //public CameraSettings GetCameraSettings { get; private set; }
+        //[JsonIgnore]
+        //public GymLevelSettings GetGymLevelSettings { get; private set; }
+        //[JsonIgnore]
+        //public GetPlayerProfileResponse PlayerProfile { get; private set; }
 
         [JsonIgnore]
         public string SchedulerName
@@ -75,15 +75,15 @@ namespace DraconiusGoGUI.DracoManager
         }
 
         [JsonIgnore]
-        public int PokemonCaught
+        public int CreatureCaught
         {
             get
             {
-                return Tracker == null ? 0 : Tracker.PokemonCaught;
+                return Tracker == null ? 0 : Tracker.CreatureCaught;
             }
             set
             {
-                Tracker.PokemonCaught = value;
+                Tracker.CreatureCaught = value;
             }
         }
 
@@ -129,35 +129,35 @@ namespace DraconiusGoGUI.DracoManager
         [JsonIgnore]
         public BotState State { get; set; }
 
-        [JsonIgnore]
-        public PlayerData PlayerData { get { return _client?.ClientSession?.Player?.Data; } }
+        //[JsonIgnore]
+        //public PlayerData PlayerData { get { return _client?.ClientSession?.Player?.Data; } }
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
 
-        [JsonIgnore]
-        public List<ItemData> Items { get; private set; } = new List<ItemData>();
+        //[JsonIgnore]
+        //public List<ItemData> Items { get; private set; } = new List<ItemData>();
 
-        [JsonIgnore]
-        public List<PokemonData> Pokemon { get; private set; } = new List<PokemonData>();
+        //[JsonIgnore]
+        //public List<CreatureData> Creature { get; private set; } = new List<CreatureData>();
 
-        [JsonIgnore]
-        public List<PokedexEntry> Pokedex { get; private set; }  = new List<PokedexEntry>();
+        //[JsonIgnore]
+        //public List<PokedexEntry> Pokedex { get; private set; }  = new List<PokedexEntry>();
 
-        [JsonIgnore]
-        public List<Candy> PokemonCandy { get; private set; } = new List<Candy>();
+        //[JsonIgnore]
+        //public List<Candy> CreatureCandy { get; private set; } = new List<Candy>();
 
-        [JsonIgnore]
-        public List<EggIncubator> Incubators { get; private set; } = new List<EggIncubator>();
+        //[JsonIgnore]
+        //public List<EggIncubator> Incubators { get; private set; } = new List<EggIncubator>();
 
-        [JsonIgnore]
-        public List<PokemonData> Eggs { get; private set; } = new List<PokemonData>();
+        //[JsonIgnore]
+        //public List<CreatureData> Eggs { get; private set; } = new List<CreatureData>();
 
-        [JsonIgnore]
-        public Dictionary<PokemonId, PokemonSettings> PokeSettings { get; private set; }
+        //[JsonIgnore]
+        //public Dictionary<CreatureId, CreatureSettings> PokeSettings { get; private set; }
 
-        [JsonIgnore]
-        public PlayerLevelSettings LevelSettings { get; private set; }
+        //[JsonIgnore]
+        //public PlayerLevelSettings LevelSettings { get; private set; }
 
         [JsonIgnore]
         public List<FarmLocation> FarmLocations { get; private set; }
@@ -208,13 +208,16 @@ namespace DraconiusGoGUI.DracoManager
         [JsonIgnore]
         public int Level
         {
+            
             get
             {
-                return Stats == null ? 0 : Stats.Level;
+                return 0;
+                //return Stats == null ? 0 : Stats.Level;
             }
+            
             set
             {
-                Stats.Level = value;
+                //Stats.Level = value;
             }
         }
 
@@ -223,7 +226,8 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return Stats == null ? TeamColor.Neutral.ToString() : UserSettings.DefaultTeam;
+                //return Stats == null ? TeamColor.Neutral.ToString() : UserSettings.DefaultTeam;
+                return string.Empty;
             }
         }
 
@@ -245,7 +249,8 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     return "Unknown";
                 }
-
+                return "Unknown";
+                /*
                 long currentExp = Stats.Experience - Stats.PrevLevelXp;
                 long required = Stats.NextLevelXp - Stats.PrevLevelXp;
                 long needed = required - currentExp;
@@ -267,6 +272,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 return time.TotalHours >= 24 ? String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds) : String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
+                */
             }
         }
 
@@ -297,6 +303,8 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
+                return "Unknown";
+                /*
                 if (Stats == null)
                 {
                     return "??/??";
@@ -313,6 +321,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 return String.Format("{0}/{1} ({2:0.00}%)", currentExp, required, ratio);
+                */
             }
         }
 
@@ -321,16 +330,18 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return PlayerData == null ? 350 : PlayerData.MaxItemStorage;
+                return 0;
+                //return PlayerData == null ? 350 : PlayerData.MaxItemStorage;
             }
         }
 
         [JsonIgnore]
-        public int MaxPokemonStorage
+        public int MaxCreatureStorage
         {
             get
             {
-                return PlayerData == null ? 250 : PlayerData.MaxPokemonStorage;
+                return 0;
+                //return PlayerData == null ? 250 : PlayerData.MaxCreatureStorage;
             }
         }
 
@@ -339,6 +350,8 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
+                return 0;
+                /*
                 if(PlayerData == null || PlayerData.Currencies.Count == 0)
                 {
                     return 0;
@@ -346,6 +359,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 Currency stardust = PlayerData.Currencies.FirstOrDefault(x => x.Name == "STARDUST");
                 return stardust.Amount == 0 ? 0 : stardust.Amount;
+                */
             }
         }
 
@@ -354,6 +368,8 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
+                return 0;
+                /*
                 if (PlayerData == null || PlayerData.Currencies.Count == 0)
                 {
                     return 0;
@@ -361,6 +377,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 Currency pokecoins = PlayerData.Currencies.FirstOrDefault(x => x.Name == "POKECOIN");
                 return pokecoins.Amount == 0 ? 0 : pokecoins.Amount;
+                */
             }
         }
 
@@ -412,7 +429,7 @@ namespace DraconiusGoGUI.DracoManager
             get
             {
                 if (_client.LoggedIn)
-                    return _client.ClientSession.LuckyEggsUsed;
+                    return false;// _client.ClientSession.LuckyEggsUsed;
                 else
                     return false;
             }
@@ -423,13 +440,13 @@ namespace DraconiusGoGUI.DracoManager
         private void ExpIncrease(int amount)
         {
             ExpGained += amount;
-            Stats.Experience += amount;
+            //Stats.Experience += amount;
         }
 
         private int RemainingPokeballs()
         {
             int total = 0;
-
+            /*
             ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall);
 
             if(data != null)
@@ -463,7 +480,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 total += data.Count;
             }
-
+            */
             return total;
         }
 

@@ -10,27 +10,28 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult> EvolveFilteredPokemon()
+        /*
+        private async Task<MethodResult> EvolveFilteredCreature()
         {
-            MethodResult<List<PokemonData>> response = GetPokemonToEvolve();
+            MethodResult<List<CreatureData>> response = GetCreatureToEvolve();
 
             if (response.Data.Count == 0)
             {
                 return new MethodResult();
             }
 
-            LogCaller(new LoggerEventArgs(String.Format("{0} pokemon to evolve", response.Data.Count), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("{0} Creature to evolve", response.Data.Count), LoggerTypes.Info));
 
-            if (FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
+            if (FilledCreatureInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon inventory space {0:0.00}% of {1:0.00}% force evolve above percent.", FilledPokemonInventorySpace(), UserSettings.ForceEvolveAbovePercent), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Not enough Creature inventory space {0:0.00}% of {1:0.00}% force evolve above percent.", FilledCreatureInventorySpace(), UserSettings.ForceEvolveAbovePercent), LoggerTypes.Info));
 
                 return new MethodResult();
             }
 
-            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve)
+            if (response.Data.Count < UserSettings.MinCreatureBeforeEvolve)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon.", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Not enough Creature to evolve. {0} of {1} evolvable Creature.", response.Data.Count, UserSettings.MinCreatureBeforeEvolve), LoggerTypes.Info));
 
                 return new MethodResult();
             }
@@ -45,7 +46,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            MethodResult evole = await EvolvePokemon(response.Data);
+            MethodResult evole = await EvolveCreature(response.Data);
             if (evole.Success)
             {
                 return new MethodResult
@@ -57,40 +58,40 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
         }
 
-        public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
+        public async Task<MethodResult> EvolveCreature(IEnumerable<CreatureData> CreatureToEvolve)
         {
             //Shouldn't happen
-            if (pokemonToEvolve.Count() < 1)
+            if (CreatureToEvolve.Count() < 1)
             {
-                LogCaller(new LoggerEventArgs("Null value sent to evolve pokemon", LoggerTypes.Debug));
+                LogCaller(new LoggerEventArgs("Null value sent to evolve Creature", LoggerTypes.Debug));
 
                 return new MethodResult();
             }
 
-            foreach (PokemonData pokemon in pokemonToEvolve)
+            foreach (CreatureData Creature in CreatureToEvolve)
             {
-                if (pokemon == null)
+                if (Creature == null)
                 {
-                    LogCaller(new LoggerEventArgs("Null pokemon data in IEnumerable", LoggerTypes.Debug));
+                    LogCaller(new LoggerEventArgs("Null Creature data in IEnumerable", LoggerTypes.Debug));
 
                     continue;
                 }
 
-                if (pokemon.IsBad)
+                if (Creature.IsBad)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Pokemon {0} is slashed.", pokemon.PokemonId), LoggerTypes.Warning));
-                    //await TransferPokemon(new List<PokemonData> { pokemon });
+                    LogCaller(new LoggerEventArgs(String.Format("Creature {0} is slashed.", Creature.CreatureId), LoggerTypes.Warning));
+                    //await TransferCreature(new List<CreatureData> { Creature });
                     continue;
                 }
 
-                if (!CanEvolvePokemon(pokemon))
+                if (!CanEvolveCreature(Creature))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgrated maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be upgrated maybe is deployed Creature or you not have needed resources.", Creature.CreatureId), LoggerTypes.Info));
                     continue;
                 }
 
-                PokemonSettings pokemonSettings = GetPokemonSetting((pokemon).PokemonId).Data;
-                ItemId itemNeeded = pokemonSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault();
+                CreatureSettings CreatureSettings = GetCreatureSetting((Creature).CreatureId).Data;
+                ItemId itemNeeded = CreatureSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault();
 
                 if (!_client.LoggedIn)
                 {
@@ -104,10 +105,10 @@ namespace DraconiusGoGUI.DracoManager
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.EvolvePokemon,
-                    RequestMessage = new EvolvePokemonMessage
+                    RequestType = RequestType.EvolveCreature,
+                    RequestMessage = new EvolveCreatureMessage
                     {
-                        PokemonId = pokemon.Id,
+                        CreatureId = Creature.Id,
                         EvolutionItemRequirement = itemNeeded
                     }.ToByteString()
                 });
@@ -115,45 +116,45 @@ namespace DraconiusGoGUI.DracoManager
                 if (response == null)
                     return new MethodResult();
 
-                EvolvePokemonResponse evolvePokemonResponse = EvolvePokemonResponse.Parser.ParseFrom(response);
-                switch (evolvePokemonResponse.Result)
+                EvolveCreatureResponse evolveCreatureResponse = EvolveCreatureResponse.Parser.ParseFrom(response);
+                switch (evolveCreatureResponse.Result)
                 {
-                    case EvolvePokemonResponse.Types.Result.Success:
-                        ExpIncrease(evolvePokemonResponse.ExperienceAwarded);
-                        //_expGained += evolvePokemonResponse.ExperienceAwarded;
+                    case EvolveCreatureResponse.Types.Result.Success:
+                        ExpIncrease(evolveCreatureResponse.ExperienceAwarded);
+                        //_expGained += evolveCreatureResponse.ExperienceAwarded;
 
                         LogCaller(new LoggerEventArgs(
                                 String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3} -> {4}. IV: {5:0.00}%",
-                                            pokemon.PokemonId,
-                                            pokemonSettings.EvolutionBranch.Select(x => x.Evolution).FirstOrDefault(),
-                                            evolvePokemonResponse.ExperienceAwarded,
-                                            pokemon.Cp,
-                                            evolvePokemonResponse.EvolvedPokemonData.Cp,
-                                            CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData)),
+                                            Creature.CreatureId,
+                                            CreatureSettings.EvolutionBranch.Select(x => x.Evolution).FirstOrDefault(),
+                                            evolveCreatureResponse.ExperienceAwarded,
+                                            Creature.Cp,
+                                            evolveCreatureResponse.EvolvedCreatureData.Cp,
+                                            CalculateIVPerfection(evolveCreatureResponse.EvolvedCreatureData)),
                                             LoggerTypes.Evolve));
 
-                        UpdateInventory(InventoryRefresh.Pokemon);
-                        UpdateInventory(InventoryRefresh.PokemonCandy);
+                        UpdateInventory(InventoryRefresh.Creature);
+                        UpdateInventory(InventoryRefresh.CreatureCandy);
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                         continue;
-                    case EvolvePokemonResponse.Types.Result.FailedInsufficientResources:
+                    case EvolveCreatureResponse.Types.Result.FailedInsufficientResources:
                         LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Warning));
                         continue;
-                    case EvolvePokemonResponse.Types.Result.FailedInvalidItemRequirement:
+                    case EvolveCreatureResponse.Types.Result.FailedInvalidItemRequirement:
                         LogCaller(new LoggerEventArgs("Evolve request failed: Failed Invalid Item Requirement", LoggerTypes.Warning));
                         continue;
-                    case EvolvePokemonResponse.Types.Result.FailedPokemonCannotEvolve:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon Cannot Evolve", LoggerTypes.Warning));
+                    case EvolveCreatureResponse.Types.Result.FailedCreatureCannotEvolve:
+                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Creature Cannot Evolve", LoggerTypes.Warning));
                         continue;
-                    case EvolvePokemonResponse.Types.Result.FailedPokemonIsDeployed:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon IsDeployed", LoggerTypes.Warning));
+                    case EvolveCreatureResponse.Types.Result.FailedCreatureIsDeployed:
+                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Creature IsDeployed", LoggerTypes.Warning));
                         continue;
-                    case EvolvePokemonResponse.Types.Result.FailedPokemonMissing:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon Missing", LoggerTypes.Warning));
+                    case EvolveCreatureResponse.Types.Result.FailedCreatureMissing:
+                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Creature Missing", LoggerTypes.Warning));
                         continue;
-                    case EvolvePokemonResponse.Types.Result.Unset:
+                    case EvolveCreatureResponse.Types.Result.Unset:
                         LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Warning));
                         continue;
                 }
@@ -165,7 +166,7 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private async Task<MethodResult<int>> GetEvolutionCandy(PokemonId pokemonId)
+        private async Task<MethodResult<int>> GetEvolutionCandy(CreatureId CreatureId)
         {
             if (PokeSettings == null)
             {
@@ -177,7 +178,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            MethodResult<PokemonSettings> settingsResult = GetPokemonSetting(pokemonId);
+            MethodResult<CreatureSettings> settingsResult = GetCreatureSetting(CreatureId);
 
             if (!settingsResult.Success)
             {
@@ -195,31 +196,31 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private MethodResult<List<PokemonData>> GetPokemonToEvolve()
+        private MethodResult<List<CreatureData>> GetCreatureToEvolve()
         {
-            if (!UserSettings.EvolvePokemon)
+            if (!UserSettings.EvolveCreature)
             {
                 LogCaller(new LoggerEventArgs("Evolving disabled", LoggerTypes.Info));
 
-                return new MethodResult<List<PokemonData>>
+                return new MethodResult<List<CreatureData>>
                 {
-                    Data = new List<PokemonData>(),
+                    Data = new List<CreatureData>(),
                     Message = "Evolving disabled",
                     Success = true
                 };
             }
 
-            var pokemonToEvolve = new List<PokemonData>();
+            var CreatureToEvolve = new List<CreatureData>();
 
-            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.OrderByDescending(x => x.PokemonId).GroupBy(x => x.PokemonId);
+            IEnumerable<IGrouping<CreatureId, CreatureData>> groupedCreature = Creature.OrderByDescending(x => x.CreatureId).GroupBy(x => x.CreatureId);
 
-            foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
+            foreach (IGrouping<CreatureId, CreatureData> group in groupedCreature)
             {
                 EvolveSetting evolveSetting = UserSettings.EvolveSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if (evolveSetting == null)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to find evolve settings for pokemon {0}", group.Key), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to find evolve settings for Creature {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
@@ -229,20 +230,20 @@ namespace DraconiusGoGUI.DracoManager
                     //Don't evolve
                     continue;
                 }
-                PokemonSettings setting;
+                CreatureSettings setting;
                 if (!PokeSettings.TryGetValue(group.Key, out setting))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for pokemon {0}", group.Key), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for Creature {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
 
-                Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
-                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
+                Candy CreatureCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+                List<CreatureData> CreatureGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
 
-                if (pokemonCandy == null)
+                if (CreatureCandy == null)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("No candy found for pokemon {0}", group.Key), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("No candy found for Creature {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
@@ -251,28 +252,28 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (candyToEvolve == 0)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("No evolution for pokemon {0}", group.Key), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("No evolution for Creature {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
 
-                int totalPokemon = pokemonGroupToEvolve.Count;
-                int totalCandy = pokemonCandy.Candy_;
+                int totalCreature = CreatureGroupToEvolve.Count;
+                int totalCandy = CreatureCandy.Candy_;
 
-                int maxPokemon = totalCandy / candyToEvolve;
+                int maxCreature = totalCandy / candyToEvolve;
 
-                foreach (PokemonData pData in pokemonGroupToEvolve.Take(maxPokemon))
+                foreach (CreatureData pData in CreatureGroupToEvolve.Take(maxCreature))
                 {
-                    if (!CanTransferOrEvolePokemon(pData, true))
-                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be transfered maybe is a favorit, is deployed or is a buddy pokemon.", pData.PokemonId), LoggerTypes.Info));
+                    if (!CanTransferOrEvoleCreature(pData, true))
+                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pData.CreatureId), LoggerTypes.Info));
                     else
-                        pokemonToEvolve.Add(pData);
+                        CreatureToEvolve.Add(pData);
                 }
             }
 
-            return new MethodResult<List<PokemonData>>
+            return new MethodResult<List<CreatureData>>
             {
-                Data = pokemonToEvolve,
+                Data = CreatureToEvolve,
                 Message = "Success",
                 Success = true
             };
@@ -334,29 +335,29 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        public double FilledPokemonInventorySpace()
+        public double FilledCreatureInventorySpace()
         {
-            if (Pokemon == null || PlayerData == null)
+            if (Creature == null || PlayerData == null)
             {
                 return 0;
             }
 
-            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
+            return (double)(Creature.Count + Eggs.Count) / PlayerData.MaxCreatureStorage * 100;
         }
 
-        private bool CanEvolvePokemon(PokemonData pokemon)
+        private bool CanEvolveCreature(CreatureData Creature)
         {
-            // Can't evolve pokemon in gyms.
-            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+            // Can't evolve Creature in gyms.
+            if (!string.IsNullOrEmpty(Creature.DeployedFortId))
                 return false;
 
-            var settings = PokeSettings.SingleOrDefault(x => x.Value.PokemonId == pokemon.PokemonId);
+            var settings = PokeSettings.SingleOrDefault(x => x.Value.CreatureId == Creature.CreatureId);
 
-            // Can't evolve pokemon that are not evolvable.
+            // Can't evolve Creature that are not evolvable.
             if (settings.Value.EvolutionIds.Count == 0 && settings.Value.EvolutionBranch.Count == 0)
                 return false;
 
-            int familyCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == settings.Value.FamilyId).Candy_;
+            int familyCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == settings.Value.FamilyId).Candy_;
 
             bool canEvolve = false;
             // Check requirements for all branches, if we meet the requirements for any of them then we return true.
@@ -380,5 +381,6 @@ namespace DraconiusGoGUI.DracoManager
             }
             return canEvolve;
         }
+        */
     }
 }

@@ -13,7 +13,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DraconiusGoGUI.Captcha;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -26,9 +25,9 @@ namespace DraconiusGoGUI.DracoManager
         private bool _firstRun = true;
         private int _failedInventoryReponses = 0;
         private const int _failedInventoryUntilBan = 3;
-        private int _fleeingPokemonResponses = 0;
-        private bool _potentialPokemonBan = false;
-        private const int _fleeingPokemonUntilBan = 3;
+        private int _fleeingCreatureResponses = 0;
+        private bool _potentialCreatureBan = false;
+        private const int _fleeingCreatureUntilBan = 3;
         private bool _potentialPokeStopBan = false;
         private int _failedPokestopResponse = 0;
         private bool _autoRestart = false;
@@ -38,8 +37,6 @@ namespace DraconiusGoGUI.DracoManager
         private bool CatchDisabled = false;
 
         public bool _proxyIssue = false;
-        //Manager captcha solver
-        public CaptchaManager CaptchaSolver = new CaptchaManager();
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
@@ -52,8 +49,8 @@ namespace DraconiusGoGUI.DracoManager
         [JsonConstructor]
         public Manager()
         {
-            Stats = new PlayerStats();
-            Logs = new List<Log>();
+            //Stats = new PlayerStats();
+            //Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
         }
@@ -62,7 +59,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             UserSettings = new Settings();
             Logs = new List<Log>();
-            Stats = new PlayerStats();
+            //Stats = new PlayerStats();
             Tracker = new Tracker();
             ProxyHandler = handler;
             LoadFarmLocations();
@@ -175,8 +172,8 @@ namespace DraconiusGoGUI.DracoManager
             LogCaller(new LoggerEventArgs("Bot started", LoggerTypes.Info));
 
             _runningStopwatch.Start();
-            _potentialPokemonBan = false;
-            _fleeingPokemonResponses = 0;
+            _potentialCreatureBan = false;
+            _fleeingCreatureResponses = 0;
 
             t.Start();
 
@@ -256,14 +253,14 @@ namespace DraconiusGoGUI.DracoManager
                 return true;
             }
 
-            if (_client?.ClientSession?.State == SessionState.Paused)
+            /*if (_client?.ClientSession?.State == SessionState.Paused)
             {
                 LogCaller(new LoggerEventArgs("Bot paused", LoggerTypes.Info));
 
                 State = BotState.Paused;
 
                 return true;
-            }
+            }*/
 
             return false;
         }
@@ -357,10 +354,10 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }
 
-                    if (_client.ClientSession.AccessToken.IsExpired)
+                    /*if (_client.ClientSession.AccessToken.IsExpired)
                     {
                         Restart();
-                    }
+                    }*/
 
                     if (UserSettings.StopOnAPIUpdate)
                     {
@@ -369,13 +366,13 @@ namespace DraconiusGoGUI.DracoManager
                         try
                         {
                             var remote = new Version();
-                            if (_client.ClientSession.GlobalSettings != null)
-                                remote = new Version(_client.ClientSession.GlobalSettings?.MinimumClientVersion);
-                            if (_client.VersionStr < remote)
-                            {
-                                LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
-                                break;
-                            }
+                            //if (_client.ClientSession.GlobalSettings != null)
+                            //    remote = new Version(_client.ClientSession.GlobalSettings?.MinimumClientVersion);
+                            //if (_client.VersionStr < remote)
+                            //{
+                            //    LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
+                            //    break;
+                            //}
                         }
                         catch (Exception ex1)
                         {
@@ -387,10 +384,10 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }
 
-                    //Get pokemon settings
-                    if (PokeSettings == null)
+                    //Get Creature settings
+                    /*if (PokeSettings == null)
                     {
-                        LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Grabbing Creature settings ...", LoggerTypes.Debug));
 
                         result = await GetItemTemplates();
 
@@ -398,14 +395,15 @@ namespace DraconiusGoGUI.DracoManager
                         {
                             //if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
                             //    AccountState = AccountState.TemporalBan;
-                            LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
+                            LogCaller(new LoggerEventArgs("Load Creature settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             break;
                         }
-                    }
+                    }*/
 
                     //Auto complete tutorials
                     if (UserSettings.CompleteTutorial)
                     {
+                        /*
                         if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
                         {
                             result = await MarkStartUpTutorialsComplete(true);
@@ -421,6 +419,7 @@ namespace DraconiusGoGUI.DracoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
+                        */
                     }
 
                     _failedInventoryReponses = 0;
@@ -441,14 +440,14 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
+                        //result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
 
-                        if (!result.Success)
-                        {
-                            break;
-                        }
+                        //if (!result.Success)
+                        //{
+                       //     break;
+                       // }
 
-                        UpdateInventory(InventoryRefresh.All);
+                        //UpdateInventory(InventoryRefresh.All);
                     }
 
                     #endregion
@@ -460,7 +459,7 @@ namespace DraconiusGoGUI.DracoManager
                     reloadAllForts:
 
                     LogCaller(new LoggerEventArgs("Getting pokestops...", LoggerTypes.Info));
-
+                    /*
                     MethodResult<List<FortData>> pokestops = await GetAllFortsAsync();
 
                     if (!pokestops.Success)
@@ -593,46 +592,46 @@ namespace DraconiusGoGUI.DracoManager
                         {
                             int remainingPokeballs = RemainingPokeballs();
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingPokeballs, LoggerTypes.Info));
-                            double filledPokemonStorage = FilledPokemonStorage();
+                            double filledCreatureStorage = FilledCreatureStorage();
 
                             if (remainingPokeballs > 0)
                             {
-                                if (filledPokemonStorage <= 100)
+                                if (filledCreatureStorage <= 100)
                                 {
-                                    //Catch nearby pokemon
-                                    MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
-                                    if (nearbyPokemonResponse.Success)
+                                    //Catch nearby Creature
+                                    MethodResult nearbyCreatureResponse = await CatchNeabyCreature();
+                                    if (nearbyCreatureResponse.Success)
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                                    //Catch incense pokemon
-                                    MethodResult incensePokemonResponse = await CatchInsencePokemon();
-                                    if (incensePokemonResponse.Success)
+                                    //Catch incense Creature
+                                    MethodResult incenseCreatureResponse = await CatchInsenceCreature();
+                                    if (incenseCreatureResponse.Success)
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                                    //Catch lured pokemon
-                                    MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
-                                    if (luredPokemonResponse.Success)
+                                    //Catch lured Creature
+                                    MethodResult luredCreatureResponse = await CatchLuredCreature(pokestop);
+                                    if (luredCreatureResponse.Success)
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                                    //Check sniping NearyPokemon
-                                    MethodResult Snipe = await SnipeAllNearyPokemon();
+                                    //Check sniping NearyCreature
+                                    MethodResult Snipe = await SnipeAllNearyCreature();
                                     if (Snipe.Success)
                                     {
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                        //this as walk to pokemon sinpe pos is not good .. continue for new pos..
+                                        //this as walk to Creature sinpe pos is not good .. continue for new pos..
                                         continue;
                                     }
                                 }
                                 else
                                 {
-                                    LogCaller(new LoggerEventArgs("You inventory pokemon storage is full please transfer some pokemons.", LoggerTypes.Warning));
-                                    await TransferFilteredPokemon();
+                                    LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
+                                    await TransferFilteredCreature();
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                             }
                             else
                             {
-                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
@@ -743,7 +742,7 @@ namespace DraconiusGoGUI.DracoManager
                                                 if (pokestop.OwnedByTeam == PlayerData.Team || pokestop.OwnedByTeam == TeamColor.Neutral)
                                                 {
                                                     //Check if config as deploy actived
-                                                    if (UserSettings.DeployPokemon)
+                                                    if (UserSettings.DeployCreature)
                                                     {
                                                         //Try to deploy
                                                         await GymDeploy(pokestop);
@@ -769,16 +768,16 @@ namespace DraconiusGoGUI.DracoManager
                                 {
                                     if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial) && UserSettings.CompleteTutorial)
                                     {
-                                        result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
+                                        result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.CreatureBerry, TutorialState.UseItem });
 
                                         if (!result.Success)
                                         {
-                                            LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
+                                            LogCaller(new LoggerEventArgs("Failed. Marking pokestop, Creatureberry, useitem, Creaturecapture tutorials completed..", LoggerTypes.Warning));
 
                                             break;
                                         }
 
-                                        LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
+                                        LogCaller(new LoggerEventArgs("Marking pokestop, Creatureberry, useitem, Creaturecapture tutorials completed.", LoggerTypes.Success));
 
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                     }
@@ -841,9 +840,9 @@ namespace DraconiusGoGUI.DracoManager
                                 Restart();
                             }
 
-                            if (UserSettings.EvolvePokemon)
+                            if (UserSettings.EvolveCreature)
                             {
-                                MethodResult evolveResult = await EvolveFilteredPokemon();
+                                MethodResult evolveResult = await EvolveFilteredCreature();
 
                                 if (evolveResult.Success)
                                 {
@@ -851,9 +850,9 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            if (UserSettings.TransferPokemon)
+                            if (UserSettings.TransferCreature)
                             {
-                                MethodResult transferResult = await TransferFilteredPokemon();
+                                MethodResult transferResult = await TransferFilteredCreature();
 
                                 if (transferResult.Success)
                                 {
@@ -861,9 +860,9 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            if (UserSettings.UpgradePokemon)
+                            if (UserSettings.UpgradeCreature)
                             {
-                                MethodResult upgradeResult = await UpgradeFilteredPokemon();
+                                MethodResult upgradeResult = await UpgradeFilteredCreature();
 
                                 if (upgradeResult.Success)
                                 {
@@ -919,7 +918,7 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        if (Tracker.PokemonCaught >= UserSettings.CatchPokemonDayLimit && Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
+                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit && Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
                         {
                             LogCaller(new LoggerEventArgs("Daily limits reached. Stoping ...", LoggerTypes.Warning));
                             Stop();
@@ -935,26 +934,9 @@ namespace DraconiusGoGUI.DracoManager
                             }
                         }
                     }
+                    */
                 }
                 catch (StackOverflowException ex)
-                {
-                    AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
-                    break;
-                }
-                catch (HashVersionMismatchException ex)
-                {
-                    AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
-                    break;
-                }
-                catch (GoogleLoginException ex)
-                {
-                    AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
-                    break;
-                }
-                catch (PtcLoginException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
@@ -971,40 +953,12 @@ namespace DraconiusGoGUI.DracoManager
                     LogCaller(new LoggerEventArgs("OperationCanceledException. Stopping ...", LoggerTypes.Warning, ex));
                     break;
                 }
-                catch (APIBadRequestException ex)
-                {
-                    LogCaller(new LoggerEventArgs("API Bad Request. Restarting ...", LoggerTypes.Warning, ex));
-                }
-                catch (InvalidPlatformException ex)
-                {
-                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Restarting  ...", LoggerTypes.Warning, ex));
-                }
-                catch (SessionInvalidatedException ex)
-                {
-                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Restarting ...", LoggerTypes.Warning, ex));
-                }
-                catch (PokeHashException ex)
-                {
-                    AccountState = AccountState.HashIssues;
-                    LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
-                }
-                catch (SessionUnknowException ex)
-                {
-                    AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
-                }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
                 }
-                catch (SessionStateException ex)
-                {
-                    AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs("SessionStateException. Restarting ...", LoggerTypes.Exception, ex));
-                    _client.CleanLocalAccesToken();
-                }
-                catch (Exception ex)
+               catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
                 }
@@ -1130,7 +1084,7 @@ namespace DraconiusGoGUI.DracoManager
 
         public void ClearStats()
         {
-            _fleeingPokemonResponses = 0;
+            _fleeingCreatureResponses = 0;
             TotalPokeStopExp = 0;
             Tracker.Values.Clear();
             Tracker.CalculatedTrackingHours();

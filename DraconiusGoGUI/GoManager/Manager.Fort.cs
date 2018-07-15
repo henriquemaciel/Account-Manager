@@ -8,6 +8,7 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        /*
         private async Task<MethodResult> SearchPokestop(FortData pokestop)
         {
             if (pokestop == null)
@@ -79,19 +80,19 @@ namespace DraconiusGoGUI.DracoManager
 
                             if (fortResponse.ExperienceAwarded != 0)
                             {
-                                if (!_potentialPokemonBan && _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                                if (!_potentialCreatureBan && _fleeingCreatureResponses >= _fleeingCreatureUntilBan)
                                 {
-                                    LogCaller(new LoggerEventArgs("Potential pokemon ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
+                                    LogCaller(new LoggerEventArgs("Potential Creature ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
 
-                                    _potentialPokemonBan = true;
-                                    _fleeingPokemonResponses = 0;
+                                    _potentialCreatureBan = true;
+                                    _fleeingCreatureResponses = 0;
                                 }
-                                else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                                else if (_fleeingCreatureResponses >= _fleeingCreatureUntilBan)
                                 {
                                     //Already pokestop banned
                                     if (AccountState == AccountState.SoftBan)
                                     {
-                                        _potentialPokemonBan = true;
+                                        _potentialCreatureBan = true;
                                         _potentialPokeStopBan = true;
                                     }
 
@@ -100,11 +101,11 @@ namespace DraconiusGoGUI.DracoManager
                                         //Only occurs when out of range is found
                                         if (fortResponse.ExperienceAwarded == 0)
                                         {
-                                            LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban or daily limit reached.", LoggerTypes.Warning));
+                                            LogCaller(new LoggerEventArgs("Creature fleeing and failing to grab stops. Potential Creature & pokestop ban or daily limit reached.", LoggerTypes.Warning));
                                         }
                                         else
                                         {
-                                            LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban or daily limit reached.", LoggerTypes.Warning));
+                                            LogCaller(new LoggerEventArgs("Creature fleeing, yet grabbing stops. Potential Creature ban or daily limit reached.", LoggerTypes.Warning));
                                         }
                                     }
 
@@ -182,18 +183,11 @@ namespace DraconiusGoGUI.DracoManager
                                             await RecycleFilteredItems();
                                             return new MethodResult();
                                         case FortSearchResponse.Types.Result.Success:
-                                            string _message = String.Format("Searched {0}. Exp: {1}. Items: {2}.", // Badge: {3}. BonusLoot: {4}. Gems: {5}. Loot: {6}, Eggs: {7:0.0}. RaidTickets: {8}. TeamBonusLoot: {9}",
+                                            string _message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
                                                             fort,
                                                             fortResponse.ExperienceAwarded,
                                                             StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
-                                                            /*,
-                                                            fortResponse.AwardedGymBadge.ToString(),
-                                                            fortResponse.BonusLoot.LootItem.ToString(),
-                                                            fortResponse.GemsAwarded.ToString(),
-                                                            fortResponse.Loot.LootItem.ToString(),
-                                                            fortResponse.PokemonDataEgg.EggKmWalkedStart,
-                                                            fortResponse.RaidTickets.ToString(),
-                                                            fortResponse.TeamBonusLoot.LootItem.ToString()*/);
+                                                            
 
                                             //Successfully grabbed stop
                                             if (AccountState == AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
@@ -210,9 +204,9 @@ namespace DraconiusGoGUI.DracoManager
 
                                             if (fortResponse.ExperienceAwarded == 0)
                                             {
-                                                //Softban on the fleeing pokemon. Reset.
-                                                _fleeingPokemonResponses = 0;
-                                                _potentialPokemonBan = false;
+                                                //Softban on the fleeing Creature. Reset.
+                                                _fleeingCreatureResponses = 0;
+                                                _potentialCreatureBan = false;
 
                                                 ++_totalZeroExpStops;
                                                 _message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
@@ -256,18 +250,10 @@ namespace DraconiusGoGUI.DracoManager
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         break;
                     case FortSearchResponse.Types.Result.Success:
-                        string message = String.Format("Searched {0}. Exp: {1}. Items: {2}.", // Badge: {3}. BonusLoot: {4}. Gems: {5}. Loot: {6}, Eggs: {7:0.0}. RaidTickets: {8}. TeamBonusLoot: {9}",
+                        string message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
                             fort,
                             fortResponse.ExperienceAwarded,
                             StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
-                            /*,
-                            fortResponse.AwardedGymBadge.ToString(),
-                            fortResponse.BonusLoot.LootItem.ToString(),
-                            fortResponse.GemsAwarded.ToString(),
-                            fortResponse.Loot.LootItem.ToString(),
-                            fortResponse.PokemonDataEgg.EggKmWalkedStart,
-                            fortResponse.RaidTickets.ToString(),
-                            fortResponse.TeamBonusLoot.LootItem.ToString()*/);
 
                         //Successfully grabbed stop
                         if (AccountState == AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
@@ -284,9 +270,9 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (fortResponse.ExperienceAwarded == 0)
                         {
-                            //Softban on the fleeing pokemon. Reset.
-                            _fleeingPokemonResponses = 0;
-                            _potentialPokemonBan = false;
+                            //Softban on the fleeing Creature. Reset.
+                            _fleeingCreatureResponses = 0;
+                            _potentialCreatureBan = false;
 
                             ++_totalZeroExpStops;
                             message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
@@ -414,5 +400,6 @@ namespace DraconiusGoGUI.DracoManager
            }
             return new MethodResult<AddFortModifierResponse>();
         }
+        */
     }
 }

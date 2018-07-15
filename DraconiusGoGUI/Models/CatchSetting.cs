@@ -5,14 +5,14 @@ namespace DraconiusGoGUI.Models
     [Serializable]
     public class CatchSetting
     {
-        public PokemonId Id { get; set; }
+        //public CreatureId Id { get; set; }
         public bool Catch { get; set; }
         public bool UsePinap { get; set; }
         public bool Snipe { get; set; }
 
         public CatchSetting()
         {
-            Id = PokemonId.Missingno;
+            //Id = CreatureId.Missingno;
             Catch = true;
             //Snipe = true;
             UsePinap = true;
@@ -22,7 +22,8 @@ namespace DraconiusGoGUI.Models
         {
             get
             {
-                return Id.ToString();
+                return string.Empty;
+                //return Id.ToString();
             }
         }
     }

@@ -2,7 +2,7 @@
 {
     public class TrackerValues
     {
-        public int Pokemon { get; set; }
+        public int Creature { get; set; }
         public int Pokestops { get; set; }
     }
 }

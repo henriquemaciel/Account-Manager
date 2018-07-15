@@ -4,13 +4,8 @@
     {
         Good,
         Conecting,
-        Flagged,
-        TemporalBan,
         PermanentBan,
-        SoftBan,
-        CaptchaReceived,
         NotVerified,
-        HashIssues,
         Unknown
     }
 }

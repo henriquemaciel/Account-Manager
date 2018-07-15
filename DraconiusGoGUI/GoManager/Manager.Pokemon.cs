@@ -10,26 +10,27 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
+        /*
+        public async Task<MethodResult> TransferCreature(IEnumerable<CreatureData> CreaturesToTransfer)
         {
-            List<PokemonData> pokemonToTransfer = new List<PokemonData>();
+            List<CreatureData> CreatureToTransfer = new List<CreatureData>();
 
-            foreach (var pokToTranfer in pokemonsToTransfer)
+            foreach (var pokToTranfer in CreaturesToTransfer)
             {
-                if (!CanTransferOrEvolePokemon(pokToTranfer))
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be transfered maybe is a favorit, is deployed or is a buddy pokemon.", pokToTranfer.PokemonId), LoggerTypes.Info));
+                if (!CanTransferOrEvoleCreature(pokToTranfer))
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pokToTranfer.CreatureId), LoggerTypes.Info));
                 else
-                    pokemonToTransfer.Add(pokToTranfer);
+                    CreatureToTransfer.Add(pokToTranfer);
             }
 
-            if (pokemonsToTransfer.Count() == 0 || pokemonsToTransfer.FirstOrDefault() == null)
+            if (CreaturesToTransfer.Count() == 0 || CreaturesToTransfer.FirstOrDefault() == null)
                 return new MethodResult();
 
-            LogCaller(new LoggerEventArgs(String.Format("Found {0} pokemon to transfer", pokemonToTransfer.Count()), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Found {0} Creature to transfer", CreatureToTransfer.Count()), LoggerTypes.Info));
 
             if (!UserSettings.TransferAtOnce)
             {
-                foreach (PokemonData pokemon in pokemonToTransfer)
+                foreach (CreatureData Creature in CreatureToTransfer)
                 {
                     if (!_client.LoggedIn)
                     {
@@ -43,59 +44,59 @@ namespace DraconiusGoGUI.DracoManager
 
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
-                        RequestType = RequestType.ReleasePokemon,
-                        RequestMessage = new ReleasePokemonMessage
+                        RequestType = RequestType.ReleaseCreature,
+                        RequestMessage = new ReleaseCreatureMessage
                         {
-                            PokemonId = pokemon.Id
+                            CreatureId = Creature.Id
                         }.ToByteString()
                     });
 
                     if (response == null)
                         return new MethodResult();
 
-                    ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-                    switch (releasePokemonResponse.Result)
+                    ReleaseCreatureResponse releaseCreatureResponse = ReleaseCreatureResponse.Parser.ParseFrom(response);
+                    switch (releaseCreatureResponse.Result)
                     {
-                        case ReleasePokemonResponse.Types.Result.Success:
+                        case ReleaseCreatureResponse.Types.Result.Success:
                             LogCaller(new LoggerEventArgs(String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                pokemon.PokemonId,
-                                pokemon.Cp,
-                                CalculateIVPerfection(pokemon)),
+                                Creature.CreatureId,
+                                Creature.Cp,
+                                CalculateIVPerfection(Creature)),
                                 LoggerTypes.Transfer));
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                            RemoveInventoryItem(GetPokemonHashKey(pokemon.Id));
-                            UpdateInventory(InventoryRefresh.PokemonCandy);
+                            RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
+                            UpdateInventory(InventoryRefresh.CreatureCandy);
                             continue;
-                        case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
+                        case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsBuddy:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemon.PokemonId,
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                                Creature.CreatureId,
+                                releaseCreatureResponse.Result), LoggerTypes.Warning));
                             continue;
-                        case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                        case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsEgg:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemon.PokemonId,
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                                Creature.CreatureId,
+                                releaseCreatureResponse.Result), LoggerTypes.Warning));
                             continue;
-                        case ReleasePokemonResponse.Types.Result.PokemonDeployed:
+                        case ReleaseCreatureResponse.Types.Result.CreatureDeployed:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemon.PokemonId,
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                                Creature.CreatureId,
+                                releaseCreatureResponse.Result), LoggerTypes.Warning));
                             continue;
-                        case ReleasePokemonResponse.Types.Result.Failed:
+                        case ReleaseCreatureResponse.Types.Result.Failed:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
-                                pokemon.PokemonId), LoggerTypes.Warning));
+                                Creature.CreatureId), LoggerTypes.Warning));
                             continue;
-                        case ReleasePokemonResponse.Types.Result.Unset:
+                        case ReleaseCreatureResponse.Types.Result.Unset:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemon.PokemonId,
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                                Creature.CreatureId,
+                                releaseCreatureResponse.Result), LoggerTypes.Warning));
                             continue;
                     }
                 }
 
-                UpdateInventory(InventoryRefresh.Pokemon);
+                UpdateInventory(InventoryRefresh.Creature);
 
                 return new MethodResult
                 {
@@ -104,7 +105,7 @@ namespace DraconiusGoGUI.DracoManager
             }
             else
             {
-                var PokemonIds = pokemonToTransfer.Select(x => x.Id);
+                var CreatureIds = CreatureToTransfer.Select(x => x.Id);
 
                 if (!_client.LoggedIn)
                 {
@@ -118,62 +119,62 @@ namespace DraconiusGoGUI.DracoManager
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.ReleasePokemon,
-                    RequestMessage = new ReleasePokemonMessage
+                    RequestType = RequestType.ReleaseCreature,
+                    RequestMessage = new ReleaseCreatureMessage
                     {
-                        PokemonIds = { PokemonIds }
+                        CreatureIds = { CreatureIds }
                     }.ToByteString()
                 });
 
                 if (response == null)
                     return new MethodResult();
 
-                ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                ReleaseCreatureResponse releaseCreatureResponse = ReleaseCreatureResponse.Parser.ParseFrom(response);
 
-                switch (releasePokemonResponse.Result)
+                switch (releaseCreatureResponse.Result)
                 {
-                    case ReleasePokemonResponse.Types.Result.Success:
+                    case ReleaseCreatureResponse.Types.Result.Success:
                         LogCaller(new LoggerEventArgs(
-                            String.Format("Successully candy awarded {0} of {1} Pokemons.",
-                                releasePokemonResponse.CandyAwarded,
-                                pokemonToTransfer.Count()),
+                            String.Format("Successully candy awarded {0} of {1} Creatures.",
+                                releaseCreatureResponse.CandyAwarded,
+                                CreatureToTransfer.Count()),
                             LoggerTypes.Transfer));
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                        foreach (var pokemonId in PokemonIds)
+                        foreach (var CreatureId in CreatureIds)
                         {
-                            RemoveInventoryItem(GetPokemonHashKey(pokemonId));
+                            RemoveInventoryItem(GetCreatureHashKey(CreatureId));
                         }
-                        UpdateInventory(InventoryRefresh.PokemonCandy);
+                        UpdateInventory(InventoryRefresh.CreatureCandy);
                         break;
-                    case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
+                    case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsBuddy:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            pokemonToTransfer.Count(),
-                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                            CreatureToTransfer.Count(),
+                            releaseCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                    case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsEgg:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            pokemonToTransfer.Count(),
-                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                            CreatureToTransfer.Count(),
+                            releaseCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case ReleasePokemonResponse.Types.Result.PokemonDeployed:
+                    case ReleaseCreatureResponse.Types.Result.CreatureDeployed:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            pokemonToTransfer.Count(),
-                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                            CreatureToTransfer.Count(),
+                            releaseCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case ReleasePokemonResponse.Types.Result.Failed:
+                    case ReleaseCreatureResponse.Types.Result.Failed:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
-                            pokemonToTransfer.Count()), LoggerTypes.Warning));
+                            CreatureToTransfer.Count()), LoggerTypes.Warning));
                         break;
-                    case ReleasePokemonResponse.Types.Result.Unset:
+                    case ReleaseCreatureResponse.Types.Result.Unset:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            pokemonToTransfer.Count(),
-                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                            CreatureToTransfer.Count(),
+                            releaseCreatureResponse.Result), LoggerTypes.Warning));
                         break;
                 }
 
-                UpdateInventory(InventoryRefresh.Pokemon);
+                UpdateInventory(InventoryRefresh.Creature);
 
                 return new MethodResult
                 {
@@ -182,14 +183,14 @@ namespace DraconiusGoGUI.DracoManager
             }
         }
 
-        private async Task<MethodResult> TransferFilteredPokemon()
+        private async Task<MethodResult> TransferFilteredCreature()
         {
 
-            double configPercentPokemons = UserSettings.PercTransPoke * 0.01;
+            double configPercentCreatures = UserSettings.PercTransPoke * 0.01;
 
-            double percentPokemon = PlayerData.MaxPokemonStorage * configPercentPokemons;
+            double percentCreature = PlayerData.MaxCreatureStorage * configPercentCreatures;
 
-            if (percentPokemon > Pokemon.Count)
+            if (percentCreature > Creature.Count)
             {
                 return new MethodResult
                 {
@@ -197,14 +198,14 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            MethodResult<List<PokemonData>> transferResult = GetPokemonToTransfer();
+            MethodResult<List<CreatureData>> transferResult = GetCreatureToTransfer();
 
             if (!transferResult.Success || transferResult.Data.Count == 0)
             {
                 return new MethodResult();
             }
 
-            await TransferPokemon(transferResult.Data);
+            await TransferCreature(transferResult.Data);
 
             return new MethodResult
             {
@@ -213,41 +214,41 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        public MethodResult<List<PokemonData>> GetPokemonToTransfer()
+        public MethodResult<List<CreatureData>> GetCreatureToTransfer()
         {
-            if (!UserSettings.TransferPokemon)
+            if (!UserSettings.TransferCreature)
             {
                 LogCaller(new LoggerEventArgs("Transferring disabled", LoggerTypes.Debug));
 
-                return new MethodResult<List<PokemonData>>
+                return new MethodResult<List<CreatureData>>
                 {
-                    Data = new List<PokemonData>(),
+                    Data = new List<CreatureData>(),
                     Message = "Transferring disabled",
                     Success = true
                 };
             }
 
-            if (!Pokemon.Any())
+            if (!Creature.Any())
             {
-                LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
-                return new MethodResult<List<PokemonData>>
+                return new MethodResult<List<CreatureData>>
                 {
-                    Message = "You have no pokemon"
+                    Message = "You have no Creature"
                 };
             }
 
-            var pokemonToTransfer = new List<PokemonData>();
+            var CreatureToTransfer = new List<CreatureData>();
 
-            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.GroupBy(x => x.PokemonId);
+            IEnumerable<IGrouping<CreatureId, CreatureData>> groupedCreature = Creature.GroupBy(x => x.CreatureId);
 
-            foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
+            foreach (IGrouping<CreatureId, CreatureData> group in groupedCreature)
             {
                 TransferSetting settings = UserSettings.TransferSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if (settings == null)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to find transfer settings for pokemon {0}", group.Key), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to find transfer settings for Creature {0}", group.Key), LoggerTypes.Warning));
 
                     continue;
                 }
@@ -260,64 +261,64 @@ namespace DraconiusGoGUI.DracoManager
                 switch (settings.Type)
                 {
                     case TransferType.All:
-                        pokemonToTransfer.AddRange(group.ToList());
+                        CreatureToTransfer.AddRange(group.ToList());
                         break;
                     case TransferType.BelowCP:
-                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
+                        CreatureToTransfer.AddRange(GetCreatureBelowCP(group, settings.MinCP));
                         break;
                     case TransferType.BelowIVPercentage:
-                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
+                        CreatureToTransfer.AddRange(GetCreatureBelowIVPercent(group, settings.IVPercent));
                         break;
                     case TransferType.KeepPossibleEvolves:
-                        pokemonToTransfer.AddRange(GetPokemonByPossibleEvolve(group, settings.KeepMax));
+                        CreatureToTransfer.AddRange(GetCreatureByPossibleEvolve(group, settings.KeepMax));
                         break;
                     case TransferType.KeepStrongestX:
-                        pokemonToTransfer.AddRange(GetPokemonByStrongest(group, settings.KeepMax));
+                        CreatureToTransfer.AddRange(GetCreatureByStrongest(group, settings.KeepMax));
                         break;
                     case TransferType.KeepXHighestIV:
-                        pokemonToTransfer.AddRange(GetPokemonByIV(group, settings.KeepMax));
+                        CreatureToTransfer.AddRange(GetCreatureByIV(group, settings.KeepMax));
                         break;
                     case TransferType.BelowCPAndIVAmount:
-                        pokemonToTransfer.AddRange(GetPokemonBelowCPIVAmount(group, settings.MinCP, settings.IVPercent));
+                        CreatureToTransfer.AddRange(GetCreatureBelowCPIVAmount(group, settings.MinCP, settings.IVPercent));
                         break;
                     case TransferType.BelowCPOrIVAmount:
-                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
-                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
-                        pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
+                        CreatureToTransfer.AddRange(GetCreatureBelowIVPercent(group, settings.IVPercent));
+                        CreatureToTransfer.AddRange(GetCreatureBelowCP(group, settings.MinCP));
+                        CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
                     case TransferType.Slashed:
-                        pokemonToTransfer.AddRange(group.ToList());
-                        pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.IsBad).ToList();
+                        CreatureToTransfer.AddRange(group.ToList());
+                        CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.IsBad).ToList();
                         break;
                 }
             }
 
-            if (UserSettings.TransferSlashPokemons)
+            if (UserSettings.TransferSlashCreatures)
             {
-                var slashPokemons = Pokemon.Where(x => x.IsBad);
-                foreach (var slashPokemon in slashPokemons)
+                var slashCreatures = Creature.Where(x => x.IsBad);
+                foreach (var slashCreature in slashCreatures)
                 {
-                    var inlist = pokemonToTransfer.FirstOrDefault(x => x.Id == slashPokemon.Id);
+                    var inlist = CreatureToTransfer.FirstOrDefault(x => x.Id == slashCreature.Id);
                     if (inlist == null)
                     {
-                        pokemonToTransfer.Add(slashPokemon);
+                        CreatureToTransfer.Add(slashCreature);
                     }
                 }
             }
 
-            return new MethodResult<List<PokemonData>>
+            return new MethodResult<List<CreatureData>>
             {
-                Data = pokemonToTransfer,
-                Message = String.Format("Found {0} pokemon to transfer", pokemonToTransfer.Count),
+                Data = CreatureToTransfer,
+                Message = String.Format("Found {0} Creature to transfer", CreatureToTransfer.Count),
                 Success = true
             };
         }
 
-        private List<PokemonData> GetPokemonBelowCPIVAmount(IGrouping<PokemonId, PokemonData> pokemon, int minCp, double percent)
+        private List<CreatureData> GetCreatureBelowCPIVAmount(IGrouping<CreatureId, CreatureData> Creature, int minCp, double percent)
         {
-            var toTransfer = new List<PokemonData>();
+            var toTransfer = new List<CreatureData>();
 
-            foreach (PokemonData pData in pokemon)
+            foreach (CreatureData pData in Creature)
             {
                 double perfectResult = CalculateIVPerfection(pData);
 
@@ -330,16 +331,16 @@ namespace DraconiusGoGUI.DracoManager
             return toTransfer;
         }
 
-        private List<PokemonData> GetPokemonBelowCP(IGrouping<PokemonId, PokemonData> pokemon, int minCp)
+        private List<CreatureData> GetCreatureBelowCP(IGrouping<CreatureId, CreatureData> Creature, int minCp)
         {
-            return pokemon.Where(x => x.Cp < minCp).ToList();
+            return Creature.Where(x => x.Cp < minCp).ToList();
         }
 
-        private List<PokemonData> GetPokemonBelowIVPercent(IGrouping<PokemonId, PokemonData> pokemon, double percent)
+        private List<CreatureData> GetCreatureBelowIVPercent(IGrouping<CreatureId, CreatureData> Creature, double percent)
         {
-            var toTransfer = new List<PokemonData>();
+            var toTransfer = new List<CreatureData>();
 
-            foreach (PokemonData pData in pokemon)
+            foreach (CreatureData pData in Creature)
             {
                 double perfectResult = CalculateIVPerfection(pData);
 
@@ -352,74 +353,74 @@ namespace DraconiusGoGUI.DracoManager
             return toTransfer;
         }
 
-        private List<PokemonData> GetPokemonByStrongest(IGrouping<PokemonId, PokemonData> pokemon, int amount)
+        private List<CreatureData> GetCreatureByStrongest(IGrouping<CreatureId, CreatureData> Creature, int amount)
         {
-            return pokemon.OrderByDescending(x => x.Cp).Skip(amount).ToList();
+            return Creature.OrderByDescending(x => x.Cp).Skip(amount).ToList();
         }
 
-        private List<PokemonData> GetPokemonByIV(IGrouping<PokemonId, PokemonData> pokemon, int amount)
+        private List<CreatureData> GetCreatureByIV(IGrouping<CreatureId, CreatureData> Creature, int amount)
         {
-            if (!pokemon.Any())
+            if (!Creature.Any())
             {
-                return new List<PokemonData>();
+                return new List<CreatureData>();
             }
 
             //Test out first one to make sure things are correct
-            double perfectResult = CalculateIVPerfection(pokemon.First());
+            double perfectResult = CalculateIVPerfection(Creature.First());
 
-            return pokemon.OrderByDescending(x => CalculateIVPerfection(x)).ThenByDescending(x => x.Cp).Skip(amount).ToList();
+            return Creature.OrderByDescending(x => CalculateIVPerfection(x)).ThenByDescending(x => x.Cp).Skip(amount).ToList();
         }
 
-        private List<PokemonData> GetPokemonByPossibleEvolve(IGrouping<PokemonId, PokemonData> pokemon, int limit)
+        private List<CreatureData> GetCreatureByPossibleEvolve(IGrouping<CreatureId, CreatureData> Creature, int limit)
         {
-            PokemonSettings setting = null;
-            if (!PokeSettings.TryGetValue(pokemon.Key, out setting))
+            CreatureSettings setting = null;
+            if (!PokeSettings.TryGetValue(Creature.Key, out setting))
             {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for pokemon {0}", pokemon.Key), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for Creature {0}", Creature.Key), LoggerTypes.Info));
 
-                return new List<PokemonData>();
+                return new List<CreatureData>();
             }
 
-            int pokemonCandy = 0;
+            int CreatureCandy = 0;
 
-            if (PokemonCandy.Any(x => x.FamilyId == setting.FamilyId))
+            if (CreatureCandy.Any(x => x.FamilyId == setting.FamilyId))
             {
-                pokemonCandy = PokemonCandy.Where(x => x.FamilyId == setting.FamilyId).FirstOrDefault().Candy_;
-                //int pokemonCandy = PokemonCandy.SingleOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
+                CreatureCandy = CreatureCandy.Where(x => x.FamilyId == setting.FamilyId).FirstOrDefault().Candy_;
+                //int CreatureCandy = CreatureCandy.SingleOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
             }
 
             int candyToEvolve = setting.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
-            int totalPokemon = pokemon.Count();
+            int totalCreature = Creature.Count();
 
             if (candyToEvolve == 0)
             {
                 //Not thinks good
-                return pokemon.OrderByDescending(x => x.Cp).ToList();
-                //return new List<PokemonData>();
+                return Creature.OrderByDescending(x => x.Cp).ToList();
+                //return new List<CreatureData>();
             }
 
-            int maxPokemon = pokemonCandy / candyToEvolve;
+            int maxCreature = CreatureCandy / candyToEvolve;
 
-            if (maxPokemon > limit)
+            if (maxCreature > limit)
             {
-                maxPokemon = limit;
+                maxCreature = limit;
             }
 
-            return pokemon.OrderByDescending(x => x.Cp).Skip(maxPokemon).ToList();
+            return Creature.OrderByDescending(x => x.Cp).Skip(maxCreature).ToList();
         }
 
         // NOTE: this is the real IV Percent, using only Individual values.
-        public static double CalculateIVPerfection(PokemonData pokemon)
+        public static double CalculateIVPerfection(CreatureData Creature)
         {
             // NOTE: 45 points = 15 at points + 15 def points + 15 sta points
             //  100/45 simplifying is 20/9
-            return ((double)pokemon.IndividualAttack + pokemon.IndividualDefense + pokemon.IndividualStamina) * 20 / 9;
+            return ((double)Creature.IndividualAttack + Creature.IndividualDefense + Creature.IndividualStamina) * 20 / 9;
         }
 
-        // This other Percent gives different IV % for the same IVs depending of the pokemon level.
-        public MethodResult<double> CalculateIVPerfectionUsingMaxCP(PokemonData pokemon)
+        // This other Percent gives different IV % for the same IVs depending of the Creature level.
+        public MethodResult<double> CalculateIVPerfectionUsingMaxCP(CreatureData Creature)
         {
-            MethodResult<PokemonSettings> settingResult = GetPokemonSetting(pokemon.PokemonId);
+            MethodResult<CreatureSettings> settingResult = GetCreatureSetting(Creature.CreatureId);
 
             if (!settingResult.Success)
             {
@@ -430,22 +431,9 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            /*
-            if (Math.Abs(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier) <= 0)
-            {
-                double perfection = (double)(pokemon.IndividualAttack * 2 + pokemon.IndividualDefense + pokemon.IndividualStamina) / (4.0 * 15.0) * 100.0;
-
-                return new MethodResult<double>
-                {
-                    Data = perfection,
-                    Message = "Success",
-                    Success = true
-                };
-            }*/
-
-            double maxCp = CalculateMaxCpMultiplier(pokemon);
-            double minCp = CalculateMinCpMultiplier(pokemon);
-            double curCp = CalculateCpMultiplier(pokemon);
+            double maxCp = CalculateMaxCpMultiplier(Creature);
+            double minCp = CalculateMinCpMultiplier(Creature);
+            double curCp = CalculateCpMultiplier(Creature);
 
             double perfectPercent = (curCp - minCp) / (maxCp - minCp) * 100.0;
 
@@ -457,14 +445,14 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        public async Task<MethodResult> FavoritePokemon(IEnumerable<PokemonData> pokemonToFavorite, bool favorite = true)
+        public async Task<MethodResult> FavoriteCreature(IEnumerable<CreatureData> CreatureToFavorite, bool favorite = true)
         {
-            foreach (PokemonData pokemon in pokemonToFavorite)
+            foreach (CreatureData Creature in CreatureToFavorite)
             {
                 bool isFavorited = true;
                 string message = "unfavorited";
 
-                if (pokemon.Favorite == 0)
+                if (Creature.Favorite == 0)
                 {
                     isFavorited = false;
                     message = "favorited";
@@ -487,10 +475,10 @@ namespace DraconiusGoGUI.DracoManager
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.SetFavoritePokemon,
-                    RequestMessage = new SetFavoritePokemonMessage
+                    RequestType = RequestType.SetFavoriteCreature,
+                    RequestMessage = new SetFavoriteCreatureMessage
                     {
-                        PokemonId = (long)pokemon.Id,
+                        CreatureId = (long)Creature.Id,
                         IsFavorite = favorite
                     }.ToByteString()
                 });
@@ -498,17 +486,17 @@ namespace DraconiusGoGUI.DracoManager
                 if (response == null)
                     return new MethodResult();
 
-                SetFavoritePokemonResponse setFavoritePokemonResponse = null;
+                SetFavoriteCreatureResponse setFavoriteCreatureResponse = null;
 
-                setFavoritePokemonResponse = SetFavoritePokemonResponse.Parser.ParseFrom(response);
+                setFavoriteCreatureResponse = SetFavoriteCreatureResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs(
                     String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
-                        pokemon.PokemonId,
-                        pokemon.Cp,
-                        CalculateIVPerfection(pokemon), message),
+                        Creature.CreatureId,
+                        Creature.Cp,
+                        CalculateIVPerfection(Creature), message),
                     LoggerTypes.Success));
 
-                UpdateInventory(InventoryRefresh.Pokemon);
+                UpdateInventory(InventoryRefresh.Creature);
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
@@ -520,18 +508,18 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
         }
 
-        public async Task<MethodResult> RenamePokemon(IEnumerable<PokemonData> pokemonToRename)
+        public async Task<MethodResult> RenameCreature(IEnumerable<CreatureData> CreatureToRename)
         {
-            foreach (PokemonData pokemon in pokemonToRename)
+            foreach (CreatureData Creature in CreatureToRename)
             {
-                string input = Prompt.ShowDialog($"New nickname for {pokemon.PokemonId.ToString()}", "Rename");
+                string input = Prompt.ShowDialog($"New nickname for {Creature.CreatureId.ToString()}", "Rename");
 
                 if (String.IsNullOrEmpty(input))
                 {
                     input = String.Empty;
                 }
 
-                if (input == pokemon.Nickname)
+                if (input == Creature.Nickname)
                 {
                     continue;
                 }               
@@ -548,10 +536,10 @@ namespace DraconiusGoGUI.DracoManager
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.NicknamePokemon,
-                    RequestMessage = new NicknamePokemonMessage
+                    RequestType = RequestType.NicknameCreature,
+                    RequestMessage = new NicknameCreatureMessage
                     {
-                        PokemonId = pokemon.Id,
+                        CreatureId = Creature.Id,
                         Nickname = input
                     }.ToByteString()
                 });
@@ -559,15 +547,15 @@ namespace DraconiusGoGUI.DracoManager
                 if (response == null)
                     return new MethodResult();
 
-                NicknamePokemonResponse nicknamePokemonResponse = null;
+                NicknameCreatureResponse nicknameCreatureResponse = null;
 
-                nicknamePokemonResponse = NicknamePokemonResponse.Parser.ParseFrom(response);
+                nicknameCreatureResponse = NicknameCreatureResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs(
                     String.Format("Successully  renamed: {0} to: {1}.",
-                        pokemon.PokemonId,
-                        String.IsNullOrEmpty(input) ? $"Default [{pokemon.PokemonId.ToString()}]" : input), LoggerTypes.Success));
+                        Creature.CreatureId,
+                        String.IsNullOrEmpty(input) ? $"Default [{Creature.CreatureId.ToString()}]" : input), LoggerTypes.Success));
 
-                UpdateInventory(InventoryRefresh.Pokemon);
+                UpdateInventory(InventoryRefresh.Creature);
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
@@ -579,40 +567,40 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
         }
 
-        private double CalculateMaxCpMultiplier(PokemonData poke)
+        private double CalculateMaxCpMultiplier(CreatureData poke)
         {
-            PokemonSettings pokemonSettings = GetPokemonSetting(poke.PokemonId).Data;
+            CreatureSettings CreatureSettings = GetCreatureSetting(poke.CreatureId).Data;
 
-            return (pokemonSettings.Stats.BaseAttack + 15) * Math.Sqrt(pokemonSettings.Stats.BaseDefense + 15) *
-            Math.Sqrt(pokemonSettings.Stats.BaseStamina + 15);
+            return (CreatureSettings.Stats.BaseAttack + 15) * Math.Sqrt(CreatureSettings.Stats.BaseDefense + 15) *
+            Math.Sqrt(CreatureSettings.Stats.BaseStamina + 15);
         }
 
-        private double CalculateCpMultiplier(PokemonData poke)
+        private double CalculateCpMultiplier(CreatureData poke)
         {
-            PokemonSettings pokemonSettings = GetPokemonSetting(poke.PokemonId).Data;
+            CreatureSettings CreatureSettings = GetCreatureSetting(poke.CreatureId).Data;
 
-            return (pokemonSettings.Stats.BaseAttack + poke.IndividualAttack) *
-            Math.Sqrt(pokemonSettings.Stats.BaseDefense + poke.IndividualDefense) *
-            Math.Sqrt(pokemonSettings.Stats.BaseStamina + poke.IndividualStamina);
+            return (CreatureSettings.Stats.BaseAttack + poke.IndividualAttack) *
+            Math.Sqrt(CreatureSettings.Stats.BaseDefense + poke.IndividualDefense) *
+            Math.Sqrt(CreatureSettings.Stats.BaseStamina + poke.IndividualStamina);
         }
 
-        private double CalculateMinCpMultiplier(PokemonData poke)
+        private double CalculateMinCpMultiplier(CreatureData poke)
         {
-            PokemonSettings pokemonSettings = GetPokemonSetting(poke.PokemonId).Data;
+            CreatureSettings CreatureSettings = GetCreatureSetting(poke.CreatureId).Data;
 
-            return pokemonSettings.Stats.BaseAttack * Math.Sqrt(pokemonSettings.Stats.BaseDefense) * Math.Sqrt(pokemonSettings.Stats.BaseStamina);
+            return CreatureSettings.Stats.BaseAttack * Math.Sqrt(CreatureSettings.Stats.BaseDefense) * Math.Sqrt(CreatureSettings.Stats.BaseStamina);
         }
 
-        public async Task<MethodResult> UpgradePokemon(IEnumerable<PokemonData> pokemonsToUpgrade)
+        public async Task<MethodResult> UpgradeCreature(IEnumerable<CreatureData> CreaturesToUpgrade)
         {
-            if (pokemonsToUpgrade.Count() == 0 || pokemonsToUpgrade.FirstOrDefault() == null)
+            if (CreaturesToUpgrade.Count() == 0 || CreaturesToUpgrade.FirstOrDefault() == null)
                 return new MethodResult();
 
-            foreach (var pokemon in pokemonsToUpgrade)
+            foreach (var Creature in CreaturesToUpgrade)
             {
-                if (!CanUpgradePokemon(pokemon))
+                if (!CanUpgradeCreature(Creature))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgraded maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be upgraded maybe is deployed Creature or you not have needed resources.", Creature.CreatureId), LoggerTypes.Info));
                     continue;
                 }
 
@@ -626,43 +614,43 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                int cpBefore = pokemon.Cp;
+                int cpBefore = Creature.Cp;
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.UpgradePokemon,
-                    RequestMessage = new UpgradePokemonMessage
+                    RequestType = RequestType.UpgradeCreature,
+                    RequestMessage = new UpgradeCreatureMessage
                     {
-                        PokemonId = pokemon.Id
+                        CreatureId = Creature.Id
                     }.ToByteString()
                 });
 
                 if (response == null)
                     return new MethodResult();
 
-                var upgradePokemonResponse = UpgradePokemonResponse.Parser.ParseFrom(response);
+                var upgradeCreatureResponse = UpgradeCreatureResponse.Parser.ParseFrom(response);
 
-                switch (upgradePokemonResponse.Result)
+                switch (upgradeCreatureResponse.Result)
                 {
-                    case UpgradePokemonResponse.Types.Result.Success:
-                        UpdateInventory(InventoryRefresh.Pokemon);
-                        UpdateInventory(InventoryRefresh.PokemonCandy);
-                        LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success, CP before: {1} CP after: {2}.", pokemon.PokemonId, cpBefore, upgradePokemonResponse.UpgradedPokemon.Cp), LoggerTypes.Upgrade));
+                    case UpgradeCreatureResponse.Types.Result.Success:
+                        UpdateInventory(InventoryRefresh.Creature);
+                        UpdateInventory(InventoryRefresh.CreatureCandy);
+                        LogCaller(new LoggerEventArgs(String.Format("Upgrade Creature {0} success, CP before: {1} CP after: {2}.", Creature.CreatureId, cpBefore, upgradeCreatureResponse.UpgradedCreature.Cp), LoggerTypes.Upgrade));
                         break;
-                    case UpgradePokemonResponse.Types.Result.ErrorInsufficientResources:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                    case UpgradeCreatureResponse.Types.Result.ErrorInsufficientResources:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case UpgradePokemonResponse.Types.Result.ErrorPokemonIsDeployed:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                    case UpgradeCreatureResponse.Types.Result.ErrorCreatureIsDeployed:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case UpgradePokemonResponse.Types.Result.ErrorPokemonNotFound:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                    case UpgradeCreatureResponse.Types.Result.ErrorCreatureNotFound:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case UpgradePokemonResponse.Types.Result.ErrorUpgradeNotAvailable:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                    case UpgradeCreatureResponse.Types.Result.ErrorUpgradeNotAvailable:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
                         break;
-                    case UpgradePokemonResponse.Types.Result.Unset:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                    case UpgradeCreatureResponse.Types.Result.Unset:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
                         break;
                 }
             }
@@ -692,80 +680,62 @@ namespace DraconiusGoGUI.DracoManager
             return (float)(Math.Round((level) * 2) / 2.0);
         }
 
-        /* Un-Used reference only
-        private double GetPokemonLevel(double cpMultiplier)
+        private bool CanTransferOrEvoleCreature(CreatureData Creature, bool allmodes = false)
         {
-            double pokemonLevel;
-            if (cpMultiplier < 0.734)
-            {
-                pokemonLevel = (58.35178527 * cpMultiplier * cpMultiplier - 2.838007664 * cpMultiplier + 0.8539209906);
-            }
-            else
-            {
-                pokemonLevel = 171.0112688 * cpMultiplier - 95.20425243;
-            }
-            pokemonLevel = (Math.Round(pokemonLevel) * 2) / 2;
-
-            return pokemonLevel;
-        }
-        */
-
-        private bool CanTransferOrEvolePokemon(PokemonData pokemon, bool allmodes = false)
-        {
-            // Can't transfer pokemon null.
-            if (pokemon == null || pokemon.PokemonId == PokemonId.Missingno)
+            // Can't transfer Creature null.
+            if (Creature == null || Creature.CreatureId == CreatureId.Missingno)
                 return false;
 
-            // Can't transfer pokemon check all modes.
-            if (allmodes && pokemon.IsBad)
+            // Can't transfer Creature check all modes.
+            if (allmodes && Creature.IsBad)
                 return false;
 
-            // Can't transfer pokemon in gyms.
-            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+            // Can't transfer Creature in gyms.
+            if (!string.IsNullOrEmpty(Creature.DeployedFortId))
                 return false;
 
-            // Can't transfer buddy pokemon
-            var buddy = PlayerData?.BuddyPokemon;
-            if (buddy != null && buddy.Id == pokemon.Id)
+            // Can't transfer buddy Creature
+            var buddy = PlayerData?.BuddyCreature;
+            if (buddy != null && buddy.Id == Creature.Id)
                 return false;
 
             // Can't transfer favorite
-            if (pokemon.Favorite == 1)
+            if (Creature.Favorite == 1)
                 return false;
 
             return true;
         }
 
-        private bool CanUpgradePokemon(PokemonData pokemon)
+        private bool CanUpgradeCreature(CreatureData Creature)
         {
-            // Can't upgrade pokemon in gyms.
-            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+            // Can't upgrade Creature in gyms.
+            if (!string.IsNullOrEmpty(Creature.DeployedFortId))
                 return false;
 
-            int pokemonLevel = (int)GetLevelFromCpMultiplier(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);
+            int CreatureLevel = (int)GetLevelFromCpMultiplier(Creature.CpMultiplier + Creature.AdditionalCpMultiplier);
 
-            // Can't evolve unless pokemon level is lower than trainer.
-            if (pokemonLevel >= Level + 2)
+            // Can't evolve unless Creature level is lower than trainer.
+            if (CreatureLevel >= Level + 2)
                 return false;
 
-            int familyCandy = PokemonCandy.Where(x => x.FamilyId == GetPokemonSetting(pokemon.PokemonId).Data.FamilyId).FirstOrDefault().Candy_;
+            int familyCandy = CreatureCandy.Where(x => x.FamilyId == GetCreatureSetting(Creature.CreatureId).Data.FamilyId).FirstOrDefault().Candy_;
 
             // Can't evolve if not enough candy.
-            int pokemonCandyNeededAlready = UpgradeSettings.CandyCost[pokemonLevel];
-            if (familyCandy < pokemonCandyNeededAlready)
+            int CreatureCandyNeededAlready = UpgradeSettings.CandyCost[CreatureLevel];
+            if (familyCandy < CreatureCandyNeededAlready)
                 return false;
 
             // Can't evolve if not enough stardust.
-            var stardustToUpgrade = UpgradeSettings.StardustCost[pokemonLevel];
+            var stardustToUpgrade = UpgradeSettings.StardustCost[CreatureLevel];
             if (TotalStardust < stardustToUpgrade)
                 return false;
 
             return true;
         }
 
-        private async Task<MethodResult> UpgradeFilteredPokemon()
+        private async Task<MethodResult> UpgradeFilteredCreature()
         {
-            MethodResult<List<PokemonData>> upgradeResult = GetPokemonToUpgrade();
+            MethodResult<List<CreatureData>> upgradeResult = GetCreatureToUpgrade();
 
             if (!upgradeResult.Success || upgradeResult.Data.Count == 0)
             {
@@ -774,7 +744,7 @@ namespace DraconiusGoGUI.DracoManager
 
             LogCaller(new LoggerEventArgs(upgradeResult.Message, LoggerTypes.Info));
 
-            await UpgradePokemon(upgradeResult.Data);
+            await UpgradeCreature(upgradeResult.Data);
 
             return new MethodResult
             {
@@ -783,41 +753,41 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        public MethodResult<List<PokemonData>> GetPokemonToUpgrade()
+        public MethodResult<List<CreatureData>> GetCreatureToUpgrade()
         {
-            if (!UserSettings.UpgradePokemon)
+            if (!UserSettings.UpgradeCreature)
             {
                 LogCaller(new LoggerEventArgs("Upgrade disabled", LoggerTypes.Debug));
 
-                return new MethodResult<List<PokemonData>>
+                return new MethodResult<List<CreatureData>>
                 {
-                    Data = new List<PokemonData>(),
+                    Data = new List<CreatureData>(),
                     Message = "Upgrade disabled",
                     Success = true
                 };
             }
 
-            if (!Pokemon.Any())
+            if (!Creature.Any())
             {
-                LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
-                return new MethodResult<List<PokemonData>>
+                return new MethodResult<List<CreatureData>>
                 {
-                    Message = "You have no pokemon"
+                    Message = "You have no Creature"
                 };
             }
 
-            var pokemonToUpgrade = new List<PokemonData>();
+            var CreatureToUpgrade = new List<CreatureData>();
 
-            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.GroupBy(x => x.PokemonId);
+            IEnumerable<IGrouping<CreatureId, CreatureData>> groupedCreature = Creature.GroupBy(x => x.CreatureId);
 
-            foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
+            foreach (IGrouping<CreatureId, CreatureData> group in groupedCreature)
             {
                 UpgradeSetting settings = UserSettings.UpgradeSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if (settings == null)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to find upgrade settings for pokemon {0}", group.Key), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to find upgrade settings for Creature {0}", group.Key), LoggerTypes.Warning));
 
                     continue;
                 }
@@ -827,18 +797,19 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
 
-                pokemonToUpgrade.AddRange(group.ToList());
+                CreatureToUpgrade.AddRange(group.ToList());
             }
 
-            return new MethodResult<List<PokemonData>>
+            return new MethodResult<List<CreatureData>>
             {
-                Data = pokemonToUpgrade,
-                Message = String.Format("Found {0} pokemon to upgrade", pokemonToUpgrade.Count),
+                Data = CreatureToUpgrade,
+                Message = String.Format("Found {0} Creature to upgrade", CreatureToUpgrade.Count),
                 Success = true
             };
         }
 
-        //List pokemon shadowban for reference
+        //List Creature shadowban for reference
         private static HashSet<int> _commonShadowIDs = new HashSet<int> { 16, 19, 23, 27, 29, 32, 43, 46, 52, 54, 60, 69, 77, 81, 98, 118, 120, 129, 177, 183, 187, 191, 194, 209, 218, 293, 304, 320, 325, 339 };
+        */
     }
 }

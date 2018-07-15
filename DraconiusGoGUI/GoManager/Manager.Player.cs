@@ -14,7 +14,7 @@ namespace DraconiusGoGUI.DracoManager
     {
         public async Task<MethodResult> UpdateDetails()
         {
-            UpdateInventory(InventoryRefresh.All);
+            //UpdateInventory(InventoryRefresh.All);
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
@@ -42,14 +42,15 @@ namespace DraconiusGoGUI.DracoManager
             var builder = new StringBuilder();
             builder.AppendLine("=== Trainer Stats ===");
 
+            /*
             if (Stats != null && PlayerData != null)
             {
                 builder.AppendLine(String.Format("Group: {0}", UserSettings.GroupName));
                 builder.AppendLine(String.Format("Username: {0}", UserSettings.Username));
                 builder.AppendLine(String.Format("Password: {0}", UserSettings.Password));
                 builder.AppendLine(String.Format("Level: {0}", Stats.Level));
-                builder.AppendLine(String.Format("Current Trainer Name: {0}", PlayerData.Username));
-                builder.AppendLine(String.Format("Team: {0}", PlayerData.Team));
+                //builder.AppendLine(String.Format("Current Trainer Name: {0}", PlayerData.Username));
+                //builder.AppendLine(String.Format("Team: {0}", PlayerData.Team));
                 builder.AppendLine(String.Format("Stardust: {0:N0}", TotalStardust));
                 builder.AppendLine(String.Format("Unique Pokedex Entries: {0}", Stats.UniquePokedexEntries));
             }
@@ -57,22 +58,23 @@ namespace DraconiusGoGUI.DracoManager
             {
                 builder.AppendLine("Failed to grab stats");
             }
-
+            */
             builder.AppendLine();
 
-            builder.AppendLine("=== Pokemon ===");
+            builder.AppendLine("=== Creature ===");
 
-            if (Pokemon != null)
+            /*
+            if (Creature != null)
             {
-                foreach (PokemonData pokemon in Pokemon.OrderByDescending(x => x.Cp))
+                foreach (CreatureData Creature in Creature.OrderByDescending(x => x.Cp))
                 {
                     string candy = "Unknown";
 
-                    MethodResult<PokemonSettings> pSettings = GetPokemonSetting(pokemon.PokemonId);
+                    MethodResult<CreatureSettings> pSettings = GetCreatureSetting(Creature.CreatureId);
 
                     if (pSettings.Success)
                     {
-                        Candy pCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == pSettings.Data.FamilyId);
+                        Candy pCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == pSettings.Data.FamilyId);
 
                         if (pCandy != null)
                         {
@@ -80,14 +82,15 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }
 
-                    double perfectResult = CalculateIVPerfection(pokemon);
+                    double perfectResult = CalculateIVPerfection(Creature);
                     string iv = "Unknown";
 
                     iv = Math.Round(perfectResult, 2).ToString() + "%";
 
-                    builder.AppendLine(String.Format("Pokemon: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", pokemon.PokemonId, pokemon.Cp, iv, pokemon.Move1.ToString().Replace("Fast", ""), pokemon.Move2, candy));
+                    builder.AppendLine(String.Format("Creature: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", Creature.CreatureId, Creature.Cp, iv, Creature.Move1.ToString().Replace("Fast", ""), Creature.Move2, candy));
                 }
             }
+            */
 
             //Remove the hardcoded directory later
             try
@@ -138,6 +141,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.LevelUpRewards,
@@ -153,7 +157,7 @@ namespace DraconiusGoGUI.DracoManager
             LevelUpRewardsResponse levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
             string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
             LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.LevelUp));
-
+            */
             return new MethodResult
             {
                 Success = true
@@ -171,7 +175,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetPlayer,
@@ -185,7 +189,7 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
 
             var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
-
+            */
             return new MethodResult
             {
                 Success = true
@@ -203,7 +207,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetPlayerProfile,
@@ -219,14 +223,14 @@ namespace DraconiusGoGUI.DracoManager
             var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
 
             PlayerProfile = parsedResponse;
-
+            */
             return new MethodResult
             {
                 Success = true
             };
         }
 
-        private async Task<MethodResult> SetPlayerTeam(TeamColor team)
+        private async Task<MethodResult> SetPlayerTeam(/*TeamColor team*/)
         {
             if (!_client.LoggedIn)
             {
@@ -237,7 +241,7 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetPlayerTeam,
@@ -256,14 +260,14 @@ namespace DraconiusGoGUI.DracoManager
 
             // not nedded pogolib set this auto
             //_client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
-
+            */
             return new MethodResult
             {
                 Success = true
             };
         }
 
-        public async Task<MethodResult> SetBuddyPokemon(PokemonData pokemon)
+        public async Task<MethodResult> SetBuddyCreature(/*CreatureData Creature*/)
         {
             if (!_client.LoggedIn)
             {
@@ -274,57 +278,57 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
+            /*
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.SetBuddyPokemon,
-                RequestMessage = new SetBuddyPokemonMessage
+                RequestType = RequestType.SetBuddyCreature,
+                RequestMessage = new SetBuddyCreatureMessage
                 {
-                    PokemonId = pokemon.Id
+                    CreatureId = Creature.Id
                 }.ToByteString()
             }, true);
 
             if (response == null)
                 return new MethodResult();
 
-            SetBuddyPokemonResponse setBuddyPokemonResponse = SetBuddyPokemonResponse.Parser.ParseFrom(response);
+            SetBuddyCreatureResponse setBuddyCreatureResponse = SetBuddyCreatureResponse.Parser.ParseFrom(response);
 
-            switch (setBuddyPokemonResponse.Result)
+            switch (setBuddyCreatureResponse.Result)
             {
-                case SetBuddyPokemonResponse.Types.Result.ErrorInvalidPokemon:
-                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Warning));
+                case SetBuddyCreatureResponse.Types.Result.ErrorInvalidCreature:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy Creature, reason: {setBuddyCreatureResponse.Result.ToString()}", LoggerTypes.Warning));
                     break;
-                case SetBuddyPokemonResponse.Types.Result.ErrorPokemonDeployed:
-                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Warning));
+                case SetBuddyCreatureResponse.Types.Result.ErrorCreatureDeployed:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy Creature, reason: {setBuddyCreatureResponse.Result.ToString()}", LoggerTypes.Warning));
                     break;
-                case SetBuddyPokemonResponse.Types.Result.ErrorPokemonIsEgg:
-                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Warning));
+                case SetBuddyCreatureResponse.Types.Result.ErrorCreatureIsEgg:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy Creature, reason: {setBuddyCreatureResponse.Result.ToString()}", LoggerTypes.Warning));
                     break;
-                case SetBuddyPokemonResponse.Types.Result.ErrorPokemonNotOwned:
-                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Warning));
+                case SetBuddyCreatureResponse.Types.Result.ErrorCreatureNotOwned:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy Creature, reason: {setBuddyCreatureResponse.Result.ToString()}", LoggerTypes.Warning));
                     break;
-                case SetBuddyPokemonResponse.Types.Result.Success:
-                    PlayerData.BuddyPokemon = new BuddyPokemon
+                case SetBuddyCreatureResponse.Types.Result.Success:
+                    PlayerData.BuddyCreature = new BuddyCreature
                     {
-                        Id = pokemon.Id,
-                        //LastKmAwarded = PokeSettings[pokemon.PokemonId].KmBuddyDistance,
-                        //StartKmWalked = PokeSettings[pokemon.PokemonId].KmDistanceToHatch
+                        Id = Creature.Id,
+                        //LastKmAwarded = PokeSettings[Creature.CreatureId].KmBuddyDistance,
+                        //StartKmWalked = PokeSettings[Creature.CreatureId].KmDistanceToHatch
                     };
 
-                    setBuddyPokemonResponse.UpdatedBuddy = PlayerData.BuddyPokemon;
+                    setBuddyCreatureResponse.UpdatedBuddy = PlayerData.BuddyCreature;
 
-                    LogCaller(new LoggerEventArgs($"Set buddy pokemon completion request wasn't successful. pokemon buddy: {pokemon.PokemonId.ToString()}", LoggerTypes.Buddy));
+                    LogCaller(new LoggerEventArgs($"Set buddy Creature completion request wasn't successful. Creature buddy: {Creature.CreatureId.ToString()}", LoggerTypes.Buddy));
 
-                    UpdateInventory(InventoryRefresh.Pokemon);
+                    UpdateInventory(InventoryRefresh.Creature);
 
                     return new MethodResult
                     {
                         Success = true
                     };
-                case SetBuddyPokemonResponse.Types.Result.Unest:
-                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Warning));
+                case SetBuddyCreatureResponse.Types.Result.Unest:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy Creature, reason: {setBuddyCreatureResponse.Result.ToString()}", LoggerTypes.Warning));
                     break;
-            }
+            }*/
             return new MethodResult();
         }
 
@@ -411,7 +415,7 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         FormUrlEncodedContent content = new FormUrlEncodedContent(new[] {
                             new KeyValuePair<string, string>("api", UserSettings.ShuffleADS_API),
-                            new KeyValuePair<string, string>("type", "Pokemon"),
+                            new KeyValuePair<string, string>("type", "Creature"),
                             new KeyValuePair<string, string>("account", UserSettings.AccountName + ":" + UserSettings.Password),
                             new KeyValuePair<string, string>("account_level", Level.ToString())
                         });
@@ -471,7 +475,7 @@ namespace DraconiusGoGUI.DracoManager
                             UserSettings.CompleteTutorial = true;
                             Level = 0;
                             this.ClearStats();
-                            PokemonCaught = 0;
+                            CreatureCaught = 0;
                             PokestopsFarmed = 0;
                             _firstRun = true;
                             LogCaller(new LoggerEventArgs("Previous accout status cleaning complete", LoggerTypes.Success));

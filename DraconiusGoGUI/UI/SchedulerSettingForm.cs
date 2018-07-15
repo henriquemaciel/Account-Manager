@@ -21,7 +21,7 @@ namespace DraconiusGoGUI.UI
             foreach(SchedulerOption option in Enum.GetValues(typeof(SchedulerOption)))
             {
                 comboBoxMasterAction.Items.Add(option);
-                comboBoxPokemonAction.Items.Add(option);
+                comboBoxCreatureAction.Items.Add(option);
                 comboBoxPokestopAction.Items.Add(option);
             }
 
@@ -49,9 +49,9 @@ namespace DraconiusGoGUI.UI
             numericUpDownEndTime.Value = new Decimal(_scheduler.EndTime);
             numericUpDownCheckSpeed.Value = _scheduler.CheckTime;
 
-            comboBoxPokemonAction.SelectOption<SchedulerOption>(_scheduler.PokemonLimiter.Option);
-            numericUpDownPokemonMin.Value = _scheduler.PokemonLimiter.Min;
-            numericUpDownPokemonMax.Value = _scheduler.PokemonLimiter.Max;
+            comboBoxCreatureAction.SelectOption<SchedulerOption>(_scheduler.CreatureLimiter.Option);
+            numericUpDownCreatureMin.Value = _scheduler.CreatureLimiter.Min;
+            numericUpDownCreatureMax.Value = _scheduler.CreatureLimiter.Max;
 
             comboBoxPokestopAction.SelectOption<SchedulerOption>(_scheduler.PokeStoplimiter.Option);
             numericUpDownPokestopsMin.Value = _scheduler.PokeStoplimiter.Min;
@@ -62,7 +62,7 @@ namespace DraconiusGoGUI.UI
 
         private bool SaveValues()
         {
-            if(comboBoxMasterAction.HasNullItem() || comboBoxPokemonAction.HasNullItem() || comboBoxPokestopAction.HasNullItem())
+            if(comboBoxMasterAction.HasNullItem() || comboBoxCreatureAction.HasNullItem() || comboBoxPokestopAction.HasNullItem())
             {
                 MessageBox.Show("Please select valid options for the actions", "Warning");
                 return false;
@@ -74,9 +74,9 @@ namespace DraconiusGoGUI.UI
             _scheduler.EndTime = (double)numericUpDownEndTime.Value;
             _scheduler.CheckTime = (int)numericUpDownCheckSpeed.Value;
 
-            _scheduler.PokemonLimiter.Option = (SchedulerOption)comboBoxPokemonAction.SelectedItem;
-            _scheduler.PokemonLimiter.Min = (int)numericUpDownPokemonMin.Value;
-            _scheduler.PokemonLimiter.Max = (int)numericUpDownPokemonMax.Value;
+            _scheduler.CreatureLimiter.Option = (SchedulerOption)comboBoxCreatureAction.SelectedItem;
+            _scheduler.CreatureLimiter.Min = (int)numericUpDownCreatureMin.Value;
+            _scheduler.CreatureLimiter.Max = (int)numericUpDownCreatureMax.Value;
 
             _scheduler.PokeStoplimiter.Option = (SchedulerOption)comboBoxPokestopAction.SelectedItem;
             _scheduler.PokeStoplimiter.Min = (int)numericUpDownPokestopsMin.Value;

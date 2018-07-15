@@ -15,16 +15,16 @@ namespace DraconiusGoGUI.AccountScheduler
         }
 
         [JsonIgnore]
-        public int PokemonCaught { get;  set; }
+        public int CreatureCaught { get;  set; }
 
         [JsonIgnore]
         public int PokestopsFarmed { get;  set; }
 
-        public void AddValues(int pokemon = 0, int pokestops = 0)
+        public void AddValues(int Creature = 0, int pokestops = 0)
         {
             lock (Values)
             {
-                PokemonCaught += pokemon;
+                CreatureCaught += Creature;
                 PokestopsFarmed += pokestops;
 
                 //Add to dictionary
@@ -34,14 +34,14 @@ namespace DraconiusGoGUI.AccountScheduler
                 {
                     TrackerValues trackerValues = Values[currentTime];
 
-                    trackerValues.Pokemon += pokemon;
+                    trackerValues.Creature += Creature;
                     trackerValues.Pokestops += pokestops;
                 }
                 else
                 {
                     TrackerValues trackerValues = new TrackerValues
                     {
-                        Pokemon = pokemon,
+                        Creature = Creature,
                         Pokestops = pokestops
                     };
 
@@ -61,17 +61,17 @@ namespace DraconiusGoGUI.AccountScheduler
             {
                 Values = Values.Where(x => x.Key >= resetTime).ToDictionary(x => x.Key, x => x.Value);
 
-                int pokemon = 0;
+                int Creature = 0;
                 int pokestops = 0;
 
                 //Should only contain last 24 hours worth of values
                 foreach(KeyValuePair<DateTime, TrackerValues> tracker in Values)
                 {
-                    pokemon += tracker.Value.Pokemon;
+                    Creature += tracker.Value.Creature;
                     pokestops += tracker.Value.Pokestops;
                 }
 
-                PokemonCaught = pokemon;
+                CreatureCaught = Creature;
                 PokestopsFarmed = pokestops;
             }
         }

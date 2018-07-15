@@ -21,7 +21,7 @@ namespace DraconiusGoGUI.AccountScheduler
         public double OffSet { get; set; }
 
         public SchedulerLimiter PokeStoplimiter { get; set; }
-        public SchedulerLimiter PokemonLimiter { get; set; }
+        public SchedulerLimiter CreatureLimiter { get; set; }
         public SchedulerOption MasterOption { get; set; }
         public Color NameColor { get; set; }
 
@@ -59,16 +59,16 @@ namespace DraconiusGoGUI.AccountScheduler
             }
         }
 
-        public string PokemonSettings
+        public string CreatureSettings
         {
             get
             {
-                if(PokemonLimiter == null)
+                if(CreatureLimiter == null)
                 {
                     return "Unknown";
                 }
 
-                return String.Format("{0}-{1} {2}", PokemonLimiter.Min, PokemonLimiter.Max, PokemonLimiter.Option);
+                return String.Format("{0}-{1} {2}", CreatureLimiter.Min, CreatureLimiter.Max, CreatureLimiter.Option);
             }
         }
 
@@ -93,7 +93,7 @@ namespace DraconiusGoGUI.AccountScheduler
 
             Name = "Change Name";
             PokeStoplimiter = new SchedulerLimiter();
-            PokemonLimiter = new SchedulerLimiter();
+            CreatureLimiter = new SchedulerLimiter();
             MasterOption = SchedulerOption.StartStop;
 
             _timer = new Timer(_checkTime)

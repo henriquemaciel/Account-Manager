@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.UI
 {
@@ -24,47 +25,48 @@ namespace DraconiusGoGUI.UI
             _manager = manager;
 
             #region Catching
-
+            /*
             olvColumnCatchId.AspectGetter = delegate (object x)
             {
                 var setting = (CatchSetting)x;
 
                 return (int)setting.Id;
             };
-
+            */
             #endregion
 
             #region Evolving
-
+            /*
             olvColumnEvolveId.AspectGetter = delegate (object x)
             {
                 var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
-
+            */
             #endregion
 
             #region Transfer
-
+            /*
             olvColumnTransferId.AspectGetter = delegate (object x)
             {
                 var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
+            */
 
             #endregion
 
             #region Upgrade
-
+            /*
             olvColumnUpgradeId.AspectGetter = delegate (object x)
             {
                 var setting = (UpgradeSetting)x;
 
                 return (int)setting.Id;
             };
-
+            */
             #endregion
 
         }
@@ -83,7 +85,7 @@ namespace DraconiusGoGUI.UI
                 comboBoxMinAccountState.Items.Add(state);
             }
 
-            foreach (TeamColor team in Enum.GetValues(typeof(TeamColor)))
+            foreach (AllianceType team in Enum.GetValues(typeof(AllianceType)))
             {
                 cbTeam.Items.Add(team.ToString());
             }
@@ -94,16 +96,7 @@ namespace DraconiusGoGUI.UI
 
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
-            //Set other satus
-            numericUpDownThrottles.Enabled = !_manager.UserSettings.EnableHumanization;
-            numericUpDownGeneralDelay.Enabled = _manager.UserSettings.EnableHumanization;
-            numericUpDownGeneralDelayRandom.Enabled = _manager.UserSettings.EnableHumanization;
-            numericUpDownPlayerActionDelay.Enabled = _manager.UserSettings.EnableHumanization;
-            numericUpDownPlayerActionRandomiz.Enabled = _manager.UserSettings.EnableHumanization; ;
-            numericUpDownLocationUpdateDelay.Enabled = _manager.UserSettings.EnableHumanization;
-            numericUpDownLocationUpdateRandom.Enabled = _manager.UserSettings.EnableHumanization;
-            //
-        }
+         }
 
         private void UpdateListViews()
         {
@@ -121,27 +114,21 @@ namespace DraconiusGoGUI.UI
             textBoxLat.Text = settings.Latitude.ToString();
             textBoxLong.Text = settings.Longitude.ToString();
             textBoxName.Text = settings.AccountName;
-            textBoxMaxTravelDistance.Text = settings.MaxTravelDistance.ToString();
             textBoxWalkSpeed.Text = settings.WalkingSpeed.ToString();
-            textBoxPokemonBeforeEvolve.Text = settings.MinPokemonBeforeEvolve.ToString();
+            textBoxCreatureBeforeEvolve.Text = settings.MinCreatureBeforeEvolve.ToString();
             textBoxMaxLevel.Text = settings.MaxLevel.ToString();
             textBoxPercTransItems.Text = settings.PercTransItems.ToString();
             textBoxPercTransPoke.Text = settings.PercTransPoke.ToString();
             textBoxProxy.Text = settings.Proxy.ToString();
-            checkBoxMimicWalking.Checked = settings.MimicWalking;
-            checkBoxShufflePokestops.Checked = settings.ShufflePokestops;
-            checkBoxEncounterWhileWalking.Checked = settings.EncounterWhileWalking;
             checkBoxRecycle.Checked = settings.RecycleItems;
-            checkBoxEvolve.Checked = settings.EvolvePokemon;
-            checkBoxTransfers.Checked = settings.TransferPokemon;
-            checkBoxTransferSlashPokemons.Checked = settings.TransferSlashPokemons;
+            checkBoxEvolve.Checked = settings.EvolveCreature;
+            checkBoxTransfers.Checked = settings.TransferCreature;
+            checkBoxTransferSlashCreatures.Checked = settings.TransferSlashCreatures;
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
-            checkBoxCatchPokemon.Checked = settings.CatchPokemon;
+            checkBoxCatchCreature.Checked = settings.CatchCreature;
             numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
-            numericUpDownMaxMetersStop.Value = new Decimal(settings.MaxPokestopMeters);
-            numericUpDownMaxMetersStopRandom.Value = new Decimal(settings.MaxPokestopMetersRandom);
             numericUpDownMaxLogs.Value = settings.MaxLogs;
             numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
@@ -149,7 +136,7 @@ namespace DraconiusGoGUI.UI
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
             checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
-            numericUpDownPokemonsDayLimit.Value = new Decimal(settings.CatchPokemonDayLimit);
+            numericUpDownCreaturesDayLimit.Value = new Decimal(settings.CatchCreatureDayLimit);
             numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinPokestopsDayLimit);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
@@ -159,7 +146,7 @@ namespace DraconiusGoGUI.UI
                 checkBoxSpinGyms.Enabled = true;
                 checkBoxSpinGyms.Checked = settings.SpinGyms;
                 checkBoxDeployToGym.Enabled = true;
-                checkBoxDeployToGym.Checked = settings.DeployPokemon;
+                checkBoxDeployToGym.Checked = settings.DeployCreature;
                 checkBoxGoToGymsOnly.Enabled = true;
                 checkBoxGoToGymsOnly.Checked = settings.GoOnlyToGyms;
             }
@@ -177,21 +164,7 @@ namespace DraconiusGoGUI.UI
             cbUseLuckEggConst.Checked = settings.UseLuckEggConst;
             checkBoxReqFortDetails.Checked = settings.RequestFortDetails;
 
-            //Humanization
-            checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
-            numericUpDownInsideReticuleChance.Value = settings.InsideReticuleChance;
-
-            numericUpDownGeneralDelay.Value = settings.GeneralDelay;
-            numericUpDownGeneralDelayRandom.Value = settings.GeneralDelayRandom;
-
-            numericUpDownLocationUpdateDelay.Value = settings.DelayBetweenLocationUpdates;
-            numericUpDownLocationUpdateRandom.Value = settings.LocationupdateDelayRandom;
-
-            numericUpDownPlayerActionDelay.Value = settings.DelayBetweenPlayerActions;
-            numericUpDownPlayerActionRandomiz.Value = settings.PlayerActionDelayRandom;
-
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
-            //End humanization
 
             //Device settings
             textBoxDeviceId.Text = settings.DeviceId;
@@ -204,74 +177,21 @@ namespace DraconiusGoGUI.UI
             textBoxHardwareModel.Text = settings.HardwareModel;
             //End device settings
 
-            //Api config
-            cbHashHost.Text = settings.HashHost.ToString();
-            cbHashEndpoint.Text = settings.HashEndpoint;
-            tbAuthHashKey.Text = settings.AuthAPIKey;
-            cbUseOnlyThisHashKey.Checked = settings.UseOnlyOneKey;
-
             checkBoxUseBerries.Checked = settings.UseBerries;
             checkBoxGetARBonus.Checked = settings.GetArBonus;
             checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
-            numericUpDownProximity.Value = settings.ARBonusProximity;
-            numericUpDownAwareness.Value = settings.ARBonusAwareness;
-            checkBoxUpgradePokemons.Checked = settings.UpgradePokemon;
-            checkBoxUsePOGOLibHeartbeat.Checked = settings.UsePOGOLibHeartbeat;
-
-            cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
-            tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
+            checkBoxUpgradeCreatures.Checked = settings.UpgradeCreature;
             cbAutoUpdate.Checked = AutoUpdate;
             numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
 
-            checkBoxShowDebugLogs.Checked = settings.ShowDebugLogs;
-            checkBoxDownloadResources.Checked = settings.DownloadResources;
-
-            //Captcha Config
-            AllowManualCaptchaResolve.Checked = settings.AllowManualCaptchaResolve;
-            ManualCaptchaTimeout.Text = settings.ManualCaptchaTimeout.ToString();
-            PlaySoundOnCaptcha.Checked = settings.PlaySoundOnCaptcha;
-            DisplayOnTop.Checked = settings.DisplayOnTop;
-            Enable2Captcha.Checked = settings.Enable2Captcha;
-            EnableAntiCaptcha.Checked = settings.EnableAntiCaptcha;
-            EnableShuffleCaptcha.Checked = settings.ShuffleCaptcha_Enable;
-            AntiCaptchaAPIKey.Text = settings.AntiCaptchaAPIKey;
-            ProxyHostCaptcha.Text = settings.ProxyHostCaptcha;
-            ProxyPortCaptcha.Text = settings.ProxyPortCaptcha.ToString();
-            EnableCaptchaSolutions.Checked = settings.EnableCaptchaSolutions;
-            CaptchaSolutionAPIKey.Text = settings.CaptchaSolutionAPIKey;
-            CaptchaSolutionsSecretKey.Text = settings.CaptchaSolutionsSecretKey;
-            AutoCaptchaTimeout.Text = settings.AutoCaptchaTimeout.ToString();
-            AutoCaptchaRetries.Text = settings.AutoCaptchaRetries.ToString();
-            TwoCaptchaAPIKey.Text = settings.TwoCaptchaAPIKey;
-            ShuffleAPIKey.Text = settings.ShuffleCaptcha_API;
             checkBoxAutoFavShiny.Checked = settings.AutoFavoritShiny;
-            checkBoxSniperNoInPokedex.Checked = settings.SnipeAllPokemonsNoInPokedex;
+            checkBoxSniperNoInPokedex.Checked = settings.SnipeAllCreaturesNoInPokedex;
             checkBoxTooBalls.Checked = settings.IgnoreStopsIfTooBalls;
             numericUpDownTooBalls.Value = new Decimal(settings.BallsToIgnoreStops);
-            numericUpDownThrottles.Value = new Decimal(settings.APIThrottles);
             checkBoxSoftBypass.Checked = settings.UseSoftBanBypass;
             numericUpDownSoftBypass.Value = new Decimal(settings.SoftBanBypassTimes);
             numericUpDownLvForConsLukky.Value = new Decimal(settings.LevelForConstLukky);
-            checkBoxIgRPCSem.Checked = settings.IgnoreRPCSemafore;
-            checkBoxIgHashSem.Checked = settings.IgnoreHashSemafore;
-            checkBoxEnablePGPool.Checked = settings.EnablePGPool;
-            textBoxPGPoolEndPoint.Text = settings.PGPoolEndpoint;
-
-            enableShuffleADSCheckBox.Checked = settings.ShuffleADS_Enable;
-            ShuffleADSAPITextBox.Text = settings.ShuffleADS_API;
-            ShuffleADSGetNewPTC.Checked = settings.ShuffleADS_GetNewPTC;
-            ShuffleADSStartAfterGet.Checked = settings.ShuffleADS_StartAfterGet;
-
-
-            //Location time zones
-            var zones = new TimeZoneIds().GetTimeZoneIds();
-            foreach (var tz in zones)
-            {
-                cbTimeZones.Items.Add(tz.Key);
-            }
-
-            cbTimeZones.Text = _manager.UserSettings.TimeZone;
 
             for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -297,13 +217,6 @@ namespace DraconiusGoGUI.UI
         private void CheckBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
         {
             textBoxWalkSpeed.Enabled = false;
-            checkBoxEncounterWhileWalking.Enabled = false;
-
-            if (checkBoxMimicWalking.Checked)
-            {
-                textBoxWalkSpeed.Enabled = true;
-                checkBoxEncounterWhileWalking.Enabled = true;
-            }
         }
 
         private void ButtonSave_Click(object sender, EventArgs e)
@@ -337,26 +250,20 @@ namespace DraconiusGoGUI.UI
             int perctranspoke;
             if (!Int32.TryParse(textBoxPercTransPoke.Text, out perctranspoke) || perctranspoke < 0)
             {
-                MessageBox.Show("Invalid % Transfer Pokemon", "Warning");
+                MessageBox.Show("Invalid % Transfer Creature", "Warning");
                 return false;
             }
 
-            int minPokemonBeforeEvolve;
-            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
+            int minCreatureBeforeEvolve;
+            if (!Int32.TryParse(textBoxCreatureBeforeEvolve.Text, out minCreatureBeforeEvolve) || minCreatureBeforeEvolve < 0)
             {
-                MessageBox.Show("Invalid pokemon before evolve", "Warning");
+                MessageBox.Show("Invalid Creature before evolve", "Warning");
                 return false;
             }
             int walkingSpeed;
             if (!Int32.TryParse(textBoxWalkSpeed.Text, out walkingSpeed) || walkingSpeed <= 0)
             {
                 MessageBox.Show("Invalid walking speed", "Warning");
-                return false;
-            }
-            int maxTravelDistance;
-            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out maxTravelDistance) || maxTravelDistance <= 0)
-            {
-                MessageBox.Show("Invalid max travel distance", "Warning");
                 return false;
             }
             double defaultLat;
@@ -401,40 +308,35 @@ namespace DraconiusGoGUI.UI
                 return false;
             }
 
-            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ? AuthType.Google : AuthType.Ptc;
-
-            userSettings.MimicWalking = checkBoxMimicWalking.Checked;
-            userSettings.ShufflePokestops = checkBoxShufflePokestops.Checked;
+            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ? Enums.AuthType.GOOGLE : Enums.AuthType.DEVICE;
 
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();
             userSettings.Latitude = defaultLat;
             userSettings.Longitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
-            userSettings.MaxTravelDistance = maxTravelDistance;
-            userSettings.EncounterWhileWalking = checkBoxEncounterWhileWalking.Checked;
             userSettings.AccountName = textBoxName.Text;
-            userSettings.TransferPokemon = checkBoxTransfers.Checked;
-            userSettings.TransferSlashPokemons = checkBoxTransferSlashPokemons.Checked;
-            userSettings.EvolvePokemon = checkBoxEvolve.Checked;
+            userSettings.TransferCreature = checkBoxTransfers.Checked;
+            userSettings.TransferSlashCreatures = checkBoxTransferSlashCreatures.Checked;
+            userSettings.EvolveCreature = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
-            userSettings.MinPokemonBeforeEvolve = minPokemonBeforeEvolve;
+            userSettings.MinCreatureBeforeEvolve = minCreatureBeforeEvolve;
             userSettings.UseLuckyEgg = checkBoxUseLuckyEgg.Checked;
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.OnlyUnlimitedIncubator = checkBoxOnlyUnlimitedIncubator.Checked;
             userSettings.MaxLevel = maxLevel;
             userSettings.PercTransItems = perctransitems;
             userSettings.PercTransPoke = perctranspoke;
-            userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
+            userSettings.CatchCreature = checkBoxCatchCreature.Checked;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
-            userSettings.CatchPokemonDayLimit = (int)numericUpDownPokemonsDayLimit.Value;
+            userSettings.CatchCreatureDayLimit = (int)numericUpDownCreaturesDayLimit.Value;
             userSettings.SpinPokestopsDayLimit = (int)numericUpDownStopsDayLimit.Value;
             userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
-            userSettings.DeployPokemon = checkBoxDeployToGym.Checked;
+            userSettings.DeployCreature = checkBoxDeployToGym.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
@@ -449,23 +351,8 @@ namespace DraconiusGoGUI.UI
             userSettings.RequestFortDetails = checkBoxReqFortDetails.Checked;
             userSettings.IgnoreStopsIfTooBalls = checkBoxTooBalls.Checked;
             userSettings.BallsToIgnoreStops = (int)numericUpDownTooBalls.Value;
-            userSettings.MaxPokestopMeters = (double)numericUpDownMaxMetersStop.Value;
-
-            //Humanization
-            userSettings.EnableHumanization = checkBoxHumanizeThrows.Checked;
-            userSettings.InsideReticuleChance = (int)numericUpDownInsideReticuleChance.Value;
-
-            userSettings.GeneralDelay = (int)numericUpDownGeneralDelay.Value;
-            userSettings.GeneralDelayRandom = (int)numericUpDownGeneralDelayRandom.Value;
-
-            userSettings.DelayBetweenLocationUpdates = (int)numericUpDownLocationUpdateDelay.Value;
-            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationUpdateRandom.Value;
-
-            userSettings.DelayBetweenPlayerActions = (int)numericUpDownPlayerActionDelay.Value;
-            userSettings.PlayerActionDelayRandom = (int)numericUpDownPlayerActionRandomiz.Value;
 
             userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
-            //End humanization
 
             //Device settings
             userSettings.DeviceId = textBoxDeviceId.Text;
@@ -477,33 +364,6 @@ namespace DraconiusGoGUI.UI
             userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
             userSettings.FirmwareType = textBoxFirmwareType.Text;
             //End device settings
-
-            //Api config
-            userSettings.HashHost = new Uri(cbHashHost.Text);
-            userSettings.HashEndpoint = cbHashEndpoint.Text;
-            userSettings.AuthAPIKey = tbAuthHashKey.Text;
-            userSettings.UseOnlyOneKey = cbUseOnlyThisHashKey.Checked;
-
-            if (enableShuffleADSCheckBox.Checked && String.IsNullOrEmpty(ShuffleADSAPITextBox.Text.Trim()))
-            {
-                MessageBox.Show("Shuffle ADS API empty", "Warning");
-                return false;
-            }
-
-            userSettings.ShuffleADS_Enable = enableShuffleADSCheckBox.Checked;
-            userSettings.ShuffleADS_API = ShuffleADSAPITextBox.Text.Trim();
-            userSettings.ShuffleADS_GetNewPTC = ShuffleADSGetNewPTC.Checked;
-            userSettings.ShuffleADS_StartAfterGet = ShuffleADSStartAfterGet.Checked;
-
-            //End api config
-
-            //Location time zones
-            var x = new TimeZoneIds().GetTimeZoneIds();
-            userSettings.TimeZone = cbTimeZones.Text;
-            userSettings.Country = x[cbTimeZones.Text].Item1;
-            userSettings.Language = x[cbTimeZones.Text].Item2;
-            userSettings.POSIX = x[cbTimeZones.Text].Item3;
-            //End location time zones
 
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
             userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
@@ -524,75 +384,13 @@ namespace DraconiusGoGUI.UI
                 userSettings.ProxyPort = 0;
             }
 
-            userSettings.ARBonusProximity = numericUpDownProximity.Value;
-            userSettings.ARBonusAwareness = numericUpDownAwareness.Value;
 
-            // Developer options
-            userSettings.ShowDebugLogs = checkBoxShowDebugLogs.Checked;
-            userSettings.DownloadResources = checkBoxDownloadResources.Checked;
-
-            //Captcha Config
-            userSettings.AllowManualCaptchaResolve = AllowManualCaptchaResolve.Checked;
-            int manualCaptchaTimeout;
-            if (!Int32.TryParse(ManualCaptchaTimeout.Text, out manualCaptchaTimeout))
-            {
-                MessageBox.Show("InvalidTimeOut", "Warning");
-                return false;
-            }
-            userSettings.ManualCaptchaTimeout = manualCaptchaTimeout;
-            userSettings.PlaySoundOnCaptcha = PlaySoundOnCaptcha.Checked;
-            userSettings.DisplayOnTop = DisplayOnTop.Checked;
-            userSettings.Enable2Captcha = Enable2Captcha.Checked;
-            userSettings.EnableAntiCaptcha = EnableAntiCaptcha.Checked;
-            userSettings.ShuffleCaptcha_Enable = EnableShuffleCaptcha.Checked;
-            userSettings.ShuffleCaptcha_API = ShuffleAPIKey.Text;
-            userSettings.AntiCaptchaAPIKey = AntiCaptchaAPIKey.Text;
-            userSettings.ProxyHostCaptcha = ProxyHostCaptcha.Text;
-            int proxyPortCaptcha;
-            if (!Int32.TryParse(ProxyPortCaptcha.Text, out proxyPortCaptcha))
-            {
-                MessageBox.Show("InvalidProxyCaptchaPort", "Warning");
-                return false;
-            }
-            userSettings.ProxyPortCaptcha = proxyPortCaptcha;
-            userSettings.EnableCaptchaSolutions = EnableCaptchaSolutions.Checked;
-            userSettings.CaptchaSolutionAPIKey = CaptchaSolutionAPIKey.Text;
-            userSettings.CaptchaSolutionsSecretKey = CaptchaSolutionsSecretKey.Text;
-            int autoCaptchaTimeout;
-            if (!Int32.TryParse(AutoCaptchaTimeout.Text, out autoCaptchaTimeout))
-            {
-                MessageBox.Show("InvalidAutoCaptchaTimeout", "Warning");
-                return false;
-            }
-            userSettings.AutoCaptchaTimeout = autoCaptchaTimeout;
-            int autoCaptchaRetries;
-            if (!Int32.TryParse(AutoCaptchaRetries.Text, out autoCaptchaRetries))
-            {
-                MessageBox.Show("InvalidAutoCaptchaRetries", "Warning");
-                return false;
-            }
-            userSettings.AutoCaptchaRetries = autoCaptchaRetries;
-            userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
-            userSettings.UpgradePokemon = checkBoxUpgradePokemons.Checked;
+            userSettings.UpgradeCreature = checkBoxUpgradeCreatures.Checked;
             userSettings.AutoFavoritShiny = checkBoxAutoFavShiny.Checked;
-            userSettings.SnipeAllPokemonsNoInPokedex = checkBoxSniperNoInPokedex.Checked;
-            userSettings.UsePOGOLibHeartbeat = checkBoxUsePOGOLibHeartbeat.Checked;
+            userSettings.SnipeAllCreaturesNoInPokedex = checkBoxSniperNoInPokedex.Checked;
             userSettings.UseSoftBanBypass = checkBoxSoftBypass.Checked;
-            userSettings.MaxPokestopMetersRandom = (int)numericUpDownMaxMetersStopRandom.Value;
-            userSettings.IgnoreHashSemafore = checkBoxIgHashSem.Checked;
-            userSettings.IgnoreRPCSemafore = checkBoxIgRPCSem.Checked;
-            userSettings.EnablePGPool = checkBoxEnablePGPool.Checked;
-            userSettings.PGPoolEndpoint = textBoxPGPoolEndPoint.Text;
-
-            int apithrottles;
-            if (!Int32.TryParse(numericUpDownThrottles.Text, out apithrottles))
-            {
-                MessageBox.Show("API Throttles value", "Warning");
-                return false;
-            }
-            userSettings.APIThrottles = apithrottles;
 
             int softbanbypass;
             if (!Int32.TryParse(numericUpDownSoftBypass.Text, out softbanbypass))
@@ -661,7 +459,7 @@ namespace DraconiusGoGUI.UI
 
         #endregion
 
-        #region CatchPokemon
+        #region CatchCreature
 
         private void TrueToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1052,17 +850,6 @@ namespace DraconiusGoGUI.UI
                 checkBoxGoToGymsOnly.Enabled = false;
                 checkBoxGoToGymsOnly.Checked = false;
             }
-        }
-
-        private void CheckBoxHumanizeThrows_Click(object sender, EventArgs e)
-        {
-            numericUpDownThrottles.Enabled = !checkBoxHumanizeThrows.Checked;
-            numericUpDownGeneralDelay.Enabled = checkBoxHumanizeThrows.Checked;
-            numericUpDownGeneralDelayRandom.Enabled = checkBoxHumanizeThrows.Checked;
-            numericUpDownPlayerActionDelay.Enabled = checkBoxHumanizeThrows.Checked;
-            numericUpDownPlayerActionRandomiz.Enabled = checkBoxHumanizeThrows.Checked;
-            numericUpDownLocationUpdateDelay.Enabled = checkBoxHumanizeThrows.Checked;
-            numericUpDownLocationUpdateRandom.Enabled = checkBoxHumanizeThrows.Checked;
         }
     }
 }

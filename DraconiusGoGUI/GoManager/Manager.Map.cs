@@ -8,7 +8,8 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemonAsync()
+        /*
+        private async Task<MethodResult<List<MapCreature>>> GetCatchableCreatureAsync()
         {
             if (!UserSettings.UsePOGOLibHeartbeat)
                 await _client.ClientSession.RpcClient.RefreshMapObjectsAsync();
@@ -20,17 +21,17 @@ namespace DraconiusGoGUI.DracoManager
 
             //var cells = _client.ClientSession.Map.Cells;
 
-            //         Where(PokemonWithinCatchSettings) <-- Unneeded, will be filtered after.
-            List<MapPokemon> newCatchablePokemons = _client.ClientSession.Map.Cells.SelectMany(x => x.CatchablePokemons).ToList();
-            List<MapPokemon> realList = new List<MapPokemon>();
+            //         Where(CreatureWithinCatchSettings) <-- Unneeded, will be filtered after.
+            List<MapCreature> newCatchableCreatures = _client.ClientSession.Map.Cells.SelectMany(x => x.CatchableCreatures).ToList();
+            List<MapCreature> realList = new List<MapCreature>();
 
-            foreach (var pok in newCatchablePokemons)
+            foreach (var pok in newCatchableCreatures)
             {
                 if (IsValidLocation(pok.Latitude, pok.Longitude))
                     realList.Add(pok);
             }
 
-            return new MethodResult<List<MapPokemon>>
+            return new MethodResult<List<MapCreature>>
             {
                 Data = realList,
                 Success = true,
@@ -111,7 +112,7 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private async Task<MethodResult<MapPokemon>> GetIncensePokemons()
+        private async Task<MethodResult<MapCreature>> GetIncenseCreatures()
         {
             if (!_client.ClientSession.IncenseUsed)
             {
@@ -127,11 +128,11 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         await UseIncense(incenses.FirstOrDefault().ItemId);
 
-                        if (_client.ClientSession.Map.IncensePokemon != null)
+                        if (_client.ClientSession.Map.IncenseCreature != null)
                         {
-                            return new MethodResult<MapPokemon>
+                            return new MethodResult<MapCreature>
                             {
-                                Data = _client.ClientSession.Map.IncensePokemon,
+                                Data = _client.ClientSession.Map.IncenseCreature,
                                 Success = true,
                                 Message = "Succes"
                             };
@@ -140,16 +141,17 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            if (_client.ClientSession.Map.IncensePokemon != null)
+            if (_client.ClientSession.Map.IncenseCreature != null)
             {
-                return new MethodResult<MapPokemon>
+                return new MethodResult<MapCreature>
                 {
-                    Data = _client.ClientSession.Map.IncensePokemon,
+                    Data = _client.ClientSession.Map.IncenseCreature,
                     Success = true,
                     Message = "Succes"
                 };
             }
-            return new MethodResult<MapPokemon>();
+            return new MethodResult<MapCreature>();
         }
+        */
     }
 }

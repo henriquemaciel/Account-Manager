@@ -11,6 +11,7 @@ namespace DraconiusGoGUI.DracoManager
     {
         private async Task<MethodResult> IncubateEggs()
         {
+            /*
             if (!UserSettings.IncubateEggs)
             {
                 LogCaller(new LoggerEventArgs("Incubating disabled", LoggerTypes.Info));
@@ -33,7 +34,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            PokemonData egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.EggIncubatorId));
+            CreatureData egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.EggIncubatorId));
 
             if (egg == null)
             {
@@ -60,7 +61,7 @@ namespace DraconiusGoGUI.DracoManager
                 RequestMessage = new UseItemEggIncubatorMessage
                 {
                     ItemId = incubatorResponse.Data.Id,
-                    PokemonId = egg.Id
+                    CreatureId = egg.Id
                 }.ToByteString()
             });
 
@@ -70,14 +71,14 @@ namespace DraconiusGoGUI.DracoManager
             var useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
 
             var incitem = incubatorResponse.Data.Id;
-            var _egg = egg.PokemonId;
+            var _egg = egg.CreatureId;
 
-            LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
+            LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Creature Id: {1}", incitem, _egg), LoggerTypes.Incubate));
 
             //TODO: Need tests
             UpdateInventory(InventoryRefresh.Eggs);
             UpdateInventory(InventoryRefresh.Incubators);
-
+            */
             return new MethodResult
             {
                 Message = "Success",
@@ -85,6 +86,7 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
+        /*
         private MethodResult<EggIncubator> GetIncubator()
         {
             if(Incubators == null)
@@ -92,7 +94,7 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult<EggIncubator>();
             }
 
-            EggIncubator unusedUnlimitedIncubator = Incubators.FirstOrDefault(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited && x.PokemonId == 0);
+            EggIncubator unusedUnlimitedIncubator = Incubators.FirstOrDefault(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited && x.CreatureId == 0);
 
             if(unusedUnlimitedIncubator != null)
             {
@@ -105,7 +107,7 @@ namespace DraconiusGoGUI.DracoManager
 
             if (!UserSettings.OnlyUnlimitedIncubator)
             {
-                IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.PokemonId == 0);
+                IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.CreatureId == 0);
     
                 foreach(EggIncubator incubator in incubators)
                 {
@@ -122,5 +124,6 @@ namespace DraconiusGoGUI.DracoManager
                 Message = "No unused incubators"
             };
         }
+        */
     }
 }

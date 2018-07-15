@@ -5,12 +5,12 @@ namespace DraconiusGoGUI.Models
     [Serializable]
     public class InventoryItemSetting
     {
-        public ItemId Id { get; set; }
+        //public ItemId Id { get; set; }
         public int MaxInventory { get; set; }
 
         public InventoryItemSetting()
         {
-            Id = ItemId.ItemUnknown;
+            //Id = ItemId.ItemUnknown;
             MaxInventory = 100;
         }
 
@@ -18,7 +18,8 @@ namespace DraconiusGoGUI.Models
         {
             get
             {
-                return Id.ToString().Replace("Item", "");
+                return string.Empty;
+                //return Id.ToString().Replace("Item", "");
             }
         }
     }

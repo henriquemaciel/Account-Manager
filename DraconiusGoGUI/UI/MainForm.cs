@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using DraconiusGoGUI.Models.CommandLineUtility;
-using DraconiusGoGUI.UI.PluginUI.ShuffleADS;
 
 namespace DraconiusGoGUI
 {
@@ -34,7 +33,7 @@ namespace DraconiusGoGUI
         private bool _showStartup = true;
         private bool _autoupdate = true;
         private readonly string _saveFile = "data";
-        private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked DracoManager Version";
+        private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Based on Account Manager";
         private static string[] _args;
 
         public MainForm(string[] args)
@@ -51,10 +50,7 @@ namespace DraconiusGoGUI
             fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
-            fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
-            fastObjectListViewHashKeys.ForeColor = Color.LightGray;
-
-            Text = "Account Manager - " + _versionNumber;
+            Text = "Account Manager (DraconiusGO) - " + _versionNumber;
 
             olvColumnProxyAuth.AspectGetter = delegate (object x)
             {
@@ -167,16 +163,17 @@ namespace DraconiusGoGUI
             // 
             await LoadSettings();
             //
-
+            /*
             if (_autoupdate)
             {
                 bool IsLatest = await VersionCheckState.IsLatest();
                 if (!IsLatest)
                     await VersionCheckState.Execute();
             }
+            
 
             await VersionCheckState.CleanupOldFiles();
-
+            */
             //TODO: need review
             //var plugins = new PluginsEx();
 
@@ -280,7 +277,7 @@ namespace DraconiusGoGUI
                         manager.Tracker.CalculatedTrackingHours();
                     }
 
-                    if (manager.AccountState == AccountState.Conecting || manager.AccountState == AccountState.HashIssues)
+                    if (manager.AccountState == AccountState.Conecting)
                     {
                         manager.AccountState = AccountState.Good;
                     }
@@ -288,17 +285,7 @@ namespace DraconiusGoGUI
                     _managers.Add(manager);
                 }
 
-                foreach (HashKey key in tempHashKeys)
-                {
-                    HashKey tested = TestHashKey(key);
-                    if (!tested.IsValide)
-                        MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
-
-                    _hashKeys.Add(tested);
-                }
-
                 fastObjectListViewMain.SetObjects(_managers);
-                fastObjectListViewHashKeys.SetObjects(_hashKeys);
             }
             catch (Exception ex1)
             {
@@ -528,7 +515,7 @@ namespace DraconiusGoGUI
             List<string> account = new List<string>();
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(String.Format("https://api.shuffletanker.com/api/v2/Account/GetAccounts/{0}/Pokemon/0/17520/{1}", api, amount));
+                HttpResponseMessage response = await client.GetAsync(String.Format("https://api.shuffletanker.com/api/v2/Account/GetAccounts/{0}/Creature/0/17520/{1}", api, amount));
                 if (response.IsSuccessStatusCode)
                 {
                     account = (await response.Content.ReadAsStringAsync()).Replace("\"", "").Split(';').ToList();
@@ -584,11 +571,8 @@ namespace DraconiusGoGUI
             toolStripStatusLabelTotalAccounts.Text = _managers.Count.ToString();
 
             //Longer running
-            int tempBanned = 0;
             int running = 0;
             int permBan = 0;
-            int flags = 0;
-            int captcha = 0;
 
             var tempManagers = new List<Manager>(_managers);
 
@@ -603,33 +587,10 @@ namespace DraconiusGoGUI
                 {
                     ++permBan;
                 }
-
-                if (manager.AccountState == AccountState.Flagged)
-                {
-                    ++flags;
-                }
-
-                if (manager.AccountState == AccountState.CaptchaReceived)
-                {
-                    ++captcha;
-                }
-
-                if (manager.AccountState == AccountState.SoftBan)
-                {
-                    ++tempBanned;
-                }
-
-                if (manager.AccountState == AccountState.TemporalBan)
-                {
-                    ++tempBanned;
-                }
             }
 
             toolStripStatusLabelAccountBanned.Text = permBan.ToString();
-            toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
             toolStripStatusLabelTotalRunning.Text = running.ToString();
-            toolStripStatusLabelFlagged.Text = flags.ToString();
-            toolStripStatusLabelCaptcha.Text = captcha.ToString();
 
             if (_proxyHandler?.Proxies != null)
             {
@@ -650,12 +611,12 @@ namespace DraconiusGoGUI
             newAccount.UserSettings.Username = username.Trim();
             newAccount.UserSettings.Password = password.Trim();
 
-            newAccount.UserSettings.AuthType = AuthType.Ptc;
+            newAccount.UserSettings.AuthType = AuthType.DEVICE;
             newAccount.UserSettings.MaxLevel = 30;
             newAccount.Level = 0;
             newAccount.ExpGained = 0;
             newAccount.PokestopsFarmed = 0;
-            newAccount.PokemonCaught = 0;
+            newAccount.CreatureCaught = 0;
 
 
             AddManager(newAccount);
@@ -741,7 +702,7 @@ namespace DraconiusGoGUI
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
                     manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
 
-                    manager.UserSettings.AuthType = importModel.Username.Contains("@") ? AuthType.Google : AuthType.Ptc;
+                    manager.UserSettings.AuthType = importModel.Username.Contains("@") ? AuthType.GOOGLE : AuthType.DEVICE;
 
                     if (parts.Length % 2 == 1)
                     {
@@ -758,121 +719,6 @@ namespace DraconiusGoGUI
                 fastObjectListViewMain.SetObjects(_managers);
 
                 MessageBox.Show(String.Format("Successfully imported {0} out of {1} accounts", totalSuccess, total));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
-            }
-        }
-
-        private async void ShuffleADSWConfigToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var tSMI = sender as ToolStripMenuItem;
-
-            bool useConfig;
-            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out useConfig))
-            {
-                return;
-            }
-
-            try
-            {
-                ShuffleADS_ImportForm f = new ShuffleADS_ImportForm();
-                DialogResult dialogResult = f.ShowDialog();
-                if (dialogResult == DialogResult.OK)
-                {
-                    string api = f.Api;
-                    int amount = f.amount;
-                    f.Dispose();
-                    List<string> accounts = await ShuffleADSImportAccounts(api, amount);
-                    if (accounts.Count == 0)
-                    {
-                        return;
-                    }
-
-                    string configFile = String.Empty;
-
-                    if (useConfig)
-                    {
-                        configFile = ImportConfig();
-                    }
-
-                    var tempManagers = new HashSet<Manager>(_managers);
-
-                    if (useConfig && String.IsNullOrEmpty(configFile))
-                    {
-                        return;
-                    }
-
-                    int totalSuccess = 0;
-                    int total = accounts.Count;
-
-                    foreach (string account in accounts)
-                    {
-                        string[] parts = account.Split(':');
-
-                        /*
-                         * User:Pass = 2
-                         * User:Pass:MaxLevel = 3
-                         * User:Pass:IP:Port = 4
-                         * User:Pass:IP:Port:MaxLevel = 5
-                         * User:Pass:IP:Port:pUsername:pPassword = 6
-                         * User:Pass:IP:Port:pUsername:pPassword:MaxLevel = 7
-                         */
-                        if (parts.Length < 2 || parts.Length > 7)
-                        {
-                            continue;
-                        }
-
-                        var importModel = new AccountImport();
-
-                        if (!importModel.ParseAccount(account))
-                        {
-                            continue;
-                        }
-
-                        var manager = new Manager(_proxyHandler);
-
-                        if (useConfig)
-                        {
-                            MethodResult result = await manager.ImportConfigFromFile(configFile);
-
-                            if (!result.Success)
-                            {
-                                MessageBox.Show("Failed to import configuration file");
-
-                                return;
-                            }
-                        }
-                        //Randomize device id;
-                        manager.RandomDeviceId();
-                        manager.UserSettings.AccountName = importModel.Username.Trim();
-                        manager.UserSettings.Username = importModel.Username.Trim();
-                        manager.UserSettings.Password = importModel.Password.Trim();
-                        manager.UserSettings.ProxyIP = importModel.Address;
-                        manager.UserSettings.ProxyPort = importModel.Port;
-                        manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
-                        manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
-
-                        manager.UserSettings.AuthType = importModel.Username.Contains("@") ? AuthType.Google : AuthType.Ptc;
-
-                        if (parts.Length % 2 == 1)
-                        {
-                            manager.UserSettings.MaxLevel = importModel.MaxLevel;
-                        }
-
-                        if (tempManagers.Add(manager))
-                        {
-                            AddManager(manager);
-                            ++totalSuccess;
-                        }
-                    }
-
-                    fastObjectListViewMain.SetObjects(_managers);
-
-                    MessageBox.Show(String.Format("Successfully imported {0} out of {1} accounts", totalSuccess, total));
-                }
-
             }
             catch (Exception ex)
             {
@@ -917,15 +763,6 @@ namespace DraconiusGoGUI
 
                 fastObjectListViewScheduler.RefreshObject(_schedulers[0]);
             }
-            else if (tabControlMain.SelectedTab == tabPageHashKeys)
-            {
-                if (_hashKeys.Count == 0)
-                {
-                    return;
-                }
-
-                fastObjectListViewHashKeys.RefreshObject(_hashKeys[0]);
-            }
         }
 
         private void ClearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -959,7 +796,6 @@ namespace DraconiusGoGUI
             fastObjectListViewMain.UseCellFormatEvents = isChecked;
             fastObjectListViewScheduler.UseCellFormatEvents = isChecked;
             fastObjectListViewProxies.UseCellFormatEvents = isChecked;
-            fastObjectListViewHashKeys.UseCellFormatEvents = isChecked;
 
             if (isChecked)
             {
@@ -971,9 +807,6 @@ namespace DraconiusGoGUI
 
                 fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewScheduler.ForeColor = Color.LightGray;
-
-                fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
-                fastObjectListViewHashKeys.ForeColor = Color.LightGray;
             }
             else
             {
@@ -985,9 +818,6 @@ namespace DraconiusGoGUI
 
                 fastObjectListViewScheduler.BackColor = SystemColors.Window;
                 fastObjectListViewScheduler.ForeColor = SystemColors.WindowText;
-
-                fastObjectListViewHashKeys.BackColor = SystemColors.Window;
-                fastObjectListViewHashKeys.ForeColor = SystemColors.WindowText;
             }
         }
 
@@ -1063,39 +893,24 @@ namespace DraconiusGoGUI
                     case AccountState.NotVerified:
                         e.SubItem.ForeColor = Color.Red;
                         break;
-                    case AccountState.SoftBan:
-                        e.SubItem.ForeColor = Color.Yellow;
-                        break;
-                    case AccountState.Good:
+                   case AccountState.Good:
                         e.SubItem.ForeColor = Color.Green;
-                        break;
-                    case AccountState.Flagged:
-                        e.SubItem.ForeColor = Color.Magenta;
-                        break;
-                    case AccountState.CaptchaReceived:
-                        e.SubItem.ForeColor = Color.Tomato;
                         break;
                     case AccountState.Conecting:
                         e.SubItem.ForeColor = Color.Blue;
                         break;
-                    case AccountState.HashIssues:
-                        e.SubItem.ForeColor = Color.Coral;
-                        break;
-                    case AccountState.Unknown:
+                   case AccountState.Unknown:
                         e.SubItem.ForeColor = Color.Cyan;
-                        break;
-                    case AccountState.TemporalBan:
-                        e.SubItem.ForeColor = Color.Yellow;
                         break;
                 }
             }
-            else if (e.Column == olvColumnPokemonCaught)
+            else if (e.Column == olvColumnCreatureCaught)
             {
-                if (manager.Tracker.PokemonCaught + 100 >= manager.UserSettings.CatchPokemonDayLimit)
+                if (manager.Tracker.CreatureCaught + 100 >= manager.UserSettings.CatchCreatureDayLimit)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
-                if (manager.Tracker.PokemonCaught >= manager.UserSettings.CatchPokemonDayLimit)
+                if (manager.Tracker.CreatureCaught >= manager.UserSettings.CatchCreatureDayLimit)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
@@ -1146,18 +961,18 @@ namespace DraconiusGoGUI
 
                 e.SubItem.ForeColor = log.GetLogColor();
             }
-            else if (e.Column == olvColumnPokemonCaught)
+            else if (e.Column == olvColumnCreatureCaught)
             {
-                if (manager.AccountScheduler == null || manager.AccountScheduler.PokemonLimiter.Option == SchedulerOption.Nothing)
+                if (manager.AccountScheduler == null || manager.AccountScheduler.CreatureLimiter.Option == SchedulerOption.Nothing)
                 {
                     return;
                 }
 
-                if (manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Max)
+                if (manager.CreatureCaught >= manager.AccountScheduler.CreatureLimiter.Max)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                else if (manager.PokemonCaught <= manager.AccountScheduler.PokemonLimiter.Min)
+                else if (manager.CreatureCaught <= manager.AccountScheduler.CreatureLimiter.Min)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
@@ -1414,7 +1229,7 @@ namespace DraconiusGoGUI
 
         private void ClearCountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + pokemon counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + Creature counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
@@ -1568,12 +1383,12 @@ namespace DraconiusGoGUI
                 return;
             }
 
-            enableTransferToolStripMenuItem.Checked = manager.UserSettings.TransferPokemon;
-            enableEvolveToolStripMenuItem1.Checked = manager.UserSettings.EvolvePokemon;
+            enableTransferToolStripMenuItem.Checked = manager.UserSettings.TransferCreature;
+            enableEvolveToolStripMenuItem1.Checked = manager.UserSettings.EvolveCreature;
             enableRecycleToolStripMenuItem4.Checked = manager.UserSettings.RecycleItems;
             enableIncubateEggsToolStripMenuItem5.Checked = manager.UserSettings.IncubateEggs;
             enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseLuckyEgg;
-            enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
+            enableCatchCreatureToolStripMenuItem2.Checked = manager.UserSettings.CatchCreature;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
             claimLevelUpToolStripMenuItem.Checked = manager.UserSettings.ClaimLevelUpRewards;
@@ -1630,7 +1445,7 @@ namespace DraconiusGoGUI
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.TransferPokemon = !enableTransferToolStripMenuItem.Checked;
+                manager.UserSettings.TransferCreature = !enableTransferToolStripMenuItem.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1640,7 +1455,7 @@ namespace DraconiusGoGUI
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.EvolvePokemon = !enableEvolveToolStripMenuItem1.Checked;
+                manager.UserSettings.EvolveCreature = !enableEvolveToolStripMenuItem1.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1676,20 +1491,20 @@ namespace DraconiusGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void EnableCatchPokemonToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void EnableCatchCreatureToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.CatchPokemon = !enableCatchPokemonToolStripMenuItem2.Checked;
+                manager.UserSettings.CatchCreature = !enableCatchCreatureToolStripMenuItem2.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void SetRequiredPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetRequiredCreatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            string data = Prompt.ShowDialog("Evolvable pokemon required to evolve:", "Set Min Pokemon Before Evolve");
+            string data = Prompt.ShowDialog("Evolvable Creature required to evolve:", "Set Min Creature Before Evolve");
 
             if (String.IsNullOrEmpty(data))
             {
@@ -1704,7 +1519,7 @@ namespace DraconiusGoGUI
 
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.MinPokemonBeforeEvolve = value;
+                manager.UserSettings.MinCreatureBeforeEvolve = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1746,9 +1561,9 @@ namespace DraconiusGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void SetMaxPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetMaxCreatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string data = Prompt.ShowDialog("Total pokemon per snipe:", "Set Maximum Pokemon To Snipe");
+            string data = Prompt.ShowDialog("Total Creature per snipe:", "Set Maximum Creature To Snipe");
 
             if (String.IsNullOrEmpty(data))
             {
@@ -1899,13 +1714,9 @@ namespace DraconiusGoGUI
             {
                 fastObjectListViewScheduler.SetObjects(_schedulers);
             }
-            else if (tabControlMain.SelectedTab == tabPageHashKeys)
-            {
-                fastObjectListViewHashKeys.SetObjects(_hashKeys);
-            }
             else if (tabControlMain.SelectedTab == tabPageAccounts)
             {
-                fastObjectListViewHashKeys.SetObjects(_managers);
+                fastObjectListViewMain.SetObjects(_managers);
             }
         }
 
@@ -2393,210 +2204,6 @@ namespace DraconiusGoGUI
         }
         # endregion
 
-        #region HashKeys
-
-        private void DeleteToolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            foreach (var hashkey in fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>())
-            {
-                _hashKeys.Remove(hashkey as HashKey);
-            }
-
-            fastObjectListViewHashKeys.SetObjects(_hashKeys);
-        }
-
-        private void AddToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            string input = Prompt.ShowDialog("Add Hash Key", "Hash Key");
-
-            if (String.IsNullOrEmpty(input))
-            {
-                return;
-            }
-
-            HashKey newkey = new HashKey { Key = input, IsValide = false, KeyInfo = null };
-
-            HashKey tested = TestHashKey(newkey);
-            if (!tested.IsValide)
-            {
-                MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo);
-                return;
-            }
-
-            foreach (HashKey key in _hashKeys)
-            {
-                if (key.Key == tested.Key)
-                {
-                    var msg = $"This key already existes {tested.Key}, Hash key infos {tested.KeyInfo}";
-                    MessageBox.Show(msg, "Duplicated key", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-            }
-
-            _hashKeys.Add(tested);
-            fastObjectListViewHashKeys.SetObjects(_hashKeys);
-        }
-
-        private void TestKeyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>())
-            {
-                HashKey tested = TestHashKey(key);
-                if (!tested.IsValide)
-                    MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
-                _hashKeys.Remove(key);
-                _hashKeys.Add(tested);
-            }
-
-            fastObjectListViewHashKeys.SetObjects(_hashKeys);
-        }
-
-        private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
-        {
-            if (e.Column == olvColumnKeys)
-            {
-                try
-                {
-                    e.SubItem.ForeColor = e.SubItem.Text.Substring(0, 2) == "PH" ? Color.Blue : Color.Green;
-                }
-                catch
-                {
-                    //Not keys found
-                }
-            }
-            else if (e.Column == olvColumnHashInfos)
-            {
-                if (e.SubItem.Text == "The HashKey is invalid or has expired" || e.SubItem.Text.Contains("RPM: 0"))
-                    e.SubItem.ForeColor = Color.Red;
-                else
-                    e.SubItem.ForeColor = Color.White;
-            }
-        }
-
-        private void ImportToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Title = "Open Keys file";
-                ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    if (String.IsNullOrEmpty(ofd.FileName))
-                    {
-                        return;
-                    }
-
-                    List<HashKey> newKeys = JsonConvert.DeserializeObject<List<HashKey>>(File.ReadAllText(ofd.FileName));
-                    int totalSuccess = 0;
-                    int total = newKeys.Count;
-                    var existKeys = new List<string>();
-
-                    foreach (HashKey key in _hashKeys)
-                        existKeys.Add(key.Key);
-
-                    foreach (HashKey key in newKeys)
-                    {
-                        if (existKeys.Contains(key.Key))
-                            continue;
-                        HashKey tested = TestHashKey(key);
-                        if (!tested.IsValide)
-                            MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
-                        _hashKeys.Add(tested);
-                        ++totalSuccess;
-                    }
-
-                    fastObjectListViewHashKeys.SetObjects(_hashKeys);
-
-                    MessageBox.Show(String.Format("Successfully imported {0} out of {1} keys", totalSuccess, total));
-                }
-            }
-        }
-
-        private void ExportToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            string fileName = String.Empty;
-            var keysToExport = new List<HashKey>();
-
-            using (var sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    fileName = sfd.FileName;
-                }
-                else
-                {
-                    return;
-                }
-            }
-
-            IEnumerable<HashKey> selectedKeys = fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>();
-
-            foreach (var key in selectedKeys)
-            {
-                keysToExport.Add(key);
-            }
-
-            try
-            {
-                string data = JsonConvert.SerializeObject(keysToExport, Formatting.Indented);
-
-                File.WriteAllText(fileName, data);
-
-                MessageBox.Show(String.Format("Successfully exported {0} of {1} keys", keysToExport.Count, fastObjectListViewHashKeys.SelectedObjects.Count));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
-            }
-        }
-
-        private HashKey TestHashKey(HashKey haskkey)
-        {
-            HashKey result = new HashKey
-            {
-                Key = haskkey.Key,
-                IsValide = false
-            };
-
-            string mode = null;
-
-            try
-            {
-                var client = new HttpClient();
-                string urlcheck = null;
-                client.DefaultRequestHeaders.Add("X-AuthToken", result.Key);
-                if (result.Key.Substring(0, 2) == "PH")
-                {
-                    urlcheck = $"http://hash.goman.io/api/v159_1/hash";
-                    mode = "Remaining requests";
-                }
-                else
-                {
-                    urlcheck = $"https://pokehash.buddyauth.com/api/v159_1/hash";
-                    mode = "RPM";
-                }
-                //result = $"Hash End-Point Set to '{urlcheck}'";
-                HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
-                string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
-                string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
-                DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
-                TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
-                result.KeyInfo = string.Format($"{mode}: {MaxRequestCount} Expires in: {(Convert.ToDecimal(Expiration.Days) + (Convert.ToDecimal(Expiration.Hours) / 24)):0.00} days ({AuthTokenExpiration})");
-                if (AuthTokenExpiration > DateTime.Now)
-                    result.IsValide = true;
-            }
-            catch
-            {
-                result.KeyInfo = "The HashKey is invalid or has expired";
-                result.IsValide = false;
-            }
-
-            return result;
-        }
-
         private void RMFormatToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -2628,7 +2235,7 @@ namespace DraconiusGoGUI
 
                     var manager = new Manager(_proxyHandler);
 
-                    manager.UserSettings.AuthType = (parts[0].Trim().ToLower() == "ptc") ? AuthType.Ptc : AuthType.Google;
+                    manager.UserSettings.AuthType = (parts[0].Trim().ToLower() == "ptc") ? AuthType.DEVICE : AuthType.GOOGLE;
                     manager.UserSettings.AccountName = importModel.Username.Trim();
                     manager.UserSettings.Username = importModel.Username.Trim();
                     manager.UserSettings.Password = importModel.Password.Trim();
@@ -2791,6 +2398,5 @@ namespace DraconiusGoGUI
                 MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
             }
         }
-        #endregion
     }
 }

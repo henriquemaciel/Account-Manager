@@ -84,7 +84,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     //Only auto start when both are below min values
                     //Otherwise we'll get constant start/stops
-                    if ((PokemonCaught <= scheduler.PokemonLimiter.Min || scheduler.PokemonLimiter.Option == SchedulerOption.Nothing) &&
+                    if ((CreatureCaught <= scheduler.CreatureLimiter.Min || scheduler.CreatureLimiter.Option == SchedulerOption.Nothing) &&
                         (PokestopsFarmed <= scheduler.PokeStoplimiter.Min || scheduler.PokeStoplimiter.Option == SchedulerOption.Nothing))
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Auto starting (schedule) in {0} seconds...", delay/1000), LoggerTypes.Debug));
@@ -114,9 +114,9 @@ namespace DraconiusGoGUI.DracoManager
             {
                 if (State != BotState.Stopping && State != BotState.Stopped)
                 {
-                    if (PokemonCaught >= scheduler.PokemonLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
+                    if (CreatureCaught >= scheduler.CreatureLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
                     {
-                        LogCaller(new LoggerEventArgs("Max pokemon and pokestop limit reached. Stopping", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Max Creature and pokestop limit reached. Stopping", LoggerTypes.Debug));
                         Stop();
 
                         return;
@@ -124,36 +124,36 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            //Pokemon
-            if (scheduler.PokemonLimiter.Option != SchedulerOption.Nothing)
+            //Creature
+            if (scheduler.CreatureLimiter.Option != SchedulerOption.Nothing)
             {
-                if (PokemonCaught >= scheduler.PokemonLimiter.Max)
+                if (CreatureCaught >= scheduler.CreatureLimiter.Max)
                 {
 
-                    switch (scheduler.PokemonLimiter.Option)
+                    switch (scheduler.CreatureLimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            if(UserSettings.CatchPokemon)
+                            if(UserSettings.CatchCreature)
                             {
-                                LogCaller(new LoggerEventArgs("Max pokemon limit reached. Disabling setting...", LoggerTypes.Debug));
-                                UserSettings.CatchPokemon = false;
+                                LogCaller(new LoggerEventArgs("Max Creature limit reached. Disabling setting...", LoggerTypes.Debug));
+                                UserSettings.CatchCreature = false;
                             }
                             break;
                         case SchedulerOption.StartStop: //Just stop it
-                            LogCaller(new LoggerEventArgs("Max pokemon limit reached. Stopping bot...", LoggerTypes.Debug));
+                            LogCaller(new LoggerEventArgs("Max Creature limit reached. Stopping bot...", LoggerTypes.Debug));
                             Stop();
                             break;
                     }
                 }
-                else if (PokemonCaught <= scheduler.PokemonLimiter.Min)
+                else if (CreatureCaught <= scheduler.CreatureLimiter.Min)
                 {
-                    switch (scheduler.PokemonLimiter.Option)
+                    switch (scheduler.CreatureLimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            if (!UserSettings.CatchPokemon)
+                            if (!UserSettings.CatchCreature)
                             {
-                                LogCaller(new LoggerEventArgs("Min pokemon limit reached. Enabling catching...", LoggerTypes.Debug));
-                                UserSettings.CatchPokemon = true;
+                                LogCaller(new LoggerEventArgs("Min Creature limit reached. Enabling catching...", LoggerTypes.Debug));
+                                UserSettings.CatchCreature = true;
                             }
                             break;
                         case SchedulerOption.StartStop: //Start only if pokestop is disabled/nothing or pokestops below threshold
@@ -162,7 +162,7 @@ namespace DraconiusGoGUI.DracoManager
                             {
                                 if (State == BotState.Stopped)
                                 {
-                                    LogCaller(new LoggerEventArgs(String.Format("Min pokemon limit reached. Starting in {0} seconds", delay/1000), LoggerTypes.Debug));
+                                    LogCaller(new LoggerEventArgs(String.Format("Min Creature limit reached. Starting in {0} seconds", delay/1000), LoggerTypes.Debug));
 
                                     await Task.Delay(delay);
 
@@ -205,9 +205,9 @@ namespace DraconiusGoGUI.DracoManager
                                 UserSettings.SearchFortBelowPercent = 1000;
                             }
                             break;
-                        case SchedulerOption.StartStop: //Start only if pokemon is disabled/nothing or pokemon caught below threshold
-                            if (scheduler.PokemonLimiter.Option != SchedulerOption.StartStop ||
-                                PokemonCaught <= scheduler.PokemonLimiter.Min)
+                        case SchedulerOption.StartStop: //Start only if Creature is disabled/nothing or Creature caught below threshold
+                            if (scheduler.CreatureLimiter.Option != SchedulerOption.StartStop ||
+                                CreatureCaught <= scheduler.CreatureLimiter.Min)
                             {
                                 if (State == BotState.Stopped)
                                 {

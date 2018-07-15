@@ -7,18 +7,12 @@
 [![GitHub license](https://img.shields.io/badge/license-GNU-blue.svg)](https://raw.githubusercontent.com/Furtif/Account-Manager/master/License.md) 
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/Furtif/Account-Manager.svg?columns=all)](https://waffle.io/Furtif/Account-Manager) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SNATC29B4ZJD4) [![Discord](https://img.shields.io/badge/Discord-Online-blue.svg)](https://discord.gg/rkm4xhX)
 
-## POGOLib.Core [![NuGet](https://img.shields.io/nuget/v/POGOLib.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Core) - POGOProtos.Core [![NuGet](https://img.shields.io/nuget/vpre/POGOProtos.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOProtos.Core)
+## DracoLib.Core [![NuGet](https://img.shields.io/nuget/v/DracoLib.Core.svg?maxAge=60)](https://www.nuget.org/packages/DracoLib.Core) - DracoProtos.Core [![NuGet](https://img.shields.io/nuget/v/DracoProtos.Core.svg?maxAge=60)](https://www.nuget.org/packages/DracoProtos.Core)
 
 
 ![alt text][1.1] <strong><em>`The contents of this repo are a proof of concept and are for educational use only`</em></strong>![alt text][1.1]<br/>
 
-<h1>Account Manager is now compatible with 0.91.2 API.</h1>
-
-<p>
-Account Manager itself is free but now you will need to purchase an API key to run the bot.
-<br/>
-See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
-</p>
+<h1>Account Manager (DraconiusGo) is now compatible with 1.8.1 API.</h1>
 
 [![Stories in Ready](https://discordapp.com/api/guilds/335455302965002242/widget.png?style=banner3&time-)](https://discord.gg/rkm4xhX)
 
@@ -85,5 +79,4 @@ This is not a public release, just a project with releases for code testers for 
 
 ### `Credits`
 - [SlxTnT](https://github.com/SL-x-TnT)
-- [AeonLucid](https://github.com/AeonLucid)
 - [Xelwon](https://github.com/Xelwon)
