@@ -7,7 +7,7 @@ version:  0.0.{build}
 
 branches:
   only:
-  - master
+  - draco_manager
   
 # Do not build on tags
 skip_tags: false
@@ -198,7 +198,7 @@ before_deploy:
 - git config --global credential.helper store
 - git config --global user.email "%github_email%"
 - git config --global user.name "%github_user%"
-- git checkout master
+- git checkout draco_manager
 - git checkout -b Appveyor "%APPVEYOR_REPO_BRANCH%"
 - SET PATH=C:\Ruby23-x64\bin;%PATH%
 
