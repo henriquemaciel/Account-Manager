@@ -135,15 +135,15 @@ after_build:
     New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)";
     if ($env:PLATFORM -eq "x86")
     {
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\DraconiusGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\DraconiusGoGUI" -Force;
     }  
     elseif ($env:PLATFORM -eq "x64")
     {
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\DraconiusGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\DraconiusGoGUI" -Force;
     }
     elseif ($env:PLATFORM -eq "Any CPU")
     {
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\DraconiusGoGUI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\DraconiusGoGUI" -Force;
     }
 
 # to run your custom scripts instead of automatic MSBuild
@@ -162,8 +162,8 @@ test: off
 
 artifacts:
 
-  - path: '\$(PLATFORM)\$(CONFIGURATION)\PokemonGoGUI'
-    name: PokemonGoGUI
+  - path: '\$(PLATFORM)\$(CONFIGURATION)\DraconiusGoGUI'
+    name: DraconiusGoGUI
           
 #---------------------------------#
 #     deployment configuration    #
@@ -177,9 +177,9 @@ deploy:
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
     description: '[CHANGELOG.md](https://github.com/Furtif/Account-Manager/blob/master/CHANGELOG.md)'
-    release: PokemonGoGUI $(APPVEYOR_REPO_TAG_NAME)
+    release: DraconiusGoGUI $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(auth_token)
-    artifact: PokemonGoGUI
+    artifact: DraconiusGoGUI
     draft: false
     prerelease: false
     force_update: true
@@ -221,7 +221,7 @@ before_deploy:
 #- bundle install --retry 3
 - bundle exec github_changelog_generator --max-issues 75
 - git add "CHANGELOG.md"
-- git add "PokemonGoGUI/Properties/AssemblyInfo.cs"
+- git add "DraconiusGoGUI/Properties/AssemblyInfo.cs"
 - git commit -m "%APPVEYOR_REPO_TAG_NAME%"
 - git checkout "%APPVEYOR_REPO_BRANCH%"
 - git merge Appveyor
