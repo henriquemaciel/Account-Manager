@@ -1,4 +1,4 @@
-# Account Manager forked GoManager Version
+# Account Manager(DraconiusGo) - Based on Account Manager
 
 <!-- define variables -->
 [1.1]: http://i.imgur.com/M4fJ65n.png (ATTENTION)
