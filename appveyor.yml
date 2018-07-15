@@ -176,7 +176,7 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: '[CHANGELOG.md](https://github.com/Furtif/Account-Manager/blob/master/CHANGELOG.md)'
+    description: '[CHANGELOG.md](https://github.com/Furtif/Account-Manager/blob/draco_manager/CHANGELOG.md)'
     release: DraconiusGoGUI $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(auth_token)
     artifact: DraconiusGoGUI
@@ -219,7 +219,7 @@ before_deploy:
 - gem install bundler -f
 - bundle install
 #- bundle install --retry 3
-- bundle exec github_changelog_generator --max-issues 75
+- bundle exec github_changelog_generator --max-issues 150  --user RocketBot --project DraconiusGoGUI
 - git add "CHANGELOG.md"
 - git add "DraconiusGoGUI/Properties/AssemblyInfo.cs"
 - git commit -m "%APPVEYOR_REPO_TAG_NAME%"
