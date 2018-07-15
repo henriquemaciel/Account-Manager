@@ -176,7 +176,7 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: '[CHANGELOG.md](https://github.com/Furtif/Account-Manager/blob/draco_manager/CHANGELOG.md)'
+    description: '[CHANGELOG.md](https://github.com/Furtif/Account-Manager/blob/draco_manager/README.md)'
     release: DraconiusGoGUI $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(auth_token)
     artifact: DraconiusGoGUI
@@ -200,27 +200,27 @@ before_deploy:
 - git config --global user.name "%github_user%"
 - git checkout draco_manager
 - git checkout -b Appveyor "%APPVEYOR_REPO_BRANCH%"
-- SET PATH=C:\Ruby23-x64\bin;%PATH%
+#- SET PATH=C:\Ruby23-x64\bin;%PATH%
 
 # Print version and location for pre-installed ruby
-- ruby --version
-- where ruby
+#- ruby --version
+#- where ruby
 
 # Install latest version of RubyGems
-- gem update --system --no-document --no-post-install-message
-- gem --version
-- where gem
+#- gem update --system --no-document --no-post-install-message
+#- gem --version
+#- where gem
 
 # Print version and location for pre-installed bundler
 #- bundler --version
 #- where bundler
 
 # Install ruby dependencies
-- gem install bundler -f
-- bundle install
+#- gem install bundler -f
+#- bundle install
 #- bundle install --retry 3
-- bundle exec github_changelog_generator --max-issues 150  --user RocketBot --project account-manager
-- git add "CHANGELOG.md"
+#- bundle exec github_changelog_generator --max-issues 150  --user RocketBot --project account-manager
+#- git add "CHANGELOG.md"
 - git add "DraconiusGoGUI/Properties/AssemblyInfo.cs"
 - git commit -m "%APPVEYOR_REPO_TAG_NAME%"
 - git checkout "%APPVEYOR_REPO_BRANCH%"
