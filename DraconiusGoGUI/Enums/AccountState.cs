@@ -4,6 +4,7 @@
     {
         Good,
         Conecting,
+        SoftBan,
         PermanentBan,
         NotVerified,
         Unknown

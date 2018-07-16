@@ -14,6 +14,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DracoLib.Core.Extensions;
+using DracoProtos.Core.Objects;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -459,10 +461,8 @@ namespace DraconiusGoGUI.DracoManager
                     //Goto her if count or meters is < of settings
                     reloadAllForts:
 
-                    LogCaller(new LoggerEventArgs("Getting pokestops...", LoggerTypes.Info));
-                    break;
-                    /*
-                    MethodResult<List<FortData>> pokestops = await GetAllFortsAsync();
+                    LogCaller(new LoggerEventArgs("Getting pokestops...", LoggerTypes.Info));                   
+                    MethodResult<List<FBuilding>> pokestops = await GetAllFortsAsync();
 
                     if (!pokestops.Success)
                     {
@@ -496,7 +496,7 @@ namespace DraconiusGoGUI.DracoManager
 
                     int currentFailedStops = 0;
 
-                    var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
+                    var pokestopsToFarm = new Queue<FBuilding>(pokestops.Data);
 
                     while (pokestopsToFarm.Any())
                     {
@@ -513,26 +513,26 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        pokestopsToFarm = new Queue<FortData>(pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)));
+                        pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(UserSettings.Latitude, UserSettings.Longitude, x.coords.latitude, x.coords.longitude)));
 
-                        FortData pokestop = pokestopsToFarm.FirstOrDefault();
+                        FBuilding pokestop = pokestopsToFarm.FirstOrDefault();
 
                         if (pokestop == null)
                             continue;
 
-                        var player = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                        var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
+                        var player = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude);
+                        var fortLocation = new GeoCoordinate(pokestop.coords.latitude, pokestop.coords.longitude);
                         double distance = CalculateDistanceInMeters(player, fortLocation);
  
                         if (UserSettings.MaxPokestopMeters > 0)
                         {
                             double rand = UserSettings.MaxPokestopMetersRandom - UserSettings.MaxPokestopMeters;
-                            pokestopsToFarm = new Queue<FortData>(pokestopsToFarm.OrderBy(x => distance <= rand));
+                            pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => distance <= rand));
 
                             if (pokestopsToFarm.Count < 1)
                             {
                                 rand = UserSettings.MaxPokestopMetersRandom + UserSettings.MaxPokestopMeters;
-                                pokestopsToFarm = new Queue<FortData>(pokestopsToFarm.OrderBy(x => distance <= rand));
+                                pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => distance <= rand));
                             }
 
                             if (pokestopsToFarm.Count < 1)
@@ -546,28 +546,28 @@ namespace DraconiusGoGUI.DracoManager
                         if (pokestopsToFarm.Count < 1)
                             continue;
 
-                        if (UserSettings.GoOnlyToGyms && pokestop.Type != FortType.Gym)
+                        if (UserSettings.GoOnlyToGyms && pokestop.type != BuildingType.ARENA)
                             continue;
 
                         pokestop = pokestopsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("Fort DeQueued: " + pokestop.Id, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Fort DeQueued: " + pokestop.id, LoggerTypes.Debug));
 
                         string fort = "pokestop";
                         LoggerTypes loggerTypes = LoggerTypes.Info;
 
-                        if (pokestop.Type == FortType.Gym && Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
+                        if (pokestop.type == BuildingType.ARENA  && Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
                         {
                             fort = "Gym";
                             loggerTypes = LoggerTypes.Gym;
                         }
 
-                        if (!UserSettings.SpinGyms && pokestop.Type == FortType.Gym)
+                        if (!UserSettings.SpinGyms && pokestop.type == BuildingType.ARENA)
                             continue;
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
                         //Go to pokestops
-                        MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
+                        MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.coords.latitude, pokestop.coords.longitude));
 
                         if (!walkResult.Success)
                         {
@@ -590,6 +590,7 @@ namespace DraconiusGoGUI.DracoManager
                         }
 
                         // NOTE: not an "else" we could enabled catch in this time
+                        /*
                         if (!CatchDisabled)
                         {
                             int remainingPokeballs = RemainingPokeballs();
@@ -648,7 +649,7 @@ namespace DraconiusGoGUI.DracoManager
                         //Clean inventory,
                         if (UserSettings.RecycleItems)
                         {
-                            await RecycleFilteredItems();
+                            //await RecycleFilteredItems();
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
 
@@ -824,6 +825,7 @@ namespace DraconiusGoGUI.DracoManager
                             LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
                         }
 
+                        */
                         //Stop bot instantly
                         if (!IsRunning)
                         {
@@ -833,43 +835,41 @@ namespace DraconiusGoGUI.DracoManager
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
-                            // clean account state
-                            if (AccountState != AccountState.Flagged || AccountState != AccountState.SoftBan)
-                                AccountState = AccountState.Good;
-
-                            if (_client.ClientSession.AccessToken.IsExpired)
-                            {
-                                Restart();
-                            }
 
                             if (UserSettings.EvolveCreature)
                             {
+                                /*
                                 MethodResult evolveResult = await EvolveFilteredCreature();
 
                                 if (evolveResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
+                                */
                             }
 
                             if (UserSettings.TransferCreature)
                             {
+                                /*
                                 MethodResult transferResult = await TransferFilteredCreature();
 
                                 if (transferResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
+                                */
                             }
 
                             if (UserSettings.UpgradeCreature)
                             {
+                                /*
                                 MethodResult upgradeResult = await UpgradeFilteredCreature();
 
                                 if (upgradeResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
+                                */
                             }
 
                             if (UserSettings.IncubateEggs)
@@ -882,12 +882,12 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            UpdateInventory(InventoryRefresh.All); //all inventory
+                            //UpdateInventory(InventoryRefresh.All); //all inventory
                         }
 
                         WaitPaused();
 
-                        UpdateInventory(InventoryRefresh.Stats);
+                        //UpdateInventory(InventoryRefresh.Stats);
 
                         if (Level > prevLevel)
                         {
@@ -902,7 +902,6 @@ namespace DraconiusGoGUI.DracoManager
                             LogCaller(new LoggerEventArgs(String.Format("Max level of {0} reached.", UserSettings.MaxLevel), LoggerTypes.Info));
                             await ExportToPGPool();
                             Stop();
-                            await ShuffleADSProcess();
                         }
 
                         if (_totalZeroExpStops > 25)
@@ -928,15 +927,16 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (UserSettings.UseLuckEggConst && Level >= UserSettings.LevelForConstLukky && IsRunning)
                         {
+                            /*
                             MethodResult luckEggResult = await UseLuckyEgg();
 
                             if (luckEggResult.Success)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
+                            */
                         }
                     }
-                    */
                 }
                 catch (StackOverflowException ex)
                 {

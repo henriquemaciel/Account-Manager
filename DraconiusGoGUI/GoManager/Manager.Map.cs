@@ -9,7 +9,7 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult<List<FCreatureUpdate>>> GetCatchableCreatureAsync()
+        private async Task<MethodResult<List<FWildCreature>>> GetCatchableCreatureAsync()
         {
             FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
             FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
@@ -18,20 +18,20 @@ namespace DraconiusGoGUI.DracoManager
             //FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
 
-            if (creatures.inRadar.Count == 0)
+            if (creatures.wilds.Count == 0)
             {
                 //throw new OperationCanceledException("Not cells.");
             }
 
-            return await Task.Run(() => new MethodResult<List<FCreatureUpdate>>
+            return await Task.Run(() => new MethodResult<List<FWildCreature>>
             {
-                Data = new List<FCreatureUpdate> { creatures },
+                Data = creatures.wilds,
                 Success = true,
                 Message = "Success"
             });
         }
 
-        private async Task<MethodResult<List<FBuildingUpdate>>> GetAllFortsAsync()
+        private async Task<MethodResult<List<FBuilding>>> GetAllFortsAsync()
         {
             FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
             //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
@@ -40,14 +40,17 @@ namespace DraconiusGoGUI.DracoManager
             //FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
             FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
 
-            if (buildings.tileBuildings.Count == 0)
+            //var _buildings[];
+            var _buildings = buildings.tileBuildings.Values.ToArray().SelectMany(t => t.buildings).ToList();
+
+            if (_buildings.Count() == 0)
             {
                 //throw new OperationCanceledException("Not cells.");
             }
 
             if (!buildings.tileBuildings.Any())
             {
-                return new MethodResult<List<FBuildingUpdate>>
+                return new MethodResult<List<FBuilding>>
                 {
                     Message = "No pokestop data found. Potential temp IP ban or bad location",
                 };
@@ -98,11 +101,11 @@ namespace DraconiusGoGUI.DracoManager
                 fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
             }
             */
-            return await Task.Run(() => new MethodResult<List<FBuildingUpdate>>
+            return await Task.Run(() => new MethodResult<List<FBuilding>>
             {
                 Message = "Success",
                 Success = true,
-                Data = new List<FBuildingUpdate> { buildings }
+                Data = _buildings
             });
         }
 
