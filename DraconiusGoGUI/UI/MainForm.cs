@@ -1878,7 +1878,6 @@ namespace DraconiusGoGUI
                 return;
             }
 
-            /*
             Dictionary<GoProxy, List<Manager>> pManagers = new Dictionary<GoProxy, List<Manager>>();
 
             foreach(Manager manager in _managers)
@@ -1899,7 +1898,7 @@ namespace DraconiusGoGUI
 
                     pManagers.Add(manager.CurrentProxy, m);
                 }
-            }*/
+            }
 
             bool messageShown = false;
 
@@ -1913,15 +1912,14 @@ namespace DraconiusGoGUI
                 }
 
                 _proxyHandler.RemoveProxy(proxy);
-
-                /*
+                
                 if(pManagers.ContainsKey(proxy))
                 {
                     foreach(Manager manager in _managers)
                     {
                         manager.RemoveProxy();
                     }
-                }*/
+                }
             }
 
             fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
@@ -2026,6 +2024,7 @@ namespace DraconiusGoGUI
                 manager.UserSettings.SPF = _spf;
             }
 
+            //orig
             //enableSpoofToolStripMenuItem.Checked = _spf;
         }
 
