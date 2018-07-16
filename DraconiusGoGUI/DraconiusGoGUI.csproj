@@ -184,7 +184,7 @@
     <Compile Include="GoManager\Manager.Map.cs" />
     <Compile Include="GoManager\Manager.Navigation.cs" />
     <Compile Include="GoManager\Manager.Player.cs" />
-    <Compile Include="GoManager\Manager.Pokemon.cs" />
+    <Compile Include="GoManager\Manager.Creature.cs" />
     <Compile Include="GoManager\Manager.Properties.cs" />
     <Compile Include="GoManager\Manager.Proxy.cs" />
     <Compile Include="GoManager\Manager.Scheduler.cs" />
