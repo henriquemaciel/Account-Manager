@@ -240,7 +240,6 @@ namespace DraconiusGoGUI
                     return false;
 
                 var tempManagers = new List<Manager>();
-                var tempHashKeys = new List<HashKey>();
 
                 byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
                 string data = Compression.Unzip(byteData);
@@ -253,8 +252,6 @@ namespace DraconiusGoGUI
                     tempManagers = model.Managers;
                 if (model.Schedulers != null)
                     _schedulers = model.Schedulers;
-                if (model.HashKeys != null)
-                    tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 _autoupdate = model.AutoUpdate;
@@ -266,11 +263,11 @@ namespace DraconiusGoGUI
                     manager.OnLog += Manager_OnLog;
 
                     //Patch for version upgrade
-                    if (String.IsNullOrEmpty(manager.UserSettings.DeviceId))
+                    /*if (String.IsNullOrEmpty(manager.UserSettings.DeviceId))
                     {
                         //Load some
                         manager.UserSettings.RandomizeDevice();
-                    }
+                    }*/
 
                     if (manager.Tracker != null)
                     {

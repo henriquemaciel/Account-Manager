@@ -14,9 +14,6 @@ namespace DraconiusGoGUI.DracoManager
     {
         public int CalculateDelay(int baseDelay, int offset)
         {
-            if (!UserSettings.EnableHumanization)
-                return UserSettings.APIThrottles; //1000 for well
-
             lock(_rand)
             {
                 int maxOffset = offset * 2;

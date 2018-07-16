@@ -11,6 +11,9 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using DracoLib.Core;
+using DracoLib.Core.Utils;
+using DracoProtos.Core.Base;
 
 #endregion
 
@@ -23,6 +26,7 @@ namespace DraconiusGoGUI
         public bool LoggedIn = false;
         public Manager ClientManager;
         private string RessourcesFolder;
+        private DracoClient DracoClient;
         private CancellationTokenSource CancellationTokenSource;
 
         public Client()
@@ -51,25 +55,92 @@ namespace DraconiusGoGUI
             var msgStr = "Session couldn't start up.";
             LoggedIn = false;
             CancellationTokenSource = new CancellationTokenSource();
+            string authType = AuthType.DEVICE.ToString();
 
-            return new MethodResult<bool>();
-            /*return await Task.Run(async () =>
+            switch (ClientManager.UserSettings.AuthType)
             {
-                switch (ClientManager.UserSettings.AuthType)
+                case AuthType.GOOGLE:
+                    authType = AuthType.GOOGLE.ToString().ToUpper();
+                    break;
+                case AuthType.DEVICE:
+                    authType = AuthType.DEVICE.ToString().ToUpper();
+                    break;
+                default:
+                    throw new ArgumentException("Login provider must be either \"google\" or \"device\".");
+            }
+
+            return await Task.Run(() =>
+            {
+
+                User config = new User()
                 {
-                    case AuthType.GOOGLE:
-                        //LoginProvider = new GoogleLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password);
-                        break;
-                    case AuthType.DEVICE:
-                        //LoginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, ClientManager.UserSettings.Proxy.AsWebProxy());
-                        break;
-                    default:
-                        throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
+                    Username = ClientManager.UserSettings.Username,
+                    Password = ClientManager.UserSettings.Password,
+                    DeviceId = DracoUtils.GenerateDeviceId(),
+                    Login = authType
+                };
+
+                Config options = new Config()
+                {
+                    CheckProtocol = true,
+                    EventsCounter = new Dictionary<string, int>(),
+                    Lang = "English",
+                    TimeOut = 20 * 1000,
+                    UtcOffset = (int)TimeZoneInfo.Utc.GetUtcOffset(DateTime.Now).TotalSeconds,
+                    Delay = 1000
+                };
+
+                string proxy = ClientManager.Proxy;
+
+                DracoClient = new DracoClient(proxy, options);
+
+                ClientManager.LogCaller(new LoggerEventArgs("Ping...", LoggerTypes.Info));
+                var ping = DracoClient.Ping();
+                if (!ping) throw new Exception();
+
+                ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
+                DracoClient.Boot(config);
+
+                ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
+                var login = DracoClient.Login().Result;
+                if (login == null) throw new Exception("Unable to login");
+
+                var newLicence = login.info.newLicense;
+
+                if (login.info.sendClientLog)
+                {
+                    ClientManager.LogCaller(new LoggerEventArgs("Send client log is set to true! Please report.", LoggerTypes.Info));
                 }
+
+                DracoClient.Post("https://us.draconiusgo.com/client-error", new
+                {
+                    appVersion = DracoClient.ClientVersion,
+                    deviceInfo = $"platform = iOS\"nos ={ DracoClient.ClientInfo.platformVersion }\"ndevice = iPhone 6S",
+                    userId = DracoClient.User.Id,
+                    message = "Material doesn\"t have a texture property \"_MainTex\"",
+                    stackTrace = "",
+                });
+
+                if (newLicence > 0)
+                {
+                    DracoClient.AcceptLicence(newLicence);
+                }
+
+                ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
+                DracoClient.Load();
+
 
                 ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
-            });*/
+                msgStr = "Conected to server...";
+                LoggedIn = true;
+
+                return new MethodResult<bool>
+                {
+                    Success = true,
+                    Message = msgStr
+                };
+            });
         }
    
  
@@ -89,14 +160,13 @@ namespace DraconiusGoGUI
         {
             ClientManager = manager;
 
-            Dictionary<string, string> Header = new Dictionary<string, string>()
+            /*Dictionary<string, string> Header = new Dictionary<string, string>()
             {
                 {"11.1.0", "CFNetwork/889.3 Darwin/17.2.0"},
                 {"11.2.0", "CFNetwork/893.10 Darwin/17.3.0"},
                 {"11.2.5", "CFNetwork/893.14.2 Darwin/17.4.0"},
                 {"11.3.0", "CFNetwork/897.1 Darwin/17.5.0"}
-            };
-
+            };*/
         }
 
 

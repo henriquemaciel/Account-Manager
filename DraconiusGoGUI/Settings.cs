@@ -70,8 +70,6 @@ namespace DraconiusGoGUI
         public bool SnipeAllCreaturesNoInPokedex { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
-        public bool UsePOGOLibHeartbeat { get; set; }
-        public int APIThrottles { get; set; }
         public int SoftBanBypassTimes { get; set; }
 
         public int MaxLogs { get; set; }
@@ -116,8 +114,6 @@ namespace DraconiusGoGUI
         public int BallsToIgnoreStops { get; set; }
         public bool IgnoreStopsIfTooBalls { get; set; }
         public bool UseSoftBanBypass { get; set; }
-        public bool IgnoreHashSemafore { get; set; }
-        public bool IgnoreRPCSemafore { get; set; }
         public string PGPoolEndpoint { get; set; }
         public bool EnablePGPool { get; set; }
 
@@ -168,8 +164,8 @@ namespace DraconiusGoGUI
             AuthType = AuthType.DEVICE;
             MimicWalking = false;
             CatchCreature = true;
-            WalkingSpeed = 200;
-            MaxTravelDistance = 50000;
+            WalkingSpeed = 9;
+            MaxTravelDistance = 30000;
             EncounterWhileWalking = true;
             EnableHumanization = false;
             InsideReticuleChance = 100;
@@ -206,8 +202,6 @@ namespace DraconiusGoGUI
             RequestFortDetails = false;
             BallsToIgnoreStops = 80;
             IgnoreStopsIfTooBalls = false;
-            UsePOGOLibHeartbeat = false;
-            APIThrottles = 1000;
             MinCreatureBeforeEvolve = 1;
             UseSoftBanBypass = true;
             SoftBanBypassTimes = 40;
@@ -217,8 +211,6 @@ namespace DraconiusGoGUI
             UseIncense = true;
             MaxPokestopMeters = 100.00;
             MaxPokestopMetersRandom = 50;
-            IgnoreHashSemafore = false;
-            IgnoreRPCSemafore = false;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";
         }

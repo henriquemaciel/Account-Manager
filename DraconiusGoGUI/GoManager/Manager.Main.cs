@@ -50,7 +50,7 @@ namespace DraconiusGoGUI.DracoManager
         public Manager()
         {
             //Stats = new PlayerStats();
-            //Logs = new List<Log>();
+            Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
         }
