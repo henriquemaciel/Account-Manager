@@ -20,9 +20,8 @@
 Download the bot from the [release](https://github.com/Furtif/Account-Manager/releases) tab.  
 
 ### `Dependencies`
- - Microsoft [.NET 4.5 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=55170&desc=dotnet47)
+ - Microsoft [.NET 4.7 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=55170&desc=dotnet47)
  - Windows 7/8/8.1/10 (x86 or x64)
- - PogoDev ApiKey valid to get one here [Buy](https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer)
 
 ## `Developers and Contributors`
 
