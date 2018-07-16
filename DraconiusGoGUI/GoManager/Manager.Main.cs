@@ -13,6 +13,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DracoLib.Core.Extensions;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -440,12 +441,12 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        //result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
+                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
 
-                        //if (!result.Success)
-                        //{
-                       //     break;
-                       // }
+                        if (!result.Success)
+                        {
+                            break;
+                        }
 
                         //UpdateInventory(InventoryRefresh.All);
                     }
@@ -459,6 +460,7 @@ namespace DraconiusGoGUI.DracoManager
                     reloadAllForts:
 
                     LogCaller(new LoggerEventArgs("Getting pokestops...", LoggerTypes.Info));
+                    break;
                     /*
                     MethodResult<List<FortData>> pokestops = await GetAllFortsAsync();
 

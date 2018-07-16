@@ -2,12 +2,12 @@
 using System;
 using System.Threading.Tasks;
 using DraconiusGoGUI.Extensions;
+using DracoLib.Core.Extensions;
 
 namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        /*
         protected const double SpeedDownTo = 10 / 3.6;
         private double CurrentWalkingSpeed = 0;
         private Random WalkingRandom = new Random();
@@ -99,7 +99,7 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             var destinaionCoordinate = new GeoCoordinate(location.Latitude, location.Longitude);
-            var sourceLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+            var sourceLocation = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude); ;
             var nextWaypointBearing = DegreeBearing(sourceLocation, destinaionCoordinate);
             var nextWaypointDistance = speedInMetersPerSecond;
             var waypoint = CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
@@ -116,7 +116,7 @@ namespace DraconiusGoGUI.DracoManager
                 var millisecondsUntilVariant =
                     (DateTime.Now - requestVariantDateTime).TotalMilliseconds;
 
-                sourceLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                sourceLocation = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude); ;
                 var currentDistanceToTarget = CalculateDistanceInMeters(sourceLocation, destinaionCoordinate);
 
                 speedInMetersPerSecond = (UserSettings.WalkingSpeed + WalkOffset()) / 3.6;
@@ -164,7 +164,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             try
             {
-                var previousLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                var previousLocation = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude);
 
                 double distance = CalculateDistanceInMeters(previousLocation, location);
 
@@ -179,11 +179,11 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                //await Task.Run(() => _client.ClientSession.Player.SetCoordinates(moveTo));
+                await Task.Run(() => _client.DracoClient.GetMapUpdate(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy));
 
-                //UserSettings.Latitude = _client.ClientSession.Player.Latitude;
-                //UserSettings.Longitude = _client.ClientSession.Player.Longitude;
-                //UserSettings.Altitude = _client.ClientSession.Player.Altitude;
+                UserSettings.Latitude = moveTo.Latitude;
+                UserSettings.Longitude = moveTo.Longitude;
+                UserSettings.HorizontalAccuracy = moveTo.HorizontalAccuracy;
 
                 //string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
                 string message = String.Format("Walked distance: {0:0.00}m", distance);
@@ -353,7 +353,6 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             return currentSpeed;
-        }
-        */
+        }       
     }
 }

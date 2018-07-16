@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using DracoLib.Core;
 using DracoLib.Core.Utils;
 using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
 
 #endregion
 
@@ -21,19 +22,14 @@ namespace DraconiusGoGUI
 {
     public class Client : IDisposable
     {
-        public Version VersionStr;
-        public uint AppVersion;
         public bool LoggedIn = false;
         public Manager ClientManager;
-        private string RessourcesFolder;
-        private DracoClient DracoClient;
+        public DracoClient DracoClient;
+        public FConfig ClientFConfig;
         private CancellationTokenSource CancellationTokenSource;
 
         public Client()
         {
-            VersionStr = new Version("0.91.2");
-            AppVersion = 9100;
-            RessourcesFolder = $"data/{VersionStr.ToString()}/";
         }
 
         public void Logout()
@@ -55,16 +51,16 @@ namespace DraconiusGoGUI
             var msgStr = "Session couldn't start up.";
             LoggedIn = false;
             CancellationTokenSource = new CancellationTokenSource();
-            string authType = AuthType.DEVICE.ToString();
+            string authType = AuthType.DEVICE.ToString().ToUpper();
 
             switch (ClientManager.UserSettings.AuthType)
             {
                 case AuthType.GOOGLE:
                     authType = AuthType.GOOGLE.ToString().ToUpper();
                     break;
-                case AuthType.DEVICE:
+                /*case AuthType.DEVICE:
                     authType = AuthType.DEVICE.ToString().ToUpper();
-                    break;
+                    break;*/
                 default:
                     throw new ArgumentException("Login provider must be either \"google\" or \"device\".");
             }
@@ -99,7 +95,7 @@ namespace DraconiusGoGUI
                 if (!ping) throw new Exception();
 
                 ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                DracoClient.Boot(config);
+                ClientFConfig = DracoClient.Boot(config);
 
                 ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
                 var login = DracoClient.Login().Result;
@@ -143,19 +139,6 @@ namespace DraconiusGoGUI
             });
         }
    
- 
-        private void SessionMapUpdate(object sender, EventArgs e)
-        {
-            //Map Update
-        }
-
- 
-        private void SessionInventoryUpdate(object sender, EventArgs e)
-        {
-            //TODO: review needed here            
-            //ClientManager.UpdateInventory(InventoryRefresh.All); // <- this line should be the unique line updating the inventory
-        }
-
         public void SetSettings(Manager manager)
         {
             ClientManager = manager;

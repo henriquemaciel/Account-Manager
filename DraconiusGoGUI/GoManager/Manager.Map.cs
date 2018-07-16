@@ -1,4 +1,5 @@
 ﻿using DraconiusGoGUI.Extensions;
+using DracoProtos.Core.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,60 +9,53 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        /*
-        private async Task<MethodResult<List<MapCreature>>> GetCatchableCreatureAsync()
+        private async Task<MethodResult<List<FCreatureUpdate>>> GetCatchableCreatureAsync()
         {
-            if (!UserSettings.UsePOGOLibHeartbeat)
-                await _client.ClientSession.RpcClient.RefreshMapObjectsAsync();
+            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+            FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
+            //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
+            //FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
 
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            if (creatures.inRadar.Count == 0)
             {
-               throw new OperationCanceledException("Not cells.");
+                //throw new OperationCanceledException("Not cells.");
             }
 
-            //var cells = _client.ClientSession.Map.Cells;
-
-            //         Where(CreatureWithinCatchSettings) <-- Unneeded, will be filtered after.
-            List<MapCreature> newCatchableCreatures = _client.ClientSession.Map.Cells.SelectMany(x => x.CatchableCreatures).ToList();
-            List<MapCreature> realList = new List<MapCreature>();
-
-            foreach (var pok in newCatchableCreatures)
+            return await Task.Run(() => new MethodResult<List<FCreatureUpdate>>
             {
-                if (IsValidLocation(pok.Latitude, pok.Longitude))
-                    realList.Add(pok);
-            }
-
-            return new MethodResult<List<MapCreature>>
-            {
-                Data = realList,
+                Data = new List<FCreatureUpdate> { creatures },
                 Success = true,
                 Message = "Success"
-            };
+            });
         }
 
-        private async Task<MethodResult<List<FortData>>> GetAllFortsAsync()
+        private async Task<MethodResult<List<FBuildingUpdate>>> GetAllFortsAsync()
         {
-            if (!UserSettings.UsePOGOLibHeartbeat)
-                await _client.ClientSession.RpcClient.RefreshMapObjectsAsync();
+            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+            //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
+            //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
+            //FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
 
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            if (buildings.tileBuildings.Count == 0)
             {
-                throw new OperationCanceledException("Not cells.");
+                //throw new OperationCanceledException("Not cells.");
             }
 
-            var forts = _client.ClientSession.Map.Cells.SelectMany(p => p.Forts);//.GetFortsSortedByDistance();
-
-            if (!forts.Any())
+            if (!buildings.tileBuildings.Any())
             {
-                return new MethodResult<List<FortData>>
+                return new MethodResult<List<FBuildingUpdate>>
                 {
                     Message = "No pokestop data found. Potential temp IP ban or bad location",
                 };
             }
+            /*
+            var fortData = new List<FBuildingUpdate>();
 
-            var fortData = new List<FortData>();
-
-            foreach (FortData fort in forts)
+            foreach (var fort in buildings.tileBuildings)
             {
                 if (!IsValidLocation(fort.Latitude, fort.Longitude))
                 {
@@ -103,15 +97,16 @@ namespace DraconiusGoGUI.DracoManager
             {
                 fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
             }
-
-            return new MethodResult<List<FortData>>
+            */
+            return await Task.Run(() => new MethodResult<List<FBuildingUpdate>>
             {
                 Message = "Success",
                 Success = true,
-                Data = fortData
-            };
+                Data = new List<FBuildingUpdate> { buildings }
+            });
         }
 
+        /*
         private async Task<MethodResult<MapCreature>> GetIncenseCreatures()
         {
             if (!_client.ClientSession.IncenseUsed)

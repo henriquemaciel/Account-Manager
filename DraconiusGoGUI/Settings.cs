@@ -15,7 +15,7 @@ namespace DraconiusGoGUI
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double Altitude { get; set; }
+        public double HorizontalAccuracy { get; set; }
         public string DeviceId { get; set; }
         public string DeviceBrand { get; set; }
         public string DeviceModel { get; set; }
