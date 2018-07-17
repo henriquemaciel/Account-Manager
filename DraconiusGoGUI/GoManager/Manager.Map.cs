@@ -52,7 +52,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult<List<FBuilding>>
                 {
-                    Message = "No pokestop data found. Potential temp IP ban or bad location",
+                    Message = "No buildings data found. Potential temp IP ban or bad location",
                 };
             }
             /*

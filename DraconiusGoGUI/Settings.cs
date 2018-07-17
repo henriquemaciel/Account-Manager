@@ -162,7 +162,7 @@ namespace DraconiusGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.DEVICE;
-            MimicWalking = false;
+            MimicWalking = true;
             CatchCreature = true;
             WalkingSpeed = 9;
             MaxTravelDistance = 30000;

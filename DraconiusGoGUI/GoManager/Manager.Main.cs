@@ -461,7 +461,7 @@ namespace DraconiusGoGUI.DracoManager
                     //Goto her if count or meters is < of settings
                     reloadAllForts:
 
-                    LogCaller(new LoggerEventArgs("Getting pokestops...", LoggerTypes.Info));                   
+                    LogCaller(new LoggerEventArgs("Getting buildings...", LoggerTypes.Info));                   
                     MethodResult<List<FBuilding>> pokestops = await GetAllFortsAsync();
 
                     if (!pokestops.Success)
@@ -552,19 +552,30 @@ namespace DraconiusGoGUI.DracoManager
                         pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort DeQueued: " + pokestop.id, LoggerTypes.Debug));
 
-                        string fort = "pokestop";
+                        string fort = "";
                         LoggerTypes loggerTypes = LoggerTypes.Info;
 
-                        if (pokestop.type == BuildingType.ARENA  && Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
+                        switch (pokestop.type)
                         {
-                            fort = "Gym";
-                            loggerTypes = LoggerTypes.Gym;
+                            case BuildingType.ARENA:
+                                fort = "Arena";
+                                if (Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
+                                {
+                                    loggerTypes = LoggerTypes.Gym;
+                                }
+                                break;
+                            case BuildingType.STOP:
+                                fort = "Pillar of Abundance";
+                                break;
+                            default:
+                                fort = pokestop.type.ToString();
+                                break;
                         }
 
                         if (!UserSettings.SpinGyms && pokestop.type == BuildingType.ARENA)
                             continue;
 
-                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
+                        LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
                         //Go to pokestops
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.coords.latitude, pokestop.coords.longitude));

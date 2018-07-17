@@ -734,7 +734,8 @@ namespace DraconiusGoGUI.UI
 
         private void ComboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxLocationPresets.SelectedItem is FarmLocation fLocation)
+            var fLocation = comboBoxLocationPresets.SelectedItem as FarmLocation;
+            if (fLocation != null)
             {
                 if (fLocation.Name == "Current")
                 {
