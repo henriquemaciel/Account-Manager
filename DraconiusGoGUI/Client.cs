@@ -88,54 +88,61 @@ namespace DraconiusGoGUI
 
                 string proxy = ClientManager.Proxy;
 
-                DracoClient = new DracoClient(proxy, options);
-
-                ClientManager.LogCaller(new LoggerEventArgs("Ping...", LoggerTypes.Info));
-                var ping = DracoClient.Ping();
-                if (!ping) throw new Exception();
-
-                ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                ClientFConfig = DracoClient.Boot(config);
-
-                ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
-                var login = DracoClient.Login().Result;
-                if (login == null) throw new Exception("Unable to login");
-
-                var newLicence = login.info.newLicense;
-
-                if (login.info.sendClientLog)
+                try
                 {
-                    ClientManager.LogCaller(new LoggerEventArgs("Send client log is set to true! Please report.", LoggerTypes.Info));
+                    DracoClient = new DracoClient(proxy, options);
+
+                    ClientManager.LogCaller(new LoggerEventArgs("Ping...", LoggerTypes.Info));
+                    var ping = DracoClient.Ping();
+                    if (!ping) throw new Exception();
+
+                    ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
+                    ClientFConfig = DracoClient.Boot(config);
+
+                    ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
+                    var login = DracoClient.Login().Result;
+                    if (login == null) throw new Exception("Unable to login");
+
+                    var newLicence = login.info.newLicense;
+
+                    if (login.info.sendClientLog)
+                    {
+                        ClientManager.LogCaller(new LoggerEventArgs("Send client log is set to true! Please report.", LoggerTypes.Info));
+                    }
+
+                    DracoClient.Post("https://us.draconiusgo.com/client-error", new
+                    {
+                        appVersion = DracoClient.ClientVersion,
+                        deviceInfo = $"platform = iOS\"nos ={ DracoClient.ClientInfo.platformVersion }\"ndevice = iPhone 6S",
+                        userId = DracoClient.User.Id,
+                        message = "Material doesn\"t have a texture property \"_MainTex\"",
+                        stackTrace = "",
+                    });
+
+                    if (newLicence > 0)
+                    {
+                        DracoClient.AcceptLicence(newLicence);
+                    }
+
+                    ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
+                    DracoClient.Load();
+
+
+                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
+
+                    msgStr = "Conected to server...";
+                    LoggedIn = true;
                 }
-
-                DracoClient.Post("https://us.draconiusgo.com/client-error", new
+                catch (Exception ex)
                 {
-                    appVersion = DracoClient.ClientVersion,
-                    deviceInfo = $"platform = iOS\"nos ={ DracoClient.ClientInfo.platformVersion }\"ndevice = iPhone 6S",
-                    userId = DracoClient.User.Id,
-                    message = "Material doesn\"t have a texture property \"_MainTex\"",
-                    stackTrace = "",
-                });
-
-                if (newLicence > 0)
-                {
-                    DracoClient.AcceptLicence(newLicence);
+                    msgStr = ex.Message + " StackTrace: " + ex.StackTrace;
                 }
-
-                ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
-                DracoClient.Load();
-
-
-                ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
-
-                msgStr = "Conected to server...";
-                LoggedIn = true;
 
                 ClientManager.Strings = DracoClient.Strings;
 
                 return new MethodResult<bool>
                 {
-                    Success = true,
+                    Success = LoggedIn,
                     Message = msgStr
                 };
             });
