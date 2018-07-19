@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DraconiusGoGUI.Extensions;
-using DraconiusGoGUI.Enums;
-
-namespace DraconiusGoGUI.DracoManager
+﻿namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {

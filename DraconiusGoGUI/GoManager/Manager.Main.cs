@@ -1,4 +1,3 @@
-using System.Globalization;
 using Newtonsoft.Json;
 using DraconiusGoGUI.AccountScheduler;
 using DraconiusGoGUI.Enums;
@@ -12,11 +11,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using DracoLib.Core.Extensions;
 using DracoProtos.Core.Objects;
 using DracoProtos.Core.Base;
-using DracoLib.Core;
 using DracoLib.Core.Text;
 
 namespace DraconiusGoGUI.DracoManager

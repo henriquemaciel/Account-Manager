@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
-using DraconiusGoGUI.Extensions;
-using DraconiusGoGUI.Models;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 using DraconiusGoGUI.Enums;
 using DracoProtos.Core.Objects;
 

@@ -1,7 +1,4 @@
-﻿using DraconiusGoGUI.Enums;
-using DraconiusGoGUI.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using DraconiusGoGUI.Extensions;
 using System.Threading.Tasks;
 
 namespace DraconiusGoGUI.DracoManager

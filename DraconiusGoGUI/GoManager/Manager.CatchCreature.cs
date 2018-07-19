@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
 using DraconiusGoGUI.Extensions;
-using DraconiusGoGUI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DraconiusGoGUI.Enums;
 

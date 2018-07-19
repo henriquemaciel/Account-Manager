@@ -1,20 +1,17 @@
 ﻿#region using directives
 
-using Newtonsoft.Json;
 using DraconiusGoGUI.Enums;
-using DraconiusGoGUI.Exceptions;
 using DraconiusGoGUI.Extensions;
 using DraconiusGoGUI.DracoManager;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using DracoLib.Core;
 using DracoLib.Core.Utils;
 using DracoProtos.Core.Base;
 using DracoProtos.Core.Objects;
+using DracoLib.Core.Exceptions;
 
 #endregion
 
@@ -133,7 +130,15 @@ namespace DraconiusGoGUI
                     msgStr = "Conected to server...";
                     LoggedIn = true;
                 }
-                catch (Exception ex)
+                catch (DracoError ex)
+                {
+                    msgStr = ex.Message + " StackTrace: " + ex.StackTrace;
+                }
+                catch (GoogleLoginException ex)
+                {
+                    msgStr = ex.Message + " StackTrace: " + ex.StackTrace;
+                }
+                catch (FacebookLoginException ex)
                 {
                     msgStr = ex.Message + " StackTrace: " + ex.StackTrace;
                 }

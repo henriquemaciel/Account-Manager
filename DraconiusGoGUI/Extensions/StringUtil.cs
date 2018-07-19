@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DraconiusGoGUI.Extensions
+﻿namespace DraconiusGoGUI.Extensions
 {
     public static class StringUtil
     {

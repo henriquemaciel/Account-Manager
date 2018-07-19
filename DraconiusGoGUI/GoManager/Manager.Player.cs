@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DraconiusGoGUI.Extensions;
 using DraconiusGoGUI.Enums;
 using System.Net.Http;
-using System.Collections.Generic;
 
 namespace DraconiusGoGUI.DracoManager
 {

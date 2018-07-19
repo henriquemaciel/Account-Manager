@@ -7,10 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DracoProtos.Core.Objects;
-using DracoLib.Core;
 
 namespace DraconiusGoGUI.UI
 {
@@ -54,7 +52,7 @@ namespace DraconiusGoGUI.UI
             //ToString for sorting purposes
             olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).element;
 
-            olvColumnPokedexId.AspectGetter = (entry) => _manager.Strings.Load("creature." + (entry as FCreadexEntry).name.ToString());
+            olvColumnPokedexId.AspectGetter = (entry) => _manager.Strings.GetCreatureName((entry as FCreadexEntry).name.ToString());
 
             olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).name;
 
@@ -105,7 +103,7 @@ namespace DraconiusGoGUI.UI
             */
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
-               return _manager.Strings.Load("creature." + (Creature as FUserCreature).name.ToString());
+               return _manager.Strings.GetCreatureName((Creature as FUserCreature).name.ToString());
             };
             /*
             olvColumnPrimaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move1).ToString().Replace("Fast", "");
@@ -153,7 +151,7 @@ namespace DraconiusGoGUI.UI
             {
                 var item = (FBagItem)x;
 
-                return _manager.Strings.Load("key.item." + item.type.ToString());
+                return _manager.Strings.GetItemName(item.type.ToString());
             };
             
 
@@ -534,7 +532,7 @@ namespace DraconiusGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
-                //_manager.UpdateInventory(InventoryRefresh.CreatureCandy);
+                _manager.UpdateInventory(InventoryRefresh.CreatureCandy);
                 //fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
