@@ -9,6 +9,8 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DracoProtos.Core.Objects;
+using DracoLib.Core;
 
 namespace DraconiusGoGUI.UI
 {
@@ -50,18 +52,18 @@ namespace DraconiusGoGUI.UI
             #region Pokedex
 
             //ToString for sorting purposes
-            //olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).CreatureId;
+            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).element;
 
-            //olvColumnPokedexId.AspectGetter = (entry) => (entry as PokedexEntry).CreatureId.ToString();
+            olvColumnPokedexId.AspectGetter = (entry) => _manager.Strings.Load("creature." + (entry as FCreadexEntry).name.ToString());
 
-            //olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).CreatureId;
+            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).name;
 
             #endregion
 
             #region Creature
 
 
-            //olvColumnCreatureId.AspectGetter = (Creature) => (int)(Creature as CreatureData).CreatureId;
+            olvColumnCreatureId.AspectGetter = (Creature) => (Creature as FUserCreature).id;
 
             //olvColumnCreatureFavorite.AspectGetter = (Creature) => (Creature as CreatureData).Favorite == 1; 
 
@@ -100,12 +102,12 @@ namespace DraconiusGoGUI.UI
 
                 return family == null ? 0 : family.Candy_;
             };
-
+            */
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
-               return String.IsNullOrEmpty((Creature as CreatureData).Nickname) ? (Creature as CreatureData).CreatureId.ToString() : (Creature as CreatureData).Nickname;
+               return _manager.Strings.Load("creature." + (Creature as FUserCreature).name.ToString());
             };
-
+            /*
             olvColumnPrimaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move1).ToString().Replace("Fast", "");
 
             olvColumnSecondaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move2).ToString();
@@ -142,18 +144,18 @@ namespace DraconiusGoGUI.UI
 
                 return family.FamilyId.ToString().Replace("Family", "");
             };
-
+            */
             #endregion
-
+            
             #region Inventory
 
             olvColumnInventoryItem.AspectGetter = delegate (object x)
             {
-                var item = (ItemData)x;
+                var item = (FBagItem)x;
 
-                return item.ItemId.ToString().Replace("Item", "");
+                return _manager.Strings.Load("key.item." + item.type.ToString());
             };
-            */
+            
 
             #endregion
         }
@@ -261,18 +263,18 @@ namespace DraconiusGoGUI.UI
                 labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
                 labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
             }
-
+            */
             if (_manager.Creature != null)
             {
                 labelCreatureCount.Text = String.Format("{0}/{1}", _manager.Creature.Count + _manager.Eggs.Count, _manager.MaxCreatureStorage);
-                labelDeployedCreatures.Text = _manager.Creature.Where(i => !string.IsNullOrEmpty(i.DeployedFortId)).Count().ToString();
+                labelDeployedCreatures.Text = _manager.Creature.Where(i => i.isArenaDefender).Count().ToString();
             }
 
             if (_manager.Items != null)
             {
-                //labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.Count), _manager.MaxItemStorage);
+                labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.count), _manager.MaxItemStorage);
             }
-
+            /*
             if (_manager.PlayerData != null)
             {
                 //BuddyCreature buddy = _manager.PlayerData.BuddyCreature ?? new BuddyCreature();
@@ -319,31 +321,32 @@ namespace DraconiusGoGUI.UI
 
         private void FastObjectListViewCreature_FormatCell(object sender, FormatCellEventArgs e)
         {
-           /* var CreatureData = (CreatureData)e.Model;
+            var CreatureData = (FUserCreature)e.Model;
 
             if (CreatureData == null)
                 return;
 
             if (e.Column == olvColumnCreatureName)
             {
-                bool fav = (bool)olvColumnCreatureFavorite.GetValue(CreatureData);
-                bool bubby = _manager?.PlayerData?.BuddyCreature?.Id == CreatureData.Id == true;
-                if (fav)
-                {
-                    e.SubItem.ForeColor = Color.Gold;
-                }
-                else if (bubby)
-                {
-                    e.SubItem.ForeColor = Color.Blue;
-                }
-                else if (!String.IsNullOrEmpty(CreatureData.DeployedFortId))
-                {
+                //bool fav = (bool)olvColumnCreatureFavorite.GetValue(CreatureData);
+                //bool bubby = _manager?.PlayerData?.BuddyCreature?.Id == CreatureData.Id == true;
+                //if (fav)
+                //{
+                //    e.SubItem.ForeColor = Color.Gold;
+                //}
+                //else if (bubby)
+                //{
+                //    e.SubItem.ForeColor = Color.Blue;
+                //}
+                //else if (!String.IsNullOrEmpty(CreatureData.DeployedFortId))
+                //{
                     //deployed
-                    e.SubItem.ForeColor = Color.LightGreen;
-                }
+                //    e.SubItem.ForeColor = Color.LightGreen;
+                //}
             }
             else if (e.Column == olvColumnCreatureCandy)
             {
+                /*
                 int candy = (int)olvColumnCreatureCandy.GetValue(CreatureData);
                 int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(CreatureData);
 
@@ -351,6 +354,7 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = candy >= candyToEvolve ? Color.Green : Color.Red;
                 }
+                */
             }
             else if (e.Column == olvColumnPerfectPercent)
             {
@@ -371,6 +375,7 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnAttack)
             {
+                /*
                 if (CreatureData.IndividualAttack >= 13)
                 {
                     e.SubItem.ForeColor = Color.Green;
@@ -387,10 +392,12 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
+                */
 
             }
             else if (e.Column == olvColumnDefense)
             {
+                /*
                 if (CreatureData.IndividualDefense >= 13)
                 {
                     e.SubItem.ForeColor = Color.Green;
@@ -407,9 +414,11 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
+                */
             }
             else if (e.Column == olvColumnStamina)
             {
+                /*
                 if (CreatureData.IndividualStamina >= 13)
                 {
                     e.SubItem.ForeColor = Color.Green;
@@ -426,8 +435,8 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
+                */
             }
-            */
         }
 
         private async void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -520,8 +529,8 @@ namespace DraconiusGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageCreature)
             {
-                //_manager.UpdateInventory(InventoryRefresh.Creature);
-                //fastObjectListViewCreature.SetObjects(_manager.Creature);
+                _manager.UpdateInventory(InventoryRefresh.Creature);
+                fastObjectListViewCreature.SetObjects(_manager.Creature);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
@@ -530,23 +539,23 @@ namespace DraconiusGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
-                //_manager.UpdateInventory(InventoryRefresh.Eggs);
-                //_manager.UpdateInventory(InventoryRefresh.Incubators);
-                //fastObjectListViewEggs.SetObjects(_manager.Eggs);
+                _manager.UpdateInventory(InventoryRefresh.Eggs);
+                _manager.UpdateInventory(InventoryRefresh.Incubators);
+                fastObjectListViewEggs.SetObjects(_manager.Eggs);
             }
             else if (tabControlMain.SelectedTab == tabPageInventory)
             {
-                //_manager.UpdateInventory(InventoryRefresh.Items);
-                //fastObjectListViewInventory.SetObjects(_manager.Items);
+                _manager.UpdateInventory(InventoryRefresh.Items);
+                fastObjectListViewInventory.SetObjects(_manager.Items);
             }
             else if (tabControlMain.SelectedTab == tabPagePokedex)
             {
-                //_manager.UpdateInventory(InventoryRefresh.Pokedex);
-                //fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
+                _manager.UpdateInventory(InventoryRefresh.Pokedex);
+                fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {
-                //_manager.UpdateInventory(InventoryRefresh.Stats);
+                _manager.UpdateInventory(InventoryRefresh.Stats);
                 DisplayDetails();
             }
         }

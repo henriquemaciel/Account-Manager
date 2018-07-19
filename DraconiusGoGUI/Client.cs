@@ -131,6 +131,8 @@ namespace DraconiusGoGUI
                 msgStr = "Conected to server...";
                 LoggedIn = true;
 
+                ClientManager.Strings = DracoClient.Strings;
+
                 return new MethodResult<bool>
                 {
                     Success = true,

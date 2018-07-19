@@ -16,6 +16,8 @@ using System.Windows.Forms;
 using DracoLib.Core.Extensions;
 using DracoProtos.Core.Objects;
 using DracoProtos.Core.Base;
+using DracoLib.Core;
+using DracoLib.Core.Text;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -43,6 +45,9 @@ namespace DraconiusGoGUI.DracoManager
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
+
+        //DracoText for translations
+        public Strings Strings { get; set; }
 
         [JsonIgnore]
         public ProxyHandler ProxyHandler { get; set; }
@@ -450,7 +455,7 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        //UpdateInventory(InventoryRefresh.All);
+                        UpdateInventory(InventoryRefresh.All);
                     }
 
                     #endregion
@@ -566,6 +571,18 @@ namespace DraconiusGoGUI.DracoManager
                                 break;
                             case BuildingType.STOP:
                                 fort = "Pillar of Abundance";
+                                break;
+                            case BuildingType.OBELISK:
+                                fort = "Obelisk";
+                                break;
+                            case BuildingType.ROOST:
+                                fort = "Roost";
+                                break;
+                            case BuildingType.PORTAL:
+                                fort = "Portal";
+                                break;
+                            case BuildingType.LIBRARY:
+                                fort = "Library";
                                 break;
                             default:
                                 fort = pokestop.type.ToString();
@@ -893,7 +910,7 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            //UpdateInventory(InventoryRefresh.All); //all inventory
+                            UpdateInventory(InventoryRefresh.All); //all inventory
                         }
 
                         WaitPaused();

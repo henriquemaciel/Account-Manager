@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using DracoProtos.Core.Objects;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -135,23 +137,23 @@ namespace DraconiusGoGUI.DracoManager
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
 
-        //[JsonIgnore]
-        //public List<ItemData> Items { get; private set; } = new List<ItemData>();
+        [JsonIgnore]
+        public List<FBagItem> Items { get; private set; } = new List<FBagItem>();
 
-        //[JsonIgnore]
-        //public List<CreatureData> Creature { get; private set; } = new List<CreatureData>();
+        [JsonIgnore]
+        public List<FUserCreature> Creature { get; private set; } = new List<FUserCreature>();
 
-        //[JsonIgnore]
-        //public List<PokedexEntry> Pokedex { get; private set; }  = new List<PokedexEntry>();
+        [JsonIgnore]
+        public List<FCreadexEntry> Pokedex { get; private set; }  = new List<FCreadexEntry>();
 
         //[JsonIgnore]
         //public List<Candy> CreatureCandy { get; private set; } = new List<Candy>();
 
-        //[JsonIgnore]
-        //public List<EggIncubator> Incubators { get; private set; } = new List<EggIncubator>();
+        [JsonIgnore]
+        public List<FIncubator> Incubators { get; private set; } = new List<FIncubator>();
 
-        //[JsonIgnore]
-        //public List<CreatureData> Eggs { get; private set; } = new List<CreatureData>();
+        [JsonIgnore]
+        public List<FEgg> Eggs { get; private set; } = new List<FEgg>();
 
         //[JsonIgnore]
         //public Dictionary<CreatureId, CreatureSettings> PokeSettings { get; private set; }
@@ -446,41 +448,27 @@ namespace DraconiusGoGUI.DracoManager
         private int RemainingPokeballs()
         {
             int total = 0;
-            /*
-            ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall);
+            
+            FBagItem data = Items.FirstOrDefault(x => x.type == ItemType.MAGIC_BALL_SIMPLE);
 
             if(data != null)
             {
-                total += data.Count;
+                total += data.count;
             }
 
-            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall);
+            data = Items.FirstOrDefault(x => x.type == ItemType.MAGIC_BALL_NORMAL);
 
             if (data != null)
             {
-                total += data.Count;
+                total += data.count;
             }
-            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall);
+            data = Items.FirstOrDefault(x => x.type == ItemType.MAGIC_BALL_GOOD);
 
             if (data != null)
             {
-                total += data.Count;
+                total += data.count;
             }
 
-            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall);
-
-            if (data != null)
-            {
-                total += data.Count;
-            }
-
-            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPremierBall);
-
-            if (data != null)
-            {
-                total += data.Count;
-            }
-            */
             return total;
         }
 

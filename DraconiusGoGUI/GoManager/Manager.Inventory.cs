@@ -6,14 +6,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using DraconiusGoGUI.Enums;
+using DracoProtos.Core.Objects;
 
 namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        /*
-        private ConcurrentDictionary<string, InventoryItem> InventoryItems = new ConcurrentDictionary<string, InventoryItem>();
+        //private ConcurrentDictionary<string, FBagItem> InventoryItems = new ConcurrentDictionary<string, FBagItem>();
+        //private ConcurrentDictionary<string, FCreadexEntry> dexEntries = new ConcurrentDictionary<string, FCreadexEntry>();
 
+        /*
         private string GetInventoryItemHashKey(InventoryItem item)
         {
             if (item == null || item.InventoryItemData == null)
@@ -74,13 +76,12 @@ namespace DraconiusGoGUI.DracoManager
                 .Where(aItems => aItems?.Item != null)
                 .SelectMany(aItems => aItems.Item);
         }
-
-        private IEnumerable<ItemData> GetItemsData()
+        */
+        private IEnumerable<FBagItem> GetItemsData()
         {
-            return InventoryItems.Select(x => x.Value.InventoryItemData.Item)
-                .Where(x => x != null);
+            return _client.DracoClient.Inventory.GetUserItems().items;
         }
-
+        /*
         private ItemData GetItemData(ItemId itemId)
         {
             return GetItemsData()?.FirstOrDefault(p => p.ItemId == itemId);
@@ -91,13 +92,12 @@ namespace DraconiusGoGUI.DracoManager
             var itemData = GetItemData(itemId);
             return (itemData != null) ? itemData.Count : 0;
         }
-
+        */
         private int GetItemsCount()
         {
-            return InventoryItems.Where(p => p.Value.InventoryItemData.Item != null)
-                .Sum(p => p.Value.InventoryItemData.Item.Count);
+            return _client.DracoClient.Inventory.GetUserItems().items.Count();
         }
-
+        /*
         private PlayerStats GetPlayerStats()
         {
             return InventoryItems.Select(i => i.Value.InventoryItemData?.PlayerStats)
@@ -116,33 +116,29 @@ namespace DraconiusGoGUI.DracoManager
             return InventoryItems.Select(i => i.Value.InventoryItemData?.CreatureData)
                .Where(p => p != null && p.IsEgg);
         }
-
-        private IEnumerable<CreatureData> GetCreatures()
+        */
+        private IEnumerable<FUserCreature> GetCreatures()
         {
-            return InventoryItems
-                .Select(kvp => kvp.Value.InventoryItemData?.CreatureData)
-                .Where(p => p != null && !p.IsEgg && p.CreatureId > 0);
+            return _client.DracoClient.Inventory.GetUserCreatures().userCreatures;
         }
-
+        /*
         private IEnumerable<Candy> GetCandies()
         {
             return InventoryItems
                 .Select(kvp => kvp.Value.InventoryItemData?.Candy)
                 .Where(p => p != null && p.FamilyId > 0);
         }
-
-        private IEnumerable<PokedexEntry> GetPokedex()
+        */
+        private IEnumerable<FCreadexEntry> GetPokedex()
         {
-            return InventoryItems
-                .Select(kvp => kvp.Value.InventoryItemData?.PokedexEntry)
-                .Where(p => p != null && p.CreatureId > 0);
+            return _client.DracoClient.Inventory.GetCreadex().entries;
         }
-
-        private CreatureData GetCreature(ulong CreatureId)
+        /*
+        private FUserCreature GetCreature(ulong CreatureId)
         {
             return GetCreatures().FirstOrDefault(p => p.Id == CreatureId);
         }
-
+        /*
         private bool RemoveInventoryItem(string key)
         {
             InventoryItem toRemove;
@@ -200,7 +196,7 @@ namespace DraconiusGoGUI.DracoManager
                 });
             }
         }
-
+        */
         /// <summary>
         /// Load Inventory methodes.
         /// </summary>
@@ -215,8 +211,8 @@ namespace DraconiusGoGUI.DracoManager
 
             try
             {
-                foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
-                    AddRemoveOrUpdateItem(item);
+                //foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
+                //    AddRemoveOrUpdateItem(item);
 
                 switch (type)
                 {
@@ -224,15 +220,15 @@ namespace DraconiusGoGUI.DracoManager
                         Items.Clear();
                         Creature.Clear();
                         Pokedex.Clear();
-                        CreatureCandy.Clear();
+                        //CreatureCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
-                        Stats = GetPlayerStats();
+                        //Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
                         Pokedex = GetPokedex().ToList();
-                        CreatureCandy = GetCandies().ToList();
-                        Incubators = GetIncubators().ToList();
-                        Eggs = GetEggs().ToList();
+                        //CreatureCandy = GetCandies().ToList();
+                        //Incubators = GetIncubators().ToList();
+                        //Eggs = GetEggs().ToList();
                         Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Items:
@@ -248,19 +244,19 @@ namespace DraconiusGoGUI.DracoManager
                         Pokedex = GetPokedex().ToList();
                         break;
                     case InventoryRefresh.CreatureCandy:
-                        CreatureCandy.Clear();
-                        CreatureCandy = GetCandies().ToList();
+                        //CreatureCandy.Clear();
+                        //CreatureCandy = GetCandies().ToList();
                         break;
                     case InventoryRefresh.Incubators:
                         Incubators.Clear();
-                        Incubators = GetIncubators().ToList();
+                        //Incubators = GetIncubators().ToList();
                         break;
                     case InventoryRefresh.Eggs:
                         Eggs.Clear();
-                        Eggs = GetEggs().ToList();
+                        //Eggs = GetEggs().ToList();
                         break;
                     case InventoryRefresh.Stats:
-                        Stats = GetPlayerStats();
+                        //Stats = GetPlayerStats();
                         break;
                 }
             }
@@ -270,7 +266,7 @@ namespace DraconiusGoGUI.DracoManager
                 ++_failedInventoryReponses;
             }
         }
-
+        /*
         public async Task<MethodResult> RecycleFilteredItems()
         {
             if (Items.Count == 0 || Items == null)
