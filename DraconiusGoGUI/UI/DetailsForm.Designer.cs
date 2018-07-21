@@ -715,7 +715,7 @@
             // 
             // olvColumnCreatureIdNumber
             // 
-            this.olvColumnCreatureIdNumber.AspectName = "Id";
+            this.olvColumnCreatureIdNumber.AspectName = "id";
             this.olvColumnCreatureIdNumber.DisplayIndex = 0;
             this.olvColumnCreatureIdNumber.IsVisible = false;
             this.olvColumnCreatureIdNumber.Text = "Creature Id";
@@ -741,7 +741,7 @@
             // 
             // olvColumnCp
             // 
-            this.olvColumnCp.AspectName = "Cp";
+            this.olvColumnCp.AspectName = "cp";
             this.olvColumnCp.Text = "Cp";
             this.olvColumnCp.UseFiltering = false;
             this.olvColumnCp.Width = 46;
