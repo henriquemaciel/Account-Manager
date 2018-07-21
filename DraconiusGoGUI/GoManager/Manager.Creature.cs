@@ -1,10 +1,20 @@
-﻿namespace DraconiusGoGUI.DracoManager
+﻿using DraconiusGoGUI.Enums;
+using DraconiusGoGUI.Extensions;
+using DraconiusGoGUI.Models;
+using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        /*
-        public async Task<MethodResult> TransferCreature(IEnumerable<CreatureData> CreaturesToTransfer)
+        public async Task<MethodResult> TransferCreature(IEnumerable<FUserCreature> CreaturesToTransfer)
         {
+            /*
             List<CreatureData> CreatureToTransfer = new List<CreatureData>();
 
             foreach (var pokToTranfer in CreaturesToTransfer)
@@ -167,17 +177,16 @@
                 }
 
                 UpdateInventory(InventoryRefresh.Creature);
-
-                return new MethodResult
-                {
-                    Success = true
-                };
-            }
+                */
+            return new MethodResult
+            {
+                Success = true
+            };
         }
 
         private async Task<MethodResult> TransferFilteredCreature()
         {
-
+            /*
             double configPercentCreatures = UserSettings.PercTransPoke * 0.01;
 
             double percentCreature = PlayerData.MaxCreatureStorage * configPercentCreatures;
@@ -198,7 +207,9 @@
             }
 
             await TransferCreature(transferResult.Data);
+            */
 
+            await Task.Delay(0);
             return new MethodResult
             {
                 Success = true,
@@ -206,35 +217,35 @@
             };
         }
 
-        public MethodResult<List<CreatureData>> GetCreatureToTransfer()
+        public MethodResult<List<FUserCreature>> GetCreatureToTransfer()
         {
             if (!UserSettings.TransferCreature)
             {
                 LogCaller(new LoggerEventArgs("Transferring disabled", LoggerTypes.Debug));
 
-                return new MethodResult<List<CreatureData>>
+                return new MethodResult<List<FUserCreature>>
                 {
-                    Data = new List<CreatureData>(),
+                    Data = new List<FUserCreature>(),
                     Message = "Transferring disabled",
                     Success = true
                 };
             }
 
-            if (!Creature.Any())
+            if (Creature == null)
             {
                 LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
-                return new MethodResult<List<CreatureData>>
+                return new MethodResult<List<FUserCreature>>
                 {
                     Message = "You have no Creature"
                 };
             }
 
-            var CreatureToTransfer = new List<CreatureData>();
+            var CreatureToTransfer = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureId, CreatureData>> groupedCreature = Creature.GroupBy(x => x.CreatureId);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.GroupBy(x => x.name);
 
-            foreach (IGrouping<CreatureId, CreatureData> group in groupedCreature)
+            foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {
                 TransferSetting settings = UserSettings.TransferSettings.FirstOrDefault(x => x.Id == group.Key);
 
@@ -276,17 +287,18 @@
                     case TransferType.BelowCPOrIVAmount:
                         CreatureToTransfer.AddRange(GetCreatureBelowIVPercent(group, settings.IVPercent));
                         CreatureToTransfer.AddRange(GetCreatureBelowCP(group, settings.MinCP));
-                        CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.Id).ToList();
+                        CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.id).ToList();
                         break;
                     case TransferType.Slashed:
-                        CreatureToTransfer.AddRange(group.ToList());
-                        CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.IsBad).ToList();
+                        //CreatureToTransfer.AddRange(group.ToList());
+                        //CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.IsDead).ToList();
                         break;
                 }
             }
 
             if (UserSettings.TransferSlashCreatures)
             {
+                /*
                 var slashCreatures = Creature.Where(x => x.IsBad);
                 foreach (var slashCreature in slashCreatures)
                 {
@@ -296,9 +308,10 @@
                         CreatureToTransfer.Add(slashCreature);
                     }
                 }
+                */
             }
-
-            return new MethodResult<List<CreatureData>>
+            
+            return new MethodResult<List<FUserCreature>>
             {
                 Data = CreatureToTransfer,
                 Message = String.Format("Found {0} Creature to transfer", CreatureToTransfer.Count),
@@ -306,15 +319,15 @@
             };
         }
 
-        private List<CreatureData> GetCreatureBelowCPIVAmount(IGrouping<CreatureId, CreatureData> Creature, int minCp, double percent)
+        private List<FUserCreature> GetCreatureBelowCPIVAmount(IGrouping<CreatureType, FUserCreature> Creature, int minCp, double percent)
         {
-            var toTransfer = new List<CreatureData>();
+            var toTransfer = new List<FUserCreature>();
 
-            foreach (CreatureData pData in Creature)
+            foreach (FUserCreature pData in Creature)
             {
                 double perfectResult = CalculateIVPerfection(pData);
 
-                if (perfectResult >= 0 && perfectResult < percent && pData.Cp < minCp)
+                if (perfectResult >= 0 && perfectResult < percent && pData.cp < minCp)
                 {
                     toTransfer.Add(pData);
                 }
@@ -323,16 +336,16 @@
             return toTransfer;
         }
 
-        private List<CreatureData> GetCreatureBelowCP(IGrouping<CreatureId, CreatureData> Creature, int minCp)
+        private List<FUserCreature> GetCreatureBelowCP(IGrouping<CreatureType, FUserCreature> Creature, int minCp)
         {
-            return Creature.Where(x => x.Cp < minCp).ToList();
+            return Creature.Where(x => x.cp < minCp).ToList();
         }
 
-        private List<CreatureData> GetCreatureBelowIVPercent(IGrouping<CreatureId, CreatureData> Creature, double percent)
+        private List<FUserCreature> GetCreatureBelowIVPercent(IGrouping<CreatureType, FUserCreature> Creature, double percent)
         {
-            var toTransfer = new List<CreatureData>();
+            var toTransfer = new List<FUserCreature>();
 
-            foreach (CreatureData pData in Creature)
+            foreach (FUserCreature pData in Creature)
             {
                 double perfectResult = CalculateIVPerfection(pData);
 
@@ -345,32 +358,33 @@
             return toTransfer;
         }
 
-        private List<CreatureData> GetCreatureByStrongest(IGrouping<CreatureId, CreatureData> Creature, int amount)
+        private List<FUserCreature> GetCreatureByStrongest(IGrouping<CreatureType, FUserCreature> Creature, int amount)
         {
-            return Creature.OrderByDescending(x => x.Cp).Skip(amount).ToList();
+            return Creature.OrderByDescending(x => x.cp).Skip(amount).ToList();
         }
 
-        private List<CreatureData> GetCreatureByIV(IGrouping<CreatureId, CreatureData> Creature, int amount)
+        private List<FUserCreature> GetCreatureByIV(IGrouping<CreatureType, FUserCreature> Creature, int amount)
         {
             if (!Creature.Any())
             {
-                return new List<CreatureData>();
+                return new List<FUserCreature>();
             }
 
             //Test out first one to make sure things are correct
             double perfectResult = CalculateIVPerfection(Creature.First());
 
-            return Creature.OrderByDescending(x => CalculateIVPerfection(x)).ThenByDescending(x => x.Cp).Skip(amount).ToList();
+            return Creature.OrderByDescending(x => CalculateIVPerfection(x)).ThenByDescending(x => x.cp).Skip(amount).ToList();
         }
 
-        private List<CreatureData> GetCreatureByPossibleEvolve(IGrouping<CreatureId, CreatureData> Creature, int limit)
+        private List<FUserCreature> GetCreatureByPossibleEvolve(IGrouping<CreatureType, FUserCreature> Creature, int limit)
         {
+            /*
             CreatureSettings setting = null;
             if (!PokeSettings.TryGetValue(Creature.Key, out setting))
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for Creature {0}", Creature.Key), LoggerTypes.Info));
 
-                return new List<CreatureData>();
+                return new List<FUserCreature>();
             }
 
             int CreatureCandy = 0;
@@ -398,20 +412,23 @@
                 maxCreature = limit;
             }
 
-            return Creature.OrderByDescending(x => x.Cp).Skip(maxCreature).ToList();
+            return Creature.OrderByDescending(x => x.cp).Skip(maxCreature).ToList();
+            */
+            return new List<FUserCreature>();
         }
 
         // NOTE: this is the real IV Percent, using only Individual values.
-        public static double CalculateIVPerfection(CreatureData Creature)
+        public static double CalculateIVPerfection(FUserCreature Creature)
         {
             // NOTE: 45 points = 15 at points + 15 def points + 15 sta points
             //  100/45 simplifying is 20/9
-            return ((double)Creature.IndividualAttack + Creature.IndividualDefense + Creature.IndividualStamina) * 20 / 9;
+            return ((double)Creature.attackValue + Creature.staminaValue) * 20 / 9;
         }
 
         // This other Percent gives different IV % for the same IVs depending of the Creature level.
-        public MethodResult<double> CalculateIVPerfectionUsingMaxCP(CreatureData Creature)
+        public MethodResult<double> CalculateIVPerfectionUsingMaxCP(FUserCreature Creature)
         {
+            /*
             MethodResult<CreatureSettings> settingResult = GetCreatureSetting(Creature.CreatureId);
 
             if (!settingResult.Success)
@@ -428,23 +445,23 @@
             double curCp = CalculateCpMultiplier(Creature);
 
             double perfectPercent = (curCp - minCp) / (maxCp - minCp) * 100.0;
-
+            */
             return new MethodResult<double>
             {
-                Data = perfectPercent,
+                Data = 0, //perfectPercent,
                 Message = "Success",
                 Success = true
             };
         }
 
-        public async Task<MethodResult> FavoriteCreature(IEnumerable<CreatureData> CreatureToFavorite, bool favorite = true)
+        public async Task<MethodResult> FavoriteCreature(IEnumerable<FUserCreature> CreatureToFavorite, bool favorite = true)
         {
-            foreach (CreatureData Creature in CreatureToFavorite)
+            foreach (FUserCreature Creature in CreatureToFavorite)
             {
                 bool isFavorited = true;
                 string message = "unfavorited";
 
-                if (Creature.Favorite == 0)
+                if (Creature.group < 1)
                 {
                     isFavorited = false;
                     message = "favorited";
@@ -465,6 +482,7 @@
                     }
                 }
 
+                /*
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetFavoriteCreature,
@@ -491,7 +509,7 @@
                 UpdateInventory(InventoryRefresh.Creature);
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
+                */
                 return new MethodResult
                 {
                     Success = true
@@ -500,21 +518,21 @@
             return new MethodResult();
         }
 
-        public async Task<MethodResult> RenameCreature(IEnumerable<CreatureData> CreatureToRename)
+        public async Task<MethodResult> RenameCreature(IEnumerable<FUserCreature> CreatureToRename)
         {
-            foreach (CreatureData Creature in CreatureToRename)
+            foreach (FUserCreature Creature in CreatureToRename)
             {
-                string input = Prompt.ShowDialog($"New nickname for {Creature.CreatureId.ToString()}", "Rename");
+                string input = Prompt.ShowDialog($"New nickname for {Creature.name.ToString()}", "Rename");
 
                 if (String.IsNullOrEmpty(input))
                 {
                     input = String.Empty;
                 }
 
-                if (input == Creature.Nickname)
+                if (input == Creature.name.ToString())
                 {
                     continue;
-                }               
+                }
 
                 if (!_client.LoggedIn)
                 {
@@ -525,7 +543,7 @@
                         return result;
                     }
                 }
-
+                /*
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.NicknameCreature,
@@ -550,7 +568,7 @@
                 UpdateInventory(InventoryRefresh.Creature);
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
+                */
                 return new MethodResult
                 {
                     Success = true
@@ -559,31 +577,40 @@
             return new MethodResult();
         }
 
-        private double CalculateMaxCpMultiplier(CreatureData poke)
+        private double CalculateMaxCpMultiplier(FUserCreature poke)
         {
+            /*
             CreatureSettings CreatureSettings = GetCreatureSetting(poke.CreatureId).Data;
 
             return (CreatureSettings.Stats.BaseAttack + 15) * Math.Sqrt(CreatureSettings.Stats.BaseDefense + 15) *
             Math.Sqrt(CreatureSettings.Stats.BaseStamina + 15);
+            */
+            return 0;
         }
 
-        private double CalculateCpMultiplier(CreatureData poke)
+        private double CalculateCpMultiplier(FUserCreature poke)
         {
+            /*
             CreatureSettings CreatureSettings = GetCreatureSetting(poke.CreatureId).Data;
 
             return (CreatureSettings.Stats.BaseAttack + poke.IndividualAttack) *
             Math.Sqrt(CreatureSettings.Stats.BaseDefense + poke.IndividualDefense) *
             Math.Sqrt(CreatureSettings.Stats.BaseStamina + poke.IndividualStamina);
+            */
+            return 0;
         }
 
-        private double CalculateMinCpMultiplier(CreatureData poke)
+        private double CalculateMinCpMultiplier(FUserCreature poke)
         {
+            /*
             CreatureSettings CreatureSettings = GetCreatureSetting(poke.CreatureId).Data;
 
             return CreatureSettings.Stats.BaseAttack * Math.Sqrt(CreatureSettings.Stats.BaseDefense) * Math.Sqrt(CreatureSettings.Stats.BaseStamina);
+            */
+            return 0;
         }
 
-        public async Task<MethodResult> UpgradeCreature(IEnumerable<CreatureData> CreaturesToUpgrade)
+        public async Task<MethodResult> UpgradeCreature(IEnumerable<FUserCreature> CreaturesToUpgrade)
         {
             if (CreaturesToUpgrade.Count() == 0 || CreaturesToUpgrade.FirstOrDefault() == null)
                 return new MethodResult();
@@ -592,7 +619,7 @@
             {
                 if (!CanUpgradeCreature(Creature))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be upgraded maybe is deployed Creature or you not have needed resources.", Creature.CreatureId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be upgraded maybe is deployed Creature or you not have needed resources.", Creature.name.ToString()), LoggerTypes.Info));
                     continue;
                 }
 
@@ -606,8 +633,8 @@
                     }
                 }
 
-                int cpBefore = Creature.Cp;
-
+                int cpBefore = Creature.cp;
+                /*
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UpgradeCreature,
@@ -645,6 +672,7 @@
                         LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
                         break;
                 }
+                */
             }
 
             return new MethodResult
@@ -672,62 +700,62 @@
             return (float)(Math.Round((level) * 2) / 2.0);
         }
 
-        private bool CanTransferOrEvoleCreature(CreatureData Creature, bool allmodes = false)
+        private bool CanTransferOrEvoleCreature(FUserCreature Creature, bool allmodes = false)
         {
             // Can't transfer Creature null.
-            if (Creature == null || Creature.CreatureId == CreatureId.Missingno)
+            if (Creature == null || Creature.name == 0)
                 return false;
 
             // Can't transfer Creature check all modes.
-            if (allmodes && Creature.IsBad)
-                return false;
+            //if (allmodes && Creature.IsBad)
+            //    return false;
 
             // Can't transfer Creature in gyms.
-            if (!string.IsNullOrEmpty(Creature.DeployedFortId))
-                return false;
+            //if (!string.IsNullOrEmpty(Creature.DeployedFortId))
+            //    return false;
 
             // Can't transfer buddy Creature
-            var buddy = PlayerData?.BuddyCreature;
-            if (buddy != null && buddy.Id == Creature.Id)
-                return false;
+            //var buddy = PlayerData?.BuddyCreature;
+            //if (buddy != null && buddy.Id == Creature.Id)
+            //    return false;
 
             // Can't transfer favorite
-            if (Creature.Favorite == 1)
-                return false;
+            //if (Creature.Favorite == 1)
+            //    return false;
 
             return true;
         }
 
-        private bool CanUpgradeCreature(CreatureData Creature)
+        private bool CanUpgradeCreature(FUserCreature Creature)
         {
             // Can't upgrade Creature in gyms.
-            if (!string.IsNullOrEmpty(Creature.DeployedFortId))
-                return false;
+            //if (!string.IsNullOrEmpty(Creature.DeployedFortId))
+            //    return false;
 
-            int CreatureLevel = (int)GetLevelFromCpMultiplier(Creature.CpMultiplier + Creature.AdditionalCpMultiplier);
+            //int CreatureLevel = (int)GetLevelFromCpMultiplier(Creature.CpMultiplier + Creature.AdditionalCpMultiplier);
 
             // Can't evolve unless Creature level is lower than trainer.
-            if (CreatureLevel >= Level + 2)
-                return false;
+            //if (CreatureLevel >= Level + 2)
+            //    return false;
 
-            int familyCandy = CreatureCandy.Where(x => x.FamilyId == GetCreatureSetting(Creature.CreatureId).Data.FamilyId).FirstOrDefault().Candy_;
+            //int familyCandy = CreatureCandy.Where(x => x.FamilyId == GetCreatureSetting(Creature.CreatureId).Data.FamilyId).FirstOrDefault().Candy_;
 
             // Can't evolve if not enough candy.
-            int CreatureCandyNeededAlready = UpgradeSettings.CandyCost[CreatureLevel];
-            if (familyCandy < CreatureCandyNeededAlready)
-                return false;
+            //int CreatureCandyNeededAlready = UpgradeSettings.CandyCost[CreatureLevel];
+            //if (familyCandy < CreatureCandyNeededAlready)
+            //    return false;
 
             // Can't evolve if not enough stardust.
-            var stardustToUpgrade = UpgradeSettings.StardustCost[CreatureLevel];
-            if (TotalStardust < stardustToUpgrade)
-                return false;
+            //var stardustToUpgrade = UpgradeSettings.StardustCost[CreatureLevel];
+            //if (TotalStardust < stardustToUpgrade)
+            //    return false;
 
             return true;
         }
 
         private async Task<MethodResult> UpgradeFilteredCreature()
         {
-            MethodResult<List<CreatureData>> upgradeResult = GetCreatureToUpgrade();
+            MethodResult<List<FUserCreature>> upgradeResult = GetCreatureToUpgrade();
 
             if (!upgradeResult.Success || upgradeResult.Data.Count == 0)
             {
@@ -745,15 +773,15 @@
             };
         }
 
-        public MethodResult<List<CreatureData>> GetCreatureToUpgrade()
+        public MethodResult<List<FUserCreature>> GetCreatureToUpgrade()
         {
             if (!UserSettings.UpgradeCreature)
             {
                 LogCaller(new LoggerEventArgs("Upgrade disabled", LoggerTypes.Debug));
 
-                return new MethodResult<List<CreatureData>>
+                return new MethodResult<List<FUserCreature>>
                 {
-                    Data = new List<CreatureData>(),
+                    Data = new List<FUserCreature>(),
                     Message = "Upgrade disabled",
                     Success = true
                 };
@@ -763,17 +791,17 @@
             {
                 LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
-                return new MethodResult<List<CreatureData>>
+                return new MethodResult<List<FUserCreature>>
                 {
                     Message = "You have no Creature"
                 };
             }
 
-            var CreatureToUpgrade = new List<CreatureData>();
+            var CreatureToUpgrade = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureId, CreatureData>> groupedCreature = Creature.GroupBy(x => x.CreatureId);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.GroupBy(x => x.name);
 
-            foreach (IGrouping<CreatureId, CreatureData> group in groupedCreature)
+            foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {
                 UpgradeSetting settings = UserSettings.UpgradeSettings.FirstOrDefault(x => x.Id == group.Key);
 
@@ -792,16 +820,12 @@
                 CreatureToUpgrade.AddRange(group.ToList());
             }
 
-            return new MethodResult<List<CreatureData>>
+            return new MethodResult<List<FUserCreature>>
             {
                 Data = CreatureToUpgrade,
                 Message = String.Format("Found {0} Creature to upgrade", CreatureToUpgrade.Count),
                 Success = true
             };
         }
-
-        //List Creature shadowban for reference
-        private static HashSet<int> _commonShadowIDs = new HashSet<int> { 16, 19, 23, 27, 29, 32, 43, 46, 52, 54, 60, 69, 77, 81, 98, 118, 120, 129, 177, 183, 187, 191, 194, 209, 218, 293, 304, 320, 325, 339 };
-        */
     }
 }

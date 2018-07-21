@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using DracoProtos.Core.Base;
-using DraconiusGoGUI.DracoManager;
 
 namespace DraconiusGoGUI
 {

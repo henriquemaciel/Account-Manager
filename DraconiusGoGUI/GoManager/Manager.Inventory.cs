@@ -448,15 +448,15 @@ namespace DraconiusGoGUI.DracoManager
             return (double)Items.Sum(x => x.Count) / PlayerData.MaxItemStorage * 100;
         }
 
+        */
         public double FilledCreatureStorage()
         {
-            if (Creature == null || PlayerData == null)
+            if (Creature == null || Stats == null)
             {
                 return 100;
             }
 
-            return (double)(Creature.Count + Eggs.Count) / PlayerData.MaxCreatureStorage * 100;
+            return 250;// (double)(Creature.Count + Eggs.Count) / Stats.creatureStorageSize * 100;
         }
-        */
     }
 }

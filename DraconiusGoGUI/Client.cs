@@ -22,7 +22,6 @@ namespace DraconiusGoGUI
         public bool LoggedIn = false;
         public Manager ClientManager;
         public DracoClient DracoClient;
-        public FConfig ClientFConfig;
         private CancellationTokenSource CancellationTokenSource;
 
         public Client()
@@ -94,7 +93,7 @@ namespace DraconiusGoGUI
                     if (!ping) throw new Exception();
 
                     ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                    ClientFConfig = DracoClient.Boot(config);
+                    DracoClient.Boot(config);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
                     var login = DracoClient.Login().Result;

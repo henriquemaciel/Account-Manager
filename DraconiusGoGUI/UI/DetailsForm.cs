@@ -252,16 +252,15 @@ namespace DraconiusGoGUI.UI
             labelExpPerHour.Text = String.Format("{0:0}", _manager.ExpPerHour);
             labelExpGained.Text = _manager.ExpGained.ToString();
             labelPokeCoins.Text = _manager.TotalPokeCoins.ToString();
-
-            /*
+            
             if (_manager.Stats != null)
             {
-                labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
-                labelCreatureCaught.Text = _manager.Stats.CreaturesCaptured.ToString();
-                labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
-                labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
+                //labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
+                labelCreatureCaught.Text = _manager.Stats.monstersCaughtCount.ToString();
+                //labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
+                //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
             }
-            */
+
             if (_manager.Creature != null)
             {
                 labelCreatureCount.Text = String.Format("{0}/{1}", _manager.Creature.Count + _manager.Eggs.Count, _manager.MaxCreatureStorage);

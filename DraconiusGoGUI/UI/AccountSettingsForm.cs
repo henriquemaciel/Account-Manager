@@ -25,48 +25,48 @@ namespace DraconiusGoGUI.UI
             _manager = manager;
 
             #region Catching
-            /*
+
             olvColumnCatchId.AspectGetter = delegate (object x)
             {
                 var setting = (CatchSetting)x;
 
                 return (int)setting.Id;
             };
-            */
+ 
             #endregion
 
             #region Evolving
-            /*
+            
             olvColumnEvolveId.AspectGetter = delegate (object x)
             {
                 var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
-            */
+            
             #endregion
 
             #region Transfer
-            /*
+            
             olvColumnTransferId.AspectGetter = delegate (object x)
             {
                 var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
-            */
+            
 
             #endregion
 
             #region Upgrade
-            /*
+            
             olvColumnUpgradeId.AspectGetter = delegate (object x)
             {
                 var setting = (UpgradeSetting)x;
 
                 return (int)setting.Id;
             };
-            */
+            
             #endregion
 
         }

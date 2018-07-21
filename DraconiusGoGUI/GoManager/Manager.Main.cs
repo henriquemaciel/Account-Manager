@@ -15,6 +15,7 @@ using DracoLib.Core.Extensions;
 using DracoProtos.Core.Objects;
 using DracoProtos.Core.Base;
 using DracoLib.Core.Text;
+using System.Globalization;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -54,7 +55,7 @@ namespace DraconiusGoGUI.DracoManager
         [JsonConstructor]
         public Manager()
         {
-            //Stats = new PlayerStats();
+            Stats = new FAvaUpdate();
             Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
@@ -64,7 +65,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             UserSettings = new Settings();
             Logs = new List<Log>();
-            //Stats = new PlayerStats();
+            Stats = new FAvaUpdate();
             Tracker = new Tracker();
             ProxyHandler = handler;
             LoadFarmLocations();
@@ -581,6 +582,9 @@ namespace DraconiusGoGUI.DracoManager
                             case BuildingType.LIBRARY:
                                 fort = "Library";
                                 break;
+                            case BuildingType.DUNGEON_STOP:
+                                fort = "Dungeon";
+                                break;
                             default:
                                 fort = Building.type.ToString();
                                 break;
@@ -614,18 +618,16 @@ namespace DraconiusGoGUI.DracoManager
                             }
                         }
 
-                        // NOTE: not an "else" we could enabled catch in this time
-                        /*
                         if (!CatchDisabled)
                         {
                             int remainingPokeballs = RemainingPokeballs();
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingPokeballs, LoggerTypes.Info));
-                            double filledCreatureStorage = FilledCreatureStorage();
+                            //double filledCreatureStorage = FilledCreatureStorage();
 
                             if (remainingPokeballs > 0)
                             {
-                                if (filledCreatureStorage <= 100)
-                                {
+                                //if (filledCreatureStorage <= 100)
+                                //{
                                     //Catch nearby Creature
                                     MethodResult nearbyCreatureResponse = await CatchNeabyCreature();
                                     if (nearbyCreatureResponse.Success)
@@ -637,25 +639,25 @@ namespace DraconiusGoGUI.DracoManager
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                                     //Catch lured Creature
-                                    MethodResult luredCreatureResponse = await CatchLuredCreature(Building);
-                                    if (luredCreatureResponse.Success)
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    //MethodResult luredCreatureResponse = await CatchLuredCreature(Building);
+                                    //if (luredCreatureResponse.Success)
+                                    //    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                                     //Check sniping NearyCreature
-                                    MethodResult Snipe = await SnipeAllNearyCreature();
-                                    if (Snipe.Success)
-                                    {
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    //MethodResult Snipe = await SnipeAllNearyCreature();
+                                    //if (Snipe.Success)
+                                    //{
+                                    //    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                         //this as walk to Creature sinpe pos is not good .. continue for new pos..
-                                        continue;
-                                    }
-                                }
-                                else
-                                {
-                                    LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
-                                    await TransferFilteredCreature();
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                }
+                                    //    continue;
+                                    //}
+                                //}
+                                //else
+                                //{
+                                //   LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
+                                //    await TransferFilteredCreature();
+                                //    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                //}
                             }
                             else
                             {
@@ -683,6 +685,27 @@ namespace DraconiusGoGUI.DracoManager
                             continue;
 
                         //Search
+                        if (Building.type == BuildingType.STOP || Building.type == BuildingType.PORTAL || Building.type == BuildingType.DUNGEON_STOP)
+                        {
+                            MethodResult searchResult = await SearchPokestop(Building);
+
+                            //OutOfRange will show up as a success
+                            if (searchResult.Success)
+                            {
+                                currentFailedStops = 0;
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                            }
+                            else
+                            {
+                                if (currentFailedStops > 10)
+                                {
+                                    break;
+                                }
+                                ++currentFailedStops;
+                            }
+                        }
+
+                        /* Search Old Refs:
                         double filledInventorySpace = FilledInventoryStorage();
                         LogCaller(new LoggerEventArgs(String.Format("Filled Inventory Storage: {0:0.00}%", filledInventorySpace), LoggerTypes.Debug));
 
@@ -821,7 +844,7 @@ namespace DraconiusGoGUI.DracoManager
                                         else
                                             continue;
                                     }
-
+                                    
                                     MethodResult searchResult = await SearchPokestop(Building);
 
                                     //OutOfRange will show up as a success
@@ -849,8 +872,8 @@ namespace DraconiusGoGUI.DracoManager
                         {
                             LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
                         }
-
                         */
+
                         //Stop bot instantly
                         if (!IsRunning)
                         {

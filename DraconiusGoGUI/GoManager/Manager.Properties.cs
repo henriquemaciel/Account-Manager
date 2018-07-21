@@ -20,7 +20,7 @@ namespace DraconiusGoGUI.DracoManager
         public Settings UserSettings { get; set; }
         public Tracker Tracker { get; set; }
         public Scheduler AccountScheduler { get; set; }
-        //public PlayerStats Stats { get; set; }
+        public FAvaUpdate Stats { get; set; }
         
         //[JsonIgnore]
         //public Dictionary<CreatureMove, MoveSettings> MoveSettings { get; private set; }
@@ -213,13 +213,12 @@ namespace DraconiusGoGUI.DracoManager
             
             get
             {
-                return 0;
-                //return Stats == null ? 0 : Stats.Level;
+                return Stats == null ? 0 : Stats.level;
             }
             
             set
             {
-                //Stats.Level = value;
+                Stats.level = value;
             }
         }
 
@@ -228,8 +227,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                //return Stats == null ? TeamColor.Neutral.ToString() : UserSettings.DefaultTeam;
-                return string.Empty;
+                return Stats == null ? "Neutral" : UserSettings.DefaultTeam;
             }
         }
 
@@ -251,10 +249,9 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     return "Unknown";
                 }
-                return "Unknown";
-                /*
-                long currentExp = Stats.Experience - Stats.PrevLevelXp;
-                long required = Stats.NextLevelXp - Stats.PrevLevelXp;
+
+                long currentExp = Stats.currentExperience;
+                long required = Stats.nextLevelExperience - (long)Stats.exp;
                 long needed = required - currentExp;
 
                 int expPerHour = ExpPerHour;
@@ -274,7 +271,6 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 return time.TotalHours >= 24 ? String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds) : String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
-                */
             }
         }
 
@@ -305,15 +301,13 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return "Unknown";
-                /*
                 if (Stats == null)
                 {
                     return "??/??";
                 }
 
-                long currentExp = Stats.Experience - Stats.PrevLevelXp;
-                long required = Stats.NextLevelXp - Stats.PrevLevelXp;
+                long currentExp = Stats.currentExperience;
+                long required = Stats.nextLevelExperience - (long)Stats.exp;
 
                 double ratio = 0;
 
@@ -323,7 +317,6 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 return String.Format("{0}/{1} ({2:0.00}%)", currentExp, required, ratio);
-                */
             }
         }
 
@@ -342,8 +335,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return 0;
-                //return PlayerData == null ? 250 : PlayerData.MaxCreatureStorage;
+                return Stats == null ? 250 : Stats.creatureStorageSize;
             }
         }
 
@@ -370,16 +362,12 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return 0;
-                /*
-                if (PlayerData == null || PlayerData.Currencies.Count == 0)
+                if (Stats == null || Stats.coins == 0)
                 {
                     return 0;
                 }
 
-                Currency pokecoins = PlayerData.Currencies.FirstOrDefault(x => x.Name == "POKECOIN");
-                return pokecoins.Amount == 0 ? 0 : pokecoins.Amount;
-                */
+                return Stats.coins == 0 ? 0 : Stats.coins;
             }
         }
 
