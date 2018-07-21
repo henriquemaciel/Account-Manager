@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using DracoProtos.Core.Base;
+using DraconiusGoGUI.DracoManager;
 
 namespace DraconiusGoGUI
 {
@@ -218,10 +219,10 @@ namespace DraconiusGoGUI
         public void LoadCatchSettings()
         {
             CatchSettings = new List<CatchSetting>();
-            /*
-            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
+
+            foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == CreatureId.Missingno)
+                if (Creature == 0)
                 {
                     continue;
                 }
@@ -233,16 +234,15 @@ namespace DraconiusGoGUI
 
                 CatchSettings.Add(cSettings);
             }
-            */
         }
 
         public void LoadInventorySettings()
         {
             ItemSettings = new List<InventoryItemSetting>();
-            /*
-            foreach (ItemId item in Enum.GetValues(typeof(ItemId)))
+            
+            foreach (ItemType item in Enum.GetValues(typeof(ItemType)))
             {
-                if (item == ItemId.ItemUnknown)
+                if (item == 0)
                 {
                     continue;
                 }
@@ -254,16 +254,15 @@ namespace DraconiusGoGUI
 
                 ItemSettings.Add(itemSetting);
             }
-            */
         }
 
         public void LoadEvolveSettings()
         {
             EvolveSettings = new List<EvolveSetting>();
-            /*
-            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
+
+            foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == CreatureId.Missingno)
+                if (Creature == 0)
                 {
                     continue;
                 }
@@ -276,16 +275,15 @@ namespace DraconiusGoGUI
 
                 EvolveSettings.Add(setting);
             }
-            */
         }
 
         public void LoadTransferSettings()
         {
             TransferSettings = new List<TransferSetting>();
-            /*
-            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
+
+            foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == CreatureId.Missingno)
+                if (Creature == 0)
                 {
                     continue;
                 }
@@ -298,16 +296,15 @@ namespace DraconiusGoGUI
 
                 TransferSettings.Add(setting);
             }
-            */
         }
 
         public void LoadUpgradeSettings()
         {
             UpgradeSettings = new List<UpgradeSetting>();
-            /*
-            foreach (CreatureId Creature in Enum.GetValues(typeof(CreatureId)))
+
+            foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == CreatureId.Missingno)
+                if (Creature == 0)
                 {
                     continue;
                 }
@@ -320,7 +317,6 @@ namespace DraconiusGoGUI
 
                 UpgradeSettings.Add(setting);
             }
-            */
         }
 
         public void RandomizeDeviceId()

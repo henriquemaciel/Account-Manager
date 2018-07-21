@@ -620,19 +620,19 @@
             // 
             // olvColumnPokedexId
             // 
-            this.olvColumnPokedexId.AspectName = "CreatureId";
+            this.olvColumnPokedexId.AspectName = "id";
             this.olvColumnPokedexId.Text = "Name";
             this.olvColumnPokedexId.Width = 105;
             // 
             // olvColumnCreatureEncountered
             // 
-            this.olvColumnCreatureEncountered.AspectName = "TimesEncountered";
+            this.olvColumnCreatureEncountered.AspectName = "seen";
             this.olvColumnCreatureEncountered.Text = "Encountered";
             this.olvColumnCreatureEncountered.Width = 119;
             // 
             // olvColumnCreatureCaught
             // 
-            this.olvColumnCreatureCaught.AspectName = "TimesCaptured";
+            this.olvColumnCreatureCaught.AspectName = "caughtQuantity";
             this.olvColumnCreatureCaught.Text = "Caught";
             this.olvColumnCreatureCaught.Width = 107;
             // 
@@ -944,7 +944,7 @@
             // 
             // olvColumnEggId
             // 
-            this.olvColumnEggId.AspectName = "Id";
+            this.olvColumnEggId.AspectName = "id";
             this.olvColumnEggId.Text = "Id";
             // 
             // olvColumnEggWalked
@@ -1002,7 +1002,7 @@
             // 
             // olvColumnInventoryAmount
             // 
-            this.olvColumnInventoryAmount.AspectName = "Count";
+            this.olvColumnInventoryAmount.AspectName = "count";
             this.olvColumnInventoryAmount.Text = "Amount";
             // 
             // contextMenuStripRecycle

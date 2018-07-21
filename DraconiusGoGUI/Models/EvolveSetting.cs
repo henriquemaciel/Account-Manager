@@ -1,25 +1,25 @@
-﻿using System;
+﻿using DracoProtos.Core.Base;
+using System;
 
 namespace DraconiusGoGUI.Models
 {
     [Serializable]
     public class EvolveSetting
     {
-        //public CreatureId Id { get; set; }
+        public CreatureType Id { get; set; }
         public bool Evolve { get; set; }
         public int MinCP { get; set; }
 
         public EvolveSetting()
         {
-            //Id = CreatureId.Missingno;
+            Id = 0;
         }
 
         public string Name
         {
             get
             {
-                return string.Empty;
-                //return Id.ToString();
+                return Id.ToString();
             }
         }
     }

@@ -1,16 +1,19 @@
-﻿using System;
+﻿using DraconiusGoGUI.DracoManager;
+using DracoProtos.Core.Base;
+
+using System;
 
 namespace DraconiusGoGUI.Models
 {
     [Serializable]
     public class InventoryItemSetting
     {
-        //public ItemId Id { get; set; }
+        public ItemType Id { get; set; }
         public int MaxInventory { get; set; }
 
         public InventoryItemSetting()
         {
-            //Id = ItemId.ItemUnknown;
+            Id = 0;
             MaxInventory = 100;
         }
 
@@ -18,8 +21,7 @@ namespace DraconiusGoGUI.Models
         {
             get
             {
-                return string.Empty;
-                //return Id.ToString().Replace("Item", "");
+                return Id.ToString();
             }
         }
     }
