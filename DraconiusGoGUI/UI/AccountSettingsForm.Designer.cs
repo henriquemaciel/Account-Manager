@@ -1595,7 +1595,7 @@
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(211, 23);
             this.label46.TabIndex = 63;
-            this.label46.Text = "Search Pokestops when below ";
+            this.label46.Text = "Search Buildings when below ";
             // 
             // textBoxCreatureBeforeEvolve
             // 
@@ -1876,7 +1876,7 @@
             this.checkBoxTooBalls.Name = "checkBoxTooBalls";
             this.checkBoxTooBalls.Size = new System.Drawing.Size(186, 21);
             this.checkBoxTooBalls.TabIndex = 83;
-            this.checkBoxTooBalls.Text = "Ignore Pokestops if have";
+            this.checkBoxTooBalls.Text = "Ignore Buildings if have";
             this.checkBoxTooBalls.UseVisualStyleBackColor = true;
             // 
             // cbUseLuckEggConst
@@ -1984,7 +1984,7 @@
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(161, 17);
             this.label52.TabIndex = 80;
-            this.label52.Text = "Spin Pokestops day limit";
+            this.label52.Text = "Spin Buildings day limit";
             // 
             // numericUpDownStopsDayLimit
             // 

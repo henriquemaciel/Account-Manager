@@ -1012,7 +1012,7 @@
             // olvColumnSchedulerPokestop
             // 
             this.olvColumnSchedulerPokestop.AspectName = "PokestopSettings";
-            this.olvColumnSchedulerPokestop.Text = "Pokestop Settings";
+            this.olvColumnSchedulerPokestop.Text = "Building Settings";
             this.olvColumnSchedulerPokestop.Width = 145;
             // 
             // olvColumnSchedulerCreature
@@ -1214,7 +1214,7 @@
             // olvColumnPokestopsFarmed
             // 
             this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
-            this.olvColumnPokestopsFarmed.Text = "Pokestops/23hr";
+            this.olvColumnPokestopsFarmed.Text = "Buildings/23hr";
             this.olvColumnPokestopsFarmed.Width = 94;
             // 
             // olvColumnCreatureCaught

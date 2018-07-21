@@ -459,32 +459,32 @@ namespace DraconiusGoGUI.DracoManager
 
                     #region PokeStopTask
 
-                    //Get pokestops
+                    //Get Buildings
                     //Goto her if count or meters is < of settings
                     reloadAllForts:
 
                     LogCaller(new LoggerEventArgs("Getting buildings...", LoggerTypes.Info));                   
-                    MethodResult<List<FBuilding>> pokestops = await GetAllFortsAsync();
+                    MethodResult<List<FBuilding>> Buildings = await GetAllFortsAsync();
 
-                    if (!pokestops.Success)
+                    if (!Buildings.Success)
                     {
                         await Task.Delay(failedWaitTime);
                         continue;
                     }
 
                     int pokeStopNumber = 1;
-                    int totalStops = pokestops.Data.Count;
+                    int totalStops = Buildings.Data.Count;
 
                     if (totalStops == 0)
                     {
                         _proxyIssue = false;
                         _potentialPokeStopBan = false;
 
-                        LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", Buildings.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));
 
                         if (UserSettings.AutoRotateProxies && currentFails >= UserSettings.MaxFailBeforeReset)
                         {
-                            if (pokestops.Message.StartsWith("No pokestop data found.", StringComparison.Ordinal))
+                            if (Buildings.Message.StartsWith("No Building data found.", StringComparison.Ordinal))
                             {
                                 _proxyIssue = true;
                                 await ChangeProxy();
@@ -498,7 +498,7 @@ namespace DraconiusGoGUI.DracoManager
 
                     int currentFailedStops = 0;
 
-                    var pokestopsToFarm = new Queue<FBuilding>(pokestops.Data);
+                    var pokestopsToFarm = new Queue<FBuilding>(Buildings.Data);
 
                     while (pokestopsToFarm.Any())
                     {
@@ -517,13 +517,13 @@ namespace DraconiusGoGUI.DracoManager
 
                         pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(UserSettings.Latitude, UserSettings.Longitude, x.coords.latitude, x.coords.longitude)));
 
-                        FBuilding pokestop = pokestopsToFarm.FirstOrDefault();
+                        FBuilding Building = pokestopsToFarm.FirstOrDefault();
 
-                        if (pokestop == null)
+                        if (Building == null)
                             continue;
 
                         var player = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude);
-                        var fortLocation = new GeoCoordinate(pokestop.coords.latitude, pokestop.coords.longitude);
+                        var fortLocation = new GeoCoordinate(Building.coords.latitude, Building.coords.longitude);
                         double distance = CalculateDistanceInMeters(player, fortLocation);
  
                         if (UserSettings.MaxPokestopMeters > 0)
@@ -548,16 +548,16 @@ namespace DraconiusGoGUI.DracoManager
                         if (pokestopsToFarm.Count < 1)
                             continue;
 
-                        if (UserSettings.GoOnlyToGyms && pokestop.type != BuildingType.ARENA)
+                        if (UserSettings.GoOnlyToGyms && Building.type != BuildingType.ARENA)
                             continue;
 
-                        pokestop = pokestopsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("Fort DeQueued: " + pokestop.id, LoggerTypes.Debug));
+                        Building = pokestopsToFarm.Dequeue();
+                        LogCaller(new LoggerEventArgs("Fort DeQueued: " + Building.id, LoggerTypes.Debug));
 
                         string fort = "";
                         LoggerTypes loggerTypes = LoggerTypes.Info;
 
-                        switch (pokestop.type)
+                        switch (Building.type)
                         {
                             case BuildingType.ARENA:
                                 fort = "Arena";
@@ -582,17 +582,17 @@ namespace DraconiusGoGUI.DracoManager
                                 fort = "Library";
                                 break;
                             default:
-                                fort = pokestop.type.ToString();
+                                fort = Building.type.ToString();
                                 break;
                         }
 
-                        if (!UserSettings.SpinGyms && pokestop.type == BuildingType.ARENA)
+                        if (!UserSettings.SpinGyms && Building.type == BuildingType.ARENA)
                             continue;
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
-                        //Go to pokestops
-                        MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.coords.latitude, pokestop.coords.longitude));
+                        //Go to Buildings
+                        MethodResult walkResult = await GoToLocation(new GeoCoordinate(Building.coords.latitude, Building.coords.longitude));
 
                         if (!walkResult.Success)
                         {
@@ -637,7 +637,7 @@ namespace DraconiusGoGUI.DracoManager
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                                     //Catch lured Creature
-                                    MethodResult luredCreatureResponse = await CatchLuredCreature(pokestop);
+                                    MethodResult luredCreatureResponse = await CatchLuredCreature(Building);
                                     if (luredCreatureResponse.Success)
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
@@ -688,9 +688,9 @@ namespace DraconiusGoGUI.DracoManager
 
                         if ((filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100))
                         {
-                            if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                            if (Building.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                             {
-                                if (pokestop.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
+                                if (Building.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
                                 {
                                     if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && UserSettings.CompleteTutorial)
                                     {
@@ -748,7 +748,7 @@ namespace DraconiusGoGUI.DracoManager
                                             }
                                         }
 
-                                        var gyminfo = await GymGetInfo(pokestop);
+                                        var gyminfo = await GymGetInfo(Building);
                                         if (gyminfo.Success)
                                         {
                                             LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
@@ -757,7 +757,7 @@ namespace DraconiusGoGUI.DracoManager
                                         else
                                             continue;
 
-                                        MethodResult spingym = await SearchPokestop(pokestop);
+                                        MethodResult spingym = await SearchPokestop(Building);
 
                                         //OutOfRange will show up as a success
                                         if (spingym.Success)
@@ -767,13 +767,13 @@ namespace DraconiusGoGUI.DracoManager
                                             if (gyminfo.Data.GymStatusAndDefenders.GymDefender.Count < 6)
                                             {
                                                 //Checks team color if same of player or Neutral
-                                                if (pokestop.OwnedByTeam == PlayerData.Team || pokestop.OwnedByTeam == TeamColor.Neutral)
+                                                if (Building.OwnedByTeam == PlayerData.Team || Building.OwnedByTeam == TeamColor.Neutral)
                                                 {
                                                     //Check if config as deploy actived
                                                     if (UserSettings.DeployCreature)
                                                     {
                                                         //Try to deploy
-                                                        await GymDeploy(pokestop);
+                                                        await GymDeploy(Building);
                                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                                     }
                                                 }
@@ -800,19 +800,19 @@ namespace DraconiusGoGUI.DracoManager
 
                                         if (!result.Success)
                                         {
-                                            LogCaller(new LoggerEventArgs("Failed. Marking pokestop, Creatureberry, useitem, Creaturecapture tutorials completed..", LoggerTypes.Warning));
+                                            LogCaller(new LoggerEventArgs("Failed. Marking Building, Creatureberry, useitem, Creaturecapture tutorials completed..", LoggerTypes.Warning));
 
                                             break;
                                         }
 
-                                        LogCaller(new LoggerEventArgs("Marking pokestop, Creatureberry, useitem, Creaturecapture tutorials completed.", LoggerTypes.Success));
+                                        LogCaller(new LoggerEventArgs("Marking Building, Creatureberry, useitem, Creaturecapture tutorials completed.", LoggerTypes.Success));
 
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                     }
 
                                     if (UserSettings.RequestFortDetails)
                                     {
-                                        var fortDetails = await FortDetails(pokestop);
+                                        var fortDetails = await FortDetails(Building);
                                         if (fortDetails.Success)
                                         {
                                             LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
@@ -822,7 +822,7 @@ namespace DraconiusGoGUI.DracoManager
                                             continue;
                                     }
 
-                                    MethodResult searchResult = await SearchPokestop(pokestop);
+                                    MethodResult searchResult = await SearchPokestop(Building);
 
                                     //OutOfRange will show up as a success
                                     if (searchResult.Success)
@@ -931,7 +931,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (_totalZeroExpStops > 25)
                         {
-                            LogCaller(new LoggerEventArgs("Potential PokeStop SoftBan.", LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs("Potential Building SoftBan.", LoggerTypes.Warning));
                             AccountState = AccountState.SoftBan;
                             // reset values
                             _totalZeroExpStops = 0;
@@ -940,7 +940,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (_potentialPokeStopBan)
                         {
-                            //Break out of pokestop loop to test for ip ban
+                            //Break out of Building loop to test for ip ban
                             break;
                         }
 

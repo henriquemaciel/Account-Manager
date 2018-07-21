@@ -341,7 +341,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(110, 17);
             this.label4.TabIndex = 0;
-            this.label4.Text = "PokeStop Visits:";
+            this.label4.Text = "Building Visits:";
             // 
             // label9
             // 

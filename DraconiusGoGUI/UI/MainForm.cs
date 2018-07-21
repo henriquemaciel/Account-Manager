@@ -1209,7 +1209,7 @@ namespace DraconiusGoGUI
 
         private void ClearCountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + Creature counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your Buildings + Creature counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
@@ -1507,7 +1507,7 @@ namespace DraconiusGoGUI
 
         private void SetPokestopRateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string data = Prompt.ShowDialog("Snipe after pokestops amount:", "Set Pokestop Rate");
+            string data = Prompt.ShowDialog("Snipe after Buildings amount:", "Set Building Rate");
 
             if (String.IsNullOrEmpty(data))
             {

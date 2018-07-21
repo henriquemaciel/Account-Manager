@@ -799,7 +799,7 @@
             return new MethodResult<GymBattleAttackResponse>();
         }
 
-        private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
+        private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData Building)
         {
             if (!_client.LoggedIn)
             {
@@ -825,9 +825,9 @@
                 RequestType = RequestType.GymGetInfo,
                 RequestMessage = new GymGetInfoMessage
                 {
-                    GymId = pokestop.Id,
-                    GymLatDegrees = pokestop.Latitude,
-                    GymLngDegrees = pokestop.Longitude,
+                    GymId = Building.Id,
+                    GymLatDegrees = Building.Latitude,
+                    GymLngDegrees = Building.Longitude,
                     PlayerLatDegrees = _client.ClientSession.Player.Latitude,
                     PlayerLngDegrees = _client.ClientSession.Player.Longitude
                 }.ToByteString()

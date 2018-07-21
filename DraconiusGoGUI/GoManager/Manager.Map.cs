@@ -86,7 +86,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult<List<FortData>>
                 {
-                    Message = "No searchable pokestops found within range",
+                    Message = "No searchable Buildings found within range",
                 };
             }
 

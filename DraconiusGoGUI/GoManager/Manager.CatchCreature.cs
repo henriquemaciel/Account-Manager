@@ -160,7 +160,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult
                 {
-                    Message = "No lure on pokestop",
+                    Message = "No lure on Building",
                 };
             }*/
 
@@ -469,7 +469,7 @@ namespace DraconiusGoGUI.DracoManager
 
             LastedEncountersIds.Add(fortData.LureInfo.EncounterId);
 
-            LogCaller(new LoggerEventArgs(String.Format("Faill cath lure on pokestop {0}. {1}.",fortData.Id, eResponse.Result), LoggerTypes.Warning));
+            LogCaller(new LoggerEventArgs(String.Format("Faill cath lure on Building {0}. {1}.",fortData.Id, eResponse.Result), LoggerTypes.Warning));
             */
             return new MethodResult();
         }

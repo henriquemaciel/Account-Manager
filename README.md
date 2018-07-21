@@ -12,7 +12,7 @@
 
 ![alt text][1.1] <strong><em>`The contents of this repo are a proof of concept and are for educational use only`</em></strong>![alt text][1.1]<br/>
 
-## Account Manager (DraconiusGo) is now compatible with 1.8.1 API.
+## Account Manager (DraconiusGo) is now compatible with 1.9.1 API.
 
 [![Stories in Ready](https://discordapp.com/api/guilds/335455302965002242/widget.png?style=banner3&time-)](https://discord.gg/rkm4xhX)
 

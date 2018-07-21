@@ -116,7 +116,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     if (CreatureCaught >= scheduler.CreatureLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
                     {
-                        LogCaller(new LoggerEventArgs("Max Creature and pokestop limit reached. Stopping", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Max Creature and Building limit reached. Stopping", LoggerTypes.Debug));
                         Stop();
 
                         return;
@@ -156,7 +156,7 @@ namespace DraconiusGoGUI.DracoManager
                                 UserSettings.CatchCreature = true;
                             }
                             break;
-                        case SchedulerOption.StartStop: //Start only if pokestop is disabled/nothing or pokestops below threshold
+                        case SchedulerOption.StartStop: //Start only if Building is disabled/nothing or Buildings below threshold
                             if (scheduler.PokeStoplimiter.Option != SchedulerOption.StartStop ||
                                 PokestopsFarmed <= scheduler.PokeStoplimiter.Min)
                             {
@@ -174,7 +174,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            //Pokestops
+            //Buildings
             if (scheduler.PokeStoplimiter.Option != SchedulerOption.Nothing)
             {
                 if (PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
@@ -184,12 +184,12 @@ namespace DraconiusGoGUI.DracoManager
                         case SchedulerOption.DisableEnable: //No extra checks
                             if (UserSettings.SearchFortBelowPercent != 0)
                             {
-                                LogCaller(new LoggerEventArgs("Max pokestop limit reached. Disabling...", LoggerTypes.Debug));
+                                LogCaller(new LoggerEventArgs("Max Building limit reached. Disabling...", LoggerTypes.Debug));
                                 UserSettings.SearchFortBelowPercent = 0;
                             }
                             break;
                         case SchedulerOption.StartStop: //Just stop it
-                            LogCaller(new LoggerEventArgs("Max pokestop limit reached. Stopping ...", LoggerTypes.Debug));
+                            LogCaller(new LoggerEventArgs("Max Building limit reached. Stopping ...", LoggerTypes.Debug));
                             Stop();
                             break;
                     }
@@ -201,7 +201,7 @@ namespace DraconiusGoGUI.DracoManager
                         case SchedulerOption.DisableEnable: //No extra checks
                             if (UserSettings.SearchFortBelowPercent != 1000)
                             {
-                                LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enabling ...", LoggerTypes.Debug));
+                                LogCaller(new LoggerEventArgs("Min Building limit reached. Enabling ...", LoggerTypes.Debug));
                                 UserSettings.SearchFortBelowPercent = 1000;
                             }
                             break;
@@ -211,7 +211,7 @@ namespace DraconiusGoGUI.DracoManager
                             {
                                 if (State == BotState.Stopped)
                                 {
-                                    LogCaller(new LoggerEventArgs(String.Format("Min pokestop limit reached. Starting in {0} seconds", delay/1000), LoggerTypes.Debug));
+                                    LogCaller(new LoggerEventArgs(String.Format("Min Building limit reached. Starting in {0} seconds", delay/1000), LoggerTypes.Debug));
 
                                     await Task.Delay(delay);
 

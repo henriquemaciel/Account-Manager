@@ -3,15 +3,15 @@
     public partial class Manager
     {
         /*
-        private async Task<MethodResult> SearchPokestop(FortData pokestop)
+        private async Task<MethodResult> SearchPokestop(FortData Building)
         {
-            if (pokestop == null)
+            if (Building == null)
                 return new MethodResult();
 
             FortSearchResponse fortResponse = null;
             const int maxFortAttempts = 5;
 
-            string fort = pokestop.Type == FortType.Checkpoint ? "Fort" : "Gym";
+            string fort = Building.Type == FortType.Checkpoint ? "Fort" : "Gym";
 
             for (int i = 0; i < maxFortAttempts; i++)
             {
@@ -30,9 +30,9 @@
                     RequestType = RequestType.FortSearch,
                     RequestMessage = new FortSearchMessage
                     {
-                        FortId = pokestop.Id,
-                        FortLatitude = pokestop.Latitude,
-                        FortLongitude = pokestop.Longitude,
+                        FortId = Building.Id,
+                        FortLatitude = Building.Latitude,
+                        FortLongitude = Building.Longitude,
                         PlayerLatitude = _client.ClientSession.Player.Latitude,
                         PlayerLongitude = _client.ClientSession.Player.Longitude
                     }.ToByteString()
@@ -67,7 +67,7 @@
                         {
                             if (AccountState != AccountState.SoftBan)
                             {
-                                LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
+                                LogCaller(new LoggerEventArgs("Building ban detected. Marking state", LoggerTypes.Warning));
                             }
 
                             AccountState = AccountState.SoftBan;
@@ -83,7 +83,7 @@
                                 }
                                 else if (_fleeingCreatureResponses >= _fleeingCreatureUntilBan)
                                 {
-                                    //Already pokestop banned
+                                    //Already Building banned
                                     if (AccountState == AccountState.SoftBan)
                                     {
                                         _potentialCreatureBan = true;
@@ -95,7 +95,7 @@
                                         //Only occurs when out of range is found
                                         if (fortResponse.ExperienceAwarded == 0)
                                         {
-                                            LogCaller(new LoggerEventArgs("Creature fleeing and failing to grab stops. Potential Creature & pokestop ban or daily limit reached.", LoggerTypes.Warning));
+                                            LogCaller(new LoggerEventArgs("Creature fleeing and failing to grab stops. Potential Creature & Building ban or daily limit reached.", LoggerTypes.Warning));
                                         }
                                         else
                                         {
@@ -122,7 +122,7 @@
                             if (!UserSettings.UseSoftBanBypass)
                             {
                                 _failedPokestopResponse++;
-                                LogCaller(new LoggerEventArgs($"Pokestop softban baypass disabled go to next...", LoggerTypes.Info));
+                                LogCaller(new LoggerEventArgs($"Building softban baypass disabled go to next...", LoggerTypes.Info));
                                 return new MethodResult();
                             }
 
@@ -130,12 +130,12 @@
                             int bypass = UserSettings.SoftBanBypassTimes;
 
                             //Go to location again
-                            //LogCaller(new LoggerEventArgs($"Pokestop potential softban baypass enabled go to location again {pokestop.Latitude}, {pokestop.Longitude}.", LoggerTypes.Debug));
-                            //MethodResult move = UpdateLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
+                            //LogCaller(new LoggerEventArgs($"Building potential softban baypass enabled go to location again {Building.Latitude}, {Building.Longitude}.", LoggerTypes.Debug));
+                            //MethodResult move = UpdateLocation(new GeoCoordinate(Building.Latitude, Building.Longitude));
 
                             while (bypass > 0)
                             {
-                                LogCaller(new LoggerEventArgs($"Pokestop potential softban baypass enabled #{bypass.ToString()}.", LoggerTypes.Info));
+                                LogCaller(new LoggerEventArgs($"Building potential softban baypass enabled #{bypass.ToString()}.", LoggerTypes.Info));
                                 try
                                 {
                                     if (!_client.LoggedIn)
@@ -153,9 +153,9 @@
                                         RequestType = RequestType.FortSearch,
                                         RequestMessage = new FortSearchMessage
                                         {
-                                            FortId = pokestop.Id,
-                                            FortLatitude = pokestop.Latitude,
-                                            FortLongitude = pokestop.Longitude,
+                                            FortId = Building.Id,
+                                            FortLatitude = Building.Latitude,
+                                            FortLongitude = Building.Longitude,
                                             PlayerLatitude = _client.ClientSession.Player.Latitude,
                                             PlayerLongitude = _client.ClientSession.Player.Longitude
                                         }.ToByteString()
@@ -234,7 +234,7 @@
                             _potentialPokeStopBan = true;
                             _proxyIssue = true;
                             //Display error only on first notice
-                            LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban or daily limit reached.", LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs("Building out of range. Potential temp Building ban or IP ban or daily limit reached.", LoggerTypes.Warning));
                         }
 
                         _failedPokestopResponse++;
@@ -290,7 +290,7 @@
             return new MethodResult();
         }
 
-        private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData pokestop)
+        private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData Building)
         {
             if (!_client.LoggedIn)
             {
@@ -304,7 +304,7 @@
 
             if (Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
             {
-                LogCaller(new LoggerEventArgs("Pokestops limit actived", LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs("Buildings limit actived", LoggerTypes.Info));
                 return new MethodResult<FortDetailsResponse>
                 {
                     Message = "Limit actived"
@@ -316,9 +316,9 @@
                 RequestType = RequestType.FortDetails,
                 RequestMessage = new FortDetailsMessage
                 {
-                    FortId = pokestop.Id,
-                    Latitude = pokestop.Latitude,
-                    Longitude = pokestop.Longitude,
+                    FortId = Building.Id,
+                    Latitude = Building.Latitude,
+                    Longitude = Building.Longitude,
                 }.ToByteString()
             });
 

@@ -20,12 +20,12 @@ namespace DraconiusGoGUI.AccountScheduler
         [JsonIgnore]
         public int PokestopsFarmed { get;  set; }
 
-        public void AddValues(int Creature = 0, int pokestops = 0)
+        public void AddValues(int Creature = 0, int Buildings = 0)
         {
             lock (Values)
             {
                 CreatureCaught += Creature;
-                PokestopsFarmed += pokestops;
+                PokestopsFarmed += Buildings;
 
                 //Add to dictionary
                 DateTime currentTime = GetCurrentHourDateTime();
@@ -35,14 +35,14 @@ namespace DraconiusGoGUI.AccountScheduler
                     TrackerValues trackerValues = Values[currentTime];
 
                     trackerValues.Creature += Creature;
-                    trackerValues.Pokestops += pokestops;
+                    trackerValues.Buildings += Buildings;
                 }
                 else
                 {
                     TrackerValues trackerValues = new TrackerValues
                     {
                         Creature = Creature,
-                        Pokestops = pokestops
+                        Buildings = Buildings
                     };
 
                     Values.Add(currentTime, trackerValues);
@@ -62,17 +62,17 @@ namespace DraconiusGoGUI.AccountScheduler
                 Values = Values.Where(x => x.Key >= resetTime).ToDictionary(x => x.Key, x => x.Value);
 
                 int Creature = 0;
-                int pokestops = 0;
+                int Buildings = 0;
 
                 //Should only contain last 24 hours worth of values
                 foreach(KeyValuePair<DateTime, TrackerValues> tracker in Values)
                 {
                     Creature += tracker.Value.Creature;
-                    pokestops += tracker.Value.Pokestops;
+                    Buildings += tracker.Value.Buildings;
                 }
 
                 CreatureCaught = Creature;
-                PokestopsFarmed = pokestops;
+                PokestopsFarmed = Buildings;
             }
         }
 
