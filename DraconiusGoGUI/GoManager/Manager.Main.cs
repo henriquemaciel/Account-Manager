@@ -684,8 +684,9 @@ namespace DraconiusGoGUI.DracoManager
                         if (RemainingPokeballs() >= UserSettings.BallsToIgnoreStops && UserSettings.IgnoreStopsIfTooBalls)
                             continue;
 
-                        //Search
-                        if (Building.type == BuildingType.STOP || Building.type == BuildingType.PORTAL || Building.type == BuildingType.DUNGEON_STOP)
+                        //Search 
+                        //|| Building.type == BuildingType.PORTAL || Building.type == BuildingType.DUNGEON_STOP)
+                        if (Building.type == BuildingType.STOP)
                         {
                             MethodResult searchResult = await SearchPokestop(Building);
 
