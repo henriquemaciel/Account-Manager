@@ -281,7 +281,7 @@ namespace DraconiusGoGUI.DracoManager
                     ball.count--;
                     times--;
                 } while (!resCatch.caught && !resCatch.runAway && times > 0);
-                LogCaller(new LoggerEventArgs(message, LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Info));
                 return new MethodResult
                 {
                     Message = message,

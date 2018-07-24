@@ -43,7 +43,7 @@ namespace DraconiusGoGUI.DracoManager
                     else
                         text += $"[{item.qty}] XP, ";
                 }
-                LogCaller(new LoggerEventArgs(text, LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                 if (loot.levelUpLoot != null) {
                     text = "Level Up Award: ";
                     foreach (var item in loot.levelUpLoot.lootList)
@@ -54,10 +54,13 @@ namespace DraconiusGoGUI.DracoManager
                         else
                             text += $"[{item.qty}] XP, ";
                     }
-                    LogCaller(new LoggerEventArgs(text, LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                 }
                 // copy pitstop values
                 Building.pitstop = (response.items.FirstOrDefault(x => x is FBuilding) as FBuilding).pitstop;
+
+                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
                 return new MethodResult
                 {
                     Success = true,

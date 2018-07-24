@@ -103,7 +103,7 @@ namespace DraconiusGoGUI.UI
             */
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
-               return _manager.Strings.GetCreatureName((Creature as FUserCreature).name);
+                return String.IsNullOrEmpty((Creature as FUserCreature).alias) ? _manager.Strings.GetCreatureName((Creature as FUserCreature).name) : (Creature as FUserCreature).alias;
             };
             /*
             olvColumnPrimaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move1).ToString().Replace("Fast", "");
