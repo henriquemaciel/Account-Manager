@@ -17,6 +17,8 @@ namespace DraconiusGoGUI.DracoManager
             const int maxFortAttempts = 5;
             for (int i = 0; i < maxFortAttempts; i++)
             {
+                int ExperienceAwarded = 0;
+
                 if (!_client.LoggedIn)
                 {
                     return new MethodResult();
@@ -54,13 +56,17 @@ namespace DraconiusGoGUI.DracoManager
                 var loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
                 foreach (var item in loot.loot.lootList) {
                     var itemItem = item as FLootItemItem;
-                    if (itemItem!=null)
+                    if (itemItem != null)
                         text += $"[{itemItem.qty}] {Strings.GetItemName(itemItem.item)}, ";
                     else
+                    {
                         text += $"[{item.qty}] XP, ";
+                        ExperienceAwarded = item.qty;
+                    }
                 }
                 LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
-                if (loot.levelUpLoot != null) {
+                if (loot.levelUpLoot != null)
+                {
                     text = "Level Up Award: ";
                     foreach (var item in loot.levelUpLoot.lootList)
                     {
@@ -68,14 +74,23 @@ namespace DraconiusGoGUI.DracoManager
                         if (itemItem != null)
                             text = $"[{itemItem.qty}] {Strings.GetItemName(itemItem.item)}, ";
                         else
+                        {
                             text += $"[{item.qty}] XP, ";
+                            ExperienceAwarded = item.qty;
+                        }
                     }
                     LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                 }
                 // copy pitstop values
                 Building.pitstop = (response.items.FirstOrDefault(x => x is FBuilding) as FBuilding).pitstop;
 
+                ExpIncrease(ExperienceAwarded);
+                TotalPokeStopExp += ExperienceAwarded;
+
                 Tracker.AddValues(0, 1);
+
+                _totalZeroExpStops = 0;
+                _potentialPokeStopBan = false;
 
                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
