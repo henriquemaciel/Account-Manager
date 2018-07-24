@@ -14,6 +14,12 @@ namespace DraconiusGoGUI.DracoManager
             if (Building == null)
                 return new MethodResult();
 
+            if (Stats.isBagFull)
+            {
+                LogCaller(new LoggerEventArgs($"You bag if full skip {Building.id} ", LoggerTypes.Warning));
+                return new MethodResult();
+            }
+
             const int maxBuildingAttempts = 5;
             for (int i = 0; i < maxBuildingAttempts; i++)
             {
