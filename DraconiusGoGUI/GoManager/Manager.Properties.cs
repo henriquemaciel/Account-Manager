@@ -131,8 +131,8 @@ namespace DraconiusGoGUI.DracoManager
         [JsonIgnore]
         public BotState State { get; set; }
 
-        //[JsonIgnore]
-        //public FUserInfo PlayerData { get { return _client?.Player?.Data; } }
+        [JsonIgnore]
+        public FUserInfo PlayerData { get; set; }
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }

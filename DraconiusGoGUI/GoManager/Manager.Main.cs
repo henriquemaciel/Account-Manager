@@ -56,6 +56,7 @@ namespace DraconiusGoGUI.DracoManager
         public Manager()
         {
             Stats = new FAvaUpdate();
+            PlayerData = new FUserInfo();
             Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
@@ -66,6 +67,7 @@ namespace DraconiusGoGUI.DracoManager
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new FAvaUpdate();
+            PlayerData = new FUserInfo();
             Tracker = new Tracker();
             ProxyHandler = handler;
             LoadFarmLocations();

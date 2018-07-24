@@ -272,17 +272,17 @@ namespace DraconiusGoGUI.UI
             {
                 labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.count), _manager.MaxItemStorage);
             }
-            /*
+            
             if (_manager.PlayerData != null)
             {
                 //BuddyCreature buddy = _manager.PlayerData.BuddyCreature ?? new BuddyCreature();
                 //CreatureData myBuddy = _manager.Creature.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new CreatureData();
                 //labelCreatureBuddy.Text = myBuddy.CreatureId != CreatureId.Missingno ? String.Format("{0}", myBuddy.CreatureId) : "Not set";
-                labelPlayerUsername.Text = _manager.PlayerData.Username;
-                DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
-                labelCreateDate.Text = date.ToString();
+                labelPlayerUsername.Text = _manager.PlayerData.nickname;
+                //DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
+                //labelCreateDate.Text = date.ToString();
                 string tutocompleted = "Not Completed";
-                if (_manager.PlayerData.TutorialState.Contains(TutorialState.AccountCreation)
+                /*if (_manager.PlayerData.TutorialState.Contains(TutorialState.AccountCreation)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.AvatarSelection)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.FirstTimeExperienceComplete)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.GymTutorial)
@@ -293,11 +293,10 @@ namespace DraconiusGoGUI.UI
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.BuildingTutorial)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.UseItem)
                     )
-                    tutocompleted = "Completed";
+                    tutocompleted = "Completed";*/
                     
                 labelTutorialState.Text = tutocompleted;
             }
-            */
         }
 
         private void ButtonUpdateStats_Click(object sender, EventArgs e)
@@ -685,26 +684,30 @@ namespace DraconiusGoGUI.UI
 
         private void FastObjectListViewEggs_FormatCell(object sender, FormatCellEventArgs e)
         {
-            /*
-            var egg = (CreatureData)e.Model;
-            var eggIncubator = new EggIncubator();
+
+            var egg = (FEgg)e.Model;
+            var eggIncubator = new FIncubator();
 
             foreach (var inc in _manager.Incubators)
             {
-                if (inc.CreatureId == egg.Id)
+                if (inc.eggId == egg.id)
                     eggIncubator = inc;
             }
 
             if (e.Column == olvColumnEggWalked)
             {
-                if (eggIncubator.CreatureId != 0)
-                    e.SubItem.Text = String.Format("{0:0.00} km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
+                if (eggIncubator.eggId != null)
+                {
+                    //e.SubItem.Text = String.Format("{0:0.00} km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
+                }
                 else
                     e.SubItem.Text = "0.00 km";
             }
             else if (e.Column == olvColumnEggDistance)
-                e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);
-            */                
+            {
+                //e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);
+            }
+             
         }
 
         private async void SetABuddyToolStripMenuItem_Click(object sender, EventArgs e)

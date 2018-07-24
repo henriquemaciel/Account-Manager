@@ -16,9 +16,13 @@ namespace DraconiusGoGUI.DracoManager
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
             FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
             if (avatar != null)
                 Stats = avatar;
+
+            if (playerdata != null)
+                PlayerData = playerdata;
 
             if (creatures.wilds.Count == 0)
             {
@@ -41,9 +45,13 @@ namespace DraconiusGoGUI.DracoManager
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
             FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
             if (avatar != null)
                 Stats = avatar;
+
+            if (playerdata != null)
+                PlayerData = playerdata;
 
             //var _buildings[];
             var _buildings = buildings.tileBuildings.Values.ToArray().SelectMany(t => t.buildings).ToList();
