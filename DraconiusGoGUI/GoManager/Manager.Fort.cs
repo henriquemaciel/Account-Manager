@@ -39,7 +39,7 @@ namespace DraconiusGoGUI.DracoManager
                 foreach (var item in loot.loot.lootList) {
                     var itemItem = item as FLootItemItem;
                     if (itemItem!=null)
-                        text += $"[{itemItem.qty}] {itemItem.item}, ";
+                        text += $"[{itemItem.qty}] {Strings.GetItemName(itemItem.item)}, ";
                     else
                         text += $"[{item.qty}] XP, ";
                 }
