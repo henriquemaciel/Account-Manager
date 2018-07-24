@@ -52,7 +52,7 @@ namespace DraconiusGoGUI.UI
             //ToString for sorting purposes
             olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).element;
 
-            olvColumnPokedexId.AspectGetter = (entry) => _manager.Strings.GetCreatureName((entry as FCreadexEntry).name.ToString());
+            olvColumnPokedexId.AspectGetter = (entry) => _manager.Strings.GetCreatureName((entry as FCreadexEntry).name);
 
             olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).name;
 
@@ -103,7 +103,7 @@ namespace DraconiusGoGUI.UI
             */
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
-               return _manager.Strings.GetCreatureName((Creature as FUserCreature).name.ToString());
+               return _manager.Strings.GetCreatureName((Creature as FUserCreature).name);
             };
             /*
             olvColumnPrimaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move1).ToString().Replace("Fast", "");
@@ -151,7 +151,7 @@ namespace DraconiusGoGUI.UI
             {
                 var item = (FBagItem)x;
 
-                return _manager.Strings.GetItemName(item.type.ToString());
+                return _manager.Strings.GetItemName(item.type);
             };
             
 

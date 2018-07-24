@@ -27,7 +27,7 @@ namespace DraconiusGoGUI.DracoManager
                     LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
                     return new MethodResult();
                 }
-                var response = _client.DracoClient.UseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                var response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
 
                 if (response.items.Count < 2)
                 {
@@ -50,7 +50,7 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         var itemItem = item as FLootItemItem;
                         if (itemItem != null)
-                            text = $"[{itemItem.qty}] {itemItem.item}, ";
+                            text = $"[{itemItem.qty}] {Strings.GetItemName(itemItem.item)}, ";
                         else
                             text += $"[{item.qty}] XP, ";
                     }
