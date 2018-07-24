@@ -14,8 +14,10 @@ namespace DraconiusGoGUI.DracoManager
             FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-            //FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+
+            if (map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) is FAvaUpdate avatar)
+                Stats = avatar;
 
             if (creatures.wilds.Count == 0)
             {
@@ -36,8 +38,10 @@ namespace DraconiusGoGUI.DracoManager
             //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-            //FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
             FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+
+            if (map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) is FAvaUpdate avatar)
+                Stats = avatar;
 
             //var _buildings[];
             var _buildings = buildings.tileBuildings.Values.ToArray().SelectMany(t => t.buildings).ToList();

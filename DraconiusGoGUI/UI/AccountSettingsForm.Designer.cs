@@ -33,6 +33,7 @@
             this.tabPageDetails = new System.Windows.Forms.TabPage();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
+            this.checkBoxDevLogs = new System.Windows.Forms.CheckBox();
             this.numericUpDownMaxLogs = new System.Windows.Forms.NumericUpDown();
             this.label43 = new System.Windows.Forms.Label();
             this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
@@ -214,7 +215,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxDevLogs = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -322,6 +322,16 @@
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDevLogs
+            // 
+            this.checkBoxDevLogs.AutoSize = true;
+            this.checkBoxDevLogs.Location = new System.Drawing.Point(204, 160);
+            this.checkBoxDevLogs.Name = "checkBoxDevLogs";
+            this.checkBoxDevLogs.Size = new System.Drawing.Size(202, 21);
+            this.checkBoxDevLogs.TabIndex = 68;
+            this.checkBoxDevLogs.Text = "Developement Debug Logs";
+            this.checkBoxDevLogs.UseVisualStyleBackColor = true;
             // 
             // numericUpDownMaxLogs
             // 
@@ -2210,16 +2220,6 @@
             this.olvColumnPinap.DisplayIndex = 3;
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
-            // 
-            // checkBoxDevLogs
-            // 
-            this.checkBoxDevLogs.AutoSize = true;
-            this.checkBoxDevLogs.Location = new System.Drawing.Point(204, 160);
-            this.checkBoxDevLogs.Name = "checkBoxDevLogs";
-            this.checkBoxDevLogs.Size = new System.Drawing.Size(202, 21);
-            this.checkBoxDevLogs.TabIndex = 68;
-            this.checkBoxDevLogs.Text = "Developement Debug Logs";
-            this.checkBoxDevLogs.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
