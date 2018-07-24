@@ -47,8 +47,8 @@ namespace DraconiusGoGUI
         public bool MimicWalking { get; set; }
         public int WalkingSpeed { get; set; }
         public bool EncounterWhileWalking { get; set; }
-        public double MaxPokestopMeters { get; set; }
-        public int MaxPokestopMetersRandom { get; set; }
+        public double MaxBuildingMeters { get; set; }
+        public int MaxBuildingMetersRandom { get; set; }
         public int MaxTravelDistance { get; set; }
         public bool UseLuckyEgg { get; set; }
         public bool ClaimLevelUpRewards { get; set; }
@@ -66,7 +66,7 @@ namespace DraconiusGoGUI
 
         public double SearchFortBelowPercent { get; set; }
         public int CatchCreatureDayLimit { get; set; }
-        public int SpinPokestopsDayLimit { get; set; }
+        public int SpinBuildingsDayLimit { get; set; }
         public bool SnipeAllCreaturesNoInPokedex { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
@@ -102,7 +102,7 @@ namespace DraconiusGoGUI
         public bool UseBerries { get; set; }
         public bool OnlyUnlimitedIncubator { get; set; }
         public bool TransferSlashCreatures { get; set; }
-        public bool ShufflePokestops { get; set; }
+        public bool ShuffleBuildings { get; set; }
         public bool GetArBonus { get; set; }
         public decimal ARBonusProximity { get; set; }
         public decimal ARBonusAwareness { get; set; }
@@ -179,7 +179,7 @@ namespace DraconiusGoGUI
             StopOnIPBan = true;
             SearchFortBelowPercent = 1000;
             CatchCreatureDayLimit = 500;
-            SpinPokestopsDayLimit = 700;
+            SpinBuildingsDayLimit = 700;
             ForceEvolveAbovePercent = 1000;
             PercTransItems = 90;
             PercTransPoke = 40;
@@ -209,8 +209,8 @@ namespace DraconiusGoGUI
             UseLuckEggConst = false;
             UseLuckyEgg = true;
             UseIncense = true;
-            MaxPokestopMeters = 100.00;
-            MaxPokestopMetersRandom = 50;
+            MaxBuildingMeters = 100.00;
+            MaxBuildingMetersRandom = 50;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";
         }

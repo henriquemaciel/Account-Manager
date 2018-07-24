@@ -18,14 +18,14 @@ namespace DraconiusGoGUI.AccountScheduler
         public int CreatureCaught { get;  set; }
 
         [JsonIgnore]
-        public int PokestopsFarmed { get;  set; }
+        public int BuildingsFarmed { get;  set; }
 
         public void AddValues(int Creature = 0, int Buildings = 0)
         {
             lock (Values)
             {
                 CreatureCaught += Creature;
-                PokestopsFarmed += Buildings;
+                BuildingsFarmed += Buildings;
 
                 //Add to dictionary
                 DateTime currentTime = GetCurrentHourDateTime();
@@ -72,7 +72,7 @@ namespace DraconiusGoGUI.AccountScheduler
                 }
 
                 CreatureCaught = Creature;
-                PokestopsFarmed = Buildings;
+                BuildingsFarmed = Buildings;
             }
         }
 

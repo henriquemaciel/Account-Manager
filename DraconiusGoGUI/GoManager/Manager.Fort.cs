@@ -9,7 +9,7 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult> SearchPokestop(FBuilding Building)
+        private async Task<MethodResult> SearchBuilding(FBuilding Building)
         {
             if (Building == null)
                 return new MethodResult();
@@ -85,12 +85,12 @@ namespace DraconiusGoGUI.DracoManager
                 Building.pitstop = (response.items.FirstOrDefault(x => x is FBuilding) as FBuilding).pitstop;
 
                 ExpIncrease(ExperienceAwarded);
-                TotalPokeStopExp += ExperienceAwarded;
+                TotalBuildingExp += ExperienceAwarded;
 
                 Tracker.AddValues(0, 1);
 
                 _totalZeroExpStops = 0;
-                _potentialPokeStopBan = false;
+                _potentialBuildingBan = false;
 
                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -162,7 +162,7 @@ namespace DraconiusGoGUI.DracoManager
                     LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                     break;
                 case FortSearchResponse.Types.Result.OutOfRange:
-                    if (_potentialPokeStopBan)
+                    if (_potentialBuildingBan)
                     {
                         if (AccountState != AccountState.SoftBan)
                         {
@@ -186,7 +186,7 @@ namespace DraconiusGoGUI.DracoManager
                                 if (AccountState == AccountState.SoftBan)
                                 {
                                     _potentialCreatureBan = true;
-                                    _potentialPokeStopBan = true;
+                                    _potentialBuildingBan = true;
                                 }
 
                                 if (AccountState != AccountState.SoftBan)
@@ -220,7 +220,7 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         if (!UserSettings.UseSoftBanBypass)
                         {
-                            _failedPokestopResponse++;
+                            _failedBuildingResponse++;
                             LogCaller(new LoggerEventArgs($"Building softban baypass disabled go to next...", LoggerTypes.Info));
                             return new MethodResult();
                         }
@@ -291,7 +291,7 @@ namespace DraconiusGoGUI.DracoManager
                                         }
 
                                         ExpIncrease(fortResponse.ExperienceAwarded);
-                                        TotalPokeStopExp += fortResponse.ExperienceAwarded;
+                                        TotalBuildingExp += fortResponse.ExperienceAwarded;
 
                                         Tracker.AddValues(0, 1);
 
@@ -310,7 +310,7 @@ namespace DraconiusGoGUI.DracoManager
                                         LogCaller(new LoggerEventArgs(_message, LoggerTypes.Success));
 
                                         _totalZeroExpStops = 0;
-                                        _potentialPokeStopBan = false;
+                                        _potentialBuildingBan = false;
 
                                         return new MethodResult
                                         {
@@ -330,13 +330,13 @@ namespace DraconiusGoGUI.DracoManager
                             }
                         }
 
-                        _potentialPokeStopBan = true;
+                        _potentialBuildingBan = true;
                         _proxyIssue = true;
                         //Display error only on first notice
                         LogCaller(new LoggerEventArgs("Building out of range. Potential temp Building ban or IP ban or daily limit reached.", LoggerTypes.Warning));
                     }
 
-                    _failedPokestopResponse++;
+                    _failedBuildingResponse++;
                     //Let it continue down
                     continue;
                 case FortSearchResponse.Types.Result.PoiInaccessible:
@@ -357,7 +357,7 @@ namespace DraconiusGoGUI.DracoManager
                     }
 
                     ExpIncrease(fortResponse.ExperienceAwarded);
-                    TotalPokeStopExp += fortResponse.ExperienceAwarded;
+                    TotalBuildingExp += fortResponse.ExperienceAwarded;
 
                     Tracker.AddValues(0, 1);
 
@@ -376,7 +376,7 @@ namespace DraconiusGoGUI.DracoManager
                     LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
 
                     _totalZeroExpStops = 0;
-                    _potentialPokeStopBan = false;
+                    _potentialBuildingBan = false;
 
                     return new MethodResult
                     {

@@ -90,7 +90,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (UserSettings.ShufflePokestops)
+            if (UserSettings.ShuffleBuildings)
             {
                 var rnd = new Random();
                 fortData = fortData.OrderBy(x => rnd.Next()).ToList();

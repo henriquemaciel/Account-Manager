@@ -90,15 +90,15 @@ namespace DraconiusGoGUI.DracoManager
         }
 
         [JsonIgnore]
-        public int PokestopsFarmed
+        public int BuildingsFarmed
         {
             get
             {
-                return Tracker == null ? 0 : Tracker.PokestopsFarmed;
+                return Tracker == null ? 0 : Tracker.BuildingsFarmed;
             }
             set
             {
-                Tracker.PokestopsFarmed = value;
+                Tracker.BuildingsFarmed = value;
             }
         }
 
@@ -402,7 +402,7 @@ namespace DraconiusGoGUI.DracoManager
         public int ExpGained { get; set; } = 0;
 
         [JsonIgnore]
-        public int TotalPokeStopExp { get; set; }
+        public int TotalBuildingExp { get; set; }
 
         [JsonIgnore]
         public double MaxRuntime

@@ -610,7 +610,7 @@ namespace DraconiusGoGUI
             newAccount.UserSettings.MaxLevel = 30;
             newAccount.Level = 0;
             newAccount.ExpGained = 0;
-            newAccount.PokestopsFarmed = 0;
+            newAccount.BuildingsFarmed = 0;
             newAccount.CreatureCaught = 0;
 
 
@@ -910,13 +910,13 @@ namespace DraconiusGoGUI
                     e.SubItem.ForeColor = Color.Red;
                 }
             }
-            else if (e.Column == olvColumnPokestopsFarmed)
+            else if (e.Column == olvColumnBuildingsFarmed)
             {
-                if (manager.Tracker.PokestopsFarmed + 100 >= manager.UserSettings.SpinPokestopsDayLimit)
+                if (manager.Tracker.BuildingsFarmed + 100 >= manager.UserSettings.SpinBuildingsDayLimit)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
-                if (manager.Tracker.PokestopsFarmed >= manager.UserSettings.SpinPokestopsDayLimit)
+                if (manager.Tracker.BuildingsFarmed >= manager.UserSettings.SpinBuildingsDayLimit)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
@@ -977,18 +977,18 @@ namespace DraconiusGoGUI
                 }
 
             }
-            else if (e.Column == olvColumnPokestopsFarmed)
+            else if (e.Column == olvColumnBuildingsFarmed)
             {
-                if (manager.AccountScheduler == null || manager.AccountScheduler.PokeStoplimiter.Option == SchedulerOption.Nothing)
+                if (manager.AccountScheduler == null || manager.AccountScheduler.Buildinglimiter.Option == SchedulerOption.Nothing)
                 {
                     return;
                 }
 
-                if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Max)
+                if (manager.BuildingsFarmed >= manager.AccountScheduler.Buildinglimiter.Max)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                else if (manager.PokestopsFarmed <= manager.AccountScheduler.PokeStoplimiter.Min)
+                else if (manager.BuildingsFarmed <= manager.AccountScheduler.Buildinglimiter.Min)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
@@ -1505,7 +1505,7 @@ namespace DraconiusGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void SetPokestopRateToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetBuildingRateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Snipe after Buildings amount:", "Set Building Rate");
 

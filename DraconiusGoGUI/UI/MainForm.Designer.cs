@@ -130,7 +130,7 @@
             this.olvColumnSchedulerName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerStart = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerEnd = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnSchedulerPokestop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSchedulerBuilding = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerCreature = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerLastCall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -150,7 +150,7 @@
             this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnBuildingsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnExpPerHour = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -958,7 +958,7 @@
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerName);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerStart);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnd);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokestop);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerBuilding);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerCreature);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerLastCall);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerTime);
@@ -969,7 +969,7 @@
             this.olvColumnSchedulerName,
             this.olvColumnSchedulerStart,
             this.olvColumnSchedulerEnd,
-            this.olvColumnSchedulerPokestop,
+            this.olvColumnSchedulerBuilding,
             this.olvColumnSchedulerCreature,
             this.olvColumnSchedulerLastCall,
             this.olvColumnSchedulerTime,
@@ -1009,11 +1009,11 @@
             this.olvColumnSchedulerEnd.Text = "End Hour";
             this.olvColumnSchedulerEnd.Width = 50;
             // 
-            // olvColumnSchedulerPokestop
+            // olvColumnSchedulerBuilding
             // 
-            this.olvColumnSchedulerPokestop.AspectName = "PokestopSettings";
-            this.olvColumnSchedulerPokestop.Text = "Building Settings";
-            this.olvColumnSchedulerPokestop.Width = 145;
+            this.olvColumnSchedulerBuilding.AspectName = "BuildingSettings";
+            this.olvColumnSchedulerBuilding.Text = "Building Settings";
+            this.olvColumnSchedulerBuilding.Width = 145;
             // 
             // olvColumnSchedulerCreature
             // 
@@ -1138,7 +1138,7 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnUsername);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnAccountState);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopsFarmed);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnBuildingsFarmed);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnCreatureCaught);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExp);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExpPerHour);
@@ -1156,7 +1156,7 @@
             this.olvColumnUsername,
             this.olvColumnLevel,
             this.olvColumnAccountState,
-            this.olvColumnPokestopsFarmed,
+            this.olvColumnBuildingsFarmed,
             this.olvColumnCreatureCaught,
             this.olvColumnExp,
             this.olvColumnExpPerHour,
@@ -1211,11 +1211,11 @@
             this.olvColumnAccountState.Text = "Account Status";
             this.olvColumnAccountState.Width = 85;
             // 
-            // olvColumnPokestopsFarmed
+            // olvColumnBuildingsFarmed
             // 
-            this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
-            this.olvColumnPokestopsFarmed.Text = "Buildings/23hr";
-            this.olvColumnPokestopsFarmed.Width = 94;
+            this.olvColumnBuildingsFarmed.AspectName = "BuildingsFarmed";
+            this.olvColumnBuildingsFarmed.Text = "Buildings/23hr";
+            this.olvColumnBuildingsFarmed.Width = 94;
             // 
             // olvColumnCreatureCaught
             // 
@@ -1545,7 +1545,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerName;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerStart;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerEnd;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerPokestop;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerBuilding;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerCreature;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerLastCall;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerTime;
@@ -1565,7 +1565,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnUsername;
         private BrightIdeasSoftware.OLVColumn olvColumnLevel;
         private BrightIdeasSoftware.OLVColumn olvColumnAccountState;
-        private BrightIdeasSoftware.OLVColumn olvColumnPokestopsFarmed;
+        private BrightIdeasSoftware.OLVColumn olvColumnBuildingsFarmed;
         private BrightIdeasSoftware.OLVColumn olvColumnCreatureCaught;
         private BrightIdeasSoftware.OLVColumn olvColumnExp;
         private BrightIdeasSoftware.OLVColumn olvColumnExpPerHour;

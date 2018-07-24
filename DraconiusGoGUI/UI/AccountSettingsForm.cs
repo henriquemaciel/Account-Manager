@@ -137,7 +137,7 @@ namespace DraconiusGoGUI.UI
             checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
             numericUpDownCreaturesDayLimit.Value = new Decimal(settings.CatchCreatureDayLimit);
-            numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinPokestopsDayLimit);
+            numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinBuildingsDayLimit);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
             cbMimicWalking.Checked = settings.MimicWalking;
@@ -333,7 +333,7 @@ namespace DraconiusGoGUI.UI
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
             userSettings.CatchCreatureDayLimit = (int)numericUpDownCreaturesDayLimit.Value;
-            userSettings.SpinPokestopsDayLimit = (int)numericUpDownStopsDayLimit.Value;
+            userSettings.SpinBuildingsDayLimit = (int)numericUpDownStopsDayLimit.Value;
             userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;

@@ -85,7 +85,7 @@ namespace DraconiusGoGUI.DracoManager
                     //Only auto start when both are below min values
                     //Otherwise we'll get constant start/stops
                     if ((CreatureCaught <= scheduler.CreatureLimiter.Min || scheduler.CreatureLimiter.Option == SchedulerOption.Nothing) &&
-                        (PokestopsFarmed <= scheduler.PokeStoplimiter.Min || scheduler.PokeStoplimiter.Option == SchedulerOption.Nothing))
+                        (BuildingsFarmed <= scheduler.Buildinglimiter.Min || scheduler.Buildinglimiter.Option == SchedulerOption.Nothing))
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Auto starting (schedule) in {0} seconds...", delay/1000), LoggerTypes.Debug));
 
@@ -114,7 +114,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 if (State != BotState.Stopping && State != BotState.Stopped)
                 {
-                    if (CreatureCaught >= scheduler.CreatureLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
+                    if (CreatureCaught >= scheduler.CreatureLimiter.Max && BuildingsFarmed >= scheduler.Buildinglimiter.Max)
                     {
                         LogCaller(new LoggerEventArgs("Max Creature and Building limit reached. Stopping", LoggerTypes.Debug));
                         Stop();
@@ -157,8 +157,8 @@ namespace DraconiusGoGUI.DracoManager
                             }
                             break;
                         case SchedulerOption.StartStop: //Start only if Building is disabled/nothing or Buildings below threshold
-                            if (scheduler.PokeStoplimiter.Option != SchedulerOption.StartStop ||
-                                PokestopsFarmed <= scheduler.PokeStoplimiter.Min)
+                            if (scheduler.Buildinglimiter.Option != SchedulerOption.StartStop ||
+                                BuildingsFarmed <= scheduler.Buildinglimiter.Min)
                             {
                                 if (State == BotState.Stopped)
                                 {
@@ -175,11 +175,11 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             //Buildings
-            if (scheduler.PokeStoplimiter.Option != SchedulerOption.Nothing)
+            if (scheduler.Buildinglimiter.Option != SchedulerOption.Nothing)
             {
-                if (PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
+                if (BuildingsFarmed >= scheduler.Buildinglimiter.Max)
                 {
-                    switch (scheduler.PokeStoplimiter.Option)
+                    switch (scheduler.Buildinglimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
                             if (UserSettings.SearchFortBelowPercent != 0)
@@ -194,9 +194,9 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                     }
                 }
-                else if (PokestopsFarmed <= scheduler.PokeStoplimiter.Min)
+                else if (BuildingsFarmed <= scheduler.Buildinglimiter.Min)
                 {
-                    switch (scheduler.PokeStoplimiter.Option)
+                    switch (scheduler.Buildinglimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
                             if (UserSettings.SearchFortBelowPercent != 1000)

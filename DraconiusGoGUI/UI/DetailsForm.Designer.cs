@@ -62,7 +62,7 @@
             this.labelPlayerTeam = new System.Windows.Forms.Label();
             this.labelExp = new System.Windows.Forms.Label();
             this.labelInventoryCount = new System.Windows.Forms.Label();
-            this.labelPokestopVisits = new System.Windows.Forms.Label();
+            this.labelBuildingVisits = new System.Windows.Forms.Label();
             this.labelCreatureCount = new System.Windows.Forms.Label();
             this.labelUniqueCreature = new System.Windows.Forms.Label();
             this.labelCreatureCaught = new System.Windows.Forms.Label();
@@ -206,7 +206,7 @@
             this.tabPageStats.Controls.Add(this.labelPlayerTeam);
             this.tabPageStats.Controls.Add(this.labelExp);
             this.tabPageStats.Controls.Add(this.labelInventoryCount);
-            this.tabPageStats.Controls.Add(this.labelPokestopVisits);
+            this.tabPageStats.Controls.Add(this.labelBuildingVisits);
             this.tabPageStats.Controls.Add(this.labelCreatureCount);
             this.tabPageStats.Controls.Add(this.labelUniqueCreature);
             this.tabPageStats.Controls.Add(this.labelCreatureCaught);
@@ -505,14 +505,14 @@
             this.labelInventoryCount.TabIndex = 0;
             this.labelInventoryCount.Text = "0";
             // 
-            // labelPokestopVisits
+            // labelBuildingVisits
             // 
-            this.labelPokestopVisits.AutoSize = true;
-            this.labelPokestopVisits.Location = new System.Drawing.Point(173, 230);
-            this.labelPokestopVisits.Name = "labelPokestopVisits";
-            this.labelPokestopVisits.Size = new System.Drawing.Size(16, 17);
-            this.labelPokestopVisits.TabIndex = 0;
-            this.labelPokestopVisits.Text = "0";
+            this.labelBuildingVisits.AutoSize = true;
+            this.labelBuildingVisits.Location = new System.Drawing.Point(173, 230);
+            this.labelBuildingVisits.Name = "labelBuildingVisits";
+            this.labelBuildingVisits.Size = new System.Drawing.Size(16, 17);
+            this.labelBuildingVisits.TabIndex = 0;
+            this.labelBuildingVisits.Text = "0";
             // 
             // labelCreatureCount
             // 
@@ -1213,7 +1213,7 @@
         private System.Windows.Forms.Button buttonUpdateStats;
         private System.Windows.Forms.Label labelPlayerLevel;
         private System.Windows.Forms.Label labelExp;
-        private System.Windows.Forms.Label labelPokestopVisits;
+        private System.Windows.Forms.Label labelBuildingVisits;
         private System.Windows.Forms.Label labelUniqueCreature;
         private System.Windows.Forms.Label labelCreatureCaught;
         private System.Windows.Forms.TabPage tabPageCandy;

@@ -31,8 +31,8 @@ namespace DraconiusGoGUI.DracoManager
         private int _fleeingCreatureResponses = 0;
         private bool _potentialCreatureBan = false;
         private const int _fleeingCreatureUntilBan = 3;
-        private bool _potentialPokeStopBan = false;
-        private int _failedPokestopResponse = 0;
+        private bool _potentialBuildingBan = false;
+        private int _failedBuildingResponse = 0;
         private bool _autoRestart = false;
         private bool _wasAutoRestarted = false;
         private ManualResetEvent _pauser = new ManualResetEvent(true);
@@ -458,7 +458,7 @@ namespace DraconiusGoGUI.DracoManager
 
                     #endregion
 
-                    #region PokeStopTask
+                    #region BuildingTask
 
                     //Get Buildings
                     //Goto her if count or meters is < of settings
@@ -473,13 +473,13 @@ namespace DraconiusGoGUI.DracoManager
                         continue;
                     }
 
-                    int pokeStopNumber = 1;
+                    int BuildingNumber = 1;
                     int totalStops = Buildings.Data.Count;
 
                     if (totalStops == 0)
                     {
                         _proxyIssue = false;
-                        _potentialPokeStopBan = false;
+                        _potentialBuildingBan = false;
 
                         LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", Buildings.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));
 
@@ -499,9 +499,9 @@ namespace DraconiusGoGUI.DracoManager
 
                     int currentFailedStops = 0;
 
-                    var pokestopsToFarm = new Queue<FBuilding>(Buildings.Data);
+                    var BuildingsToFarm = new Queue<FBuilding>(Buildings.Data);
 
-                    while (pokestopsToFarm.Any())
+                    while (BuildingsToFarm.Any())
                     {
                         // In each iteration of the loop we store the current level
                         int prevLevel = Level;
@@ -516,9 +516,9 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(UserSettings.Latitude, UserSettings.Longitude, x.coords.latitude, x.coords.longitude)));
+                        BuildingsToFarm = new Queue<FBuilding>(BuildingsToFarm.OrderBy(x => CalculateDistanceInMeters(UserSettings.Latitude, UserSettings.Longitude, x.coords.latitude, x.coords.longitude)));
 
-                        FBuilding Building = pokestopsToFarm.FirstOrDefault();
+                        FBuilding Building = BuildingsToFarm.FirstOrDefault();
 
                         if (Building == null)
                             continue;
@@ -527,18 +527,18 @@ namespace DraconiusGoGUI.DracoManager
                         var fortLocation = new GeoCoordinate(Building.coords.latitude, Building.coords.longitude);
                         double distance = CalculateDistanceInMeters(player, fortLocation);
  
-                        if (UserSettings.MaxPokestopMeters > 0)
+                        if (UserSettings.MaxBuildingMeters > 0)
                         {
-                            double rand = UserSettings.MaxPokestopMetersRandom - UserSettings.MaxPokestopMeters;
-                            pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => distance <= rand));
+                            double rand = UserSettings.MaxBuildingMetersRandom - UserSettings.MaxBuildingMeters;
+                            BuildingsToFarm = new Queue<FBuilding>(BuildingsToFarm.OrderBy(x => distance <= rand));
 
-                            if (pokestopsToFarm.Count < 1)
+                            if (BuildingsToFarm.Count < 1)
                             {
-                                rand = UserSettings.MaxPokestopMetersRandom + UserSettings.MaxPokestopMeters;
-                                pokestopsToFarm = new Queue<FBuilding>(pokestopsToFarm.OrderBy(x => distance <= rand));
+                                rand = UserSettings.MaxBuildingMetersRandom + UserSettings.MaxBuildingMeters;
+                                BuildingsToFarm = new Queue<FBuilding>(BuildingsToFarm.OrderBy(x => distance <= rand));
                             }
 
-                            if (pokestopsToFarm.Count < 1)
+                            if (BuildingsToFarm.Count < 1)
                             {
                                 //Pass restart if value is 0 or meter no ok recommended 250-300
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
@@ -546,13 +546,13 @@ namespace DraconiusGoGUI.DracoManager
                             }
                         }
 
-                        if (pokestopsToFarm.Count < 1)
+                        if (BuildingsToFarm.Count < 1)
                             continue;
 
                         if (UserSettings.GoOnlyToGyms && Building.type != BuildingType.ARENA)
                             continue;
 
-                        Building = pokestopsToFarm.Dequeue();
+                        Building = BuildingsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort DeQueued: " + Building.id, LoggerTypes.Debug));
 
                         string fort = "";
@@ -593,7 +593,7 @@ namespace DraconiusGoGUI.DracoManager
                         if (!UserSettings.SpinGyms && Building.type == BuildingType.ARENA)
                             continue;
 
-                        LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
+                        LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", fort, BuildingNumber, totalStops, distance), loggerTypes));
 
                         //Go to Buildings
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(Building.coords.latitude, Building.coords.longitude));
@@ -688,7 +688,7 @@ namespace DraconiusGoGUI.DracoManager
                         //|| Building.type == BuildingType.PORTAL || Building.type == BuildingType.DUNGEON_STOP)
                         if (Building.type == BuildingType.STOP)
                         {
-                            MethodResult searchResult = await SearchPokestop(Building);
+                            MethodResult searchResult = await SearchBuilding(Building);
 
                             //OutOfRange will show up as a success
                             if (searchResult.Success)
@@ -781,7 +781,7 @@ namespace DraconiusGoGUI.DracoManager
                                         else
                                             continue;
 
-                                        MethodResult spingym = await SearchPokestop(Building);
+                                        MethodResult spingym = await SearchBuilding(Building);
 
                                         //OutOfRange will show up as a success
                                         if (spingym.Success)
@@ -818,9 +818,9 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                                 else
                                 {
-                                    if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial) && UserSettings.CompleteTutorial)
+                                    if (!PlayerData.TutorialState.Contains(TutorialState.BuildingTutorial) && UserSettings.CompleteTutorial)
                                     {
-                                        result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.CreatureBerry, TutorialState.UseItem });
+                                        result = await MarkTutorialsComplete(new[] { TutorialState.BuildingTutorial, TutorialState.CreatureBerry, TutorialState.UseItem });
 
                                         if (!result.Success)
                                         {
@@ -846,7 +846,7 @@ namespace DraconiusGoGUI.DracoManager
                                             continue;
                                     }
                                     
-                                    MethodResult searchResult = await SearchPokestop(Building);
+                                    MethodResult searchResult = await SearchBuilding(Building);
 
                                     //OutOfRange will show up as a success
                                     if (searchResult.Success)
@@ -882,7 +882,7 @@ namespace DraconiusGoGUI.DracoManager
                         }
 
                         // evolve, transfer, etc on first and every 10 stops
-                        if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
+                        if (IsRunning && ((BuildingNumber > 4 && BuildingNumber % 10 == 0) || BuildingNumber == 1))
                         {
 
                             if (UserSettings.EvolveCreature)
@@ -944,7 +944,7 @@ namespace DraconiusGoGUI.DracoManager
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
 
-                        ++pokeStopNumber;
+                        ++BuildingNumber;
 
                         if (UserSettings.MaxLevel > 0 && Level >= UserSettings.MaxLevel)
                         {
@@ -962,13 +962,13 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        if (_potentialPokeStopBan)
+                        if (_potentialBuildingBan)
                         {
                             //Break out of Building loop to test for ip ban
                             break;
                         }
 
-                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit && Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
+                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit && Tracker.BuildingsFarmed >= UserSettings.SpinBuildingsDayLimit)
                         {
                             LogCaller(new LoggerEventArgs("Daily limits reached. Stoping ...", LoggerTypes.Warning));
                             Stop();
@@ -1093,7 +1093,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     Latitude = 45.03009,
                     Longitude = -93.31934,
-                    Name = "6Pokestop, Cleveland"
+                    Name = "6Building, Cleveland"
                 },
 
                 new FarmLocation
@@ -1107,7 +1107,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     Latitude = 40.755184,
                     Longitude = -73.983724,
-                    Name = "7Pokestops, Central Park NY"
+                    Name = "7Buildings, Central Park NY"
                 },
 
                 new FarmLocation
@@ -1136,7 +1136,7 @@ namespace DraconiusGoGUI.DracoManager
         public void ClearStats()
         {
             _fleeingCreatureResponses = 0;
-            TotalPokeStopExp = 0;
+            TotalBuildingExp = 0;
             Tracker.Values.Clear();
             Tracker.CalculatedTrackingHours();
         }

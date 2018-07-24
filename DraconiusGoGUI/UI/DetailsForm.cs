@@ -258,7 +258,7 @@ namespace DraconiusGoGUI.UI
             {
                 //labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
                 labelCreatureCaught.Text = _manager.Stats.monstersCaughtCount.ToString();
-                //labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
+                //labelBuildingVisits.Text = _manager.Stats.BuildingVisits.ToString();
                 //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
             }
 
@@ -290,7 +290,7 @@ namespace DraconiusGoGUI.UI
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.NameSelection)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.CreatureBerry)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.CreatureCapture)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.BuildingTutorial)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.UseItem)
                     )
                     tutocompleted = "Completed";

@@ -811,7 +811,7 @@
                 }
             }
 
-            if (Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
+            if (Tracker.BuildingsFarmed >= UserSettings.SpinBuildingsDayLimit)
             {
                 LogCaller(new LoggerEventArgs("Spin Gym limit actived", LoggerTypes.Info));
                 return new MethodResult<GymGetInfoResponse>
