@@ -11,7 +11,7 @@ namespace DraconiusGoGUI.Models
 
         public UpgradeSetting()
         {
-            Id = 0;
+            Id = CreatureType.MONSTER_WATER_1;
         }
 
         public string Name

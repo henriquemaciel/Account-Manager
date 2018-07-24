@@ -57,6 +57,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             Stats = new FAvaUpdate();
             PlayerData = new FUserInfo();
+            UserBag = new FBagUpdate();
             Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
@@ -68,6 +69,7 @@ namespace DraconiusGoGUI.DracoManager
             Logs = new List<Log>();
             Stats = new FAvaUpdate();
             PlayerData = new FUserInfo();
+            UserBag = new FBagUpdate();
             Tracker = new Tracker();
             ProxyHandler = handler;
             LoadFarmLocations();
@@ -678,7 +680,7 @@ namespace DraconiusGoGUI.DracoManager
                         //Clean inventory,
                         if (UserSettings.RecycleItems)
                         {
-                            //await RecycleFilteredItems();
+                            await RecycleFilteredItems();
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
 

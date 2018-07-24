@@ -135,6 +135,9 @@ namespace DraconiusGoGUI.DracoManager
         public FUserInfo PlayerData { get; set; }
 
         [JsonIgnore]
+        public FBagUpdate UserBag { get; set; }
+
+        [JsonIgnore]
         public List<Log> Logs { get; private set; }
 
         [JsonIgnore]
@@ -325,8 +328,7 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return 0;
-                //return Stats == null ? 350 : Stats.MaxItemStorage;
+                return UserBag == null ? 250 : UserBag.allowedItemsSize;
             }
         }
 
@@ -344,16 +346,11 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return 0;
-                /*
-                if(PlayerData == null || PlayerData.Currencies.Count == 0)
+                if(Stats == null || Stats.dust == 0)
                 {
                     return 0;
                 }
-
-                Currency stardust = PlayerData.Currencies.FirstOrDefault(x => x.Name == "STARDUST");
-                return stardust.Amount == 0 ? 0 : stardust.Amount;
-                */
+               return Stats.dust == 0 ? 0 : Stats.dust;
             }
         }
 

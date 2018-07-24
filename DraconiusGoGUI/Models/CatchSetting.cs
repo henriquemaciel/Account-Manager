@@ -13,7 +13,7 @@ namespace DraconiusGoGUI.Models
 
         public CatchSetting()
         {
-            Id = 0;
+            Id = CreatureType.MONSTER_WATER_1;
             Catch = true;
             //Snipe = true;
             UsePinap = true;

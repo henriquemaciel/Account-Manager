@@ -123,6 +123,9 @@ namespace DraconiusGoGUI
                     ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
                     DracoClient.Load();
 
+                    ClientManager.PlayerData.nickname = login.info.nickname;
+                    ClientManager.PlayerData.serverTime = login.info.serverTime;
+                    ClientManager.PlayerData.userId = login.info.userId;
 
                     ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 

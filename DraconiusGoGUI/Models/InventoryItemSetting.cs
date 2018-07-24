@@ -13,7 +13,7 @@ namespace DraconiusGoGUI.Models
 
         public InventoryItemSetting()
         {
-            Id = 0;
+            Id = ItemType.MAGIC_BALL_SIMPLE;
             MaxInventory = 100;
         }
 

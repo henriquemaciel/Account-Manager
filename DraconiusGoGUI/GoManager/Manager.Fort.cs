@@ -16,7 +16,8 @@ namespace DraconiusGoGUI.DracoManager
 
             if (Stats.isBagFull)
             {
-                LogCaller(new LoggerEventArgs($"You bag if full skip {Building.id} ", LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs($"You bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
+                await RecycleFilteredItems();
                 return new MethodResult();
             }
 

@@ -3,6 +3,10 @@ using System;
 using System.Linq;
 using DraconiusGoGUI.Enums;
 using DracoProtos.Core.Objects;
+using System.Threading.Tasks;
+using DraconiusGoGUI.Extensions;
+using DraconiusGoGUI.Models;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -75,7 +79,8 @@ namespace DraconiusGoGUI.DracoManager
         */
         private IEnumerable<FBagItem> GetItemsData()
         {
-            return _client.DracoClient.Inventory.GetUserItems().items;
+            UserBag = _client.DracoClient.Inventory.GetUserItems();
+            return UserBag.items;
         }
         /*
         private ItemData GetItemData(ItemId itemId)
@@ -99,20 +104,17 @@ namespace DraconiusGoGUI.DracoManager
             return InventoryItems.Select(i => i.Value.InventoryItemData?.PlayerStats)
                 .Where(i => i != null).FirstOrDefault();
         }
-
-        private IEnumerable<EggIncubator> GetIncubators()
-        {
-            return InventoryItems.Where(x => x.Value.InventoryItemData.EggIncubators != null)
-                    .SelectMany(i => i.Value.InventoryItemData.EggIncubators.EggIncubator)
-                    .Where(i => i != null);
-        }
-
-        private IEnumerable<CreatureData> GetEggs()
-        {
-            return InventoryItems.Select(i => i.Value.InventoryItemData?.CreatureData)
-               .Where(p => p != null && p.IsEgg);
-        }
         */
+        private IEnumerable<FIncubator> GetIncubators()
+        {
+            return _client.DracoClient.Eggs.GetHatchingInfo().incubators;
+        }
+
+        private IEnumerable<FEgg> GetEggs()
+        {
+            return _client.DracoClient.Eggs.GetHatchingInfo().eggs;
+        }
+
         private IEnumerable<FUserCreature> GetCreatures()
         {
             return _client.DracoClient.Inventory.GetUserCreatures().userCreatures;
@@ -223,8 +225,8 @@ namespace DraconiusGoGUI.DracoManager
                         Items = GetItemsData().ToList();
                         Pokedex = GetPokedex().ToList();
                         //CreatureCandy = GetCandies().ToList();
-                        //Incubators = GetIncubators().ToList();
-                        //Eggs = GetEggs().ToList();
+                        Incubators = GetIncubators().ToList();
+                        Eggs = GetEggs().ToList();
                         Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Items:
@@ -245,11 +247,11 @@ namespace DraconiusGoGUI.DracoManager
                         break;
                     case InventoryRefresh.Incubators:
                         Incubators.Clear();
-                        //Incubators = GetIncubators().ToList();
+                        Incubators = GetIncubators().ToList();
                         break;
                     case InventoryRefresh.Eggs:
                         Eggs.Clear();
-                        //Eggs = GetEggs().ToList();
+                        Eggs = GetEggs().ToList();
                         break;
                     case InventoryRefresh.Stats:
                         //Stats = GetPlayerStats();
@@ -262,10 +264,10 @@ namespace DraconiusGoGUI.DracoManager
                 ++_failedInventoryReponses;
             }
         }
-        /*
+        
         public async Task<MethodResult> RecycleFilteredItems()
         {
-            if (Items.Count == 0 || Items == null)
+            if (UserBag.items.Count == 0 || Items == null)
                 return new MethodResult
                 {
                     Message = "Not items here...."
@@ -281,14 +283,14 @@ namespace DraconiusGoGUI.DracoManager
 
             int itemsCount = 0;
 
-            foreach (ItemData item in Items)
+            foreach (var item in Items)
             {
-                itemsCount += item.Count;
+                itemsCount += item.count;
             }
 
             double configPercentItems = UserSettings.PercTransItems * 0.01;
 
-            double percentInventory = PlayerData.MaxItemStorage * configPercentItems;
+            double percentInventory = UserBag.allowedItemsSize * configPercentItems;
 
             if (percentInventory > itemsCount)
             {
@@ -301,16 +303,16 @@ namespace DraconiusGoGUI.DracoManager
             //TODO: skip ThrowInvalidOperationException(ExceptionResource resource)
             try
             {
-                foreach (ItemData item in Items)
+                foreach (var item in Items)
                 {
-                    InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
+                    InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.type);
 
                     if (itemSetting == null)
                     {
                         continue;
                     }
 
-                    int toDelete = item.Count - itemSetting.MaxInventory;
+                    int toDelete = item.count - itemSetting.MaxInventory;
 
                     if (toDelete <= 0)
                     {
@@ -336,13 +338,13 @@ namespace DraconiusGoGUI.DracoManager
             }
         }
 
-        public async Task<MethodResult> RecycleItem(ItemData item, int toDelete)
+        public async Task<MethodResult> RecycleItem(ItemType item, int toDelete)
         {
-            InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
+            InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item);
 
             return itemSetting == null ? new MethodResult() : await RecycleItem(itemSetting, toDelete);
         }
-
+        
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
             if (!_client.LoggedIn)
@@ -355,41 +357,21 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            bool recycled = (bool)_client.DracoClient.Inventory.DiscardItem(itemSetting.Id, toDelete);
+
+            if (recycled)
             {
-                RequestType = RequestType.RecycleInventoryItem,
-                RequestMessage = new RecycleInventoryItemMessage
+                LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}", toDelete, itemSetting.FriendlyName), LoggerTypes.Recycle));
+
+                return new MethodResult
                 {
-                    Count = toDelete,
-                    ItemId = itemSetting.Id
-                }.ToByteString()
-            });
-
-            if (response == null)
-                return new MethodResult();
-
-            RecycleInventoryItemResponse recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
-
-            switch (recycleInventoryItemResponse.Result)
-            {
-                case RecycleInventoryItemResponse.Types.Result.ErrorCannotRecycleIncubators:
-                    return new MethodResult();
-                case RecycleInventoryItemResponse.Types.Result.ErrorNotEnoughCopies:
-                    return new MethodResult();
-                case RecycleInventoryItemResponse.Types.Result.Success:
-                    LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
-
-                    return new MethodResult
-                    {
-                        Success = true
-                    };
-                case RecycleInventoryItemResponse.Types.Result.Unset:
-                    return new MethodResult();
+                    Success = true
+                };
             }
             return new MethodResult();
         }
 
-        private async Task<MethodResult> UseIncense(ItemId item = ItemId.ItemIncenseOrdinary)
+        private async Task<MethodResult> UseIncense(ItemType item = ItemType.INCENSE)
         {
             if (!_client.LoggedIn)
             {
@@ -400,8 +382,8 @@ namespace DraconiusGoGUI.DracoManager
                     return result;
                 }
             }
-
-            if (Items.FirstOrDefault(x => x.ItemId == item).Count == 0)
+            /*
+            if (Items.FirstOrDefault(x => x.type == ItemType.INCENSE).Count == 0)
                 return new MethodResult();
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -434,7 +416,7 @@ namespace DraconiusGoGUI.DracoManager
                     return new MethodResult();
                 case UseIncenseResponse.Types.Result.Unknown:
                     return new MethodResult();
-            }
+            }*/
             return new MethodResult();
         }
 
@@ -445,10 +427,9 @@ namespace DraconiusGoGUI.DracoManager
                 return 100;
             }
 
-            return (double)Items.Sum(x => x.Count) / PlayerData.MaxItemStorage * 100;
+            return (double)Items.Sum(x => x.count) / UserBag.allowedItemsSize * 100;
         }
 
-        */
         public double FilledCreatureStorage()
         {
             if (Creature == null || Stats == null)
@@ -456,7 +437,7 @@ namespace DraconiusGoGUI.DracoManager
                 return 100;
             }
 
-            return 250;// (double)(Creature.Count + Eggs.Count) / Stats.creatureStorageSize * 100;
+            return (double)(Creature.Count /*+ Eggs.Count*/) / Stats.creatureStorageSize * 100;
         }
     }
 }

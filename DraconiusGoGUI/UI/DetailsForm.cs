@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DracoProtos.Core.Objects;
+using System.Threading.Tasks;
 
 namespace DraconiusGoGUI.UI
 {
@@ -629,23 +630,23 @@ namespace DraconiusGoGUI.UI
                 return;
             }
 
-            /*foreach (ItemData item in fastObjectListViewInventory.SelectedObjects)
+            foreach (FBagItem item in fastObjectListViewInventory.SelectedObjects)
             {
                 int toDelete = amount;
 
-                if (amount > item.Count)
+                if (amount > item.count)
                 {
-                    toDelete = item.Count;
+                    toDelete = item.count;
                 }
 
-                await _manager.RecycleItem(item, toDelete);
+                await _manager.RecycleItem(item.type, toDelete);
 
                 await Task.Delay(500);
-            }*/
+            }
 
-            //_manager.UpdateInventory(InventoryRefresh.Items);
+            _manager.UpdateInventory(InventoryRefresh.Items);
 
-            //fastObjectListViewInventory.SetObjects(_manager.Items);
+            fastObjectListViewInventory.SetObjects(_manager.Items);
 
             MessageBox.Show("Finished recycling items");
         }
@@ -698,14 +699,14 @@ namespace DraconiusGoGUI.UI
             {
                 if (eggIncubator.eggId != null)
                 {
-                    //e.SubItem.Text = String.Format("{0:0.00} km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
+                    e.SubItem.Text = String.Format("{0:0.00} km", egg.totalDistance - egg.passedDistance);
                 }
                 else
                     e.SubItem.Text = "0.00 km";
             }
             else if (e.Column == olvColumnEggDistance)
             {
-                //e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);
+                e.SubItem.Text = String.Format("{0:0.00}km", egg.totalDistance);
             }
              
         }
