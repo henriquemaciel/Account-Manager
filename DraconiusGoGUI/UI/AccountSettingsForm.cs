@@ -135,7 +135,7 @@ namespace DraconiusGoGUI.UI
             checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
             checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
-            numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
+            numericUpDownSearchBuildingBelow.Value = new Decimal(settings.SearchBuildingBelowPercent);
             numericUpDownCreaturesDayLimit.Value = new Decimal(settings.CatchCreatureDayLimit);
             numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinBuildingsDayLimit);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
@@ -164,7 +164,7 @@ namespace DraconiusGoGUI.UI
 
             cbUseIncense.Checked = settings.UseIncense;
             cbUseLuckEggConst.Checked = settings.UseLuckEggConst;
-            checkBoxReqFortDetails.Checked = settings.RequestFortDetails;
+            checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
 
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
 
@@ -331,7 +331,7 @@ namespace DraconiusGoGUI.UI
             userSettings.PercTransPoke = perctranspoke;
             userSettings.CatchCreature = checkBoxCatchCreature.Checked;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
-            userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
+            userSettings.SearchBuildingBelowPercent = (double)numericUpDownSearchBuildingBelow.Value;
             userSettings.CatchCreatureDayLimit = (int)numericUpDownCreaturesDayLimit.Value;
             userSettings.SpinBuildingsDayLimit = (int)numericUpDownStopsDayLimit.Value;
             userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
@@ -350,7 +350,7 @@ namespace DraconiusGoGUI.UI
             userSettings.MaxFailBeforeReset = (int)numericUpDownMaxFailBeforeReset.Value;
             userSettings.AutoRotateProxies = checkBoxAutoRotateProxies.Checked;
             userSettings.AutoRemoveOnStop = checkBoxRemoveOnStop.Checked;
-            userSettings.RequestFortDetails = checkBoxReqFortDetails.Checked;
+            userSettings.RequestBuildingDetails = checkBoxReqBuildingDetails.Checked;
             userSettings.IgnoreStopsIfTooBalls = checkBoxTooBalls.Checked;
             userSettings.BallsToIgnoreStops = (int)numericUpDownTooBalls.Value;
             userSettings.MimicWalking = cbMimicWalking.Checked;

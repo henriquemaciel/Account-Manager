@@ -15,8 +15,9 @@ namespace DraconiusGoGUI.DracoManager
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+            FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
 
-            if (map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) is FAvaUpdate avatar)
+            if (avatar != null)
                 Stats = avatar;
 
             if (creatures.wilds.Count == 0)
@@ -32,15 +33,16 @@ namespace DraconiusGoGUI.DracoManager
             });
         }
 
-        private async Task<MethodResult<List<FBuilding>>> GetAllFortsAsync()
+        private async Task<MethodResult<List<FBuilding>>> GetAllBuildingsAsync()
         {
             FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
             //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+            FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
 
-            if (map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) is FAvaUpdate avatar)
+            if (avatar != null)
                 Stats = avatar;
 
             //var _buildings[];
@@ -59,36 +61,36 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
             /*
-            var fortData = new List<FBuildingUpdate>();
+            var BuildingData = new List<FBuildingUpdate>();
 
-            foreach (var fort in buildings.tileBuildings)
+            foreach (var Building in buildings.tileBuildings)
             {
-                if (!IsValidLocation(fort.Latitude, fort.Longitude))
+                if (!IsValidLocation(Building.Latitude, Building.Longitude))
                 {
                     continue;
                 }
 
-                if (fort.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
+                if (Building.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
                 {
                     continue;
                 }
 
                 var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                var fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
+                var BuildingLocation = new GeoCoordinate(Building.Latitude, Building.Longitude);
 
-                double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
+                double distance = CalculateDistanceInMeters(defaultLocation, BuildingLocation);
 
                 if (distance > UserSettings.MaxTravelDistance)
                 {
                     continue;
                 }
 
-                fortData.Add(fort);
+                BuildingData.Add(Building);
             }
 
-            if (fortData.Count == 0)
+            if (BuildingData.Count == 0)
             {
-                return new MethodResult<List<FortData>>
+                return new MethodResult<List<BuildingData>>
                 {
                     Message = "No searchable Buildings found within range",
                 };
@@ -97,11 +99,11 @@ namespace DraconiusGoGUI.DracoManager
             if (UserSettings.ShuffleBuildings)
             {
                 var rnd = new Random();
-                fortData = fortData.OrderBy(x => rnd.Next()).ToList();
+                BuildingData = BuildingData.OrderBy(x => rnd.Next()).ToList();
             }
             else
             {
-                fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+                BuildingData = BuildingData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
             }
             */
             return await Task.Run(() => new MethodResult<List<FBuilding>>

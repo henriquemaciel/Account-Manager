@@ -172,9 +172,9 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private async Task<MethodResult> CatchLuredCreature(/*FortData fortData*/)
+        private async Task<MethodResult> CatchLuredCreature(/*BuildingData BuildingData*/)
         {
-            /*if (fortData.LureInfo == null)
+            /*if (BuildingData.LureInfo == null)
             {
                 return new MethodResult
                 {
@@ -212,7 +212,7 @@ namespace DraconiusGoGUI.DracoManager
             else
                 return new MethodResult();
             /*
-            if (fortData.LureInfo.ActiveCreatureId == CreatureId.Missingno)
+            if (BuildingData.LureInfo.ActiveCreatureId == CreatureId.Missingno)
             {
                 return new MethodResult
                 {
@@ -220,12 +220,12 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (!CreatureWithinCatchSettings(fortData.LureInfo.ActiveCreatureId))
+            if (!CreatureWithinCatchSettings(BuildingData.LureInfo.ActiveCreatureId))
             {
                 return new MethodResult();
             }
 
-            MethodResult catchResult = await CatchCreature(fortData);
+            MethodResult catchResult = await CatchCreature(BuildingData);
 
             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             */
@@ -305,10 +305,10 @@ namespace DraconiusGoGUI.DracoManager
             }
             return new MethodResult();
             /*
-            if (fortData.LureInfo == null || fortData.LureInfo.ActiveCreatureId == CreatureId.Missingno)
+            if (BuildingData.LureInfo == null || BuildingData.LureInfo.ActiveCreatureId == CreatureId.Missingno)
                 return new MethodResult();
 
-            if (LastedEncountersIds.Contains(fortData.LureInfo.EncounterId))
+            if (LastedEncountersIds.Contains(BuildingData.LureInfo.EncounterId))
                 return new MethodResult();
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -316,10 +316,10 @@ namespace DraconiusGoGUI.DracoManager
                 RequestType = RequestType.DiskEncounter,
                 RequestMessage = new DiskEncounterMessage
                 {
-                    EncounterId = fortData.LureInfo.EncounterId,
-                    FortId = fortData.Id,
-                    GymLatDegrees = fortData.Latitude,
-                    GymLngDegrees = fortData.Longitude,
+                    EncounterId = BuildingData.LureInfo.EncounterId,
+                    BuildingId = BuildingData.Id,
+                    GymLatDegrees = BuildingData.Latitude,
+                    GymLngDegrees = BuildingData.Longitude,
                     PlayerLatitude = _client.ClientSession.Player.Latitude,
                     PlayerLongitude = _client.ClientSession.Player.Longitude
                 }.ToByteString()
@@ -374,7 +374,7 @@ namespace DraconiusGoGUI.DracoManager
                             {
                                 if ((isLowProbability && isHighCp) || isHighPerfection)
                                 {
-                                    await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
+                                    await UseBerry(BuildingData.LureInfo.EncounterId, BuildingData.Id, ItemId.ItemRazzBerry);
                                     berryUsed = true;
                                 }
                                 else
@@ -383,13 +383,13 @@ namespace DraconiusGoGUI.DracoManager
                                     var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == eResponse.CreatureData.CreatureId);
                                     if (isHighProbability && catchSettings.UsePinap)
                                     {
-                                        await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
+                                        await UseBerry(BuildingData.LureInfo.EncounterId, BuildingData.Id, ItemId.ItemPinapBerry);
                                         berryUsed = true;
                                     }
                                     else if (new Random().Next(0, 100) < 50)
                                     {
                                         // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                                        await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
+                                        await UseBerry(BuildingData.LureInfo.EncounterId, BuildingData.Id, ItemId.ItemNanabBerry);
                                         berryUsed = true;
                                     }
                                 }
@@ -432,12 +432,12 @@ namespace DraconiusGoGUI.DracoManager
                             RequestMessage = new CatchCreatureMessage
                             {
                                 ArPlusValues = arPlusValues,
-                                EncounterId = fortData.LureInfo.EncounterId,
+                                EncounterId = BuildingData.LureInfo.EncounterId,
                                 HitCreature = hitInsideReticule,
                                 NormalizedHitPosition = 1,
                                 NormalizedReticleSize = reticuleSize,
                                 Pokeball = pokeBall,
-                                SpawnPointId = fortData.Id,
+                                SpawnPointId = BuildingData.Id,
                                 SpinModifier = 1
                             }.ToByteString()
                         });
@@ -446,7 +446,7 @@ namespace DraconiusGoGUI.DracoManager
                             return new MethodResult();
 
                         catchCreatureResponse = CatchCreatureResponse.Parser.ParseFrom(catchresponse);
-                        string Creature = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActiveCreatureId, eResponse.CreatureData.Cp, CalculateIVPerfection(eResponse.CreatureData));
+                        string Creature = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", BuildingData.LureInfo.ActiveCreatureId, eResponse.CreatureData.Cp, CalculateIVPerfection(eResponse.CreatureData));
                         string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                         switch (catchCreatureResponse.Status)
@@ -485,7 +485,7 @@ namespace DraconiusGoGUI.DracoManager
 
                                 //_expGained += expGained;
 
-                                fortData.LureInfo = null;
+                                BuildingData.LureInfo = null;
 
                                 LogCaller(new LoggerEventArgs(String.Format("[Lured] Creature Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", Creature, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
@@ -529,9 +529,9 @@ namespace DraconiusGoGUI.DracoManager
             if (LastedEncountersIds.Count > 30)
                 LastedEncountersIds.Clear();
 
-            LastedEncountersIds.Add(fortData.LureInfo.EncounterId);
+            LastedEncountersIds.Add(BuildingData.LureInfo.EncounterId);
 
-            LogCaller(new LoggerEventArgs(String.Format("Faill cath lure on Building {0}. {1}.",fortData.Id, eResponse.Result), LoggerTypes.Warning));
+            LogCaller(new LoggerEventArgs(String.Format("Faill cath lure on Building {0}. {1}.",BuildingData.Id, eResponse.Result), LoggerTypes.Warning));
             */
             return new MethodResult();
         }

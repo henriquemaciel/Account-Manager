@@ -64,7 +64,7 @@ namespace DraconiusGoGUI
         public int PercTransPoke { get; set; }
         public bool SPF { get; set; }
 
-        public double SearchFortBelowPercent { get; set; }
+        public double SearchBuildingBelowPercent { get; set; }
         public int CatchCreatureDayLimit { get; set; }
         public int SpinBuildingsDayLimit { get; set; }
         public bool SnipeAllCreaturesNoInPokedex { get; set; }
@@ -110,7 +110,7 @@ namespace DraconiusGoGUI
         public bool TransferAtOnce { get; set; }
         public bool ShowDebugLogs { get; set; }
         public bool DownloadResources { get; set; }
-        public bool RequestFortDetails { get; set; }
+        public bool RequestBuildingDetails { get; set; }
         public int BallsToIgnoreStops { get; set; }
         public bool IgnoreStopsIfTooBalls { get; set; }
         public bool UseSoftBanBypass { get; set; }
@@ -177,7 +177,7 @@ namespace DraconiusGoGUI
             MaxLogs = 400;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
-            SearchFortBelowPercent = 1000;
+            SearchBuildingBelowPercent = 1000;
             CatchCreatureDayLimit = 500;
             SpinBuildingsDayLimit = 700;
             ForceEvolveAbovePercent = 1000;
@@ -199,7 +199,7 @@ namespace DraconiusGoGUI
             AutoFavoritShiny = true;
             SnipeAllCreaturesNoInPokedex = false;
             EncounterWhileWalking = true;
-            RequestFortDetails = false;
+            RequestBuildingDetails = false;
             BallsToIgnoreStops = 80;
             IgnoreStopsIfTooBalls = false;
             MinCreatureBeforeEvolve = 1;

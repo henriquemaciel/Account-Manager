@@ -13,7 +13,7 @@ namespace DraconiusGoGUI.Properties {
     
     
     /// <summary>
-    ///   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+    ///   Une classe de ressource Buildingement typée destinée, entre autres, à la consultation des chaînes localisées.
     /// </summary>
     // Cette classe a été générée automatiquement par la classe StronglyTypedResourceBuilder
     // à l'aide d'un outil, tel que ResGen ou Visual Studio.
@@ -48,7 +48,7 @@ namespace DraconiusGoGUI.Properties {
         
         /// <summary>
         ///   Remplace la propriété CurrentUICulture du thread actuel pour toutes
-        ///   les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+        ///   les recherches de ressources à l'aide de cette classe de ressource Buildingement typée.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {

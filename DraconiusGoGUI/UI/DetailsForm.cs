@@ -336,7 +336,7 @@ namespace DraconiusGoGUI.UI
                 //{
                 //    e.SubItem.ForeColor = Color.Blue;
                 //}
-                //else if (!String.IsNullOrEmpty(CreatureData.DeployedFortId))
+                //else if (!String.IsNullOrEmpty(CreatureData.DeployedBuildingId))
                 //{
                     //deployed
                 //    e.SubItem.ForeColor = Color.LightGreen;

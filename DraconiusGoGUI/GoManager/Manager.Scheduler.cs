@@ -182,10 +182,10 @@ namespace DraconiusGoGUI.DracoManager
                     switch (scheduler.Buildinglimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            if (UserSettings.SearchFortBelowPercent != 0)
+                            if (UserSettings.SearchBuildingBelowPercent != 0)
                             {
                                 LogCaller(new LoggerEventArgs("Max Building limit reached. Disabling...", LoggerTypes.Debug));
-                                UserSettings.SearchFortBelowPercent = 0;
+                                UserSettings.SearchBuildingBelowPercent = 0;
                             }
                             break;
                         case SchedulerOption.StartStop: //Just stop it
@@ -199,10 +199,10 @@ namespace DraconiusGoGUI.DracoManager
                     switch (scheduler.Buildinglimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            if (UserSettings.SearchFortBelowPercent != 1000)
+                            if (UserSettings.SearchBuildingBelowPercent != 1000)
                             {
                                 LogCaller(new LoggerEventArgs("Min Building limit reached. Enabling ...", LoggerTypes.Debug));
-                                UserSettings.SearchFortBelowPercent = 1000;
+                                UserSettings.SearchBuildingBelowPercent = 1000;
                             }
                             break;
                         case SchedulerOption.StartStop: //Start only if Creature is disabled/nothing or Creature caught below threshold

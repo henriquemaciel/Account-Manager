@@ -132,7 +132,7 @@ namespace DraconiusGoGUI.DracoManager
         public BotState State { get; set; }
 
         //[JsonIgnore]
-        //public PlayerData PlayerData { get { return _client?.ClientSession?.Player?.Data; } }
+        //public FUserInfo PlayerData { get { return _client?.Player?.Data; } }
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
@@ -156,7 +156,7 @@ namespace DraconiusGoGUI.DracoManager
         public List<FEgg> Eggs { get; private set; } = new List<FEgg>();
 
         //[JsonIgnore]
-        //public Dictionary<CreatureId, CreatureSettings> PokeSettings { get; private set; }
+        //public Dictionary<CreatureType, CreatureSettings> PokeSettings { get; private set; }
 
         //[JsonIgnore]
         //public PlayerLevelSettings LevelSettings { get; private set; }
@@ -326,7 +326,7 @@ namespace DraconiusGoGUI.DracoManager
             get
             {
                 return 0;
-                //return PlayerData == null ? 350 : PlayerData.MaxItemStorage;
+                //return Stats == null ? 350 : Stats.MaxItemStorage;
             }
         }
 

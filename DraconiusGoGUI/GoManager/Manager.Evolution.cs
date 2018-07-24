@@ -340,7 +340,7 @@
         private bool CanEvolveCreature(CreatureData Creature)
         {
             // Can't evolve Creature in gyms.
-            if (!string.IsNullOrEmpty(Creature.DeployedFortId))
+            if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
                 return false;
 
             var settings = PokeSettings.SingleOrDefault(x => x.Value.CreatureId == Creature.CreatureId);

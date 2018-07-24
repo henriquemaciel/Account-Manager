@@ -51,7 +51,7 @@
             this.textBoxMaxLevel = new System.Windows.Forms.TextBox();
             this.label56 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
-            this.checkBoxReqFortDetails = new System.Windows.Forms.CheckBox();
+            this.checkBoxReqBuildingDetails = new System.Windows.Forms.CheckBox();
             this.numericUpDownStopsDayLimit = new System.Windows.Forms.NumericUpDown();
             this.label52 = new System.Windows.Forms.Label();
             this.numericUpDownCreaturesDayLimit = new System.Windows.Forms.NumericUpDown();
@@ -84,7 +84,7 @@
             this.checkBoxEvolve = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBoxTransferSlashCreatures = new System.Windows.Forms.CheckBox();
-            this.numericUpDownSearchFortBelow = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownSearchBuildingBelow = new System.Windows.Forms.NumericUpDown();
             this.checkBoxRecycle = new System.Windows.Forms.CheckBox();
             this.checkBoxUseLuckyEgg = new System.Windows.Forms.CheckBox();
             this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
@@ -229,7 +229,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTooBalls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisableCatchDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchBuildingBelow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).BeginInit();
             this.tabPageProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).BeginInit();
@@ -426,7 +426,7 @@
             this.tabPageActions.Controls.Add(this.textBoxMaxLevel);
             this.tabPageActions.Controls.Add(this.label56);
             this.tabPageActions.Controls.Add(this.label55);
-            this.tabPageActions.Controls.Add(this.checkBoxReqFortDetails);
+            this.tabPageActions.Controls.Add(this.checkBoxReqBuildingDetails);
             this.tabPageActions.Controls.Add(this.numericUpDownStopsDayLimit);
             this.tabPageActions.Controls.Add(this.label52);
             this.tabPageActions.Controls.Add(this.numericUpDownCreaturesDayLimit);
@@ -536,16 +536,16 @@
             this.label55.TabIndex = 83;
             this.label55.Text = "% Transfer Creatures:";
             // 
-            // checkBoxReqFortDetails
+            // checkBoxReqBuildingDetails
             // 
-            this.checkBoxReqFortDetails.AutoSize = true;
-            this.checkBoxReqFortDetails.Location = new System.Drawing.Point(460, 325);
-            this.checkBoxReqFortDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxReqFortDetails.Name = "checkBoxReqFortDetails";
-            this.checkBoxReqFortDetails.Size = new System.Drawing.Size(155, 21);
-            this.checkBoxReqFortDetails.TabIndex = 82;
-            this.checkBoxReqFortDetails.Text = "Request fort Details";
-            this.checkBoxReqFortDetails.UseVisualStyleBackColor = true;
+            this.checkBoxReqBuildingDetails.AutoSize = true;
+            this.checkBoxReqBuildingDetails.Location = new System.Drawing.Point(460, 325);
+            this.checkBoxReqBuildingDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxReqBuildingDetails.Name = "checkBoxReqBuildingDetails";
+            this.checkBoxReqBuildingDetails.Size = new System.Drawing.Size(155, 21);
+            this.checkBoxReqBuildingDetails.TabIndex = 82;
+            this.checkBoxReqBuildingDetails.Text = "Request Building Details";
+            this.checkBoxReqBuildingDetails.UseVisualStyleBackColor = true;
             // 
             // numericUpDownStopsDayLimit
             // 
@@ -658,7 +658,7 @@
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxEvolve);
             this.groupBoxPlayerActions.Controls.Add(this.label9);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransferSlashCreatures);
-            this.groupBoxPlayerActions.Controls.Add(this.numericUpDownSearchFortBelow);
+            this.groupBoxPlayerActions.Controls.Add(this.numericUpDownSearchBuildingBelow);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxRecycle);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseLuckyEgg);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxIncubateEggs);
@@ -934,19 +934,19 @@
             this.checkBoxTransferSlashCreatures.Text = "Transfer Slash Creatures";
             this.checkBoxTransferSlashCreatures.UseVisualStyleBackColor = true;
             // 
-            // numericUpDownSearchFortBelow
+            // numericUpDownSearchBuildingBelow
             // 
-            this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
-            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(209, 331);
-            this.numericUpDownSearchFortBelow.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
+            this.numericUpDownSearchBuildingBelow.DecimalPlaces = 2;
+            this.numericUpDownSearchBuildingBelow.Location = new System.Drawing.Point(209, 331);
+            this.numericUpDownSearchBuildingBelow.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDownSearchBuildingBelow.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
-            this.numericUpDownSearchFortBelow.Name = "numericUpDownSearchFortBelow";
-            this.numericUpDownSearchFortBelow.Size = new System.Drawing.Size(77, 22);
-            this.numericUpDownSearchFortBelow.TabIndex = 57;
+            this.numericUpDownSearchBuildingBelow.Name = "numericUpDownSearchBuildingBelow";
+            this.numericUpDownSearchBuildingBelow.Size = new System.Drawing.Size(77, 22);
+            this.numericUpDownSearchBuildingBelow.TabIndex = 57;
             // 
             // checkBoxRecycle
             // 
@@ -2251,7 +2251,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTooBalls)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisableCatchDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchBuildingBelow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).EndInit();
             this.tabPageProxy.ResumeLayout(false);
             this.tabPageProxy.PerformLayout();
@@ -2375,7 +2375,7 @@
         private System.Windows.Forms.TextBox textBoxMaxLevel;
         private System.Windows.Forms.Label label56;
         private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.CheckBox checkBoxReqFortDetails;
+        private System.Windows.Forms.CheckBox checkBoxReqBuildingDetails;
         private System.Windows.Forms.NumericUpDown numericUpDownStopsDayLimit;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.NumericUpDown numericUpDownCreaturesDayLimit;
@@ -2408,7 +2408,7 @@
         private System.Windows.Forms.CheckBox checkBoxEvolve;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox checkBoxTransferSlashCreatures;
-        private System.Windows.Forms.NumericUpDown numericUpDownSearchFortBelow;
+        private System.Windows.Forms.NumericUpDown numericUpDownSearchBuildingBelow;
         private System.Windows.Forms.CheckBox checkBoxRecycle;
         private System.Windows.Forms.CheckBox checkBoxUseLuckyEgg;
         private System.Windows.Forms.CheckBox checkBoxIncubateEggs;

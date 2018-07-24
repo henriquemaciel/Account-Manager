@@ -711,7 +711,7 @@ namespace DraconiusGoGUI.DracoManager
             //    return false;
 
             // Can't transfer Creature in gyms.
-            //if (!string.IsNullOrEmpty(Creature.DeployedFortId))
+            //if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
             //    return false;
 
             // Can't transfer buddy Creature
@@ -729,7 +729,7 @@ namespace DraconiusGoGUI.DracoManager
         private bool CanUpgradeCreature(FUserCreature Creature)
         {
             // Can't upgrade Creature in gyms.
-            //if (!string.IsNullOrEmpty(Creature.DeployedFortId))
+            //if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
             //    return false;
 
             //int CreatureLevel = (int)GetLevelFromCpMultiplier(Creature.CpMultiplier + Creature.AdditionalCpMultiplier);

@@ -93,25 +93,25 @@
                     NearbyCreature nearbyCreature = CreatureToSnipe.First();
                     CreatureToSnipe.Remove(nearbyCreature);
 
-                    var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts);
-                    var fortNearby = forts.Where(x => x.Id == nearbyCreature.FortId).FirstOrDefault();
+                    var Buildings = _client.ClientSession.Map.Cells.SelectMany(x => x.Buildings);
+                    var BuildingNearby = Buildings.Where(x => x.Id == nearbyCreature.BuildingId).FirstOrDefault();
 
-                    if (fortNearby == null || nearbyCreature == null || nearbyCreature.CreatureId == CreatureId.Missingno)
+                    if (BuildingNearby == null || nearbyCreature == null || nearbyCreature.CreatureId == CreatureId.Missingno)
                     {
                         continue;
                     }
 
                     GeoCoordinate coords = new GeoCoordinate
                     {
-                        Latitude = fortNearby.Latitude,
-                        Longitude = fortNearby.Longitude
+                        Latitude = BuildingNearby.Latitude,
+                        Longitude = BuildingNearby.Longitude
                     };
 
                     await CaptureSnipeCreature(coords.Latitude, coords.Longitude, nearbyCreature.CreatureId);
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    CreatureToSnipe = CreatureToSnipe.Where(x => UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.CreatureId).Snipe && fortNearby.CooldownCompleteTimestampMs >= DateTime.Now.AddSeconds(30).ToUnixTime() && !LastedEncountersIds.Contains(x.EncounterId) && IsValidLocation(fortNearby.Latitude, fortNearby.Longitude)).OrderBy(x => x.DistanceInMeters).ToList();
+                    CreatureToSnipe = CreatureToSnipe.Where(x => UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.CreatureId).Snipe && BuildingNearby.CooldownCompleteTimestampMs >= DateTime.Now.AddSeconds(30).ToUnixTime() && !LastedEncountersIds.Contains(x.EncounterId) && IsValidLocation(BuildingNearby.Latitude, BuildingNearby.Longitude)).OrderBy(x => x.DistanceInMeters).ToList();
 
                     if (UserSettings.SnipeAllCreaturesNoInPokedex)
                     {
@@ -145,9 +145,9 @@
         private async Task<MethodResult> CaptureSnipeCreature(double latitude, double longitude, CreatureId Creature)
         {
             var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-            var fortLocation = new GeoCoordinate(latitude, longitude);
+            var BuildingLocation = new GeoCoordinate(latitude, longitude);
 
-            double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
+            double distance = CalculateDistanceInMeters(currentLocation, BuildingLocation);
             LogCaller(new LoggerEventArgs(String.Format("Going to sniping {0} at location {1}, {2}. Distance {3:0.00}m", Creature, latitude, longitude, distance), LoggerTypes.Snipe));
 
             // Not nedded this runs on local pos.../

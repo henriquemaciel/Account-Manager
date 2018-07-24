@@ -14,8 +14,8 @@ namespace DraconiusGoGUI.DracoManager
             if (Building == null)
                 return new MethodResult();
 
-            const int maxFortAttempts = 5;
-            for (int i = 0; i < maxFortAttempts; i++)
+            const int maxBuildingAttempts = 5;
+            for (int i = 0; i < maxBuildingAttempts; i++)
             {
                 int ExperienceAwarded = 0;
 
@@ -101,12 +101,12 @@ namespace DraconiusGoGUI.DracoManager
                 };
 
             }
-            //FortSearchResponse fortResponse = null;
+            //BuildingSearchResponse BuildingResponse = null;
 
-            //string fort = Building.Type == FortType.Checkpoint ? "Fort" : "Gym";
+            //string Building = Building.Type == BuildingType.Checkpoint ? "Building" : "Gym";
 
             /*
-            for (int i = 0; i < maxFortAttempts; i++)
+            for (int i = 0; i < maxBuildingAttempts; i++)
             {
                 if (!_client.LoggedIn)
                 {
@@ -140,28 +140,28 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
 
             /*
-            fortResponse = FortSearchResponse.Parser.ParseFrom(response);
+            BuildingResponse = BuildingSearchResponse.Parser.ParseFrom(response);
 
-            switch (fortResponse.Result)
+            switch (BuildingResponse.Result)
             {
-                case FortSearchResponse.Types.Result.ExceededDailyLimit:
+                case BuildingSearchResponse.Types.Result.ExceededDailyLimit:
                     AccountState = AccountState.SoftBan;
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}. Stoping ...", fort, fortResponse.Result), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}. Stoping ...", Building, BuildingResponse.Result), LoggerTypes.Warning));
                     Stop();
                     break;
-                case FortSearchResponse.Types.Result.InCooldownPeriod:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                case BuildingSearchResponse.Types.Result.InCooldownPeriod:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", Building, BuildingResponse.Result), LoggerTypes.Warning));
                     return new MethodResult();//break;
-                case FortSearchResponse.Types.Result.InventoryFull:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                case BuildingSearchResponse.Types.Result.InventoryFull:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", Building, BuildingResponse.Result), LoggerTypes.Warning));
                     //Recycle if inventory full
                     await RecycleFilteredItems();
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     return new MethodResult();
-                case FortSearchResponse.Types.Result.NoResultSet:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                case BuildingSearchResponse.Types.Result.NoResultSet:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", Building, BuildingResponse.Result), LoggerTypes.Warning));
                     break;
-                case FortSearchResponse.Types.Result.OutOfRange:
+                case BuildingSearchResponse.Types.Result.OutOfRange:
                     if (_potentialBuildingBan)
                     {
                         if (AccountState != AccountState.SoftBan)
@@ -171,7 +171,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         AccountState = AccountState.SoftBan;
 
-                        if (fortResponse.ExperienceAwarded != 0)
+                        if (BuildingResponse.ExperienceAwarded != 0)
                         {
                             if (!_potentialCreatureBan && _fleeingCreatureResponses >= _fleeingCreatureUntilBan)
                             {
@@ -192,7 +192,7 @@ namespace DraconiusGoGUI.DracoManager
                                 if (AccountState != AccountState.SoftBan)
                                 {
                                     //Only occurs when out of range is found
-                                    if (fortResponse.ExperienceAwarded == 0)
+                                    if (BuildingResponse.ExperienceAwarded == 0)
                                     {
                                         LogCaller(new LoggerEventArgs("Creature fleeing and failing to grab stops. Potential Creature & Building ban or daily limit reached.", LoggerTypes.Warning));
                                     }
@@ -249,12 +249,12 @@ namespace DraconiusGoGUI.DracoManager
 
                                 var _response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                                 {
-                                    RequestType = RequestType.FortSearch,
-                                    RequestMessage = new FortSearchMessage
+                                    RequestType = RequestType.BuildingSearch,
+                                    RequestMessage = new BuildingSearchMessage
                                     {
-                                        FortId = Building.Id,
-                                        FortLatitude = Building.Latitude,
-                                        FortLongitude = Building.Longitude,
+                                        BuildingId = Building.Id,
+                                        BuildingLatitude = Building.Latitude,
+                                        BuildingLongitude = Building.Longitude,
                                         PlayerLatitude = _client.ClientSession.Player.Latitude,
                                         PlayerLongitude = _client.ClientSession.Player.Longitude
                                     }.ToByteString()
@@ -263,23 +263,23 @@ namespace DraconiusGoGUI.DracoManager
                                 if (_response == null)
                                     return new MethodResult();
 
-                                fortResponse = FortSearchResponse.Parser.ParseFrom(_response);
+                                BuildingResponse = BuildingSearchResponse.Parser.ParseFrom(_response);
 
-                                switch (fortResponse.Result)
+                                switch (BuildingResponse.Result)
                                 {
-                                    case FortSearchResponse.Types.Result.ExceededDailyLimit:
-                                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                                    case BuildingSearchResponse.Types.Result.ExceededDailyLimit:
+                                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", Building, BuildingResponse.Result), LoggerTypes.Warning));
                                         return new MethodResult();
-                                    case FortSearchResponse.Types.Result.InventoryFull:
-                                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                                    case BuildingSearchResponse.Types.Result.InventoryFull:
+                                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", Building, BuildingResponse.Result), LoggerTypes.Warning));
                                         //Recycle if inventory full
                                         await RecycleFilteredItems();
                                         return new MethodResult();
-                                    case FortSearchResponse.Types.Result.Success:
+                                    case BuildingSearchResponse.Types.Result.Success:
                                         string _message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
-                                                        fort,
-                                                        fortResponse.ExperienceAwarded,
-                                                        StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
+                                                        Building,
+                                                        BuildingResponse.ExperienceAwarded,
+                                                        StringUtil.GetSummedFriendlyNameOfItemAwardList(BuildingResponse.ItemsAwarded.ToList())
 
 
                                         //Successfully grabbed stop
@@ -290,19 +290,19 @@ namespace DraconiusGoGUI.DracoManager
                                             LogCaller(new LoggerEventArgs("Soft ban was removed", LoggerTypes.Info));
                                         }
 
-                                        ExpIncrease(fortResponse.ExperienceAwarded);
-                                        TotalBuildingExp += fortResponse.ExperienceAwarded;
+                                        ExpIncrease(BuildingResponse.ExperienceAwarded);
+                                        TotalBuildingExp += BuildingResponse.ExperienceAwarded;
 
                                         Tracker.AddValues(0, 1);
 
-                                        if (fortResponse.ExperienceAwarded == 0)
+                                        if (BuildingResponse.ExperienceAwarded == 0)
                                         {
                                             //Softban on the fleeing Creature. Reset.
                                             _fleeingCreatureResponses = 0;
                                             _potentialCreatureBan = false;
 
                                             ++_totalZeroExpStops;
-                                            _message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
+                                            _message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxBuildingAttempts);
                                             LogCaller(new LoggerEventArgs(_message, LoggerTypes.Success));
                                             continue;
                                         }
@@ -339,14 +339,14 @@ namespace DraconiusGoGUI.DracoManager
                     _failedBuildingResponse++;
                     //Let it continue down
                     continue;
-                case FortSearchResponse.Types.Result.PoiInaccessible:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                case BuildingSearchResponse.Types.Result.PoiInaccessible:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", Building, BuildingResponse.Result), LoggerTypes.Warning));
                     break;
-                case FortSearchResponse.Types.Result.Success:
+                case BuildingSearchResponse.Types.Result.Success:
                     string message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
-                        fort,
-                        fortResponse.ExperienceAwarded,
-                        StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
+                        Building,
+                        BuildingResponse.ExperienceAwarded,
+                        StringUtil.GetSummedFriendlyNameOfItemAwardList(BuildingResponse.ItemsAwarded.ToList())
 
                     //Successfully grabbed stop
                     if (AccountState == AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
@@ -356,19 +356,19 @@ namespace DraconiusGoGUI.DracoManager
                         LogCaller(new LoggerEventArgs("Soft ban was removed", LoggerTypes.Info));
                     }
 
-                    ExpIncrease(fortResponse.ExperienceAwarded);
-                    TotalBuildingExp += fortResponse.ExperienceAwarded;
+                    ExpIncrease(BuildingResponse.ExperienceAwarded);
+                    TotalBuildingExp += BuildingResponse.ExperienceAwarded;
 
                     Tracker.AddValues(0, 1);
 
-                    if (fortResponse.ExperienceAwarded == 0)
+                    if (BuildingResponse.ExperienceAwarded == 0)
                     {
                         //Softban on the fleeing Creature. Reset.
                         _fleeingCreatureResponses = 0;
                         _potentialCreatureBan = false;
 
                         ++_totalZeroExpStops;
-                        message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
+                        message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxBuildingAttempts);
                         LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                         continue;
                     }
@@ -389,7 +389,7 @@ namespace DraconiusGoGUI.DracoManager
         }
 
         /*
-        private async Task<MethodResult<AddFortModifierResponse>> AddFortModifier(string fortId, ItemId modifierType = ItemId.ItemTroyDisk)
+        private async Task<MethodResult<AddBuildingModifierResponse>> AddBuildingModifier(string BuildingId, ItemId modifierType = ItemId.ItemTroyDisk)
         {
             if (!_client.LoggedIn)
             {
@@ -397,16 +397,16 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (!result.Success)
                 {
-                    return new MethodResult<AddFortModifierResponse>();
+                    return new MethodResult<AddBuildingModifierResponse>();
                 }
             }
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.AddFortModifier,
-                RequestMessage = new AddFortModifierMessage
+                RequestType = RequestType.AddBuildingModifier,
+                RequestMessage = new AddBuildingModifierMessage
                 {
-                    FortId = fortId,
+                    BuildingId = BuildingId,
                     ModifierType = modifierType,
                     PlayerLatitude = _client.ClientSession.Player.Latitude,
                     PlayerLongitude = _client.ClientSession.Player.Longitude
@@ -414,34 +414,34 @@ namespace DraconiusGoGUI.DracoManager
             });
 
             if (response == null)
-                return new MethodResult<AddFortModifierResponse>();
+                return new MethodResult<AddBuildingModifierResponse>();
 
-            var addFortModifierResponse = AddFortModifierResponse.Parser.ParseFrom(response);
+            var addBuildingModifierResponse = AddBuildingModifierResponse.Parser.ParseFrom(response);
 
-            switch (addFortModifierResponse.Result)
+            switch (addBuildingModifierResponse.Result)
             {
-                case AddFortModifierResponse.Types.Result.Success:
-                    LogCaller(new LoggerEventArgs(String.Format("Add fort modifier {0} success.", modifierType.ToString().Replace("Item","")), LoggerTypes.Success));
-                    return new MethodResult<AddFortModifierResponse>
+                case AddBuildingModifierResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs(String.Format("Add Building modifier {0} success.", modifierType.ToString().Replace("Item","")), LoggerTypes.Success));
+                    return new MethodResult<AddBuildingModifierResponse>
                     {
                         Success = true,
                         Message = "Success",
-                        Data = addFortModifierResponse
+                        Data = addBuildingModifierResponse
                     };
-                case AddFortModifierResponse.Types.Result.FortAlreadyHasModifier:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                case AddBuildingModifierResponse.Types.Result.BuildingAlreadyHasModifier:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Building. Response: {0}", addBuildingModifierResponse.Result), LoggerTypes.Warning));
                     break;
-                case AddFortModifierResponse.Types.Result.NoItemInInventory:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                case AddBuildingModifierResponse.Types.Result.NoItemInInventory:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Building. Response: {0}", addBuildingModifierResponse.Result), LoggerTypes.Warning));
                     break;
-                case AddFortModifierResponse.Types.Result.PoiInaccessible:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                case AddBuildingModifierResponse.Types.Result.PoiInaccessible:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Building. Response: {0}", addBuildingModifierResponse.Result), LoggerTypes.Warning));
                     break;
-                case AddFortModifierResponse.Types.Result.TooFarAway:
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                case AddBuildingModifierResponse.Types.Result.TooFarAway:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Building. Response: {0}", addBuildingModifierResponse.Result), LoggerTypes.Warning));
                     break;
            }
-            return new MethodResult<AddFortModifierResponse>();
+            return new MethodResult<AddBuildingModifierResponse>();
         }
         */
     }

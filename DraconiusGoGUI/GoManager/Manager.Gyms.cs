@@ -3,7 +3,7 @@
     public partial class Manager
     {
         /*
-        private async Task<MethodResult<GymDeployResponse>> GymDeploy(FortData gym)
+        private async Task<MethodResult<GymDeployResponse>> GymDeploy(BuildingData gym)
         {
             if (gym.OwnedByTeam != PlayerData.Team)
                 return new MethodResult<GymDeployResponse>();
@@ -30,7 +30,7 @@
                 RequestType = RequestType.GymDeploy,
                 RequestMessage = new GymDeployMessage
                 {
-                    FortId = gym.Id,
+                    BuildingId = gym.Id,
                     CreatureId = Creature.Id,
                     PlayerLatitude = _client.ClientSession.Player.Latitude,
                     PlayerLongitude = _client.ClientSession.Player.Longitude
@@ -43,13 +43,13 @@
             var gymDeployResponse = GymDeployResponse.Parser.ParseFrom(response);
             switch (gymDeployResponse.Result)
             {
-                case GymDeployResponse.Types.Result.ErrorAlreadyHasCreatureOnFort:
+                case GymDeployResponse.Types.Result.ErrorAlreadyHasCreatureOnBuilding:
                     LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorFortDeployLockout:
+                case GymDeployResponse.Types.Result.ErrorBuildingDeployLockout:
                     LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorFortIsFull:
+                case GymDeployResponse.Types.Result.ErrorBuildingIsFull:
                     LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorInvalidCreature:
@@ -64,7 +64,7 @@
                 case GymDeployResponse.Types.Result.ErrorNotInRange:
                     LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
-                case GymDeployResponse.Types.Result.ErrorOpposingTeamOwnsFort:
+                case GymDeployResponse.Types.Result.ErrorOpposingTeamOwnsBuilding:
                     LogCaller(new LoggerEventArgs(String.Format("Faill to deploy Creature {0}.", gymDeployResponse.Result), LoggerTypes.Warning));
                     break;
                 case GymDeployResponse.Types.Result.ErrorPlayerBelowMinimumLevel:
@@ -113,7 +113,7 @@
             return new MethodResult<GymDeployResponse>();
         }
 
-        private async Task<MethodResult<GetRaidDetailsResponse>> GetRaidDetails(FortData gym, long raidSeed, int[] lobbyids)
+        private async Task<MethodResult<GetRaidDetailsResponse>> GetRaidDetails(BuildingData gym, long raidSeed, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -176,7 +176,7 @@
             return new MethodResult<GetRaidDetailsResponse>();
         }
 
-        private async Task<MethodResult<StartRaidBattleResponse>> StartRaidBattle(FortData gym, long raidSeed, ulong[] attackingCreatureids, int[] lobbyids)
+        private async Task<MethodResult<StartRaidBattleResponse>> StartRaidBattle(BuildingData gym, long raidSeed, ulong[] attackingCreatureids, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -252,7 +252,7 @@
             return new MethodResult<StartRaidBattleResponse>();
         }
 
-        private async Task<MethodResult<AttackRaidBattleResponse>> AttackRaidBattle(FortData gym, RepeatedField<BattleAction> attackeractions, string battleid, BattleAction lastbattleAction, long timestampms)
+        private async Task<MethodResult<AttackRaidBattleResponse>> AttackRaidBattle(BuildingData gym, RepeatedField<BattleAction> attackeractions, string battleid, BattleAction lastbattleAction, long timestampms)
         {
             if (!_client.LoggedIn)
             {
@@ -315,7 +315,7 @@
             return new MethodResult<AttackRaidBattleResponse>();
         }
 
-        private async Task<MethodResult<JoinLobbyResponse>> JoinLobby(FortData gym, long raidSeed, bool _private, int[] lobbyids)
+        private async Task<MethodResult<JoinLobbyResponse>> JoinLobby(BuildingData gym, long raidSeed, bool _private, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -390,7 +390,7 @@
             return new MethodResult<JoinLobbyResponse>();
         }
 
-        private async Task<MethodResult<LeaveLobbyResponse>> LeaveLobby(FortData gym, long raidSeed, int[] lobbyids)
+        private async Task<MethodResult<LeaveLobbyResponse>> LeaveLobby(BuildingData gym, long raidSeed, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -442,7 +442,7 @@
             return new MethodResult<LeaveLobbyResponse>();
         }
 
-        private async Task<MethodResult<SetLobbyCreatureResponse>> SetLobbyCreature(FortData gym, long raidSeed, ulong[] Creatureids, int[] lobbyids)
+        private async Task<MethodResult<SetLobbyCreatureResponse>> SetLobbyCreature(BuildingData gym, long raidSeed, ulong[] Creatureids, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -498,7 +498,7 @@
             return new MethodResult<SetLobbyCreatureResponse>();
         }
 
-        private async Task<MethodResult<SetLobbyVisibilityResponse>> SetLobbyVisibility(FortData gym, long raidSeed, int[] lobbyids)
+        private async Task<MethodResult<SetLobbyVisibilityResponse>> SetLobbyVisibility(BuildingData gym, long raidSeed, int[] lobbyids)
         {
             if (!_client.LoggedIn)
             {
@@ -553,7 +553,7 @@
             return new MethodResult<SetLobbyVisibilityResponse>();
         }
 
-        private async Task<MethodResult<GetGymBadgeDetailsResponse>> GetGymBadgeDetails(FortData gym, double latitude, double longitude)
+        private async Task<MethodResult<GetGymBadgeDetailsResponse>> GetGymBadgeDetails(BuildingData gym, double latitude, double longitude)
         {
             if (!_client.LoggedIn)
             {
@@ -570,7 +570,7 @@
                 RequestType = RequestType.GetGymBadgeDetails,
                 RequestMessage = new GetGymBadgeDetailsMessage
                 {
-                    FortId = gym.Id,
+                    BuildingId = gym.Id,
                     Latitude = latitude,
                     Longitude = longitude
                 }.ToByteString()
@@ -594,7 +594,7 @@
             return new MethodResult<GetGymBadgeDetailsResponse>();
         }
 
-        private async Task<MethodResult<UseItemGymResponse>> UseItemInGym(FortData gym, ItemId itemId)
+        private async Task<MethodResult<UseItemGymResponse>> UseItemInGym(BuildingData gym, ItemId itemId)
         {
             if (!_client.LoggedIn)
             {
@@ -646,7 +646,7 @@
             return new MethodResult<UseItemGymResponse>();
         }
 
-        private async Task<MethodResult<GymStartSessionResponse>> GymStartSession(FortData gym, ulong defendingCreatureId, IEnumerable<ulong> attackingCreatureIds)
+        private async Task<MethodResult<GymStartSessionResponse>> GymStartSession(BuildingData gym, ulong defendingCreatureId, IEnumerable<ulong> attackingCreatureIds)
         {
             if (!_client.LoggedIn)
             {
@@ -735,7 +735,7 @@
             return new MethodResult<GymStartSessionResponse>();
         }
 
-        private async Task<MethodResult<GymBattleAttackResponse>> GymBattleAttak(FortData gym, string battleId, IEnumerable<BattleAction> battleActions, BattleAction lastRetrievedAction, long timestampMs)
+        private async Task<MethodResult<GymBattleAttackResponse>> GymBattleAttak(BuildingData gym, string battleId, IEnumerable<BattleAction> battleActions, BattleAction lastRetrievedAction, long timestampMs)
         {
             if (gym.OwnedByTeam == PlayerData.Team)
                 return new MethodResult<GymBattleAttackResponse>();
@@ -799,7 +799,7 @@
             return new MethodResult<GymBattleAttackResponse>();
         }
 
-        private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData Building)
+        private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(BuildingData Building)
         {
             if (!_client.LoggedIn)
             {
@@ -861,7 +861,7 @@
             return new MethodResult<GymGetInfoResponse>();
         }
 
-        private async Task<MethodResult<GymFeedCreatureResponse>> GymFeedCreature(FortData gym, ItemData item, CreatureData Creature, int startingQuantity = 1)
+        private async Task<MethodResult<GymFeedCreatureResponse>> GymFeedCreature(BuildingData gym, ItemData item, CreatureData Creature, int startingQuantity = 1)
         {
             if (gym.OwnedByTeam != PlayerData.Team)
                 return new MethodResult<GymFeedCreatureResponse>();
@@ -962,7 +962,7 @@
 
             var defendersFromConfig = CreatureList.Where(w =>
                 w.Id != buddy?.Id &&
-                string.IsNullOrEmpty(w.DeployedFortId)
+                string.IsNullOrEmpty(w.DeployedBuildingId)
             ).ToList();
 
             foreach (var _Creature in defendersFromConfig.OrderByDescending(o => o.Cp))
@@ -992,7 +992,7 @@
                 if (CreatureList.Count == 1)
                     Creature = CreatureList.FirstOrDefault();
 
-                Creature = CreatureList.FirstOrDefault(p => string.IsNullOrEmpty(p.DeployedFortId)
+                Creature = CreatureList.FirstOrDefault(p => string.IsNullOrEmpty(p.DeployedBuildingId)
                 );
 
                 if (Creature.Stamina <= 0)
@@ -1090,7 +1090,7 @@
                     Creature.Stamina = useItemPotionResponse.Stamina;
                     LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemMaxPotion.ToString().Replace("Item",""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
-                case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
+                case UseItemPotionResponse.Types.Result.ErrorDeployedToBuilding:
                     LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -1134,7 +1134,7 @@
                     Creature.Stamina = useItemPotionResponse.Stamina;
                     LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemHyperPotion.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
-                case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
+                case UseItemPotionResponse.Types.Result.ErrorDeployedToBuilding:
                     LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
 
@@ -1180,7 +1180,7 @@
                     Creature.Stamina = useItemPotionResponse.Stamina;
                     LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemSuperPotion.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
-                case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
+                case UseItemPotionResponse.Types.Result.ErrorDeployedToBuilding:
                     LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
 
@@ -1226,7 +1226,7 @@
                     Creature.Stamina = useItemPotionResponse.Stamina;
                     LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemPotion.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                     break;
-                case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
+                case UseItemPotionResponse.Types.Result.ErrorDeployedToBuilding:
                     LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                     return false;
 
@@ -1291,7 +1291,7 @@
                         Creature.Stamina = useItemRevive.Stamina;
                         LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemRevive.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                         break;
-                    case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
+                    case UseItemReviveResponse.Types.Result.ErrorDeployedToBuilding:
                         LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                         return;
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
@@ -1336,7 +1336,7 @@
                         Creature.Stamina = useItemRevive.Stamina;
                         LogCaller(new LoggerEventArgs(String.Format("Success to use {0}, CP: {1} on {2}", ItemId.ItemMaxRevive.ToString().Replace("Item", ""), Creature.Cp, Creature.CreatureId), LoggerTypes.Success));
                         break;
-                    case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
+                    case UseItemReviveResponse.Types.Result.ErrorDeployedToBuilding:
                         LogCaller(new LoggerEventArgs($"Creature: {Creature.CreatureId.ToString()} (CP: {Creature.Cp}) is already deployed to a gym...", LoggerTypes.Warning));
                         return;
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:

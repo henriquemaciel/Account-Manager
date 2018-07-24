@@ -462,10 +462,10 @@ namespace DraconiusGoGUI.DracoManager
 
                     //Get Buildings
                     //Goto her if count or meters is < of settings
-                    reloadAllForts:
+                    reloadAllBuildings:
 
                     LogCaller(new LoggerEventArgs("Getting buildings...", LoggerTypes.Info));                   
-                    MethodResult<List<FBuilding>> Buildings = await GetAllFortsAsync();
+                    MethodResult<List<FBuilding>> Buildings = await GetAllBuildingsAsync();
 
                     if (!Buildings.Success)
                     {
@@ -524,8 +524,8 @@ namespace DraconiusGoGUI.DracoManager
                             continue;
 
                         var player = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude);
-                        var fortLocation = new GeoCoordinate(Building.coords.latitude, Building.coords.longitude);
-                        double distance = CalculateDistanceInMeters(player, fortLocation);
+                        var BuildingLocation = new GeoCoordinate(Building.coords.latitude, Building.coords.longitude);
+                        double distance = CalculateDistanceInMeters(player, BuildingLocation);
  
                         if (UserSettings.MaxBuildingMeters > 0)
                         {
@@ -542,7 +542,7 @@ namespace DraconiusGoGUI.DracoManager
                             {
                                 //Pass restart if value is 0 or meter no ok recommended 250-300
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
-                                goto reloadAllForts;
+                                goto reloadAllBuildings;
                             }
                         }
 
@@ -553,47 +553,47 @@ namespace DraconiusGoGUI.DracoManager
                             continue;
 
                         Building = BuildingsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("Fort DeQueued: " + Building.id, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Building DeQueued: " + Building.id, LoggerTypes.Debug));
 
-                        string fort = "";
+                        string _building = "";
                         LoggerTypes loggerTypes = LoggerTypes.Info;
 
                         switch (Building.type)
                         {
                             case BuildingType.ARENA:
-                                fort = "Arena";
+                                _building = "Arena";
                                 if (Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
                                 {
                                     loggerTypes = LoggerTypes.Gym;
                                 }
                                 continue;
                             case BuildingType.STOP:
-                                fort = "Pillar of Abundance";
+                                _building = "Pillar of Abundance";
                                 break;
                             case BuildingType.OBELISK:
-                                fort = "Obelisk";
+                                _building = "Obelisk";
                                 continue;
                             case BuildingType.ROOST:
-                                fort = "Roost";
+                                _building = "Roost";
                                 continue;
                             case BuildingType.PORTAL:
-                                fort = "Portal";
+                                _building = "Portal";
                                 break;
                             case BuildingType.LIBRARY:
-                                fort = "Library";
+                                _building = "Library";
                                 continue;
                             case BuildingType.DUNGEON_STOP:
-                                fort = "Dungeon";
+                                _building = "Dungeon";
                                 break;
                             default:
-                                fort = Building.type.ToString();
+                                _building = Building.type.ToString();
                                 break;
                         }
 
                         if (!UserSettings.SpinGyms && Building.type == BuildingType.ARENA)
                             continue;
 
-                        LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", fort, BuildingNumber, totalStops, distance), loggerTypes));
+                        LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", _building, BuildingNumber, totalStops, distance), loggerTypes));
 
                         //Go to Buildings
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(Building.coords.latitude, Building.coords.longitude));
@@ -710,11 +710,11 @@ namespace DraconiusGoGUI.DracoManager
                         double filledInventorySpace = FilledInventoryStorage();
                         LogCaller(new LoggerEventArgs(String.Format("Filled Inventory Storage: {0:0.00}%", filledInventorySpace), LoggerTypes.Debug));
 
-                        if ((filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100))
+                        if ((filledInventorySpace < UserSettings.SearchBuildingBelowPercent) && (filledInventorySpace <= 100))
                         {
                             if (Building.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                             {
-                                if (Building.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
+                                if (Building.Type == BuildingType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
                                 {
                                     if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && UserSettings.CompleteTutorial)
                                     {
@@ -834,12 +834,12 @@ namespace DraconiusGoGUI.DracoManager
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                     }
 
-                                    if (UserSettings.RequestFortDetails)
+                                    if (UserSettings.RequestBuildingDetails)
                                     {
-                                        var fortDetails = await FortDetails(Building);
-                                        if (fortDetails.Success)
+                                        var BuildingDetails = await BuildingDetails(Building);
+                                        if (BuildingDetails.Success)
                                         {
-                                            LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
+                                            LogCaller(new LoggerEventArgs("Building Name: " + BuildingDetails.Data.Name, LoggerTypes.Info));
                                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                         }
                                         else
@@ -866,12 +866,12 @@ namespace DraconiusGoGUI.DracoManager
                             }
                             else
                             {
-                                LogCaller(new LoggerEventArgs(String.Format("Skipping fort. In cooldown"), LoggerTypes.Info));
+                                LogCaller(new LoggerEventArgs(String.Format("Skipping Building. In cooldown"), LoggerTypes.Info));
                             }
                         }
                         else
                         {
-                            LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
+                            LogCaller(new LoggerEventArgs(String.Format("Skipping Building. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
                         }
                         */
 
