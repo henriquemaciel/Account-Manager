@@ -261,6 +261,8 @@ namespace DraconiusGoGUI.DracoManager
                 var times = 5;
                 var success = false;
                 var message = "";
+                int expGained = 0;
+                int candyGained = 0;
                 do
                 {
                     var ball = Items.FirstOrDefault(x => (x.type == ItemType.MAGIC_BALL_SIMPLE || x.type == ItemType.MAGIC_BALL_NORMAL || x.type == ItemType.MAGIC_BALL_GOOD) && x.count > 0 );
@@ -271,7 +273,14 @@ namespace DraconiusGoGUI.DracoManager
                     resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
                     if (resCatch.caught)
                     {
-                        message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp {resCatch.userCreature.cp}, caught.";
+                        if (resCatch.expCreatureExisting > 0)
+                            expGained = resCatch.expCreatureExisting;
+                        else
+                            expGained = resCatch.expCreatureNew;
+
+                        candyGained = resCatch.candies;
+
+                        message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught, exp { expGained }, candies { candyGained }";
                         success = true;
                     }
                     else if (resCatch.runAway)
@@ -281,7 +290,13 @@ namespace DraconiusGoGUI.DracoManager
                     ball.count--;
                     times--;
                 } while (!resCatch.caught && !resCatch.runAway && times > 0);
+
                 LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Info));
+
+                Tracker.AddValues(1, 0);
+
+                ExpIncrease(expGained);
+
                 return new MethodResult
                 {
                     Message = message,

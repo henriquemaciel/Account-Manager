@@ -566,22 +566,22 @@ namespace DraconiusGoGUI.DracoManager
                                 {
                                     loggerTypes = LoggerTypes.Gym;
                                 }
-                                break;
+                                continue;
                             case BuildingType.STOP:
                                 fort = "Pillar of Abundance";
                                 break;
                             case BuildingType.OBELISK:
                                 fort = "Obelisk";
-                                break;
+                                continue;
                             case BuildingType.ROOST:
                                 fort = "Roost";
-                                break;
+                                continue;
                             case BuildingType.PORTAL:
                                 fort = "Portal";
                                 break;
                             case BuildingType.LIBRARY:
                                 fort = "Library";
-                                break;
+                                continue;
                             case BuildingType.DUNGEON_STOP:
                                 fort = "Dungeon";
                                 break;
@@ -936,7 +936,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         WaitPaused();
 
-                        //UpdateInventory(InventoryRefresh.Stats);
+                        UpdateInventory(InventoryRefresh.Stats);
 
                         if (Level > prevLevel)
                         {

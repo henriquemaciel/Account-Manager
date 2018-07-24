@@ -114,14 +114,15 @@ namespace DraconiusGoGUI.UI
             olvColumnDefense.AspectGetter = (Creature) => (Creature as CreatureData).IndividualDefense;
             olvColumnStamina.AspectGetter = (Creature) => (Creature as CreatureData).IndividualStamina;
 
-
+            */
             olvColumnPerfectPercent.AspectGetter = delegate (object Creature)
             {
-                double settings = Manager.CalculateIVPerfection(Creature as CreatureData);
+                double settings = Manager.CalculateIVPerfection(Creature as FUserCreature);
                 string sDouble = String.Format("{0:0.00}", settings);
                 return double.Parse(sDouble);
             };
 
+            /*
             olvColumnCreatureHeight.AspectGetter = delegate (object Creature)
             {
                 return String.Format("{0:0.00}m", (Creature as CreatureData).HeightM);

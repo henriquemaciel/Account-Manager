@@ -14,7 +14,6 @@ namespace DraconiusGoGUI.DracoManager
             if (Building == null)
                 return new MethodResult();
 
-            //FortSearchResponse fortResponse = null;
             const int maxFortAttempts = 5;
             for (int i = 0; i < maxFortAttempts; i++)
             {
@@ -27,7 +26,24 @@ namespace DraconiusGoGUI.DracoManager
                     LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
                     return new MethodResult();
                 }
-                var response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+
+                if (!Building.available)
+                {
+                    LogCaller(new LoggerEventArgs($"Building {Building.id} no available", LoggerTypes.Warning));
+                    return new MethodResult();
+                }
+
+                FUpdate response = null;
+
+                try
+                {
+                    response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                }
+                catch(Exception ex)
+                {
+                    LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.FatalError));
+                    return new MethodResult();
+                }
 
                 if (response.items.Count < 2)
                 {
@@ -59,6 +75,8 @@ namespace DraconiusGoGUI.DracoManager
                 // copy pitstop values
                 Building.pitstop = (response.items.FirstOrDefault(x => x is FBuilding) as FBuilding).pitstop;
 
+                Tracker.AddValues(0, 1);
+
                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                 return new MethodResult
@@ -68,42 +86,43 @@ namespace DraconiusGoGUI.DracoManager
                 };
 
             }
+            //FortSearchResponse fortResponse = null;
 
-                //string fort = Building.Type == FortType.Checkpoint ? "Fort" : "Gym";
+            //string fort = Building.Type == FortType.Checkpoint ? "Fort" : "Gym";
 
-                /*
-                for (int i = 0; i < maxFortAttempts; i++)
+            /*
+            for (int i = 0; i < maxFortAttempts; i++)
+            {
+                if (!_client.LoggedIn)
                 {
-                    if (!_client.LoggedIn)
-                    {
-                        MethodResult result = await AcLogin();
+                    MethodResult result = await AcLogin();
 
-                        if (!result.Success)
-                        {
-                            return result;
-                        }
+                    if (!result.Success)
+                    {
+                        return result;
                     }
-
-                    var response = await Task.Run(() => _client.DracoClient.UseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId) as FLoot);
-
-                    if (response.lootList.Count == 0)
-                        return new MethodResult();
-
-                    string _message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
-                                  Building,
-                                  response.GetExp(),
-                                  StringUtil.GetSummedFriendlyNameOfItemAwardList(response.lootList));
-
-                    LogCaller(new LoggerEventArgs(_message, LoggerTypes.Success));
-
-                    return new MethodResult
-                    {
-                        Success = true,
-                        Message = "Success"
-                    };
                 }
-                */
-                return new MethodResult();
+
+                var response = await Task.Run(() => _client.DracoClient.UseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId) as FLoot);
+
+                if (response.lootList.Count == 0)
+                    return new MethodResult();
+
+                string _message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
+                              Building,
+                              response.GetExp(),
+                              StringUtil.GetSummedFriendlyNameOfItemAwardList(response.lootList));
+
+                LogCaller(new LoggerEventArgs(_message, LoggerTypes.Success));
+
+                return new MethodResult
+                {
+                    Success = true,
+                    Message = "Success"
+                };
+            }
+            */
+            return new MethodResult();
 
             /*
             fortResponse = FortSearchResponse.Parser.ParseFrom(response);

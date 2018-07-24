@@ -140,6 +140,8 @@ namespace DraconiusGoGUI.UI
             numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinPokestopsDayLimit);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
+            cbMimicWalking.Checked = settings.MimicWalking;
+            checkBoxDevLogs.Checked = settings.ShowDebugLogs;
 
             if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
             {
@@ -351,6 +353,8 @@ namespace DraconiusGoGUI.UI
             userSettings.RequestFortDetails = checkBoxReqFortDetails.Checked;
             userSettings.IgnoreStopsIfTooBalls = checkBoxTooBalls.Checked;
             userSettings.BallsToIgnoreStops = (int)numericUpDownTooBalls.Value;
+            userSettings.MimicWalking = cbMimicWalking.Checked;
+            userSettings.ShowDebugLogs = checkBoxDevLogs.Checked;
 
             userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
 
