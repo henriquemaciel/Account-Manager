@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using DracoProtos.Core.Base;
+using DracoLib.Core;
 
 namespace DraconiusGoGUI
 {
@@ -120,6 +121,7 @@ namespace DraconiusGoGUI
 
         public AccountState StopAtMinAccountState { get; set; }
 
+
         public ProxyEx Proxy
         {
             get
@@ -215,20 +217,18 @@ namespace DraconiusGoGUI
             PGPoolEndpoint = "http://127.0.0.1:4242/";
         }
 
+        private DracoClient DracoClient = new DracoClient();
+
         public void LoadCatchSettings()
         {
             CatchSettings = new List<CatchSetting>();
 
             foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == 0)
-                {
-                    continue;
-                }
-
                 var cSettings = new CatchSetting
                 {
-                    Id = Creature
+                    Id = Creature,
+                    Name = DracoClient.Strings.GetCreatureName(Creature)
                 };
 
                 CatchSettings.Add(cSettings);
@@ -241,14 +241,11 @@ namespace DraconiusGoGUI
             
             foreach (ItemType item in Enum.GetValues(typeof(ItemType)))
             {
-                if (item == 0)
-                {
-                    continue;
-                }
 
                 var itemSetting = new InventoryItemSetting
                 {
-                    Id = item
+                    Id = item,
+                    FriendlyName = DracoClient.Strings.GetItemName(item)
                 };
 
                 ItemSettings.Add(itemSetting);
@@ -261,14 +258,10 @@ namespace DraconiusGoGUI
 
             foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == 0)
-                {
-                    continue;
-                }
-
                 var setting = new EvolveSetting
                 {
                     Id = Creature,
+                    Name = DracoClient.Strings.GetCreatureName(Creature),
                     Evolve = true
                 };
 
@@ -282,14 +275,10 @@ namespace DraconiusGoGUI
 
             foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == 0)
-                {
-                    continue;
-                }
-
                 var setting = new TransferSetting
                 {
                     Id = Creature,
+                    Name = DracoClient.Strings.GetCreatureName(Creature),
                     Transfer = true
                 };
 
@@ -303,14 +292,11 @@ namespace DraconiusGoGUI
 
             foreach (CreatureType Creature in Enum.GetValues(typeof(CreatureType)))
             {
-                if (Creature == 0)
-                {
-                    continue;
-                }
 
                 var setting = new UpgradeSetting
                 {
                     Id = Creature,
+                    Name = DracoClient.Strings.GetCreatureName(Creature)
                     //Upgrade = true
                 };
 

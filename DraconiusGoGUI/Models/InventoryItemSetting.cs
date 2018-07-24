@@ -17,12 +17,6 @@ namespace DraconiusGoGUI.Models
             MaxInventory = 100;
         }
 
-        public string FriendlyName
-        {
-            get
-            {
-                return Id.ToString();
-            }
-        }
+        public string FriendlyName { get; set; }
     }
 }

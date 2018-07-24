@@ -22,12 +22,6 @@ namespace DraconiusGoGUI.Models
             IVPercent = 80;
         }
 
-        public string Name
-        {
-            get
-            {
-                return Id.ToString();
-            }
-        }
+        public string Name { get; set; }
     }
 }

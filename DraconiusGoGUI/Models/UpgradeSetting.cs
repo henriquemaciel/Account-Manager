@@ -14,12 +14,6 @@ namespace DraconiusGoGUI.Models
             Id = CreatureType.MONSTER_WATER_1;
         }
 
-        public string Name
-        {
-            get
-            {
-                return Id.ToString();
-            }
-        }
+        public string Name { get; set; }
     }
 }
