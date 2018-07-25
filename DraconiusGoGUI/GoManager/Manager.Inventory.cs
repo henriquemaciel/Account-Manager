@@ -357,7 +357,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            bool recycled = (bool)_client.DracoClient.Inventory.DiscardItems(itemSetting.Id, toDelete);
+            bool recycled = (bool)_client.DracoClient.Call(new ItemService().DiscardItems(itemSetting.Id, toDelete));
 
             if (recycled)
             {

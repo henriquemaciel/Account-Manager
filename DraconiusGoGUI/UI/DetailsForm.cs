@@ -439,20 +439,19 @@ namespace DraconiusGoGUI.UI
 
         private async void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} Creature?", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} Creature?", fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().Count()), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
            
-            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault() == null)
+            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().FirstOrDefault() == null)
                 return;
 
             contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.UpgradeCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
+            MethodResult managerResult = await _manager.UpgradeCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>());
 
             DisplayDetails();
 
@@ -461,7 +460,6 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished upgrade Creature");
-            */
         }
 
         private async void TransferToolStripMenuItem_Click(object sender, EventArgs e)
@@ -491,7 +489,6 @@ namespace DraconiusGoGUI.UI
 
         private async void EvolveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to evolve {0} Creature?", fastObjectListViewCreature.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
@@ -499,12 +496,12 @@ namespace DraconiusGoGUI.UI
                 return;
             }
 
-            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault() == null)
+            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().FirstOrDefault() == null)
                 return;
 
             contextMenuStripCreatureDetails.Enabled = false;
 
-            await _manager.EvolveCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
+            await _manager.EvolveCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>());
 
             DisplayDetails();
 
@@ -513,7 +510,6 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished evolving Creature");
-            */
         }
 
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -592,13 +588,13 @@ namespace DraconiusGoGUI.UI
         {
             favoriteToolStripMenuItem.Enabled = false;
 
-            //await _manager.FavoriteCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>(), true);
+            await _manager.FavoriteCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>(), true);
 
             DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            //fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished favoriting Creature");
         }
@@ -607,13 +603,13 @@ namespace DraconiusGoGUI.UI
         {
             favoriteToolStripMenuItem.Enabled = false;
 
-            //await _manager.FavoriteCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>(), false);
+            await _manager.FavoriteCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>(), false);
 
             DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            //fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished unfavoriting Creature");
         }
@@ -667,7 +663,7 @@ namespace DraconiusGoGUI.UI
         {
             showFutureTransfersToolStripMenuItem.Enabled = false;
 
-            /*MethodResult<List<CreatureData>> result = _manager.GetCreatureToTransfer();
+            MethodResult<List<FUserCreature>> result = _manager.GetCreatureToTransfer();
 
             if (result.Success)
             {
@@ -676,7 +672,7 @@ namespace DraconiusGoGUI.UI
             else
             {
                 MessageBox.Show("Failed to get Creature to be transfered");
-            }*/
+            }
 
             showFutureTransfersToolStripMenuItem.Enabled = true;
         }
@@ -711,14 +707,14 @@ namespace DraconiusGoGUI.UI
 
         private async void SetABuddyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*if (fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count() > 1)
+            if (fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().Count() > 1)
             {
-                MessageBox.Show(String.Format("Select one Creature to set a buddy you have set {0} Creatures.", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count()), "Information", MessageBoxButtons.OK);
+                MessageBox.Show(String.Format("Select one Creature to set a buddy you have set {0} Creatures.", fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().Count()), "Information", MessageBoxButtons.OK);
 
                 return;
             }
 
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to set a buddy {0} Creature?", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault().CreatureId), "Confirmation", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to set a buddy {0} Creature?", _manager.Strings.GetCreatureName(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().FirstOrDefault().name)), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
@@ -727,7 +723,7 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.SetBuddyCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault());
+            MethodResult managerResult = await _manager.SetBuddyCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().FirstOrDefault());
 
             DisplayDetails();
 
@@ -736,13 +732,11 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished set a buddy Creature");
-            */
         }
 
         private async void RenameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to rename {0} Creature(s)?", fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to rename {0} Creature(s)?", fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().Count()), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
@@ -751,7 +745,7 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.RenameCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
+            MethodResult managerResult = await _manager.RenameCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>());
 
             DisplayDetails();
 
@@ -760,7 +754,6 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished to rename Creature(s)");
-            */
         }
     }
 }

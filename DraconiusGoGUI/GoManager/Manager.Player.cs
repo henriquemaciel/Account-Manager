@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DraconiusGoGUI.Extensions;
 using DraconiusGoGUI.Enums;
 using System.Net.Http;
+using DracoProtos.Core.Objects;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -266,7 +267,7 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        public async Task<MethodResult> SetBuddyCreature(/*CreatureData Creature*/)
+        public async Task<MethodResult> SetBuddyCreature(FUserCreature Creature)
         {
             if (!_client.LoggedIn)
             {

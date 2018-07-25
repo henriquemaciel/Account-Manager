@@ -1,10 +1,16 @@
-﻿namespace DraconiusGoGUI.DracoManager
+﻿using DraconiusGoGUI.Extensions;
+using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        /*
         private async Task<MethodResult> EvolveFilteredCreature()
         {
+            /*
             MethodResult<List<CreatureData>> response = GetCreatureToEvolve();
 
             if (response.Data.Count == 0)
@@ -47,11 +53,13 @@
                     Message = "Success"
                 };
             }
+            */
             return new MethodResult();
         }
 
-        public async Task<MethodResult> EvolveCreature(IEnumerable<CreatureData> CreatureToEvolve)
+        public async Task<MethodResult> EvolveCreature(IEnumerable<FUserCreature> CreatureToEvolve)
         {
+            /*
             //Shouldn't happen
             if (CreatureToEvolve.Count() < 1)
             {
@@ -151,15 +159,16 @@
                         continue;
                 }
             }
-
+            */
             return new MethodResult
             {
                 Success = true
             };
         }
 
-        private async Task<MethodResult<int>> GetEvolutionCandy(CreatureId CreatureId)
+        private async Task<MethodResult<int>> GetEvolutionCandy(CreatureType CreatureId)
         {
+            /*
             if (PokeSettings == null)
             {
                 MethodResult result = await GetItemTemplates();
@@ -179,17 +188,20 @@
                     Message = settingsResult.Message
                 };
             }
+            */
 
             return new MethodResult<int>
             {
-                Data = settingsResult.Data.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault(),
+                //Data = settingsResult.Data.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault(),
                 Message = "Success",
                 Success = true
             };
+            
         }
 
-        private MethodResult<List<CreatureData>> GetCreatureToEvolve()
+        private MethodResult<List<FUserCreature>> GetCreatureToEvolve()
         {
+            /*
             if (!UserSettings.EvolveCreature)
             {
                 LogCaller(new LoggerEventArgs("Evolving disabled", LoggerTypes.Info));
@@ -262,10 +274,11 @@
                         CreatureToEvolve.Add(pData);
                 }
             }
+            */
 
-            return new MethodResult<List<CreatureData>>
+            return new MethodResult<List<FUserCreature>>
             {
-                Data = CreatureToEvolve,
+                //Data = CreatureToEvolve,
                 Message = "Success",
                 Success = true
             };
@@ -273,6 +286,7 @@
 
         private async Task<MethodResult> UseLuckyEgg()
         {
+            /*
             if (_client.ClientSession.LuckyEggsUsed)
             {
                 return new MethodResult
@@ -320,7 +334,7 @@
             useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
 
             LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.Count - 1), LoggerTypes.Success));
-
+            */
             return new MethodResult
             {
                 Success = true
@@ -334,11 +348,12 @@
                 return 0;
             }
 
-            return (double)(Creature.Count + Eggs.Count) / PlayerData.MaxCreatureStorage * 100;
+            return (double)(Creature.Count) / Stats.creatureStorageSize * 100;
         }
 
-        private bool CanEvolveCreature(CreatureData Creature)
+        private bool CanEvolveCreature(FUserCreature Creature)
         {
+            /*
             // Can't evolve Creature in gyms.
             if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
                 return false;
@@ -371,8 +386,8 @@
                 // If we got here, then we can evolve so break out of loop.
                 canEvolve = true;
             }
-            return canEvolve;
+            */
+            return false;// canEvolve;
         }
-        */
     }
 }

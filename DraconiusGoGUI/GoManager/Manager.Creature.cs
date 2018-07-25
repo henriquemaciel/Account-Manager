@@ -551,45 +551,15 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 int cpBefore = Creature.cp;
-                /*
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.UpgradeCreature,
-                    RequestMessage = new UpgradeCreatureMessage
-                    {
-                        CreatureId = Creature.Id
-                    }.ToByteString()
-                });
+
+                var response = _client.DracoClient.Call(new UserCreatureService().RemasterCreature(Creature.id, true));
 
                 if (response == null)
                     return new MethodResult();
 
-                var upgradeCreatureResponse = UpgradeCreatureResponse.Parser.ParseFrom(response);
-
-                switch (upgradeCreatureResponse.Result)
-                {
-                    case UpgradeCreatureResponse.Types.Result.Success:
-                        UpdateInventory(InventoryRefresh.Creature);
-                        UpdateInventory(InventoryRefresh.CreatureCandy);
-                        LogCaller(new LoggerEventArgs(String.Format("Upgrade Creature {0} success, CP before: {1} CP after: {2}.", Creature.CreatureId, cpBefore, upgradeCreatureResponse.UpgradedCreature.Cp), LoggerTypes.Upgrade));
-                        break;
-                    case UpgradeCreatureResponse.Types.Result.ErrorInsufficientResources:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case UpgradeCreatureResponse.Types.Result.ErrorCreatureIsDeployed:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case UpgradeCreatureResponse.Types.Result.ErrorCreatureNotFound:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case UpgradeCreatureResponse.Types.Result.ErrorUpgradeNotAvailable:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case UpgradeCreatureResponse.Types.Result.Unset:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade Creature. Response: {0}", upgradeCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                }
-                */
+                UpdateInventory(InventoryRefresh.Creature);
+                UpdateInventory(InventoryRefresh.CreatureCandy);
+                LogCaller(new LoggerEventArgs(String.Format("Upgrade Creature {0} success, CP before: {1} CP after: {2}.", Strings.GetCreatureName(Creature.name), cpBefore, response.cp), LoggerTypes.Upgrade));
             }
 
             return new MethodResult
