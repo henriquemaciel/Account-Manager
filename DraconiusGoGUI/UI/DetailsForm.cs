@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DracoProtos.Core.Objects;
 using System.Threading.Tasks;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.UI
 {
@@ -257,10 +258,13 @@ namespace DraconiusGoGUI.UI
             
             if (_manager.Stats != null)
             {
-                //labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
+                labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.totalDistanceF);
                 labelCreatureCaught.Text = _manager.Stats.monstersCaughtCount.ToString();
                 //labelBuildingVisits.Text = _manager.Stats.BuildingVisits.ToString();
                 //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
+                DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.Stats.registerDate);
+                labelCreateDate.Text = date.ToString();
+
             }
 
             if (_manager.Creature != null)
@@ -280,8 +284,6 @@ namespace DraconiusGoGUI.UI
                 //CreatureData myBuddy = _manager.Creature.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new CreatureData();
                 //labelCreatureBuddy.Text = myBuddy.CreatureId != CreatureId.Missingno ? String.Format("{0}", myBuddy.CreatureId) : "Not set";
                 labelPlayerUsername.Text = _manager.PlayerData.nickname;
-                //DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
-                //labelCreateDate.Text = date.ToString();
                 string tutocompleted = "Not Completed";
                 /*if (_manager.PlayerData.TutorialState.Contains(TutorialState.AccountCreation)
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.AvatarSelection)
@@ -338,7 +340,7 @@ namespace DraconiusGoGUI.UI
                 //}
                 //else if (!String.IsNullOrEmpty(CreatureData.DeployedBuildingId))
                 //{
-                    //deployed
+                //deployed
                 //    e.SubItem.ForeColor = Color.LightGreen;
                 //}
             }
@@ -346,7 +348,7 @@ namespace DraconiusGoGUI.UI
             {
                 /*
                 int candy = (int)olvColumnCreatureCandy.GetValue(CreatureData);
-                int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(CreatureData);
+                int candyToEvolve = (int)olvColumnCreatureCandy.GetValue(CreatureData);
 
                 if (candyToEvolve > 0)
                 {
@@ -358,11 +360,11 @@ namespace DraconiusGoGUI.UI
             {
                 double perfectPercent = Convert.ToDouble(olvColumnPerfectPercent.GetValue(CreatureData));
 
-                if (perfectPercent >= 93)
+                if (perfectPercent >= 95)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if (perfectPercent >= 86)
+                else if (perfectPercent >= 80)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
@@ -373,16 +375,15 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnAttack)
             {
-                /*
-                if (CreatureData.IndividualAttack >= 13)
+                if (CreatureData.attackValue >= 5)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if (CreatureData.IndividualAttack >= 11)
+                else if (CreatureData.attackValue >= 4)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
-                else if (CreatureData.IndividualAttack >= 9)
+                else if (CreatureData.attackValue >= 3)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
@@ -390,42 +391,18 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                */
-
-            }
-            else if (e.Column == olvColumnDefense)
-            {
-                /*
-                if (CreatureData.IndividualDefense >= 13)
-                {
-                    e.SubItem.ForeColor = Color.Green;
-                }
-                else if (CreatureData.IndividualDefense >= 11)
-                {
-                    e.SubItem.ForeColor = Color.Yellow;
-                }
-                else if (CreatureData.IndividualDefense >= 9)
-                {
-                    e.SubItem.ForeColor = Color.Orange;
-                }
-                else
-                {
-                    e.SubItem.ForeColor = Color.Red;
-                }
-                */
             }
             else if (e.Column == olvColumnStamina)
             {
-                /*
-                if (CreatureData.IndividualStamina >= 13)
+                if (CreatureData.staminaValue >= 5)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if (CreatureData.IndividualStamina >= 11)
+                else if (CreatureData.staminaValue >= 4)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
-                else if (CreatureData.IndividualStamina >= 9)
+                else if (CreatureData.staminaValue >= 3)
                 {
                     e.SubItem.ForeColor = Color.Orange;
                 }
@@ -433,7 +410,26 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                */
+            }
+            else if (e.Column == olvColumnPrimaryMove)
+            {
+                e.SubItem.Text = _manager.Strings.GetString("skill.main." + CreatureData.mainSkill);
+            }
+            else if (e.Column == olvColumnSecondaryMove)
+            {
+                e.SubItem.Text = _manager.Strings.GetString("skill.charge." + CreatureData.chargedSkill);
+            }
+            else if (e.Column == olvColumnEPS)
+            {
+                e.SubItem.Text = String.Format("{0:0.0}", CreatureData.mainSkillEps);
+            }
+            else if (e.Column == olvColumnDPSmain)
+            {
+                e.SubItem.Text = String.Format("{0:0}", CreatureData.mainSkillDps);
+            }
+            else if (e.Column == olvColumnDPS)
+            {
+                e.SubItem.Text = String.Format("{0:0}", CreatureData.chargedSkillDps);
             }
         }
 

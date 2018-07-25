@@ -7,6 +7,7 @@ using DraconiusGoGUI.Enums;
 using DracoProtos.Core.Objects;
 using System.Linq;
 using DracoProtos.Core.Base;
+using DraconiusGoGUI.Models;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -33,7 +34,6 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            /*
             if (FilledCreatureStorage() >= 100)
             {
                 return new MethodResult
@@ -41,7 +41,6 @@ namespace DraconiusGoGUI.DracoManager
                     Message = "Creature Inventory Full."
                 };
             }
-            */
 
             if (!CatchDisabled)
             {
@@ -110,6 +109,14 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
+            if (FilledCreatureStorage() >= 100)
+            {
+                return new MethodResult
+                {
+                    Message = "Creature Inventory Full."
+                };
+            }
+
             MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatureAsync();
             foreach (var Creature in catchableResponse.Data)
             {
@@ -122,18 +129,9 @@ namespace DraconiusGoGUI.DracoManager
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
             }
-
+       
             /*
-            if (FilledCreatureStorage() >= 100)
-            {
-                return new MethodResult
-                {
-                    Message = "Creature Inventory Full."
-                };
-            }            
-
             MethodResult<List<MapCreature>> catchableResponse = await GetCatchableCreatureAsync();
 
             if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count == 0)
@@ -172,15 +170,16 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private async Task<MethodResult> CatchLuredCreature(/*BuildingData BuildingData*/)
+        private async Task<MethodResult> CatchLuredCreature(FBuilding BuildingData)
         {
-            /*if (BuildingData.LureInfo == null)
+            /*
+            if (BuildingData.pitstop.lureBy == null)
             {
                 return new MethodResult
                 {
                     Message = "No lure on Building",
                 };
-            }*/
+            }
 
             if (!UserSettings.CatchCreature)
             {
@@ -209,10 +208,8 @@ namespace DraconiusGoGUI.DracoManager
                     return new MethodResult();
                 }
             }
-            else
-                return new MethodResult();
-            /*
-            if (BuildingData.LureInfo.ActiveCreatureId == CreatureId.Missingno)
+
+            if (BuildingData.pitstop.personalized.Value.ActiveCreatureId == CreatureId.Missingno)
             {
                 return new MethodResult
                 {
@@ -533,8 +530,8 @@ namespace DraconiusGoGUI.DracoManager
 
             LogCaller(new LoggerEventArgs(String.Format("Faill cath lure on Building {0}. {1}.",BuildingData.Id, eResponse.Result), LoggerTypes.Warning));
             */
-            return new MethodResult();
         }
+
         private async Task<MethodResult<FCatchingCreature>> EncounterCreature(FWildCreature mapCreature)
         {
             if (!_client.LoggedIn)
@@ -546,7 +543,14 @@ namespace DraconiusGoGUI.DracoManager
                     return new MethodResult<FCatchingCreature>();
                 }
             }
+
+            if (!CreatureWithinCatchSettings(mapCreature.name))
+            {
+                return new MethodResult<FCatchingCreature>();
+            }
+
             var eResponse = _client.DracoClient.Creatures.Encounter(mapCreature.id);
+
             return new MethodResult<FCatchingCreature>
             {
                 Data = eResponse,
@@ -649,7 +653,7 @@ namespace DraconiusGoGUI.DracoManager
         }
         */
 
-            //Catch encountered Creature
+        //Catch encountered Creature
         private async Task<MethodResult> CatchCreature(dynamic eResponse, /*MapCreature mapCreature,*/ bool snipped = false)
         {
             /*
@@ -874,12 +878,8 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
         }
 
-        /*
-        private bool CreatureWithinCatchSettings(CreatureId CreatureId)
-        {
-            if (CreatureId == CreatureId.Missingno)
-                return false;
-
+        private bool CreatureWithinCatchSettings(CreatureType CreatureId)
+        { 
             CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == CreatureId);
 
             if (catchSettings == null)
@@ -898,7 +898,7 @@ namespace DraconiusGoGUI.DracoManager
             return false;
         }
         
-
+        /*
         private bool CreatureWithinCatchSettings(MapCreature Creature)
         {
             if (Creature == null || Creature.CreatureId == CreatureId.Missingno)
@@ -919,9 +919,9 @@ namespace DraconiusGoGUI.DracoManager
 
             LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", Creature.CreatureId.ToString()), LoggerTypes.Info));
             return false;
-        }
+        }        
 
-        private ItemId GetBestBall(CreatureData CreatureData)
+        private ItemType GetBestBall(FCreatureUpdate CreatureData)
         {
             if (Items == null || CreatureData == null || CreatureData.CreatureId == CreatureId.Missingno)
             {

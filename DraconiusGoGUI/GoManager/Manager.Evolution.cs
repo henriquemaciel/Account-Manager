@@ -1,7 +1,10 @@
-﻿using DraconiusGoGUI.Extensions;
+﻿using DraconiusGoGUI.Enums;
+using DraconiusGoGUI.Extensions;
 using DracoProtos.Core.Base;
 using DracoProtos.Core.Objects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DraconiusGoGUI.DracoManager
@@ -287,19 +290,21 @@ namespace DraconiusGoGUI.DracoManager
         private async Task<MethodResult> UseLuckyEgg()
         {
             /*
-            if (_client.ClientSession.LuckyEggsUsed)
+            if (UsedAlready)
             {
                 return new MethodResult
                 {
                     Message = "Lucky egg already active"
                 };
             }
+            */
+            return new MethodResult { Message = Strings.GetItemName(ItemType.EXPERIENCE_BOOSTER) + " Not released yet" };
 
-            ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemLuckyEgg);
+            var data = Items.FirstOrDefault(x => x.type == ItemType.EXPERIENCE_BOOSTER);
 
-            if (data == null || data.Count == 0)
+            if (data == null || data.count == 0)
             {
-                //LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
 
                 return new MethodResult
                 {
@@ -317,24 +322,13 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.UseItemXpBoost,
-                RequestMessage = new UseItemXpBoostMessage
-                {
-                    ItemId = ItemId.ItemLuckyEgg
-                }.ToByteString()
-            });
-
+            var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
+ 
             if (response == null)
                 return new MethodResult();
 
-            UseItemXpBoostResponse useItemXpBoostResponse = null;
+            LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
 
-            useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
-
-            LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.Count - 1), LoggerTypes.Success));
-            */
             return new MethodResult
             {
                 Success = true

@@ -79,25 +79,20 @@
             this.tabPageCreature = new System.Windows.Forms.TabPage();
             this.fastObjectListViewCreature = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnCreatureId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureIdNumber = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureFavorite = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureShiny = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureGender = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureCandy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCandyToEvolve = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPerfectPercent = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPrimaryMove = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSecondaryMove = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPerfectPercent = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnEPS = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnDPSmain = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnDPS = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAttack = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnDefense = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnStamina = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCpMultiplier = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnAdditionalCpMult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureBall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureHeight = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnBaseCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripCreatureDetails = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.favoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFavoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,7 +130,6 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.olvColumnCreatureWeight = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -255,7 +249,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(30, 348);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(115, 17);
+            this.label17.Size = new System.Drawing.Size(111, 17);
             this.label17.TabIndex = 8;
             this.label17.Text = "Creature Buddy:";
             // 
@@ -273,7 +267,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(3, 311);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(142, 17);
+            this.label16.Size = new System.Drawing.Size(138, 17);
             this.label16.TabIndex = 6;
             this.label16.Text = "Deployed Creatures:";
             // 
@@ -330,7 +324,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(25, 209);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(120, 17);
+            this.label5.Size = new System.Drawing.Size(116, 17);
             this.label5.TabIndex = 0;
             this.label5.Text = "Unique Creature:";
             // 
@@ -339,7 +333,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(35, 230);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 17);
+            this.label4.Size = new System.Drawing.Size(99, 17);
             this.label4.TabIndex = 0;
             this.label4.Text = "Building Visits:";
             // 
@@ -357,7 +351,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(33, 250);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(112, 17);
+            this.label7.Size = new System.Drawing.Size(108, 17);
             this.label7.TabIndex = 0;
             this.label7.Text = "Creature Count:";
             // 
@@ -366,7 +360,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(25, 189);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(120, 17);
+            this.label3.Size = new System.Drawing.Size(116, 17);
             this.label3.TabIndex = 0;
             this.label3.Text = "Creature Caught:";
             // 
@@ -651,46 +645,38 @@
             // fastObjectListViewCreature
             // 
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureId);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureIdNumber);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureFavorite);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureShiny);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureGender);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureName);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCp);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureCandy);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCandyToEvolve);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnPerfectPercent);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnPrimaryMove);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnSecondaryMove);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnPerfectPercent);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnEPS);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnDPSmain);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnDPS);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnAttack);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnDefense);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnStamina);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCpMultiplier);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnAdditionalCpMult);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureRarity);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureBall);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureHeight);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureWeight);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnBaseCp);
             this.fastObjectListViewCreature.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewCreature.CellEditUseWholeCell = false;
             this.fastObjectListViewCreature.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCreatureId,
             this.olvColumnCreatureFavorite,
-            this.olvColumnCreatureShiny,
-            this.olvColumnCreatureGender,
             this.olvColumnCreatureName,
             this.olvColumnCp,
             this.olvColumnCreatureCandy,
             this.olvColumnCandyToEvolve,
+            this.olvColumnPerfectPercent,
             this.olvColumnPrimaryMove,
             this.olvColumnSecondaryMove,
-            this.olvColumnPerfectPercent,
+            this.olvColumnEPS,
+            this.olvColumnDPSmain,
+            this.olvColumnDPS,
             this.olvColumnAttack,
-            this.olvColumnDefense,
             this.olvColumnStamina,
-            this.olvColumnCreatureRarity,
-            this.olvColumnCreatureHeight,
-            this.olvColumnCreatureWeight});
+            this.olvColumnBaseCp});
             this.fastObjectListViewCreature.ContextMenuStrip = this.contextMenuStripCreatureDetails;
             this.fastObjectListViewCreature.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewCreature.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -710,27 +696,13 @@
             // 
             // olvColumnCreatureId
             // 
-            this.olvColumnCreatureId.AspectName = "";
-            this.olvColumnCreatureId.Text = "Id";
-            // 
-            // olvColumnCreatureIdNumber
-            // 
-            this.olvColumnCreatureIdNumber.AspectName = "id";
-            this.olvColumnCreatureIdNumber.DisplayIndex = 0;
-            this.olvColumnCreatureIdNumber.IsVisible = false;
-            this.olvColumnCreatureIdNumber.Text = "Creature Id";
+            this.olvColumnCreatureId.AspectName = "id";
+            this.olvColumnCreatureId.IsVisible = false;
+            this.olvColumnCreatureId.Text = "Creature Id";
             // 
             // olvColumnCreatureFavorite
             // 
             this.olvColumnCreatureFavorite.Text = "Favorite";
-            // 
-            // olvColumnCreatureShiny
-            // 
-            this.olvColumnCreatureShiny.Text = "Shiny";
-            // 
-            // olvColumnCreatureGender
-            // 
-            this.olvColumnCreatureGender.Text = "Gender";
             // 
             // olvColumnCreatureName
             // 
@@ -755,6 +727,11 @@
             this.olvColumnCandyToEvolve.Text = "Candies To Evolve";
             this.olvColumnCandyToEvolve.Width = 106;
             // 
+            // olvColumnPerfectPercent
+            // 
+            this.olvColumnPerfectPercent.Text = "% Perfect";
+            this.olvColumnPerfectPercent.Width = 69;
+            // 
             // olvColumnPrimaryMove
             // 
             this.olvColumnPrimaryMove.AspectName = "";
@@ -767,55 +744,40 @@
             this.olvColumnSecondaryMove.Text = "Secondary";
             this.olvColumnSecondaryMove.Width = 90;
             // 
-            // olvColumnPerfectPercent
+            // olvColumnEPS
             // 
-            this.olvColumnPerfectPercent.Text = "% Perfect";
+            this.olvColumnEPS.AspectName = "";
+            this.olvColumnEPS.Text = "EPS";
+            // 
+            // olvColumnDPSmain
+            // 
+            this.olvColumnDPSmain.AspectName = "";
+            this.olvColumnDPSmain.Text = "DPS(main)";
+            this.olvColumnDPSmain.Width = 82;
+            // 
+            // olvColumnDPS
+            // 
+            this.olvColumnDPS.AspectName = "";
+            this.olvColumnDPS.Text = "DPS(charged)";
+            this.olvColumnDPS.Width = 101;
             // 
             // olvColumnAttack
             // 
-            this.olvColumnAttack.AspectName = "";
+            this.olvColumnAttack.AspectName = "attackValue";
             this.olvColumnAttack.Text = "Attack";
-            // 
-            // olvColumnDefense
-            // 
-            this.olvColumnDefense.AspectName = "";
-            this.olvColumnDefense.Text = "Defense";
             // 
             // olvColumnStamina
             // 
-            this.olvColumnStamina.AspectName = "";
-            this.olvColumnStamina.Text = "Max Stamina";
+            this.olvColumnStamina.AspectName = "staminaValue";
+            this.olvColumnStamina.Text = "Stamina";
             this.olvColumnStamina.UseFiltering = false;
             this.olvColumnStamina.Width = 63;
             // 
-            // olvColumnCpMultiplier
+            // olvColumnBaseCp
             // 
-            this.olvColumnCpMultiplier.AspectName = "CpMultiplier";
-            this.olvColumnCpMultiplier.DisplayIndex = 10;
-            this.olvColumnCpMultiplier.IsVisible = false;
-            this.olvColumnCpMultiplier.Text = "Cp Mult";
-            // 
-            // olvColumnAdditionalCpMult
-            // 
-            this.olvColumnAdditionalCpMult.AspectName = "AdditionalCpMultiplier";
-            this.olvColumnAdditionalCpMult.DisplayIndex = 11;
-            this.olvColumnAdditionalCpMult.IsVisible = false;
-            this.olvColumnAdditionalCpMult.Text = "Cp Mult (Add)";
-            // 
-            // olvColumnCreatureRarity
-            // 
-            this.olvColumnCreatureRarity.Text = "Rarity";
-            // 
-            // olvColumnCreatureBall
-            // 
-            this.olvColumnCreatureBall.AspectName = "Pokeball";
-            this.olvColumnCreatureBall.DisplayIndex = 12;
-            this.olvColumnCreatureBall.IsVisible = false;
-            this.olvColumnCreatureBall.Text = "Ball";
-            // 
-            // olvColumnCreatureHeight
-            // 
-            this.olvColumnCreatureHeight.Text = "Height";
+            this.olvColumnBaseCp.AspectName = "baseCp";
+            this.olvColumnBaseCp.Text = "BaseCp";
+            this.olvColumnBaseCp.Width = 65;
             // 
             // contextMenuStripCreatureDetails
             // 
@@ -1160,10 +1122,6 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
-            // olvColumnCreatureWeight
-            // 
-            this.olvColumnCreatureWeight.Text = "Weight";
-            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1234,7 +1192,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnPrimaryMove;
         private BrightIdeasSoftware.OLVColumn olvColumnSecondaryMove;
         private BrightIdeasSoftware.OLVColumn olvColumnAttack;
-        private BrightIdeasSoftware.OLVColumn olvColumnDefense;
         private BrightIdeasSoftware.OLVColumn olvColumnStamina;
         private BrightIdeasSoftware.FastObjectListView fastObjectListViewCandy;
         private BrightIdeasSoftware.OLVColumn olvColumnCandyFamily;
@@ -1245,8 +1202,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripCreatureDetails;
         private System.Windows.Forms.ToolStripMenuItem evolveToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnPerfectPercent;
-        private BrightIdeasSoftware.OLVColumn olvColumnCpMultiplier;
-        private BrightIdeasSoftware.OLVColumn olvColumnAdditionalCpMult;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label labelInventoryCount;
@@ -1269,15 +1224,12 @@
         private System.Windows.Forms.Label labelDistanceWalked;
         private BrightIdeasSoftware.OLVColumn olvColumnCreatureCandy;
         private BrightIdeasSoftware.OLVColumn olvColumnCandyToEvolve;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureRarity;
         private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem transferToolStripMenuItem;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label labelPlayerTeam;
         private System.Windows.Forms.Label labelPlayerUsername;
         private System.Windows.Forms.Label label6;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureId;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureBall;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLog;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
@@ -1288,7 +1240,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripRecycle;
         private System.Windows.Forms.ToolStripMenuItem recycleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyStackTraceToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureIdNumber;
+        private BrightIdeasSoftware.OLVColumn olvColumnCreatureId;
         private System.Windows.Forms.ToolStripMenuItem showFutureTransfersToolStripMenuItem;
         private System.Windows.Forms.Label labelCreateDate;
         private System.Windows.Forms.Label label14;
@@ -1303,9 +1255,9 @@
         private System.Windows.Forms.Label labelPokeCoins;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureShiny;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureGender;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureHeight;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureWeight;
+        private BrightIdeasSoftware.OLVColumn olvColumnBaseCp;
+        private BrightIdeasSoftware.OLVColumn olvColumnEPS;
+        private BrightIdeasSoftware.OLVColumn olvColumnDPSmain;
+        private BrightIdeasSoftware.OLVColumn olvColumnDPS;
     }
 }
