@@ -466,7 +466,6 @@ namespace DraconiusGoGUI.UI
 
         private async void TransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to transfer {0} Creature?", fastObjectListViewCreature.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
@@ -474,12 +473,12 @@ namespace DraconiusGoGUI.UI
                 return;
             }
 
-            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>().FirstOrDefault() == null)
+            if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().FirstOrDefault() == null)
                 return;
 
             contextMenuStripCreatureDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.TransferCreature(fastObjectListViewCreature.SelectedObjects.Cast<CreatureData>());
+            MethodResult managerResult = await _manager.TransferCreature(fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>());
 
             DisplayDetails();
 
@@ -488,7 +487,6 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewCreature.SetObjects(_manager.Creature);
 
             MessageBox.Show("Finished transferring Creature");
-            */
         }
 
         private async void EvolveToolStripMenuItem_Click(object sender, EventArgs e)

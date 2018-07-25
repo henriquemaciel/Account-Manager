@@ -14,13 +14,12 @@ namespace DraconiusGoGUI.DracoManager
     {
         public async Task<MethodResult> TransferCreature(IEnumerable<FUserCreature> CreaturesToTransfer)
         {
-            /*
-            List<CreatureData> CreatureToTransfer = new List<CreatureData>();
+            List<FUserCreature> CreatureToTransfer = new List<FUserCreature>();
 
             foreach (var pokToTranfer in CreaturesToTransfer)
             {
                 if (!CanTransferOrEvoleCreature(pokToTranfer))
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pokToTranfer.CreatureId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pokToTranfer.name), LoggerTypes.Info));
                 else
                     CreatureToTransfer.Add(pokToTranfer);
             }
@@ -32,7 +31,7 @@ namespace DraconiusGoGUI.DracoManager
 
             if (!UserSettings.TransferAtOnce)
             {
-                foreach (CreatureData Creature in CreatureToTransfer)
+                foreach (FUserCreature Creature in CreatureToTransfer)
                 {
                     if (!_client.LoggedIn)
                     {
@@ -44,70 +43,34 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }
 
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                    {
-                        RequestType = RequestType.ReleaseCreature,
-                        RequestMessage = new ReleaseCreatureMessage
-                        {
-                            CreatureId = Creature.Id
-                        }.ToByteString()
-                    });
+                    var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(new List<string> { Creature.id }, true));
 
                     if (response == null)
                         return new MethodResult();
 
-                    ReleaseCreatureResponse releaseCreatureResponse = ReleaseCreatureResponse.Parser.ParseFrom(response);
-                    switch (releaseCreatureResponse.Result)
+                    LogCaller(new LoggerEventArgs(String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
+                        Strings.GetCreatureName(Creature.name),
+                        Creature.cp,
+                        CalculateIVPerfection(Creature)),
+                        LoggerTypes.Transfer));
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                    //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
+                    UpdateInventory(InventoryRefresh.CreatureCandy);
+
+
+                    UpdateInventory(InventoryRefresh.Creature);
+
+                    return new MethodResult
                     {
-                        case ReleaseCreatureResponse.Types.Result.Success:
-                            LogCaller(new LoggerEventArgs(String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                Creature.CreatureId,
-                                Creature.Cp,
-                                CalculateIVPerfection(Creature)),
-                                LoggerTypes.Transfer));
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                            RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
-                            UpdateInventory(InventoryRefresh.CreatureCandy);
-                            continue;
-                        case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsBuddy:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                Creature.CreatureId,
-                                releaseCreatureResponse.Result), LoggerTypes.Warning));
-                            continue;
-                        case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsEgg:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                Creature.CreatureId,
-                                releaseCreatureResponse.Result), LoggerTypes.Warning));
-                            continue;
-                        case ReleaseCreatureResponse.Types.Result.CreatureDeployed:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                Creature.CreatureId,
-                                releaseCreatureResponse.Result), LoggerTypes.Warning));
-                            continue;
-                        case ReleaseCreatureResponse.Types.Result.Failed:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
-                                Creature.CreatureId), LoggerTypes.Warning));
-                            continue;
-                        case ReleaseCreatureResponse.Types.Result.Unset:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                Creature.CreatureId,
-                                releaseCreatureResponse.Result), LoggerTypes.Warning));
-                            continue;
-                    }
+                        Success = true
+                    };
                 }
-
-                UpdateInventory(InventoryRefresh.Creature);
-
-                return new MethodResult
-                {
-                    Success = true
-                };
             }
             else
             {
-                var CreatureIds = CreatureToTransfer.Select(x => x.Id);
+                List<string> CreatureIds = CreatureToTransfer.Select(x => x.id).ToList();
 
                 if (!_client.LoggedIn)
                 {
@@ -119,77 +82,32 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.ReleaseCreature,
-                    RequestMessage = new ReleaseCreatureMessage
-                    {
-                        CreatureIds = { CreatureIds }
-                    }.ToByteString()
-                });
+                var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
 
                 if (response == null)
                     return new MethodResult();
 
-                ReleaseCreatureResponse releaseCreatureResponse = ReleaseCreatureResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs(String.Format("Successully transfer {0} Creatures.", CreatureToTransfer.Count()), LoggerTypes.Transfer));
 
-                switch (releaseCreatureResponse.Result)
-                {
-                    case ReleaseCreatureResponse.Types.Result.Success:
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully candy awarded {0} of {1} Creatures.",
-                                releaseCreatureResponse.CandyAwarded,
-                                CreatureToTransfer.Count()),
-                            LoggerTypes.Transfer));
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                        foreach (var CreatureId in CreatureIds)
-                        {
-                            RemoveInventoryItem(GetCreatureHashKey(CreatureId));
-                        }
-                        UpdateInventory(InventoryRefresh.CreatureCandy);
-                        break;
-                    case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsBuddy:
-                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            CreatureToTransfer.Count(),
-                            releaseCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case ReleaseCreatureResponse.Types.Result.ErrorCreatureIsEgg:
-                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            CreatureToTransfer.Count(),
-                            releaseCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case ReleaseCreatureResponse.Types.Result.CreatureDeployed:
-                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            CreatureToTransfer.Count(),
-                            releaseCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                    case ReleaseCreatureResponse.Types.Result.Failed:
-                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
-                            CreatureToTransfer.Count()), LoggerTypes.Warning));
-                        break;
-                    case ReleaseCreatureResponse.Types.Result.Unset:
-                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                            CreatureToTransfer.Count(),
-                            releaseCreatureResponse.Result), LoggerTypes.Warning));
-                        break;
-                }
+                UpdateInventory(InventoryRefresh.CreatureCandy);
 
                 UpdateInventory(InventoryRefresh.Creature);
-                */
-            return new MethodResult
-            {
-                Success = true
-            };
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            return new MethodResult();
         }
 
         private async Task<MethodResult> TransferFilteredCreature()
         {
-            /*
             double configPercentCreatures = UserSettings.PercTransPoke * 0.01;
 
-            double percentCreature = PlayerData.MaxCreatureStorage * configPercentCreatures;
+            double percentCreature = Stats.creatureStorageSize * configPercentCreatures;
 
             if (percentCreature > Creature.Count)
             {
@@ -199,7 +117,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            MethodResult<List<CreatureData>> transferResult = GetCreatureToTransfer();
+            MethodResult<List<FUserCreature>> transferResult = GetCreatureToTransfer();
 
             if (!transferResult.Success || transferResult.Data.Count == 0)
             {
@@ -207,7 +125,6 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             await TransferCreature(transferResult.Data);
-            */
 
             await Task.Delay(0);
             return new MethodResult
