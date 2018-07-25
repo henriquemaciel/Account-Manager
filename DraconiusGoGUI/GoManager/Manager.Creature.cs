@@ -337,9 +337,9 @@ namespace DraconiusGoGUI.DracoManager
         // NOTE: this is the real IV Percent, using only Individual values.
         public static double CalculateIVPerfection(FUserCreature Creature)
         {
-            // NOTE: 45 points = 15 at points + 15 def points + 15 sta points
-            //  100/45 simplifying is 20/9
-            return ((double)Creature.attackValue + Creature.staminaValue) * 20 / 9;
+            // NOTE: 10 points = 5 att points + 5 sta points
+            //  if 10 is 100 then 9 is X. X = 9 * 100 / 10 => X = 9 * 10; 
+            return (Creature.attackValue + Creature.staminaValue) * 10;
         }
 
         // This other Percent gives different IV % for the same IVs depending of the Creature level.
