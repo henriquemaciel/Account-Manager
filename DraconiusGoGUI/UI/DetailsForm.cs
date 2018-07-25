@@ -348,7 +348,7 @@ namespace DraconiusGoGUI.UI
             {
                 /*
                 int candy = (int)olvColumnCreatureCandy.GetValue(CreatureData);
-                int candyToEvolve = (int)olvColumnCreatureCandy.GetValue(CreatureData);
+                int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(CreatureData);
 
                 if (candyToEvolve > 0)
                 {
