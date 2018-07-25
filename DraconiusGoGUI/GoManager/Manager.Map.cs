@@ -121,7 +121,45 @@ namespace DraconiusGoGUI.DracoManager
                 Data = _buildings
             });
         }
+        private async Task<MethodResult<List<FChest>>> GetAllChestsInRangeAsync()
+        {
+            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+            //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
+            FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
+            //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+            FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
+            if (avatar != null)
+                Stats = avatar;
+
+            if (playerdata != null)
+                PlayerData = playerdata;
+
+            
+            var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
+
+            if (_chests.Count() == 0)
+            {
+                //throw new OperationCanceledException("Not cells.");
+            }
+
+            if (!chests.chests.Any())
+            {
+                return new MethodResult<List<FChest>>
+                {
+                    Message = "No chests found in range.",
+                };
+            }
+
+            return await Task.Run(() => new MethodResult<List<FChest>>
+            {
+                Message = "Success",
+                Success = true,
+                Data = _chests.ToList()
+            });
+        }
         /*
         private async Task<MethodResult<MapCreature>> GetIncenseCreatures()
         {

@@ -709,6 +709,48 @@ namespace DraconiusGoGUI.DracoManager
                                 ++currentFailedStops;
                             }
                         }
+                        var openChests = true; // TODO: make it configurable
+                        if (openChests)
+                        {
+                            var chestsResult = await GetAllChestsInRangeAsync();
+                            if (chestsResult.Success)
+                            {
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                foreach (var chest in chestsResult.Data)
+                                {
+                                    var openResult =  _client.DracoClient.OpenChest(chest);
+                                    var text = "Chest Opened. Award Received: ";
+                                    foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
+                                    {
+                                        text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
+                                    }
+                                    var xpqty = openResult.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                                    if (xpqty > 0)
+                                    {
+                                        text += $"[{xpqty}] XP, ";
+                                        ExpIncrease( xpqty);
+                                    }
+
+                                    LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
+                                    if (openResult.levelUpLoot != null)
+                                    {
+                                        text = "Level Up Award: ";
+                                        foreach (var item in openResult.levelUpLoot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
+                                        {
+                                            text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
+                                        }
+                                        xpqty = openResult.levelUpLoot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                                        if (xpqty > 0)
+                                        {
+                                            text += $"[{xpqty}] XP, ";
+                                            ExpIncrease( xpqty);
+                                        }
+                                        LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
+                                    }
+                                }                                
+                            }
+
+                        }
 
                         /* Search Old Refs:
                         double filledInventorySpace = FilledInventoryStorage();
