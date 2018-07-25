@@ -590,7 +590,7 @@ namespace DraconiusGoGUI.DracoManager
         private bool CanTransferOrEvoleCreature(FUserCreature Creature, bool allmodes = false)
         {
             // Can't transfer Creature null.
-            if (Creature == null || Creature.name == 0)
+            if (Creature == null)
                 return false;
 
             // Can't transfer Creature check all modes.
