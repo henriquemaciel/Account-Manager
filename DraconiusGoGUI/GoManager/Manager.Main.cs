@@ -891,38 +891,32 @@ namespace DraconiusGoGUI.DracoManager
 
                             if (UserSettings.EvolveCreature)
                             {
-                                /*
                                 MethodResult evolveResult = await EvolveFilteredCreature();
 
                                 if (evolveResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
-                                */
                             }
 
                             if (UserSettings.TransferCreature)
                             {
-                                /*
                                 MethodResult transferResult = await TransferFilteredCreature();
 
                                 if (transferResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
-                                */
                             }
 
                             if (UserSettings.UpgradeCreature)
                             {
-                                /*
                                 MethodResult upgradeResult = await UpgradeFilteredCreature();
 
                                 if (upgradeResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
-                                */
                             }
 
                             if (UserSettings.IncubateEggs)
@@ -980,14 +974,12 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (UserSettings.UseLuckEggConst && Level >= UserSettings.LevelForConstLukky && IsRunning)
                         {
-                            /*
                             MethodResult luckEggResult = await UseLuckyEgg();
 
                             if (luckEggResult.Success)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
-                            */
                         }
                     }
                 }

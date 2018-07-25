@@ -598,13 +598,13 @@ namespace DraconiusGoGUI.DracoManager
             //    return false;
 
             // Can't transfer Creature in gyms.
-            //if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
-            //    return false;
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
+                return false;
 
             // Can't transfer buddy Creature
-            //var buddy = PlayerData?.BuddyCreature;
-            //if (buddy != null && buddy.Id == Creature.Id)
-            //    return false;
+            var buddy = Stats.buddy;
+            if (buddy != null && buddy.id == Creature.id)
+                return false;
 
             // Can't transfer favorite
             //if (Creature.Favorite == 1)
