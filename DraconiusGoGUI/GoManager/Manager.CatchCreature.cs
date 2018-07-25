@@ -255,7 +255,8 @@ namespace DraconiusGoGUI.DracoManager
                     return new MethodResult();
                 }
                 var resCatch = new FCatchCreatureResult();
-                var times = 5;
+                var maxTries = 5; // TODO: make this configurable
+                var times = maxTries; 
                 var success = false;
                 var message = "";
                 int expGained = 0;
@@ -277,7 +278,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         candyGained = resCatch.candies;
 
-                        message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught, exp { expGained }, candies { candyGained }";
+                        message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught using a {Strings.GetItemName(ball.type)}, exp { expGained }, candies { candyGained }";
                         success = true;
                     }
                     else if (resCatch.runAway)
@@ -287,6 +288,8 @@ namespace DraconiusGoGUI.DracoManager
                     ball.count--;
                     times--;
                 } while (!resCatch.caught && !resCatch.runAway && times > 0);
+                if (times<= 0)
+                    message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp {resCatch.userCreature.cp}, not caught after of {maxTries} tries.";
 
                 LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Info));
 

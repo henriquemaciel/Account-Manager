@@ -4,6 +4,7 @@ using DracoProtos.Core.Objects;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using DracoProtos.Core.Base;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -30,7 +31,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     return new MethodResult();
                 }
-                if (Building.pitstop.cooldown)
+                if (Building.pitstop!=null && Building.pitstop.cooldown)
                 {
                     LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
                     return new MethodResult();
@@ -61,31 +62,30 @@ namespace DraconiusGoGUI.DracoManager
                 }
                 var text = "Award Received: ";
                 var loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
-                foreach (var item in loot.loot.lootList) {
-                    var itemItem = item as FLootItemItem;
-                    if (itemItem != null)
-                        text += $"[{itemItem.qty}] {Strings.GetItemName(itemItem.item)}, ";
-                    else
-                    {
-                        text += $"[{item.qty}] XP, ";
-                        ExperienceAwarded = item.qty;
-                    }
+                foreach (var item in loot.loot.lootList.Where(x=> x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item)) {
+                        text += $"[{item.Sum(x=>x.qty)}] {Strings.GetItemName(item.Key)}, ";
                 }
+                var xpqty = loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                if (xpqty > 0) { 
+                    text += $"[{xpqty}] XP, ";
+                    ExperienceAwarded = xpqty;
+                }
+
                 LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                 if (loot.levelUpLoot != null)
                 {
                     text = "Level Up Award: ";
-                    foreach (var item in loot.levelUpLoot.lootList)
+                    foreach (var item in loot.levelUpLoot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
                     {
-                        var itemItem = item as FLootItemItem;
-                        if (itemItem != null)
-                            text = $"[{itemItem.qty}] {Strings.GetItemName(itemItem.item)}, ";
-                        else
-                        {
-                            text += $"[{item.qty}] XP, ";
-                            ExperienceAwarded = item.qty;
-                        }
+                        text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
                     }
+                    xpqty = loot.levelUpLoot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                    if (xpqty > 0)
+                    {
+                        text += $"[{xpqty}] XP, ";
+                        ExperienceAwarded = xpqty;
+                    }
+
                     LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                 }
                 // copy pitstop values
