@@ -1,4 +1,6 @@
-﻿using DraconiusGoGUI.Extensions;
+﻿using DracoLib.Core.Exceptions;
+using DracoLib.Core.Extensions;
+using DraconiusGoGUI.Extensions;
 using DracoProtos.Core.Objects;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,20 +49,6 @@ namespace DraconiusGoGUI.DracoManager
             FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
             FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
-            if (avatar != null)
-                Stats = avatar;
-
-            if (playerdata != null)
-                PlayerData = playerdata;
-
-            //var _buildings[];
-            var _buildings = buildings.tileBuildings.Values.ToArray().SelectMany(t => t.buildings).ToList();
-
-            if (_buildings.Count() == 0)
-            {
-                //throw new OperationCanceledException("Not cells.");
-            }
-
             if (!buildings.tileBuildings.Any())
             {
                 return new MethodResult<List<FBuilding>>
@@ -68,23 +56,32 @@ namespace DraconiusGoGUI.DracoManager
                     Message = "No buildings data found. Potential temp IP ban or bad location",
                 };
             }
-            /*
-            var BuildingData = new List<FBuildingUpdate>();
 
-            foreach (var Building in buildings.tileBuildings)
+            if (avatar != null)
+                Stats = avatar;
+
+            if (playerdata != null)
+                PlayerData = playerdata;
+
+            //var _buildings[];
+            var ALLBuildings = buildings.tileBuildings.Values.ToArray().SelectMany(t => t.buildings).ToList();
+
+            var BuildingData = new List<FBuilding>();
+
+            foreach (var Building in ALLBuildings)
             {
-                if (!IsValidLocation(Building.Latitude, Building.Longitude))
+                if (!IsValidLocation(Building.coords.latitude, Building.coords.longitude))
                 {
                     continue;
                 }
 
-                if (Building.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
+                if (Building.pitstop != null && Building.pitstop.cooldown)
                 {
                     continue;
                 }
 
-                var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                var BuildingLocation = new GeoCoordinate(Building.Latitude, Building.Longitude);
+                var defaultLocation = new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude);
+                var BuildingLocation = new GeoCoordinate(Building.coords.latitude, Building.coords.longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, BuildingLocation);
 
@@ -96,31 +93,19 @@ namespace DraconiusGoGUI.DracoManager
                 BuildingData.Add(Building);
             }
 
-            if (BuildingData.Count == 0)
+            if (BuildingData.Count() == 0)
             {
-                return new MethodResult<List<BuildingData>>
-                {
-                    Message = "No searchable Buildings found within range",
-                };
+                throw new DracoError("Not Buildings.");
             }
 
-            if (UserSettings.ShuffleBuildings)
-            {
-                var rnd = new Random();
-                BuildingData = BuildingData.OrderBy(x => rnd.Next()).ToList();
-            }
-            else
-            {
-                BuildingData = BuildingData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
-            }
-            */
             return await Task.Run(() => new MethodResult<List<FBuilding>>
             {
                 Message = "Success",
                 Success = true,
-                Data = _buildings
+                Data = BuildingData
             });
         }
+
         private async Task<MethodResult<List<FChest>>> GetAllChestsInRangeAsync()
         {
             FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);

@@ -108,42 +108,6 @@ namespace DraconiusGoGUI.DracoManager
                 };
 
             }
-            //BuildingSearchResponse BuildingResponse = null;
-
-            //string Building = Building.Type == BuildingType.Checkpoint ? "Building" : "Gym";
-
-            /*
-            for (int i = 0; i < maxBuildingAttempts; i++)
-            {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
-                }
-
-                var response = await Task.Run(() => _client.DracoClient.UseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId) as FLoot);
-
-                if (response.lootList.Count == 0)
-                    return new MethodResult();
-
-                string _message = String.Format("Searched {0}. Exp: {1}. Items: {2}.",
-                              Building,
-                              response.GetExp(),
-                              StringUtil.GetSummedFriendlyNameOfItemAwardList(response.lootList));
-
-                LogCaller(new LoggerEventArgs(_message, LoggerTypes.Success));
-
-                return new MethodResult
-                {
-                    Success = true,
-                    Message = "Success"
-                };
-            }
-            */
             return new MethodResult();
 
             /*
