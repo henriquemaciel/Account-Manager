@@ -606,9 +606,9 @@ namespace DraconiusGoGUI.DracoManager
             if (buddy != null && buddy.id == Creature.id)
                 return false;
 
-            // Can't transfer favorite
-            //if (Creature.Favorite == 1)
-            //    return false;
+            // Can't transfer groupped
+            if (Creature.group > 0)
+                return false;
 
             return true;
         }

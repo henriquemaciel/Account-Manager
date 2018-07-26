@@ -411,6 +411,26 @@ namespace DraconiusGoGUI.UI
                     e.SubItem.ForeColor = Color.Red;
                 }
             }
+            else if (e.Column == olvColumnCreatureGroup)
+            {
+                if (CreatureData.group == 3)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                    e.SubItem.Text = "Red";
+                }
+                else if (CreatureData.staminaValue == 2)
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                    e.SubItem.Text = "Yellow";
+                }
+                else if (CreatureData.staminaValue == 1)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                    e.SubItem.Text = "Green";
+                }
+                else
+                    e.SubItem.Text = "None";
+            }
             else if (e.Column == olvColumnPrimaryMove)
             {
                 e.SubItem.Text = _manager.Strings.GetString("skill.main." + CreatureData.mainSkill);

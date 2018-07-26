@@ -79,7 +79,7 @@
             this.tabPageCreature = new System.Windows.Forms.TabPage();
             this.fastObjectListViewCreature = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnCreatureId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCreatureFavorite = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCreatureGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureCandy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -645,7 +645,7 @@
             // fastObjectListViewCreature
             // 
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureId);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureFavorite);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureGroup);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureName);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCp);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureCandy);
@@ -663,7 +663,7 @@
             this.fastObjectListViewCreature.CellEditUseWholeCell = false;
             this.fastObjectListViewCreature.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCreatureId,
-            this.olvColumnCreatureFavorite,
+            this.olvColumnCreatureGroup,
             this.olvColumnCreatureName,
             this.olvColumnCp,
             this.olvColumnCreatureCandy,
@@ -700,9 +700,10 @@
             this.olvColumnCreatureId.IsVisible = false;
             this.olvColumnCreatureId.Text = "Creature Id";
             // 
-            // olvColumnCreatureFavorite
+            // olvColumnCreatureGroup
             // 
-            this.olvColumnCreatureFavorite.Text = "Favorite";
+            this.olvColumnCreatureGroup.AspectName = "group";
+            this.olvColumnCreatureGroup.Text = "Group";
             // 
             // olvColumnCreatureName
             // 
@@ -1233,7 +1234,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLog;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnCreatureFavorite;
+        private BrightIdeasSoftware.OLVColumn olvColumnCreatureGroup;
         private System.Windows.Forms.ToolStripMenuItem favoriteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setFavoriteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setUnfavoriteToolStripMenuItem;
