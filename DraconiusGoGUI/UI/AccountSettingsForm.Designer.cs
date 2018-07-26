@@ -103,7 +103,7 @@
             this.checkBoxEnableBattles = new System.Windows.Forms.CheckBox();
             this.checkBoxSpinGyms = new System.Windows.Forms.CheckBox();
             this.checkBoxStopOnAPIUpdate = new System.Windows.Forms.CheckBox();
-            this.checkBoxClaimLevelUp = new System.Windows.Forms.CheckBox();
+            this.checkBoxOpenChests = new System.Windows.Forms.CheckBox();
             this.tabPageProxy = new System.Windows.Forms.TabPage();
             this.checkBoxRemoveOnStop = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoRotateProxies = new System.Windows.Forms.CheckBox();
@@ -476,7 +476,7 @@
             this.tabPageActions.Controls.Add(this.checkBoxEnableBattles);
             this.tabPageActions.Controls.Add(this.checkBoxSpinGyms);
             this.tabPageActions.Controls.Add(this.checkBoxStopOnAPIUpdate);
-            this.tabPageActions.Controls.Add(this.checkBoxClaimLevelUp);
+            this.tabPageActions.Controls.Add(this.checkBoxOpenChests);
             this.tabPageActions.Location = new System.Drawing.Point(4, 25);
             this.tabPageActions.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Name = "tabPageActions";
@@ -1175,16 +1175,16 @@
             this.checkBoxStopOnAPIUpdate.Text = "Stop on API Update";
             this.checkBoxStopOnAPIUpdate.UseVisualStyleBackColor = true;
             // 
-            // checkBoxClaimLevelUp
+            // checkBoxOpenChests
             // 
-            this.checkBoxClaimLevelUp.AutoSize = true;
-            this.checkBoxClaimLevelUp.Location = new System.Drawing.Point(332, 299);
-            this.checkBoxClaimLevelUp.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxClaimLevelUp.Name = "checkBoxClaimLevelUp";
-            this.checkBoxClaimLevelUp.Size = new System.Drawing.Size(112, 21);
-            this.checkBoxClaimLevelUp.TabIndex = 47;
-            this.checkBoxClaimLevelUp.Text = "Open Chests";
-            this.checkBoxClaimLevelUp.UseVisualStyleBackColor = true;
+            this.checkBoxOpenChests.AutoSize = true;
+            this.checkBoxOpenChests.Location = new System.Drawing.Point(332, 299);
+            this.checkBoxOpenChests.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxOpenChests.Name = "checkBoxOpenChests";
+            this.checkBoxOpenChests.Size = new System.Drawing.Size(112, 21);
+            this.checkBoxOpenChests.TabIndex = 47;
+            this.checkBoxOpenChests.Text = "Open Chests";
+            this.checkBoxOpenChests.UseVisualStyleBackColor = true;
             // 
             // tabPageProxy
             // 
@@ -2684,7 +2684,7 @@
         private System.Windows.Forms.CheckBox checkBoxEnableBattles;
         private System.Windows.Forms.CheckBox checkBoxSpinGyms;
         private System.Windows.Forms.CheckBox checkBoxStopOnAPIUpdate;
-        private System.Windows.Forms.CheckBox checkBoxClaimLevelUp;
+        private System.Windows.Forms.CheckBox checkBoxOpenChests;
         private System.Windows.Forms.TabPage tabPageProxy;
         private System.Windows.Forms.CheckBox checkBoxRemoveOnStop;
         private System.Windows.Forms.CheckBox checkBoxAutoRotateProxies;

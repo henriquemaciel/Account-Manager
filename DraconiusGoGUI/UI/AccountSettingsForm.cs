@@ -134,7 +134,7 @@ namespace DraconiusGoGUI.UI
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
             checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
-            checkBoxClaimLevelUp.Checked = settings.OpenChests;
+            checkBoxOpenChests.Checked = settings.OpenChests;
             numericUpDownSearchBuildingBelow.Value = new Decimal(settings.SearchBuildingBelowPercent);
             numericUpDownCreaturesDayLimit.Value = new Decimal(settings.CatchCreatureDayLimit);
             numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinBuildingsDayLimit);
@@ -351,7 +351,7 @@ namespace DraconiusGoGUI.UI
             userSettings.CatchCreatureDayLimit = (int)numericUpDownCreaturesDayLimit.Value;
             userSettings.SpinBuildingsDayLimit = (int)numericUpDownStopsDayLimit.Value;
             userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
-            userSettings.OpenChests = checkBoxClaimLevelUp.Checked;
+            userSettings.OpenChests = checkBoxOpenChests.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             userSettings.DeployCreature = checkBoxDeployToGym.Checked;
