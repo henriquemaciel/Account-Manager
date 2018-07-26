@@ -537,6 +537,12 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<FCatchingCreature>> EncounterCreature(FWildCreature mapCreature)
         {
+
+            if (mapCreature == null)
+            {
+                return new MethodResult<FCatchingCreature>();
+            }
+
             if (!_client.LoggedIn)
             {
                 MethodResult result = await AcLogin();
