@@ -37,8 +37,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.labelDeployedCreatures = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.labelTutorialState = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.labelCreateDate = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.buttonUpdateStats = new System.Windows.Forms.Button();
@@ -175,8 +173,6 @@
             this.tabPageStats.Controls.Add(this.label17);
             this.tabPageStats.Controls.Add(this.labelDeployedCreatures);
             this.tabPageStats.Controls.Add(this.label16);
-            this.tabPageStats.Controls.Add(this.labelTutorialState);
-            this.tabPageStats.Controls.Add(this.label15);
             this.tabPageStats.Controls.Add(this.labelCreateDate);
             this.tabPageStats.Controls.Add(this.label14);
             this.tabPageStats.Controls.Add(this.buttonUpdateStats);
@@ -270,24 +266,6 @@
             this.label16.Size = new System.Drawing.Size(138, 17);
             this.label16.TabIndex = 6;
             this.label16.Text = "Deployed Creatures:";
-            // 
-            // labelTutorialState
-            // 
-            this.labelTutorialState.AutoSize = true;
-            this.labelTutorialState.Location = new System.Drawing.Point(173, 381);
-            this.labelTutorialState.Name = "labelTutorialState";
-            this.labelTutorialState.Size = new System.Drawing.Size(32, 17);
-            this.labelTutorialState.TabIndex = 5;
-            this.labelTutorialState.Text = "???";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(48, 381);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(97, 17);
-            this.label15.TabIndex = 4;
-            this.label15.Text = "Tutorial State:";
             // 
             // labelCreateDate
             // 
@@ -1245,8 +1223,6 @@
         private System.Windows.Forms.ToolStripMenuItem showFutureTransfersToolStripMenuItem;
         private System.Windows.Forms.Label labelCreateDate;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label labelTutorialState;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label labelDeployedCreatures;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label labelCreatureBuddy;
