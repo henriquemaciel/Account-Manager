@@ -233,7 +233,7 @@ namespace DraconiusGoGUI.UI
                 //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.Stats.registerDate);
                 labelCreateDate.Text = date.ToString();
-                labelCreatureBuddy.Text = _manager.Stats.buddy != null ? String.Format("{0}", _manager.Strings.GetCreatureName(_manager.Stats.buddy.creature)) : "Not set";
+                labelCreatureBuddy.Text = (_manager.Stats.buddy != null && _manager.Strings != null) ? String.Format("{0}", _manager.Strings.GetCreatureName(_manager.Stats.buddy.creature)) : "Not set";
             }
 
             if (_manager.Creature != null)
