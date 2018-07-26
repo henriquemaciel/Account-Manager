@@ -134,7 +134,7 @@ namespace DraconiusGoGUI.UI
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
             checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
-            checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
+            checkBoxClaimLevelUp.Checked = settings.OpenChests;
             numericUpDownSearchBuildingBelow.Value = new Decimal(settings.SearchBuildingBelowPercent);
             numericUpDownCreaturesDayLimit.Value = new Decimal(settings.CatchCreatureDayLimit);
             numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinBuildingsDayLimit);
@@ -142,6 +142,15 @@ namespace DraconiusGoGUI.UI
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
             cbMimicWalking.Checked = settings.MimicWalking;
             checkBoxDevLogs.Checked = settings.ShowDebugLogs;
+            textBoxMaxTravel.Text = settings.MaxTravelDistance.ToString();
+            checkBoxEncounterWalk.Checked = settings.EncounterWhileWalking;
+            checkBoxHumanise.Checked = settings.EnableHumanization;
+            numericUpDownGeneralDelay.Value = new Decimal(settings.GeneralDelay);
+            numericUpDownGeneralDelayRandom.Value = new Decimal(settings.GeneralDelayRandom);
+            numericUpDownDelayBetweenPlayerActions.Value = new Decimal(settings.DelayBetweenPlayerActions);
+            numericUpDownPlayerActionDelayRandom.Value = new Decimal(settings.PlayerActionDelayRandom);
+            numericUpDownDelayBetweenLocationUpdates.Value = new Decimal(settings.DelayBetweenLocationUpdates);
+            numericUpDownLocationupdateDelayRandom.Value = new Decimal(settings.LocationupdateDelayRandom);
 
             if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
             {
@@ -167,6 +176,13 @@ namespace DraconiusGoGUI.UI
             checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
 
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
+
+            numericUpDownGeneralDelay.Enabled = settings.EnableHumanization;
+            numericUpDownGeneralDelayRandom.Enabled = settings.EnableHumanization;
+            numericUpDownDelayBetweenPlayerActions.Enabled = settings.EnableHumanization;
+            numericUpDownDelayBetweenLocationUpdates.Enabled = settings.EnableHumanization;
+            numericUpDownLocationupdateDelayRandom.Enabled = settings.EnableHumanization;
+            numericUpDownPlayerActionDelayRandom.Enabled = settings.EnableHumanization;
 
             //Device settings
             textBoxDeviceId.Text = settings.DeviceId;
@@ -335,7 +351,7 @@ namespace DraconiusGoGUI.UI
             userSettings.CatchCreatureDayLimit = (int)numericUpDownCreaturesDayLimit.Value;
             userSettings.SpinBuildingsDayLimit = (int)numericUpDownStopsDayLimit.Value;
             userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
-            userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
+            userSettings.OpenChests = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             userSettings.DeployCreature = checkBoxDeployToGym.Checked;
@@ -355,6 +371,7 @@ namespace DraconiusGoGUI.UI
             userSettings.BallsToIgnoreStops = (int)numericUpDownTooBalls.Value;
             userSettings.MimicWalking = cbMimicWalking.Checked;
             userSettings.ShowDebugLogs = checkBoxDevLogs.Checked;
+            userSettings.EnableHumanization = checkBoxHumanise.Checked;
 
             userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
 
@@ -395,6 +412,21 @@ namespace DraconiusGoGUI.UI
             userSettings.AutoFavoritShiny = checkBoxAutoFavShiny.Checked;
             userSettings.SnipeAllCreaturesNoInPokedex = checkBoxSniperNoInPokedex.Checked;
             userSettings.UseSoftBanBypass = checkBoxSoftBypass.Checked;
+            userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;           
+            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationupdateDelayRandom.Value;            
+            userSettings.DelayBetweenLocationUpdates = (int)numericUpDownDelayBetweenLocationUpdates.Value;
+            userSettings.DelayBetweenPlayerActions = (int) numericUpDownDelayBetweenPlayerActions.Value;
+            userSettings.PlayerActionDelayRandom = (int)numericUpDownPlayerActionDelayRandom.Value;
+            userSettings.GeneralDelayRandom = (int)numericUpDownGeneralDelayRandom.Value;
+            userSettings.GeneralDelay = (int)numericUpDownGeneralDelay.Value;
+
+            int maxTravel;
+            if (!Int32.TryParse(textBoxMaxTravel.Text, out maxTravel) || maxTravel <= 0)
+            {
+                MessageBox.Show("Max Travel Distance value", "Warning");
+                return false;
+            }
+            userSettings.MaxTravelDistance = maxTravel;
 
             int softbanbypass;
             if (!Int32.TryParse(numericUpDownSoftBypass.Text, out softbanbypass))
@@ -855,6 +887,22 @@ namespace DraconiusGoGUI.UI
                 checkBoxGoToGymsOnly.Enabled = false;
                 checkBoxGoToGymsOnly.Checked = false;
             }
+        }
+
+        private void CbMimicWalking_Click(object sender, EventArgs e)
+        {
+            textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
+            checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+        }
+
+        private void checkBoxHumanise_Click(object sender, EventArgs e)
+        {
+            numericUpDownGeneralDelay.Enabled = checkBoxHumanise.Checked;
+            numericUpDownGeneralDelayRandom.Enabled = checkBoxHumanise.Checked;
+            numericUpDownDelayBetweenPlayerActions.Enabled = checkBoxHumanise.Checked;
+            numericUpDownDelayBetweenLocationUpdates.Enabled = checkBoxHumanise.Checked;
+            numericUpDownLocationupdateDelayRandom.Enabled = checkBoxHumanise.Checked;
+            numericUpDownPlayerActionDelayRandom.Enabled = checkBoxHumanise.Checked;
         }
     }
 }

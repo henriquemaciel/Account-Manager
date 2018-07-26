@@ -52,7 +52,7 @@ namespace DraconiusGoGUI
         public int MaxBuildingMetersRandom { get; set; }
         public int MaxTravelDistance { get; set; }
         public bool UseLuckyEgg { get; set; }
-        public bool ClaimLevelUpRewards { get; set; }
+        public bool OpenChests { get; set; }
         public int MinCreatureBeforeEvolve { get; set; }
         public bool RecycleItems { get; set; }
         public bool TransferCreature { get; set; }
@@ -173,7 +173,8 @@ namespace DraconiusGoGUI
             InsideReticuleChance = 100;
             MinCreatureBeforeEvolve = 0;
             StopAtMinAccountState = AccountState.Unknown;
-            DelayBetweenPlayerActions = 500;
+            GeneralDelay = 200;
+            DelayBetweenPlayerActions = 200;
             DelayBetweenLocationUpdates = 1000;
             GeneralDelay = 800;
             MaxLogs = 400;
@@ -211,8 +212,7 @@ namespace DraconiusGoGUI
             UseLuckEggConst = false;
             UseLuckyEgg = true;
             UseIncense = true;
-            MaxBuildingMeters = 100.00;
-            MaxBuildingMetersRandom = 50;
+            OpenChests = true;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";
         }

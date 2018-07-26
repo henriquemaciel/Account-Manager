@@ -42,34 +42,32 @@ namespace DraconiusGoGUI.DracoManager
             var builder = new StringBuilder();
             builder.AppendLine("=== Trainer Stats ===");
 
-            /*
             if (Stats != null && PlayerData != null)
             {
                 builder.AppendLine(String.Format("Group: {0}", UserSettings.GroupName));
                 builder.AppendLine(String.Format("Username: {0}", UserSettings.Username));
                 builder.AppendLine(String.Format("Password: {0}", UserSettings.Password));
-                builder.AppendLine(String.Format("Level: {0}", Stats.Level));
+                builder.AppendLine(String.Format("Level: {0}", Stats.level));
                 //builder.AppendLine(String.Format("Current Trainer Name: {0}", PlayerData.Username));
                 //builder.AppendLine(String.Format("Team: {0}", PlayerData.Team));
                 builder.AppendLine(String.Format("Stardust: {0:N0}", TotalStardust));
-                builder.AppendLine(String.Format("Unique Pokedex Entries: {0}", Stats.UniquePokedexEntries));
+                //builder.AppendLine(String.Format("Unique Pokedex Entries: {0}", Stats.UniquePokedexEntries));
             }
             else
             {
                 builder.AppendLine("Failed to grab stats");
             }
-            */
+
             builder.AppendLine();
 
             builder.AppendLine("=== Creature ===");
 
-            /*
             if (Creature != null)
             {
-                foreach (CreatureData Creature in Creature.OrderByDescending(x => x.Cp))
+                foreach (FUserCreature Creature in Creature.OrderByDescending(x => x.cp))
                 {
                     string candy = "Unknown";
-
+                    /*
                     MethodResult<CreatureSettings> pSettings = GetCreatureSetting(Creature.CreatureId);
 
                     if (pSettings.Success)
@@ -81,16 +79,15 @@ namespace DraconiusGoGUI.DracoManager
                             candy = pCandy.Candy_.ToString("N0");
                         }
                     }
-
+                    */
                     double perfectResult = CalculateIVPerfection(Creature);
                     string iv = "Unknown";
 
                     iv = Math.Round(perfectResult, 2).ToString() + "%";
 
-                    builder.AppendLine(String.Format("Creature: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", Creature.CreatureId, Creature.Cp, iv, Creature.Move1.ToString().Replace("Fast", ""), Creature.Move2, candy));
+                    builder.AppendLine(String.Format("Creature: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", Creature.id, Creature.cp, iv, Strings.GetString("skill.main." + Creature.mainSkill), Strings.GetString("skill.charge." + Creature.chargedSkill), candy));
                 }
             }
-            */
 
             //Remove the hardcoded directory later
             try
@@ -122,112 +119,6 @@ namespace DraconiusGoGUI.DracoManager
 
                 return new MethodResult();
             }
-        }
-
-        private async Task<MethodResult> ClaimLevelUpRewards(int level)
-        {
-            if (!UserSettings.ClaimLevelUpRewards || level < 2)
-            {
-                return new MethodResult();
-            }
-
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await AcLogin();
-
-                if (!result.Success)
-                {
-                    return result;
-                }
-            }
-
-            /*
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.LevelUpRewards,
-                RequestMessage = new LevelUpRewardsMessage
-                {
-                    Level = level
-                }.ToByteString()
-            });
-
-            if (response == null)
-                return new MethodResult();
-
-            LevelUpRewardsResponse levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
-            string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
-            LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.LevelUp));
-            */
-            return new MethodResult
-            {
-                Success = true
-            };
-        }
-
-        private async Task<MethodResult> GetPlayer(bool nobuddy = true, bool noinbox = true)
-        {
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await AcLogin();
-
-                if (!result.Success)
-                {
-                    return result;
-                }
-            }
-            /*
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetPlayer,
-                RequestMessage = new GetPlayerMessage
-                {
-                    PlayerLocale = _client.PlayerLocale
-                }.ToByteString()
-            }, true, nobuddy, noinbox);
-
-            if (response == null)
-                return new MethodResult();
-
-            var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
-            */
-            return new MethodResult
-            {
-                Success = true
-            };
-        }
-
-        private async Task<MethodResult> GetPlayerProfile()
-        {
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await AcLogin();
-
-                if (!result.Success)
-                {
-                    return result;
-                }
-            }
-            /*
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetPlayerProfile,
-                RequestMessage = new GetPlayerProfileMessage
-                {
-                    PlayerName = PlayerData.Username
-                }.ToByteString()
-            }, true, false, true);
-
-            if (response == null)
-                return new MethodResult();
-
-            var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
-
-            PlayerProfile = parsedResponse;
-            */
-            return new MethodResult
-            {
-                Success = true
-            };
         }
 
         private async Task<MethodResult> SetPlayerTeam(/*TeamColor team*/)

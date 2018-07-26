@@ -117,13 +117,6 @@ namespace DraconiusGoGUI.DracoManager
                     AccountState = AccountState.Good;
                 }
 
-                // first login
-                await ClaimLevelUpRewards(Level);
-                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                //set playerProfile
-                await GetPlayerProfile();
-                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
                 if (CurrentProxy != null)
                 {
                     ProxyHandler.ResetFailCounter(CurrentProxy);
@@ -709,8 +702,8 @@ namespace DraconiusGoGUI.DracoManager
                                 ++currentFailedStops;
                             }
                         }
-                        var openChests = true; // TODO: make it configurable
-                        if (openChests)
+
+                        if (UserSettings.OpenChests)
                         {
                             var chestsResult = await GetAllChestsInRangeAsync();
                             if (chestsResult.Success)
@@ -977,12 +970,6 @@ namespace DraconiusGoGUI.DracoManager
                         WaitPaused();
 
                         UpdateInventory(InventoryRefresh.Stats);
-
-                        if (Level > prevLevel)
-                        {
-                            await ClaimLevelUpRewards(Level);
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        }
 
                         ++BuildingNumber;
 
