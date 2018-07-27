@@ -473,7 +473,7 @@ namespace DraconiusGoGUI.UI
             MessageBox.Show("Finished evolving Creature");
         }
 
-        private async void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlMain.SelectedTab == tabPageLogs)
             {
@@ -482,33 +482,33 @@ namespace DraconiusGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageCreature)
             {
-                await _manager.UpdateInventory(InventoryRefresh.Creature);
+                _manager.UpdateInventory(InventoryRefresh.Creature);
                 fastObjectListViewCreature.SetObjects(_manager.Creature);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
-                await _manager.UpdateInventory(InventoryRefresh.CreatureCandy);
+                _manager.UpdateInventory(InventoryRefresh.CreatureCandy);
                 //fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
-                await _manager.UpdateInventory(InventoryRefresh.Eggs);
-                await _manager.UpdateInventory(InventoryRefresh.Incubators);
+                _manager.UpdateInventory(InventoryRefresh.Eggs);
+                _manager.UpdateInventory(InventoryRefresh.Incubators);
                 fastObjectListViewEggs.SetObjects(_manager.Eggs);
             }
             else if (tabControlMain.SelectedTab == tabPageInventory)
             {
-                await _manager.UpdateInventory(InventoryRefresh.Items);
+                _manager.UpdateInventory(InventoryRefresh.Items);
                 fastObjectListViewInventory.SetObjects(_manager.Items);
             }
             else if (tabControlMain.SelectedTab == tabPagePokedex)
             {
-                await _manager.UpdateInventory(InventoryRefresh.Pokedex);
+                _manager.UpdateInventory(InventoryRefresh.Pokedex);
                 fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {
-                await _manager.UpdateInventory(InventoryRefresh.Stats);
+                _manager.UpdateInventory(InventoryRefresh.Stats);
                 DisplayDetails();
             }
         }
@@ -599,7 +599,7 @@ namespace DraconiusGoGUI.UI
                 await Task.Delay(500);
             }
 
-            await _manager.UpdateInventory(InventoryRefresh.Items);
+            _manager.UpdateInventory(InventoryRefresh.Items);
 
             fastObjectListViewInventory.SetObjects(_manager.Items);
 

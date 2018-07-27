@@ -21,92 +21,95 @@ namespace DraconiusGoGUI.DracoManager
                 await RecycleFilteredItems();
                 return new MethodResult();
             }
-         
-            int ExperienceAwarded = 0;
 
-            if (!_client.LoggedIn)
+            const int maxBuildingAttempts = 5;
+            for (int i = 0; i < maxBuildingAttempts; i++)
             {
-                return new MethodResult();
-            }
+                int ExperienceAwarded = 0;
 
-            if (Building.pitstop!=null && Building.pitstop.cooldown)
-            {
-                LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
-                return new MethodResult();
-            }
-
-            if (!Building.available)
-            {
-                LogCaller(new LoggerEventArgs($"Building {Building.id} no available", LoggerTypes.Warning));
-                return new MethodResult();
-            }
-
-            FUpdate response = null;
-
-            try
-            {
-                response = await _client.DracoClient.TryUseBuildingAsync(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
-            }
-            catch(Exception ex)
-            {
-                LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.FatalError));
-                return new MethodResult();
-            }
-
-            if (response.items.Count < 2)
-            {
-                LogCaller(new LoggerEventArgs($"Invalid response", LoggerTypes.Warning));
-                return new MethodResult();
-            }
-
-            var text = "Award Received: ";
-            var loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
-            foreach (var item in loot.loot.lootList.Where(x=> x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item)) {
-                    text += $"[{item.Sum(x=>x.qty)}] {Strings.GetItemName(item.Key)}, ";
-            }
-            var xpqty = loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
-            if (xpqty > 0) { 
-                text += $"[{xpqty}] XP, ";
-                ExperienceAwarded = xpqty;
-            }
-
-            LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
-            if (loot.levelUpLoot != null)
-            {
-                text = "Level Up Award: ";
-                foreach (var item in loot.levelUpLoot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
+                if (!_client.LoggedIn)
                 {
-                    text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
+                    return new MethodResult();
                 }
-                xpqty = loot.levelUpLoot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
-                if (xpqty > 0)
+                if (Building.pitstop!=null && Building.pitstop.cooldown)
                 {
+                    LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
+                    return new MethodResult();
+                }
+
+                if (!Building.available)
+                {
+                    LogCaller(new LoggerEventArgs($"Building {Building.id} no available", LoggerTypes.Warning));
+                    return new MethodResult();
+                }
+
+                FUpdate response = null;
+
+                try
+                {
+                    response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                }
+                catch(Exception ex)
+                {
+                    LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.FatalError));
+                    return new MethodResult();
+                }
+
+                if (response.items.Count < 2)
+                {
+                    LogCaller(new LoggerEventArgs($"Invalid response", LoggerTypes.Warning));
+                    return new MethodResult();
+                }
+                var text = "Award Received: ";
+                var loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
+                foreach (var item in loot.loot.lootList.Where(x=> x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item)) {
+                        text += $"[{item.Sum(x=>x.qty)}] {Strings.GetItemName(item.Key)}, ";
+                }
+                var xpqty = loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                if (xpqty > 0) { 
                     text += $"[{xpqty}] XP, ";
                     ExperienceAwarded = xpqty;
                 }
 
                 LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
+                if (loot.levelUpLoot != null)
+                {
+                    text = "Level Up Award: ";
+                    foreach (var item in loot.levelUpLoot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
+                    {
+                        text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
+                    }
+                    xpqty = loot.levelUpLoot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                    if (xpqty > 0)
+                    {
+                        text += $"[{xpqty}] XP, ";
+                        ExperienceAwarded = xpqty;
+                    }
+
+                    LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
+                }
+                // copy pitstop values
+                Building.pitstop = (response.items.FirstOrDefault(x => x is FBuilding) as FBuilding).pitstop;
+
+                ExpIncrease(ExperienceAwarded);
+                TotalBuildingExp += ExperienceAwarded;
+
+                Tracker.AddValues(0, 1);
+
+                _totalZeroExpStops = 0;
+                _potentialBuildingBan = false;
+
+                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                return new MethodResult
+                {
+                    Success = true,
+                    Message = "Success"
+                };
+
             }
-            // copy pitstop values
-            Building.pitstop = (response.items.FirstOrDefault(x => x is FBuilding) as FBuilding).pitstop;
+            return new MethodResult();
 
-            ExpIncrease(ExperienceAwarded);
-            TotalBuildingExp += ExperienceAwarded;
-
-            Tracker.AddValues(0, 1);
-
-            _totalZeroExpStops = 0;
-            _potentialBuildingBan = false;
-
-            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-            return new MethodResult
-            {
-                Success = true,
-                Message = "Success"
-            };
-
-            
             /*
             BuildingResponse = BuildingSearchResponse.Parser.ParseFrom(response);
 

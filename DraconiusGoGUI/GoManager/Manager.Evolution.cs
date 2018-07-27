@@ -322,7 +322,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            var response = await _client.DracoClient.CallAsync(new ItemService().UseExperienceBooster());
+            var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
  
             if (response == null)
                 return new MethodResult();

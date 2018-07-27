@@ -43,7 +43,7 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }
 
-                    var response = await _client.DracoClient.CallAsync(new UserCreatureService().ConvertCreaturesToCandies(new List<string> { Creature.id }, true));
+                    var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(new List<string> { Creature.id }, true));
 
                     if (response == null)
                         return new MethodResult();
@@ -57,10 +57,10 @@ namespace DraconiusGoGUI.DracoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
-                    await UpdateInventory(InventoryRefresh.CreatureCandy);
+                    UpdateInventory(InventoryRefresh.CreatureCandy);
 
 
-                    await UpdateInventory(InventoryRefresh.Creature);
+                    UpdateInventory(InventoryRefresh.Creature);
 
                     return new MethodResult
                     {
@@ -82,7 +82,7 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                var response = await _client.DracoClient.CallAsync(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
+                var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
 
                 if (response == null)
                     return new MethodResult();
@@ -91,9 +91,9 @@ namespace DraconiusGoGUI.DracoManager
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                await UpdateInventory(InventoryRefresh.CreatureCandy);
+                UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                await UpdateInventory(InventoryRefresh.Creature);
+                UpdateInventory(InventoryRefresh.Creature);
 
                 return new MethodResult
                 {
@@ -552,13 +552,13 @@ namespace DraconiusGoGUI.DracoManager
 
                 int cpBefore = Creature.cp;
 
-                var response = await _client.DracoClient.CallAsync(new UserCreatureService().RemasterCreature(Creature.id, true));
+                var response = _client.DracoClient.Call(new UserCreatureService().RemasterCreature(Creature.id, true));
 
                 if (response == null)
                     return new MethodResult();
 
-                await UpdateInventory(InventoryRefresh.Creature);
-                await UpdateInventory(InventoryRefresh.CreatureCandy);
+                UpdateInventory(InventoryRefresh.Creature);
+                UpdateInventory(InventoryRefresh.CreatureCandy);
                 LogCaller(new LoggerEventArgs(String.Format("Upgrade Creature {0} success, CP before: {1} CP after: {2}.", Strings.GetCreatureName(Creature.name), cpBefore, response.cp), LoggerTypes.Upgrade));
             }
 

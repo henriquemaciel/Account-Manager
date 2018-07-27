@@ -61,7 +61,8 @@ namespace DraconiusGoGUI
                     throw new ArgumentException("Login provider must be either \"google\" or \"device\".");
             }
 
-            
+            return await Task.Run(() =>
+            {
 
                 User config = new User()
                 {
@@ -88,14 +89,14 @@ namespace DraconiusGoGUI
                     DracoClient = new DracoClient(proxy, options);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Ping...", LoggerTypes.Info));
-                    var ping = await DracoClient.PingAsync();
+                    var ping = DracoClient.Ping();
                     if (!ping) throw new Exception();
 
                     ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                    await DracoClient.BootAsync(config);
+                    DracoClient.Boot(config);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
-                    var login = await DracoClient.Login();
+                    var login = DracoClient.Login().Result;
                     if (login == null) throw new Exception("Unable to login");
 
                     var newLicence = login.info.newLicense;
@@ -105,7 +106,7 @@ namespace DraconiusGoGUI
                         ClientManager.LogCaller(new LoggerEventArgs("Send client log is set to true! Please report.", LoggerTypes.Info));
                     }
 
-                    await DracoClient.PostAsync("https://us.draconiusgo.com/client-error", new
+                    DracoClient.Post("https://us.draconiusgo.com/client-error", new
                     {
                         appVersion = DracoClient.ClientVersion,
                         deviceInfo = $"platform = iOS\"nos ={ DracoClient.ClientInfo.platformVersion }\"ndevice = iPhone 6S",
@@ -116,7 +117,7 @@ namespace DraconiusGoGUI
 
                     if (newLicence > 0)
                     {
-                        await DracoClient.AcceptLicenceAsync(newLicence);
+                        DracoClient.AcceptLicence(newLicence);
                     }
 
                     ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
@@ -151,7 +152,7 @@ namespace DraconiusGoGUI
                     Success = LoggedIn,
                     Message = msgStr
                 };
-            
+            });
         }
    
         public void SetSettings(Manager manager)

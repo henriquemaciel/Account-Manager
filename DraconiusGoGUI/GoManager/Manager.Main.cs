@@ -450,7 +450,7 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        await UpdateInventory(InventoryRefresh.All);
+                        UpdateInventory(InventoryRefresh.All);
                     }
 
                     #endregion
@@ -711,7 +711,7 @@ namespace DraconiusGoGUI.DracoManager
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 foreach (var chest in chestsResult.Data)
                                 {
-                                    var openResult =  await _client.DracoClient.OpenChestAsync(chest);
+                                    var openResult =  _client.DracoClient.OpenChest(chest);
                                     var text = "Chest Opened. Award Received: ";
                                     foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
                                     {
@@ -964,12 +964,12 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            await UpdateInventory(InventoryRefresh.All); //all inventory
+                            UpdateInventory(InventoryRefresh.All); //all inventory
                         }
 
                         WaitPaused();
 
-                        await UpdateInventory(InventoryRefresh.Stats);
+                        UpdateInventory(InventoryRefresh.Stats);
 
                         ++BuildingNumber;
 

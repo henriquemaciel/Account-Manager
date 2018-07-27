@@ -77,9 +77,9 @@ namespace DraconiusGoGUI.DracoManager
                 .SelectMany(aItems => aItems.Item);
         }
         */
-        private async Task<IEnumerable<FBagItem>> GetItemsData()
+        private IEnumerable<FBagItem> GetItemsData()
         {
-            UserBag = await _client.DracoClient.Inventory.GetUserItemsAsync();
+            UserBag = _client.DracoClient.Inventory.GetUserItems();
             return UserBag.items;
         }
         /*
@@ -94,9 +94,9 @@ namespace DraconiusGoGUI.DracoManager
             return (itemData != null) ? itemData.Count : 0;
         }
         */
-        private async Task<int> GetItemsCount()
+        private int GetItemsCount()
         {
-            return (await _client.DracoClient.Inventory.GetUserItemsAsync()).items.Count();
+            return _client.DracoClient.Inventory.GetUserItems().items.Count();
         }
         /*
         private PlayerStats GetPlayerStats()
@@ -105,19 +105,19 @@ namespace DraconiusGoGUI.DracoManager
                 .Where(i => i != null).FirstOrDefault();
         }
         */
-        private async Task<IEnumerable<FIncubator>> GetIncubators()
+        private IEnumerable<FIncubator> GetIncubators()
         {
-            return (await _client.DracoClient.Eggs.GetHatchingInfoAsync()).incubators;
+            return _client.DracoClient.Eggs.GetHatchingInfo().incubators;
         }
 
-        private async Task<IEnumerable<FEgg>> GetEggs()
+        private IEnumerable<FEgg> GetEggs()
         {
-            return (await _client.DracoClient.Eggs.GetHatchingInfoAsync()).eggs;
+            return _client.DracoClient.Eggs.GetHatchingInfo().eggs;
         }
 
-        private async Task<IEnumerable<FUserCreature>> GetCreatures()
+        private IEnumerable<FUserCreature> GetCreatures()
         {
-            return (await _client.DracoClient.Inventory.GetUserCreaturesAsync()).userCreatures;
+            return _client.DracoClient.Inventory.GetUserCreatures().userCreatures;
         }
         /*
         private IEnumerable<Candy> GetCandies()
@@ -127,9 +127,9 @@ namespace DraconiusGoGUI.DracoManager
                 .Where(p => p != null && p.FamilyId > 0);
         }
         */
-        private async Task<IEnumerable<FCreadexEntry>> GetPokedex()
+        private IEnumerable<FCreadexEntry> GetPokedex()
         {
-            return (await _client.DracoClient.Inventory.GetCreadexAsync()).entries;
+            return _client.DracoClient.Inventory.GetCreadex().entries;
         }
         /*
         private FUserCreature GetCreature(ulong CreatureId)
@@ -198,7 +198,7 @@ namespace DraconiusGoGUI.DracoManager
         /// <summary>
         /// Load Inventory methodes.
         /// </summary>
-       public async Task UpdateInventory(InventoryRefresh type)
+       public void UpdateInventory(InventoryRefresh type)
         {
             if (!_client.LoggedIn)
             {
@@ -222,24 +222,24 @@ namespace DraconiusGoGUI.DracoManager
                         Incubators.Clear();
                         Eggs.Clear();
                         //Stats = GetPlayerStats();
-                        Items = (await GetItemsData()).ToList();
-                        Pokedex = (await GetPokedex()).ToList();
+                        Items = GetItemsData().ToList();
+                        Pokedex = GetPokedex().ToList();
                         //CreatureCandy = GetCandies().ToList();
-                        Incubators = (await GetIncubators()).ToList();
-                        Eggs = (await GetEggs()).ToList();
-                        Creature = (await GetCreatures()).ToList();
+                        Incubators = GetIncubators().ToList();
+                        Eggs = GetEggs().ToList();
+                        Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Items:
                         Items.Clear();
-                        Items = (await GetItemsData()).ToList();
+                        Items = GetItemsData().ToList();
                         break;
                     case InventoryRefresh.Creature:
                         Creature.Clear();
-                        Creature = (await GetCreatures()).ToList();
+                        Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Pokedex:
                         Pokedex.Clear();
-                        Pokedex = (await GetPokedex()).ToList();
+                        Pokedex = GetPokedex().ToList();
                         break;
                     case InventoryRefresh.CreatureCandy:
                         //CreatureCandy.Clear();
@@ -247,11 +247,11 @@ namespace DraconiusGoGUI.DracoManager
                         break;
                     case InventoryRefresh.Incubators:
                         Incubators.Clear();
-                        Incubators = (await GetIncubators()).ToList();
+                        Incubators = GetIncubators().ToList();
                         break;
                     case InventoryRefresh.Eggs:
                         Eggs.Clear();
-                        Eggs = (await GetEggs()).ToList();
+                        Eggs = GetEggs().ToList();
                         break;
                     case InventoryRefresh.Stats:
                         //Stats = GetPlayerStats();
@@ -324,7 +324,7 @@ namespace DraconiusGoGUI.DracoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 }
 
-                await UpdateInventory(InventoryRefresh.Items);
+                UpdateInventory(InventoryRefresh.Items);
 
                 return new MethodResult
                 {
@@ -357,7 +357,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            var recycled = await _client.DracoClient.CallAsync(new ItemService().DiscardItems(itemSetting.Id, toDelete));
+            bool recycled = (bool)_client.DracoClient.Call(new ItemService().DiscardItems(itemSetting.Id, toDelete));
 
             if (recycled)
             {
