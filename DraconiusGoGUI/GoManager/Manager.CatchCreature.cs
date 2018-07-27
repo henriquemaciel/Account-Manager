@@ -268,7 +268,7 @@ namespace DraconiusGoGUI.DracoManager
                         message = $"No balls. Skipping catching creature {Strings.GetCreatureName(catchingCreaure.name)}";
                         break;
                     }
-                    resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
+                    resCatch = await _client.DracoClient.Creatures.CatchAsync(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
                     if (resCatch.caught)
                     {
                         if (resCatch.expCreatureExisting > 0)
@@ -558,7 +558,7 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult<FCatchingCreature>();
             }
 
-            var eResponse = _client.DracoClient.Creatures.Encounter(mapCreature.id);
+            var eResponse = await _client.DracoClient.Creatures.EncounterAsync(mapCreature.id);
 
             return new MethodResult<FCatchingCreature>
             {
