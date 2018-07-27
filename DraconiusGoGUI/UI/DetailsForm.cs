@@ -279,7 +279,7 @@ namespace DraconiusGoGUI.UI
 
             if (e.Column == olvColumnCreatureName)
             {
-                bool bubby = _manager.Stats.buddy.id == CreatureData.id == true;
+                bool bubby = _manager.Stats.buddy?.id == CreatureData.id == true;
                 if (bubby)
                 {
                     e.SubItem.ForeColor = Color.Blue;
