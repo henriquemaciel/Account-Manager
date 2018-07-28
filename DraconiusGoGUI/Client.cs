@@ -58,7 +58,11 @@ namespace DraconiusGoGUI
                     authType = AuthType.DEVICE.ToString().ToUpper();
                     break;*/
                 default:
-                    throw new ArgumentException("Login provider must be either \"google\" or \"device\".");
+                    //throw new ArgumentException("Login provider must be either \"google\" or \"device\".");
+                    return new MethodResult<bool>
+                    {
+                        Message = "Login provider must be either \"google\" or \"device\"."
+                    };
             }
 
             return await Task.Run(() =>
