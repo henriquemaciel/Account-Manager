@@ -144,13 +144,6 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            var completeEmail = UserSettings.Username.IndexOf("@");
-
-            if (completeEmail == -1)
-            {
-                UserSettings.Username = UserSettings.Username + "@gmail.com";
-            }
-
             State = BotState.Starting;
 
             //Fixing a bug on my part
@@ -1071,7 +1064,7 @@ namespace DraconiusGoGUI.DracoManager
                 return;
             }
 
-            State = BotState.Stopping;
+            State = BotState.Stopped;
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
             //Remove proxy
