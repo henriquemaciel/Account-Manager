@@ -1717,6 +1717,11 @@ namespace DraconiusGoGUI
                     var runningCount = _managers.Where(x => x.IsRunning).Count();
                     int simultAcc = Convert.ToInt32(numericUpDownSimAcc.Value);
 
+                    if (simultAcc < 1)
+                    {
+                        simultAcc = 1;
+                    }
+
                     //Needs optimization
                     if (runningCount < simultAcc && startNewHour < DateTime.Now && !checkBoxBulkOnly.Checked)
                     {
