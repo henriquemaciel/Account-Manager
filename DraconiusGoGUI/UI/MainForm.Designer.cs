@@ -945,10 +945,10 @@
             // 
             this.tabPageScheduler.Controls.Add(this.fastObjectListViewScheduler);
             this.tabPageScheduler.Location = new System.Drawing.Point(4, 22);
-            this.tabPageScheduler.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageScheduler.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageScheduler.Name = "tabPageScheduler";
-            this.tabPageScheduler.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.tabPageScheduler.Size = new System.Drawing.Size(986, 383);
+            this.tabPageScheduler.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPageScheduler.Size = new System.Drawing.Size(986, 381);
             this.tabPageScheduler.TabIndex = 2;
             this.tabPageScheduler.Text = "Scheduler";
             this.tabPageScheduler.UseVisualStyleBackColor = true;
@@ -979,10 +979,10 @@
             this.fastObjectListViewScheduler.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewScheduler.FullRowSelect = true;
             this.fastObjectListViewScheduler.Location = new System.Drawing.Point(2, 2);
-            this.fastObjectListViewScheduler.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fastObjectListViewScheduler.Margin = new System.Windows.Forms.Padding(2);
             this.fastObjectListViewScheduler.Name = "fastObjectListViewScheduler";
             this.fastObjectListViewScheduler.ShowGroups = false;
-            this.fastObjectListViewScheduler.Size = new System.Drawing.Size(982, 379);
+            this.fastObjectListViewScheduler.Size = new System.Drawing.Size(982, 377);
             this.fastObjectListViewScheduler.TabIndex = 2;
             this.fastObjectListViewScheduler.UseCellFormatEvents = true;
             this.fastObjectListViewScheduler.UseCompatibleStateImageBehavior = false;
@@ -1043,10 +1043,10 @@
             // 
             this.tabPageProxies.Controls.Add(this.fastObjectListViewProxies);
             this.tabPageProxies.Location = new System.Drawing.Point(4, 22);
-            this.tabPageProxies.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageProxies.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageProxies.Name = "tabPageProxies";
-            this.tabPageProxies.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.tabPageProxies.Size = new System.Drawing.Size(986, 383);
+            this.tabPageProxies.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPageProxies.Size = new System.Drawing.Size(986, 381);
             this.tabPageProxies.TabIndex = 1;
             this.tabPageProxies.Text = "Proxies";
             this.tabPageProxies.UseVisualStyleBackColor = true;
@@ -1073,10 +1073,10 @@
             this.fastObjectListViewProxies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewProxies.FullRowSelect = true;
             this.fastObjectListViewProxies.Location = new System.Drawing.Point(2, 2);
-            this.fastObjectListViewProxies.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fastObjectListViewProxies.Margin = new System.Windows.Forms.Padding(2);
             this.fastObjectListViewProxies.Name = "fastObjectListViewProxies";
             this.fastObjectListViewProxies.ShowGroups = false;
-            this.fastObjectListViewProxies.Size = new System.Drawing.Size(982, 379);
+            this.fastObjectListViewProxies.Size = new System.Drawing.Size(982, 377);
             this.fastObjectListViewProxies.TabIndex = 1;
             this.fastObjectListViewProxies.UseCellFormatEvents = true;
             this.fastObjectListViewProxies.UseCompatibleStateImageBehavior = false;
@@ -1170,7 +1170,7 @@
             this.fastObjectListViewMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewMain.FullRowSelect = true;
             this.fastObjectListViewMain.Location = new System.Drawing.Point(0, 0);
-            this.fastObjectListViewMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fastObjectListViewMain.Margin = new System.Windows.Forms.Padding(2);
             this.fastObjectListViewMain.Name = "fastObjectListViewMain";
             this.fastObjectListViewMain.ShowGroups = false;
             this.fastObjectListViewMain.Size = new System.Drawing.Size(986, 353);
@@ -1380,6 +1380,11 @@
             // 
             this.numericUpDownSimAcc.Location = new System.Drawing.Point(136, 4);
             this.numericUpDownSimAcc.Margin = new System.Windows.Forms.Padding(0);
+            this.numericUpDownSimAcc.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numericUpDownSimAcc.Name = "numericUpDownSimAcc";
             this.numericUpDownSimAcc.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownSimAcc.TabIndex = 3;
@@ -1397,7 +1402,7 @@
             this.tabControlMain.Controls.Add(this.tabPageScheduler);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.Location = new System.Drawing.Point(0, 0);
-            this.tabControlMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControlMain.Margin = new System.Windows.Forms.Padding(2);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(994, 407);
@@ -1417,7 +1422,7 @@
             this.ClientSize = new System.Drawing.Size(994, 429);
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.statusStripStats);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Account Manager";
