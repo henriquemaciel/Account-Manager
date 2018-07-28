@@ -326,6 +326,13 @@ namespace DraconiusGoGUI.UI
                 return false;
             }
 
+            //TODO: check DeviceID format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX 
+            if (String.IsNullOrEmpty(textBoxDeviceId.Text))
+            {
+                MessageBox.Show("Invalid Device ID", "Warning");
+                return false;
+            }
+
             userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ? AuthType.GOOGLE : AuthType.DEVICE;
 
             userSettings.Username = textBoxPtcUsername.Text.Trim();

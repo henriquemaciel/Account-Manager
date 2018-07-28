@@ -68,7 +68,7 @@ namespace DraconiusGoGUI
                 {
                     Username = ClientManager.UserSettings.Username,
                     Password = ClientManager.UserSettings.Password,
-                    DeviceId = DracoUtils.GenerateDeviceId(),
+                    DeviceId = string.IsNullOrEmpty(ClientManager.UserSettings.DeviceId)?DracoUtils.GenerateDeviceId(): ClientManager.UserSettings.DeviceId,
                     Login = authType
                 };
 
