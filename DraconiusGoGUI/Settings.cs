@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using DracoProtos.Core.Base;
 using DracoLib.Core;
+using DracoLib.Core.Utils;
 
 namespace DraconiusGoGUI
 {
@@ -306,10 +307,7 @@ namespace DraconiusGoGUI
 
         public void RandomizeDeviceId()
         {
-            /*
-            var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceId = device.DeviceInfo.DeviceId;
-            */
+            DeviceId = DracoUtils.GenerateDeviceId();
         }
 
         public void RandomizeDevice()

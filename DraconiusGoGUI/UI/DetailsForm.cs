@@ -65,18 +65,7 @@ namespace DraconiusGoGUI.UI
 
             olvColumnCreatureId.AspectGetter = (Creature) => (Creature as FUserCreature).id;
 
-            //olvColumnCreatureFavorite.AspectGetter = (Creature) => (Creature as CreatureData).Favorite == 1; 
-
-            //olvColumnCreatureShiny.AspectGetter = (Creature) => (Creature as CreatureData).CreatureDisplay.Shiny;
-
-            //olvColumnCreatureGender.AspectGetter = (Creature) => (Creature as CreatureData).CreatureDisplay.Gender;
-
             /*
-            olvColumnCreatureRarity.AspectGetter = delegate (object Creature)
-            {
-                CreatureSettings CreatureSettings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
-                return CreatureSettings == null ? CreatureRarity.Normal : CreatureSettings.Rarity;
-            };
 
             olvColumnCandyToEvolve.AspectGetter = delegate (object Creature)
             {
@@ -107,16 +96,7 @@ namespace DraconiusGoGUI.UI
             {
                 return String.IsNullOrEmpty((Creature as FUserCreature).alias) ? _manager.Strings.GetCreatureName((Creature as FUserCreature).name) : (Creature as FUserCreature).alias;
             };
-            /*
-            olvColumnPrimaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move1).ToString().Replace("Fast", "");
 
-            olvColumnSecondaryMove.AspectGetter = (Creature) => ((CreatureMove)(Creature as CreatureData).Move2).ToString();
-
-            olvColumnAttack.AspectGetter = (Creature) => (Creature as CreatureData).IndividualAttack;
-            olvColumnDefense.AspectGetter = (Creature) => (Creature as CreatureData).IndividualDefense;
-            olvColumnStamina.AspectGetter = (Creature) => (Creature as CreatureData).IndividualStamina;
-
-            */
             olvColumnPerfectPercent.AspectGetter = delegate (object Creature)
             {
                 double settings = Manager.CalculateIVPerfection(Creature as FUserCreature);
@@ -124,21 +104,10 @@ namespace DraconiusGoGUI.UI
                 return double.Parse(sDouble);
             };
 
-            /*
-            olvColumnCreatureHeight.AspectGetter = delegate (object Creature)
-            {
-                return String.Format("{0:0.00}m", (Creature as CreatureData).HeightM);
-            };
-
-            olvColumnCreatureWeight.AspectGetter = delegate (object Creature)
-            {
-                return String.Format("{0:0.00}Kg", (Creature as CreatureData).WeightKg);
-            };
-
             #endregion
 
             #region Candy
-
+            /*
             olvColumnCandyFamily.AspectGetter = delegate (object x)
             {
                 var family = (Candy)x;
@@ -264,7 +233,7 @@ namespace DraconiusGoGUI.UI
                 //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.Stats.registerDate);
                 labelCreateDate.Text = date.ToString();
-
+                labelCreatureBuddy.Text = (_manager.Stats.buddy != null && _manager.Strings != null) ? String.Format("{0}", _manager.Strings.GetCreatureName(_manager.Stats.buddy.creature)) : "Not set";
             }
 
             if (_manager.Creature != null)
@@ -280,25 +249,7 @@ namespace DraconiusGoGUI.UI
             
             if (_manager.PlayerData != null)
             {
-                //BuddyCreature buddy = _manager.PlayerData.BuddyCreature ?? new BuddyCreature();
-                //CreatureData myBuddy = _manager.Creature.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new CreatureData();
-                //labelCreatureBuddy.Text = myBuddy.CreatureId != CreatureId.Missingno ? String.Format("{0}", myBuddy.CreatureId) : "Not set";
                 labelPlayerUsername.Text = _manager.PlayerData.nickname;
-                string tutocompleted = "Not Completed";
-                /*if (_manager.PlayerData.TutorialState.Contains(TutorialState.AccountCreation)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.AvatarSelection)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.FirstTimeExperienceComplete)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.GymTutorial)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.LegalScreen)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.NameSelection)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.CreatureBerry)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.CreatureCapture)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.BuildingTutorial)
-                    && _manager.PlayerData.TutorialState.Contains(TutorialState.UseItem)
-                    )
-                    tutocompleted = "Completed";*/
-                    
-                labelTutorialState.Text = tutocompleted;
             }
         }
 
@@ -328,21 +279,15 @@ namespace DraconiusGoGUI.UI
 
             if (e.Column == olvColumnCreatureName)
             {
-                //bool fav = (bool)olvColumnCreatureFavorite.GetValue(CreatureData);
-                //bool bubby = _manager?.PlayerData?.BuddyCreature?.Id == CreatureData.Id == true;
-                //if (fav)
-                //{
-                //    e.SubItem.ForeColor = Color.Gold;
-                //}
-                //else if (bubby)
-                //{
-                //    e.SubItem.ForeColor = Color.Blue;
-                //}
-                //else if (!String.IsNullOrEmpty(CreatureData.DeployedBuildingId))
-                //{
-                //deployed
-                //    e.SubItem.ForeColor = Color.LightGreen;
-                //}
+                bool bubby = _manager.Stats.buddy?.id == CreatureData.id == true;
+                if (bubby)
+                {
+                    e.SubItem.ForeColor = Color.Blue;
+                }
+                else if (CreatureData.isArenaDefender || CreatureData.isLibraryDefender)
+                {
+                    e.SubItem.ForeColor = Color.LightGreen;
+                }
             }
             else if (e.Column == olvColumnCreatureCandy)
             {
