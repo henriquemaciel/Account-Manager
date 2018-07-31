@@ -84,6 +84,7 @@ namespace DraconiusGoGUI
                     TimeOut = 20 * 1000,
                     UtcOffset = (int)TimeZoneInfo.Utc.GetUtcOffset(DateTime.Now).TotalSeconds,
                     Delay = 1000,
+                    // AutoRefreshMap = true // TODO: new feature in dracolib. need dracolibv119
                 };
 
                 string proxy = ClientManager.Proxy;
@@ -91,6 +92,7 @@ namespace DraconiusGoGUI
                 try
                 {
                     DracoClient = new DracoClient(proxy, options);
+                    //DracoClient.Logger = dracoLogger; // TODO: new feature in dracolib. need dracolibv119
 
                     ClientManager.LogCaller(new LoggerEventArgs("Ping...", LoggerTypes.Info));
                     var ping = DracoClient.Ping();
