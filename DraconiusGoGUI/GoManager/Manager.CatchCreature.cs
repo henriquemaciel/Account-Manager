@@ -283,7 +283,7 @@ namespace DraconiusGoGUI.DracoManager
                     }
                     else if (resCatch.runAway)
                     {
-                        message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp {resCatch.userCreature.cp}, fled.";
+                        message = $"Creature {Strings.GetCreatureName(catchingCreaure.name)}, with cp {catchingCreaure.cp}, fled.";
                     }
                     ball.count--;
                     times--;

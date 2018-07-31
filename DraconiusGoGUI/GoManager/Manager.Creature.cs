@@ -82,10 +82,14 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
-
-                if (response == null)
+                if (CreatureIds.Count != 0)
+                {
+                    var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
+                }
+                else
+                {
                     return new MethodResult();
+                }
 
                 LogCaller(new LoggerEventArgs(String.Format("Successully transfer {0} Creatures.", CreatureToTransfer.Count()), LoggerTypes.Transfer));
 
