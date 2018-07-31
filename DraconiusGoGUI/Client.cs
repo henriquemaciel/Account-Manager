@@ -83,7 +83,7 @@ namespace DraconiusGoGUI
                     Lang = "English",
                     TimeOut = 20 * 1000,
                     UtcOffset = (int)TimeZoneInfo.Utc.GetUtcOffset(DateTime.Now).TotalSeconds,
-                    Delay = 1000
+                    Delay = 1000,
                 };
 
                 string proxy = ClientManager.Proxy;
@@ -172,6 +172,10 @@ namespace DraconiusGoGUI
             };*/
         }
 
+        private void dracoLogger(string message)
+        {
+            ClientManager.LogCaller(new LoggerEventArgs(message, LoggerTypes.Debug));
+        }
 
         #region IDisposable Support
         private bool disposedValue = false; // Pour détecter les appels redondants
