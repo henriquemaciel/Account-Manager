@@ -1046,6 +1046,7 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             Stop();
+            //Bot stopped all task end
             State = BotState.Stopped;
             LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
@@ -1064,6 +1065,7 @@ namespace DraconiusGoGUI.DracoManager
                 return;
             }
 
+            //Bot wait for end actions in progress...
             State = BotState.Stopping;
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
