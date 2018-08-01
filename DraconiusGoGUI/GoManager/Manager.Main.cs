@@ -706,9 +706,8 @@ namespace DraconiusGoGUI.DracoManager
                         if (UserSettings.OpenChests)
                         {
                             var chestsResult = await GetAllChestsInRangeAsync();
-                            if (chestsResult.Success)
+                            if (chestsResult.Success || chestsResult.Data.Count > 0 || chestsResult != null)
                             {
-                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 foreach (var chest in chestsResult.Data)
                                 {
                                     var openResult =  _client.DracoClient.OpenChest(chest);
@@ -740,9 +739,9 @@ namespace DraconiusGoGUI.DracoManager
                                         }
                                         LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                                     }
-                                }                                
+                                }
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
-
                         }
 
                         /* Search Old Refs:
