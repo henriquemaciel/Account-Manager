@@ -706,7 +706,7 @@ namespace DraconiusGoGUI.DracoManager
                         if (UserSettings.OpenChests)
                         {
                             var chestsResult = await GetAllChestsInRangeAsync();
-                            if (chestsResult.Success || chestsResult.Data.Count > 0 || chestsResult != null)
+                            if (chestsResult.Success || chestsResult.Data.Count > 0 || chestsResult.Data != null)
                             {
                                 foreach (var chest in chestsResult.Data)
                                 {
