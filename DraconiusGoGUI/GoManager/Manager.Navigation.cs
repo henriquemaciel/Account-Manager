@@ -143,7 +143,6 @@ namespace DraconiusGoGUI.DracoManager
                 requestSendDateTime = DateTime.Now;
 
                 MethodResult result = await UpdateLocation(waypoint);
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for Creature
@@ -179,7 +178,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                await _client.DracoClient.GetMapUpdateAsync(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
+                _client.DracoClient.GetMapUpdate(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
 
                 UserSettings.Latitude = moveTo.Latitude;
                 UserSettings.Longitude = moveTo.Longitude;
@@ -189,6 +188,8 @@ namespace DraconiusGoGUI.DracoManager
                 string message = String.Format("Walked distance: {0:0.00}m", distance);
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.LocationUpdate));
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 return new MethodResult
                 {
