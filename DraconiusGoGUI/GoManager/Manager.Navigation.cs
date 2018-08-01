@@ -179,13 +179,12 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                await _client.DracoClient.GetMapUpdateAsync(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
+                _client.DracoClient.SetPosition(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
 
                 UserSettings.Latitude = moveTo.Latitude;
                 UserSettings.Longitude = moveTo.Longitude;
                 UserSettings.HorizontalAccuracy = moveTo.HorizontalAccuracy;
 
-                //string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
                 string message = String.Format("Walked distance: {0:0.00}m", distance);
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.LocationUpdate));
