@@ -619,12 +619,12 @@ namespace DraconiusGoGUI.DracoManager
                         {
                             int remainingPokeballs = RemainingPokeballs();
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingPokeballs, LoggerTypes.Info));
-                            //double filledCreatureStorage = FilledCreatureStorage();
+                            double filledCreatureStorage = FilledCreatureStorage();
 
                             if (remainingPokeballs > 0)
                             {
-                                //if (filledCreatureStorage <= 100)
-                                //{
+                                if (filledCreatureStorage <= 100)
+                                {
                                     //Catch nearby Creature
                                     MethodResult nearbyCreatureResponse = await CatchNeabyCreature();
                                     if (nearbyCreatureResponse.Success)
@@ -648,13 +648,13 @@ namespace DraconiusGoGUI.DracoManager
                                         //this as walk to Creature sinpe pos is not good .. continue for new pos..
                                     //    continue;
                                     //}
-                                //}
-                                //else
-                                //{
-                                //   LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
-                                //    await TransferFilteredCreature();
-                                //    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                //}
+                                }
+                                else
+                                {
+                                   LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
+                                    await TransferFilteredCreature();
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                }
                             }
                             else
                             {
