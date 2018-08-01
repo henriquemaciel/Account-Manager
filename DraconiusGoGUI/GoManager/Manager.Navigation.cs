@@ -179,7 +179,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                await Task.Run(() => _client.DracoClient.GetMapUpdate(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy));
+                await _client.DracoClient.GetMapUpdateAsync(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
 
                 UserSettings.Latitude = moveTo.Latitude;
                 UserSettings.Longitude = moveTo.Longitude;

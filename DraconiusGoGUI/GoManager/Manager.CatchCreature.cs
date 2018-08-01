@@ -118,6 +118,12 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatureAsync();
+
+            if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count == 0)
+            {
+                return new MethodResult();
+            }
+
             foreach (var Creature in catchableResponse.Data)
             {
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
@@ -131,39 +137,6 @@ namespace DraconiusGoGUI.DracoManager
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
        
-            /*
-            MethodResult<List<MapCreature>> catchableResponse = await GetCatchableCreatureAsync();
-
-            if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count == 0)
-            {
-                return new MethodResult();
-            }
-
-            foreach (MapCreature Creature in catchableResponse.Data)
-            {
-                if (Creature.CreatureId == CreatureId.Missingno)
-                    continue;
-
-                if (!CreatureWithinCatchSettings(Creature))
-                {
-                    continue;
-                }
-
-                MethodResult<EncounterResponse> result = await EncounterCreature(Creature);
-
-                if (!result.Success)
-                {
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    continue;
-                }
-
-                MethodResult catchResult = await CatchCreature(result.Data, Creature);
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-            }
-            */
-
             return new MethodResult
             {
                 Success = true
