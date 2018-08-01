@@ -122,15 +122,6 @@ namespace DraconiusGoGUI.DracoManager
             if (playerdata != null)
                 PlayerData = playerdata;
 
-            LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
-            var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
-            LogCaller(new LoggerEventArgs("in range chests: " + _chests.Count(), Enums.LoggerTypes.Debug));
-
-            if (_chests.Count() == 0)
-            {
-                //throw new OperationCanceledException("Not cells.");
-            }
-
             if (!chests.chests.Any())
             {
                 return new MethodResult<List<FChest>>
@@ -138,6 +129,20 @@ namespace DraconiusGoGUI.DracoManager
                     Message = "No chests found in range.",
                 };
             }
+
+            var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
+
+
+            if (_chests.Count() == 0)
+            {
+                return new MethodResult<List<FChest>>
+                {
+                    Message = "No chests found in range.",
+                };
+            }
+
+            LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
+            LogCaller(new LoggerEventArgs("in range chests: " + _chests.Count(), Enums.LoggerTypes.Debug));
 
             return await Task.Run(() => new MethodResult<List<FChest>>
             {
