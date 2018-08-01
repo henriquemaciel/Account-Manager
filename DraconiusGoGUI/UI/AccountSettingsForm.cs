@@ -203,7 +203,7 @@ namespace DraconiusGoGUI.UI
             cbAutoUpdate.Checked = AutoUpdate;
             numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
 
-            checkBoxAutoFavShiny.Checked = settings.AutoFavoritShiny;
+            checkBoxAutoRefreshMap.Checked = settings.AutoRefreshMap;
             checkBoxSniperNoInPokedex.Checked = settings.SnipeAllCreaturesNoInPokedex;
             checkBoxTooBalls.Checked = settings.IgnoreStopsIfTooBalls;
             numericUpDownTooBalls.Value = new Decimal(settings.BallsToIgnoreStops);
@@ -416,7 +416,7 @@ namespace DraconiusGoGUI.UI
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
             userSettings.UpgradeCreature = checkBoxUpgradeCreatures.Checked;
-            userSettings.AutoFavoritShiny = checkBoxAutoFavShiny.Checked;
+            userSettings.AutoRefreshMap = checkBoxAutoRefreshMap.Checked;
             userSettings.SnipeAllCreaturesNoInPokedex = checkBoxSniperNoInPokedex.Checked;
             userSettings.UseSoftBanBypass = checkBoxSoftBypass.Checked;
             userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;           

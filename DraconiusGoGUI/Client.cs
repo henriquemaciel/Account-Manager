@@ -84,7 +84,7 @@ namespace DraconiusGoGUI
                     TimeOut = 20 * 1000,
                     UtcOffset = (int)TimeZoneInfo.Utc.GetUtcOffset(DateTime.Now).TotalSeconds,
                     Delay = 1000,
-                    AutoRefreshMap = true // TODO: new feature in dracolib. need dracolibv119
+                    AutoRefreshMap = ClientManager.UserSettings.AutoRefreshMap// true // TODO: new feature in dracolib. need dracolibv119
                 };
 
                 string proxy = ClientManager.Proxy;
