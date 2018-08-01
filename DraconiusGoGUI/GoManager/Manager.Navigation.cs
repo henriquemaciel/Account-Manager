@@ -1,4 +1,4 @@
-﻿using DraconiusGoGUI.Enums;
+using DraconiusGoGUI.Enums;
 using System;
 using System.Threading.Tasks;
 using DraconiusGoGUI.Extensions;
@@ -143,7 +143,6 @@ namespace DraconiusGoGUI.DracoManager
                 requestSendDateTime = DateTime.Now;
 
                 MethodResult result = await UpdateLocation(waypoint);
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for Creature
@@ -188,6 +187,8 @@ namespace DraconiusGoGUI.DracoManager
                 string message = String.Format("Walked distance: {0:0.00}m", distance);
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.LocationUpdate));
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 return new MethodResult
                 {
