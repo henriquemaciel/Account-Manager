@@ -412,7 +412,6 @@ namespace DraconiusGoGUI.UI
                 userSettings.ProxyPort = 0;
             }
 
-
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
             userSettings.UpgradeCreature = checkBoxUpgradeCreatures.Checked;

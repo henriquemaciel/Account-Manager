@@ -116,7 +116,7 @@ namespace DraconiusGoGUI.DracoManager
                 //_expGained += evolveCreatureResponse.ExperienceAwarded;
 
                 LogCaller(new LoggerEventArgs(
-                        String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3} -> {4}. IV: {5:0.00}%",
+                        String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3}. IV: {4:0.00}%",
                                     Strings.GetCreatureName(Creature.name),
                                     Strings.GetCreatureName(totype),
                                     exp,

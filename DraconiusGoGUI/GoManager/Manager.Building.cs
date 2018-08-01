@@ -28,7 +28,8 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult();
             }
-            if (Building.pitstop!=null && Building.pitstop.cooldown)
+
+            if (Building.pitstop != null && Building.pitstop.cooldown)
             {
                 LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
                 return new MethodResult();
@@ -44,11 +45,11 @@ namespace DraconiusGoGUI.DracoManager
 
             try
             {
-                response = _client.DracoClient.TryUseBuilding( Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                response = await _client.DracoClient.TryUseBuildingAsync(Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.FatalError));
+                LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.Warning));
                 return new MethodResult();
             }
 
@@ -57,18 +58,25 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs($"Invalid response", LoggerTypes.Warning));
                 return new MethodResult();
             }
+
             var text = "Award Received: ";
             var loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
-            foreach (var item in loot.loot.lootList.Where(x=> x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item)) {
-                    text += $"[{item.Sum(x=>x.qty)}] {Strings.GetItemName(item.Key)}, ";
+
+            foreach (var item in loot.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
+            {
+                text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
             }
+
             var xpqty = loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
-            if (xpqty > 0) { 
+
+            if (xpqty > 0)
+            {
                 text += $"[{xpqty}] XP, ";
                 ExperienceAwarded = xpqty;
             }
 
             LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
+
             if (loot.levelUpLoot != null)
             {
                 text = "Level Up Award: ";

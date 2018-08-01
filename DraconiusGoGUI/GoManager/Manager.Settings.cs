@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -28,23 +29,22 @@ namespace DraconiusGoGUI.DracoManager
 
         public MethodResult<AccountExportModel> GetAccountExport()
         {
-            /*
             if(Stats == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
-            if (!Items.Any()) {
+            if (Items.Count == 0) {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
-            if (!Pokedex.Any()) {
+            if (Pokedex.Count == 0) {
                 LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
             var exportModel = new AccountExportModel()
             {
-                Level = Stats.Level,
+                Level = Stats.level,
                 Type = UserSettings.AuthType,
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
@@ -54,10 +54,10 @@ namespace DraconiusGoGUI.DracoManager
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),
                 ExportTime = DateTime.Now
             };
-            */
+
             return new MethodResult<AccountExportModel>
             {
-                //Data = exportModel,
+                Data = exportModel,
                 Success = true
             };
         }

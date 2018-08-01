@@ -80,10 +80,10 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             MethodResult catchResult = await CatchCreature(result.Data, iResponse.Data);
+            */
 
             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-    */
             return new MethodResult
             {
                 Success = true
@@ -200,9 +200,9 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             MethodResult catchResult = await CatchCreature(BuildingData);
-
-            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             */
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
             return new MethodResult
             {
                 Success = true
@@ -861,6 +861,9 @@ namespace DraconiusGoGUI.DracoManager
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             } while (catchCreatureResponse.Status == CatchCreatureResponse.Types.CatchStatus.CatchMissed || catchCreatureResponse.Status == CatchCreatureResponse.Types.CatchStatus.CatchEscape);
             */
+
+            //TODO: Only for remove war
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             return new MethodResult();
         }
 

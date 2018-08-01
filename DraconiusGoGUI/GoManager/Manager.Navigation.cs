@@ -144,6 +144,9 @@ namespace DraconiusGoGUI.DracoManager
 
                 MethodResult result = await UpdateLocation(waypoint);
 
+                if (!result.Success)
+                    return new MethodResult();
+
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for Creature
 

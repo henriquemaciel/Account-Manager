@@ -1,4 +1,10 @@
-﻿using DraconiusGoGUI.Extensions;
+﻿using DraconiusGoGUI.Enums;
+using DraconiusGoGUI.Extensions;
+using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DraconiusGoGUI.DracoManager
@@ -7,7 +13,6 @@ namespace DraconiusGoGUI.DracoManager
     {
         private async Task<MethodResult> IncubateEggs()
         {
-            /*
             if (!UserSettings.IncubateEggs)
             {
                 LogCaller(new LoggerEventArgs("Incubating disabled", LoggerTypes.Info));
@@ -19,7 +24,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            MethodResult<EggIncubator> incubatorResponse = GetIncubator();
+            MethodResult<FIncubator> incubatorResponse = GetIncubator();
 
             if (!incubatorResponse.Success)
             {
@@ -30,7 +35,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            CreatureData egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.EggIncubatorId));
+            FEgg egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.incubatorId));
 
             if (egg == null)
             {
@@ -51,30 +56,19 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.UseItemEggIncubator,
-                RequestMessage = new UseItemEggIncubatorMessage
-                {
-                    ItemId = incubatorResponse.Data.Id,
-                    CreatureId = egg.Id
-                }.ToByteString()
-            });
-
+            var response = _client.DracoClient.Eggs.StartHatchingEgg(egg.id, incubatorResponse.Data.incubatorId);
+                
             if (response == null)
                 return new MethodResult();
 
-            var useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
-
-            var incitem = incubatorResponse.Data.Id;
-            var _egg = egg.CreatureId;
+            var incitem = incubatorResponse.Data.eggId;
+            var _egg = egg.id;
 
             LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Creature Id: {1}", incitem, _egg), LoggerTypes.Incubate));
 
-            //TODO: Need tests
             UpdateInventory(InventoryRefresh.Eggs);
             UpdateInventory(InventoryRefresh.Incubators);
-            */
+
             return new MethodResult
             {
                 Message = "Success",
@@ -82,19 +76,18 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        /*
-        private MethodResult<EggIncubator> GetIncubator()
+        private MethodResult<FIncubator> GetIncubator()
         {
             if(Incubators == null)
             {
-                return new MethodResult<EggIncubator>();
+                return new MethodResult<FIncubator>();
             }
 
-            EggIncubator unusedUnlimitedIncubator = Incubators.FirstOrDefault(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited && x.CreatureId == 0);
+            FIncubator unusedUnlimitedIncubator = Incubators.FirstOrDefault(x => x.itemType == ItemType.INCUBATOR_PERPETUAL && x.eggId != null);
 
             if(unusedUnlimitedIncubator != null)
             {
-                return new MethodResult<EggIncubator>
+                return new MethodResult<FIncubator>
                 {
                     Data = unusedUnlimitedIncubator,
                     Success = true
@@ -103,11 +96,11 @@ namespace DraconiusGoGUI.DracoManager
 
             if (!UserSettings.OnlyUnlimitedIncubator)
             {
-                IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.CreatureId == 0);
+                IEnumerable<FIncubator> incubators = Incubators.Where(x => x.itemType == ItemType.INCUBATOR_PERPETUAL && x.eggId != null);
     
-                foreach(EggIncubator incubator in incubators)
+                foreach(FIncubator incubator in incubators)
                 {
-                    return new MethodResult<EggIncubator>
+                    return new MethodResult<FIncubator>
                     {
                         Data = incubator,
                         Success = true
@@ -115,11 +108,10 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            return new MethodResult<EggIncubator>
+            return new MethodResult<FIncubator>
             {
                 Message = "No unused incubators"
             };
         }
-        */
     }
 }
