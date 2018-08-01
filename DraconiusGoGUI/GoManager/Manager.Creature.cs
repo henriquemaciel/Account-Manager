@@ -19,7 +19,7 @@ namespace DraconiusGoGUI.DracoManager
             foreach (var pokToTranfer in CreaturesToTransfer)
             {
                 if (!CanTransferOrEvoleCreature(pokToTranfer))
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pokToTranfer.name), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", Strings.GetCreatureName(pokToTranfer.name)), LoggerTypes.Info));
                 else
                     CreatureToTransfer.Add(pokToTranfer);
             }
