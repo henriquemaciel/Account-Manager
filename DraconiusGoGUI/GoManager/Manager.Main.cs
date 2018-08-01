@@ -1064,7 +1064,7 @@ namespace DraconiusGoGUI.DracoManager
                 return;
             }
 
-            State = BotState.Stopped;
+            State = BotState.Stopping;
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
             //Remove proxy
