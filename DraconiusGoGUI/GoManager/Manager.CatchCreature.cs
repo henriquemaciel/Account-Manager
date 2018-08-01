@@ -132,6 +132,10 @@ namespace DraconiusGoGUI.DracoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     continue;
                 }
+
+                if (Creature == null || result.Data.isCreatureStorageFull || result.Data == null)
+                    continue;
+                
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
