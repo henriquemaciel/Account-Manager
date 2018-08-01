@@ -122,8 +122,9 @@ namespace DraconiusGoGUI.DracoManager
             if (playerdata != null)
                 PlayerData = playerdata;
 
-            
+            LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
             var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
+            LogCaller(new LoggerEventArgs("in range chests: " + _chests.Count(), Enums.LoggerTypes.Debug));
 
             if (_chests.Count() == 0)
             {
