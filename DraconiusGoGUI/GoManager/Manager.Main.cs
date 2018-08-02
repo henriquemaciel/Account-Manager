@@ -708,7 +708,8 @@ namespace DraconiusGoGUI.DracoManager
                             var chestsResult = await GetAllChestsInRangeAsync();
                             if (chestsResult.Success && chestsResult.Data.Count > 0 && chestsResult.Data != null)
                             {
-                                foreach (var chest in chestsResult.Data)
+                                // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
+                                foreach (var chest in chestsResult.Data.ToArray())
                                 {
                                     var openResult =  _client.DracoClient.OpenChest(chest);
                                     var text = "Chest Opened. Award Received: ";

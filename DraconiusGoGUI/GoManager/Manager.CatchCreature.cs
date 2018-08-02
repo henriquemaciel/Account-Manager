@@ -119,18 +119,22 @@ namespace DraconiusGoGUI.DracoManager
 
             MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatureAsync();
 
-            if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count == 0)
+            if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count <= 0)
             {
                 return new MethodResult();
             }
 
-            foreach (var Creature in catchableResponse.Data.Where(x=> x!=null))
+            LogCaller(new LoggerEventArgs($"{catchableResponse.Data.Count} Creatures Found: " +string.Join(", ", catchableResponse.Data.Select(x=> x.name)), LoggerTypes.Info));
+
+            // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
+            foreach (var Creature in catchableResponse.Data.Where(x => x != null).ToArray())
             {
                 if (Creature == null)
                 {
                     LogCaller(new LoggerEventArgs("Creature is null. Ignoring", LoggerTypes.Debug));
                     continue;
                 }
+                LogCaller(new LoggerEventArgs($"Trying to catch: " + Creature.name, LoggerTypes.Debug));
 
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
                 if (!result.Success)

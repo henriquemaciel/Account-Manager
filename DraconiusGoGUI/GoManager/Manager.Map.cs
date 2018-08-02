@@ -16,7 +16,7 @@ namespace DraconiusGoGUI.DracoManager
             if (map == null || map.items.Count == 0)
                 return new MethodResult<List<FWildCreature>>();
 
-            FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            var creatures = map.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
@@ -29,9 +29,14 @@ namespace DraconiusGoGUI.DracoManager
             if (playerdata != null)
                 PlayerData = playerdata;
 
-            if (creatures.wilds.Count == 0)
+            if (creatures == null &&  creatures.wilds.Count == 0)
             {
-                //throw new OperationCanceledException("Not cells.");
+                return await Task.Run(() => new MethodResult<List<FWildCreature>>
+                {
+                    Data = new List<FWildCreature>(),
+                    Message = "No Creatures Found",
+                    Success = false
+                });
             }
 
             return await Task.Run(() => new MethodResult<List<FWildCreature>>
