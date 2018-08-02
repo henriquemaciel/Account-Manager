@@ -302,7 +302,7 @@ namespace DraconiusGoGUI.DracoManager
                     userSettings.AccountName = String.Empty;
                     userSettings.Password = String.Empty;
                     userSettings.Username = String.Empty;
-                    userSettings.AutoRefreshMap = true;
+                    userSettings.MsToRefreshMap = 10100;
 
                     // gyms
                     userSettings.DefaultTeam = "Neutral";

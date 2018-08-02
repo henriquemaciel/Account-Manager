@@ -124,8 +124,14 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            foreach (var Creature in catchableResponse.Data)
+            foreach (var Creature in catchableResponse.Data.Where(x=> x!=null))
             {
+                if (Creature == null)
+                {
+                    LogCaller(new LoggerEventArgs("Creature is null. Ignoring", LoggerTypes.Debug));
+                    continue;
+                }
+
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
                 if (!result.Success)
                 {
@@ -133,10 +139,20 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
 
-                if (Creature == null || result.Data.isCreatureStorageFull || result.Data == null)
+                if (result.Data == null )
+                {
+                    LogCaller(new LoggerEventArgs("Creature Data is null. Ignoring", LoggerTypes.Debug));
                     continue;
-                
+                }
+
+                if ( result.Data.isCreatureStorageFull)
+                {
+                    LogCaller(new LoggerEventArgs("Creature Storage is full. Ignoring catching", LoggerTypes.Debug));
+                    break;
+                }
+
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
+
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }

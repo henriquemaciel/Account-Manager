@@ -84,7 +84,7 @@ namespace DraconiusGoGUI
                     TimeOut = 20 * 1000,
                     UtcOffset = (int)TimeZoneInfo.Utc.GetUtcOffset(DateTime.Now).TotalSeconds,
                     Delay = 1000,
-                    AutoRefreshMap = ClientManager.UserSettings.AutoRefreshMap
+                    AutoRefreshMap = ClientManager.UserSettings.MsToRefreshMap
                 };
 
                 string proxy = ClientManager.Proxy;

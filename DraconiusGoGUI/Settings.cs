@@ -32,7 +32,7 @@ namespace DraconiusGoGUI
         public string POSIX { get; set; }
 
 
-        public bool AutoRefreshMap { get; set; }
+        public int MsToRefreshMap { get; set; }
         public bool UseIncense { get; set; }
         public bool UseLuckEggConst { get; set; }
         public int LevelForConstLukky { get; set; }
@@ -200,7 +200,7 @@ namespace DraconiusGoGUI
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
-            AutoRefreshMap = true;
+            MsToRefreshMap = 10100;
             SnipeAllCreaturesNoInPokedex = false;
             EncounterWhileWalking = true;
             RequestBuildingDetails = false;

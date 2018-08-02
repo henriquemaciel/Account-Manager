@@ -496,7 +496,7 @@ namespace DraconiusGoGUI.DracoManager
 
                     int currentFailedStops = 0;
 
-                    var BuildingsToFarm = new Queue<FBuilding>(Buildings.Data);
+                    var BuildingsToFarm = new Queue<FBuilding>(Buildings.Data.Where(x=>x!=null));
 
                     while (BuildingsToFarm.Any())
                     {
