@@ -443,6 +443,8 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
+                        UserMap = new FUpdate();
+
                         result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
 
                         if (!result.Success)

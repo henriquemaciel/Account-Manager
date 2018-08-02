@@ -10,18 +10,20 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        private FUpdate UserMap { get; set; }
+
         private async Task<MethodResult<List<FWildCreature>>> GetCatchableCreatureAsync()
         {
-            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
-            if (map == null || map.items.Count == 0)
+            //FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+            if (UserMap == null || UserMap.items.Count == 0)
                 return new MethodResult<List<FWildCreature>>();
 
-            var creatures = map.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            var creatures = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
-            FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
-            FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
+            FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
             if (avatar != null)
                 Stats = avatar;
@@ -49,16 +51,16 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<List<FBuilding>>> GetAllBuildingsAsync()
         {
-            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
-            if (map == null || map.items.Count == 0)
+            //FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+            if (UserMap == null || UserMap.items.Count == 0)
                 return new MethodResult<List<FBuilding>>();
 
             //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-            FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
-            FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
-            FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
+            FBuildingUpdate buildings = UserMap.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+            FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
             if (!buildings.tileBuildings.Any())
             {
@@ -119,16 +121,16 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<List<FChest>>> GetAllChestsInRangeAsync()
         {
-            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
-            if (map == null || map.items.Count == 0)
+            //FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+            if (UserMap == null || UserMap.items.Count == 0)
                 return new MethodResult<List<FChest>>();
 
             //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
-            FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-            FAvaUpdate avatar = map.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
-            FUserInfo playerdata = map.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
+            FChestUpdate chests = UserMap.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
+            FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
             if (avatar != null)
                 Stats = avatar;
