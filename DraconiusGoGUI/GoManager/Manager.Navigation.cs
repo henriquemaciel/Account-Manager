@@ -3,6 +3,8 @@ using System;
 using System.Threading.Tasks;
 using DraconiusGoGUI.Extensions;
 using DracoLib.Core.Extensions;
+using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -181,7 +183,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                _client.DracoClient.SetPosition(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
+                _client.DracoClient.GetMapUpdate(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
 
                 UserSettings.Latitude = moveTo.Latitude;
                 UserSettings.Longitude = moveTo.Longitude;

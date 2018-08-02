@@ -124,7 +124,17 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            LogCaller(new LoggerEventArgs($"{catchableResponse.Data.Count} Creatures Found: " +string.Join(", ", catchableResponse.Data.Select(x=> x.name)), LoggerTypes.Info));
+            string creatures = null;
+
+            foreach (var creature in catchableResponse.Data)
+            {
+                if (String.IsNullOrEmpty(creatures))
+                    creatures = Strings.GetCreatureName(creature.name);
+                else
+                    creatures = creatures + " " + Strings.GetCreatureName(creature.name);
+            }
+
+            LogCaller(new LoggerEventArgs($"{catchableResponse.Data.Count} Creatures Found: " + creatures, LoggerTypes.Info));
 
             // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
             foreach (var Creature in catchableResponse.Data.Where(x => x != null).ToArray())

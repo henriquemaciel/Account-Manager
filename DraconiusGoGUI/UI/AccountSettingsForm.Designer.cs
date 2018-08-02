@@ -1646,7 +1646,7 @@
             this.checkBoxHumanise.TabIndex = 0;
             this.checkBoxHumanise.Text = "Enable";
             this.checkBoxHumanise.UseVisualStyleBackColor = true;
-            this.checkBoxHumanise.Click += new System.EventHandler(this.checkBoxHumanise_Click);
+            this.checkBoxHumanise.Click += new System.EventHandler(this.CheckBoxHumanise_Click);
             // 
             // tabPageDevice
             // 

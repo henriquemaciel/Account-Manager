@@ -106,7 +106,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 var totype = Creature.possibleEvolutions.Keys.FirstOrDefault();
-                var response = await _client.DracoClient.CallAsync(new UserCreatureService().EvolveCreature(Creature.id, totype));
+                var response = _client.DracoClient.Call(new UserCreatureService().EvolveCreature(Creature.id, totype));
 
                 if (response == null)
                     return new MethodResult();

@@ -12,7 +12,7 @@ namespace DraconiusGoGUI.DracoManager
     {
         private async Task<MethodResult<List<FWildCreature>>> GetCatchableCreatureAsync()
         {
-            FUpdate map = _client.DracoClient.GetMapUpdate();
+            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
             if (map == null || map.items.Count == 0)
                 return new MethodResult<List<FWildCreature>>();
 
@@ -49,7 +49,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<List<FBuilding>>> GetAllBuildingsAsync()
         {
-            FUpdate map = _client.DracoClient.GetMapUpdate();
+            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
             if (map == null || map.items.Count == 0)
                 return new MethodResult<List<FBuilding>>();
 
@@ -119,7 +119,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<List<FChest>>> GetAllChestsInRangeAsync()
         {
-            FUpdate map = _client.DracoClient.GetMapUpdate();
+            FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
             if (map == null || map.items.Count == 0)
                 return new MethodResult<List<FChest>>();
 

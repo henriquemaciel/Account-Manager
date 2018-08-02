@@ -96,7 +96,10 @@ namespace DraconiusGoGUI.UI
 
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
-         }
+
+            textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
+            checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+        }
 
         private void UpdateListViews()
         {
@@ -901,7 +904,7 @@ namespace DraconiusGoGUI.UI
             checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
         }
 
-        private void checkBoxHumanise_Click(object sender, EventArgs e)
+        private void CheckBoxHumanise_Click(object sender, EventArgs e)
         {
             numericUpDownGeneralDelay.Enabled = checkBoxHumanise.Checked;
             numericUpDownGeneralDelayRandom.Enabled = checkBoxHumanise.Checked;

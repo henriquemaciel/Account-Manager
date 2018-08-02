@@ -45,7 +45,7 @@ namespace DraconiusGoGUI.DracoManager
 
             try
             {
-                response = _client.DracoClient.TryUseBuilding(Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
             }
             catch (Exception ex)
             {
