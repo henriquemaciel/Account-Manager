@@ -35,7 +35,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            FEgg egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.incubatorId));
+            FEgg egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.id));
 
             if (egg == null)
             {
