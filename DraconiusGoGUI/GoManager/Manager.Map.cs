@@ -52,7 +52,7 @@ namespace DraconiusGoGUI.DracoManager
         private async Task<MethodResult<List<FBuilding>>> GetAllBuildingsAsync()
         {
             //FUpdate map = _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
-            if (UserMap == null || UserMap.items.Count == 0)
+            if (UserMap == null || UserMap.items == null || UserMap.items.Count == 0)
                 return new MethodResult<List<FBuilding>>();
 
             //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;

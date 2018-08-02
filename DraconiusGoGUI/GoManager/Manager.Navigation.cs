@@ -173,7 +173,7 @@ namespace DraconiusGoGUI.DracoManager
                 double distance = CalculateDistanceInMeters(previousLocation, location);
 
                 //Prevent less than 1 meter hops
-                if (distance < 1)
+                if (distance < 1 && !_firstRun)
                 {
                     return new MethodResult
                     {

@@ -714,6 +714,11 @@ namespace DraconiusGoGUI.DracoManager
                                 foreach (var chest in chestsResult.Data.ToArray())
                                 {
                                     var openResult =  _client.DracoClient.OpenChest(chest);
+                                    if (openResult.loot==null)
+                                    {
+                                        continue;
+                                    }
+                                    RemoveChest(chest);
                                     var text = "Chest Opened. Award Received: ";
                                     foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
                                     {
@@ -1162,6 +1167,14 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
+        public void RemoveChest(FChest chestobj)
+        {
+            var chestContainer = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
+            if (chestContainer != null)
+            {
+                chestContainer.chests.Remove(chestobj);
+            }
+        }
         public void ClearStats()
         {
             _fleeingCreatureResponses = 0;

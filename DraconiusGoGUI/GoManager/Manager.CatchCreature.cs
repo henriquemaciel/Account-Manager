@@ -90,6 +90,17 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
+        public void RemoveMapCreature(FWildCreature wildCreature)
+        {
+            if (UserMap == null || UserMap.items == null)
+                return;
+            var wildCreatures = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            if (wildCreatures != null)
+            {
+                wildCreatures.wilds.Remove(wildCreature);
+            }
+        }
+
         private async Task<MethodResult> CatchNeabyCreature()
         {
             if (!UserSettings.CatchCreature)
@@ -144,7 +155,7 @@ namespace DraconiusGoGUI.DracoManager
                     LogCaller(new LoggerEventArgs("Creature is null. Ignoring", LoggerTypes.Debug));
                     continue;
                 }
-                LogCaller(new LoggerEventArgs($"Trying to catch: " + Creature.name, LoggerTypes.Debug));
+                LogCaller(new LoggerEventArgs($"Trying to catch: " + Strings.GetCreatureName(Creature.name), LoggerTypes.Debug));
 
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
                 if (!result.Success)
@@ -287,10 +298,12 @@ namespace DraconiusGoGUI.DracoManager
 
                         message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught using a {Strings.GetItemName(ball.type)}, exp { expGained }, candies { candyGained }";
                         success = true;
+                        RemoveMapCreature(wildCreature);
                     }
                     else if (resCatch.runAway)
                     {
                         message = $"Creature {Strings.GetCreatureName(catchingCreaure.name)}, with cp {catchingCreaure.cp}, fled.";
+                        RemoveMapCreature(wildCreature);
                     }
                     ball.count--;
                     times--;
