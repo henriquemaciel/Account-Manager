@@ -55,35 +55,34 @@ namespace DraconiusGoGUI.DracoManager
             else
                 return new MethodResult();
 
-            /* MethodResult<MapCreature> iResponse = await GetIncenseCreatures();
+           /* MethodResult<MapCreature> iResponse = await GetIncenseCreatures();
 
-             if (!iResponse.Success || iResponse.Data == null || iResponse.Data.CreatureId == CreatureId.Missingno)
-             {
-                 return new MethodResult();
-             }
+            if (!iResponse.Success || iResponse.Data == null || iResponse.Data.CreatureId == CreatureId.Missingno)
+            {
+                return new MethodResult();
+            }
 
-             if (iResponse.Data.CreatureId == CreatureId.Missingno)
-                 return new MethodResult();
+            if (iResponse.Data.CreatureId == CreatureId.Missingno)
+                return new MethodResult();
 
-             if (!CreatureWithinCatchSettings(iResponse.Data.CreatureId))
-             {
-                 return new MethodResult();
-             }
+            if (!CreatureWithinCatchSettings(iResponse.Data.CreatureId))
+            {
+                return new MethodResult();
+            }
 
-             MethodResult<IncenseEncounterResponse> result = await EncounterIncenseCreature(iResponse.Data);
+            MethodResult<IncenseEncounterResponse> result = await EncounterIncenseCreature(iResponse.Data);
 
-             if (!result.Success)
-             {
-                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                 return new MethodResult();
-             }
-
-             MethodResult catchResult = await CatchCreature(result.Data, iResponse.Data);
-             */
-
-            if (UserSettings.EnableHumanization)
+            if (!result.Success)
+            {
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                return new MethodResult();
+            }
+
+            MethodResult catchResult = await CatchCreature(result.Data, iResponse.Data);
+            */
+
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
             return new MethodResult
             {
@@ -158,8 +157,7 @@ namespace DraconiusGoGUI.DracoManager
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
                 if (!result.Success)
                 {
-                    if (UserSettings.EnableHumanization)
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     continue;
                 }
 
@@ -178,8 +176,7 @@ namespace DraconiusGoGUI.DracoManager
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
 
 
-                if (UserSettings.EnableHumanization)
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
        
             return new MethodResult
@@ -242,8 +239,7 @@ namespace DraconiusGoGUI.DracoManager
 
             MethodResult catchResult = await CatchCreature(BuildingData);
             */
-            if (UserSettings.EnableHumanization)
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
             return new MethodResult
             {
@@ -907,8 +903,7 @@ namespace DraconiusGoGUI.DracoManager
             */
 
             //TODO: Only for remove war
-            if (UserSettings.EnableHumanization)
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             return new MethodResult();
         }
 

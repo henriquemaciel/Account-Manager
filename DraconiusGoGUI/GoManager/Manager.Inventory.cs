@@ -321,8 +321,7 @@ namespace DraconiusGoGUI.DracoManager
 
                     await RecycleItem(itemSetting, toDelete);
 
-                    if (UserSettings.EnableHumanization)
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 }
 
                 UpdateInventory(InventoryRefresh.Items);

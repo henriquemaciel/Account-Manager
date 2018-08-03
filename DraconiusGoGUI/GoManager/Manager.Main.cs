@@ -99,8 +99,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     retries--;
                     LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Warning));
-                    if (UserSettings.EnableHumanization)
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     goto initretrie;
                 }
                 else
@@ -539,8 +538,7 @@ namespace DraconiusGoGUI.DracoManager
                             if (BuildingsToFarm.Count < 1)
                             {
                                 //Pass restart if value is 0 or meter no ok recommended 250-300
-                                if (UserSettings.EnableHumanization)
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
                                 goto reloadAllBuildings;
                             }
                         }
@@ -630,14 +628,12 @@ namespace DraconiusGoGUI.DracoManager
                                     //Catch nearby Creature
                                     MethodResult nearbyCreatureResponse = await CatchNeabyCreature();
                                     if (nearbyCreatureResponse.Success)
-                                        if (UserSettings.EnableHumanization)
-                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                                     //Catch incense Creature
                                     MethodResult incenseCreatureResponse = await CatchInsenceCreature();
                                     if (incenseCreatureResponse.Success)
-                                        if (UserSettings.EnableHumanization)
-                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                                     //Catch lured Creature
                                     //MethodResult luredCreatureResponse = await CatchLuredCreature(Building);
@@ -657,8 +653,7 @@ namespace DraconiusGoGUI.DracoManager
                                 {
                                    LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
                                     await TransferFilteredCreature();
-                                    if (UserSettings.EnableHumanization)
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                             }
                             else
@@ -679,8 +674,7 @@ namespace DraconiusGoGUI.DracoManager
                         if (UserSettings.RecycleItems)
                         {
                             await RecycleFilteredItems();
-                            if (UserSettings.EnableHumanization)
-                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
 
                         //if too balls ignore stops..
@@ -697,8 +691,7 @@ namespace DraconiusGoGUI.DracoManager
                             if (searchResult.Success)
                             {
                                 currentFailedStops = 0;
-                                if (UserSettings.EnableHumanization)
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                             else
                             {
@@ -753,8 +746,7 @@ namespace DraconiusGoGUI.DracoManager
                                         LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                                     }
                                 }
-                                if (UserSettings.EnableHumanization)
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                         }
 
@@ -943,8 +935,7 @@ namespace DraconiusGoGUI.DracoManager
 
                                 if (evolveResult.Success)
                                 {
-                                    if (UserSettings.EnableHumanization)
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                             }
 
@@ -954,8 +945,7 @@ namespace DraconiusGoGUI.DracoManager
 
                                 if (transferResult.Success)
                                 {
-                                    if (UserSettings.EnableHumanization)
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                             }
 
@@ -965,8 +955,7 @@ namespace DraconiusGoGUI.DracoManager
 
                                 if (upgradeResult.Success)
                                 {
-                                    if (UserSettings.EnableHumanization)
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                             }
 
@@ -976,8 +965,7 @@ namespace DraconiusGoGUI.DracoManager
 
                                 if (incubateResult.Success)
                                 {
-                                    if (UserSettings.EnableHumanization)
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                             }
 
@@ -1024,8 +1012,7 @@ namespace DraconiusGoGUI.DracoManager
 
                             if (luckEggResult.Success)
                             {
-                                if (UserSettings.EnableHumanization)
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                         }
                     }

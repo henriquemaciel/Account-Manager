@@ -54,8 +54,7 @@ namespace DraconiusGoGUI.DracoManager
                         CalculateIVPerfection(Creature)),
                         LoggerTypes.Transfer));
 
-                    if (UserSettings.EnableHumanization)
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
                     UpdateInventory(InventoryRefresh.CreatureCandy);
@@ -94,8 +93,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 LogCaller(new LoggerEventArgs(String.Format("Successully transfer {0} Creatures.", CreatureToTransfer.Count()), LoggerTypes.Transfer));
 
-                if (UserSettings.EnableHumanization)
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 UpdateInventory(InventoryRefresh.CreatureCandy);
 
@@ -132,7 +130,7 @@ namespace DraconiusGoGUI.DracoManager
 
             await TransferCreature(transferResult.Data);
 
-            //await Task.Delay(0);
+            await Task.Delay(0);
             return new MethodResult
             {
                 Success = true,
