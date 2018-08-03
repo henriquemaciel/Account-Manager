@@ -146,7 +146,13 @@ namespace DraconiusGoGUI.DracoManager
                 requestSendDateTime = DateTime.Now;
 
                 MethodResult result = await UpdateLocation(waypoint);
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
+                // In this point we are sure that we are mimic walking but dont know if enable humazation is true
+                var delay = CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom);
+                
+                // if enable humanization is true, then delay is 0 so we put a minimum delay of 10 seconds.
+                delay = (delay ==0)? 10000 + new Random().Next(0, 200): delay; 
+                await Task.Delay(delay);
 
                 if (!result.Success)
                     return new MethodResult();
