@@ -127,7 +127,8 @@ namespace DraconiusGoGUI.DracoManager
                 UpdateInventory(InventoryRefresh.Creature);
                 UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                if (UserSettings.EnableHumanization)
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
             return new MethodResult

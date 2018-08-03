@@ -21,7 +21,8 @@ namespace DraconiusGoGUI.DracoManager
             {
                 MethodResult result = await UpdateLocation(location);
 
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+                if (UserSettings.EnableHumanization)
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 return result;
             }
@@ -110,7 +111,8 @@ namespace DraconiusGoGUI.DracoManager
             var requestVariantDateTime = DateTime.Now;
 
             //MethodResult _result = await UpdateLocation(waypoint);
-            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+            if (UserSettings.EnableHumanization)
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
             do
             {
@@ -197,7 +199,8 @@ namespace DraconiusGoGUI.DracoManager
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.LocationUpdate));
 
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+                if (UserSettings.EnableHumanization || UserSettings.MimicWalking)
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 return new MethodResult
                 {

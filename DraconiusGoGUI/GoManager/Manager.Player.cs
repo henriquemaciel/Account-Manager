@@ -18,7 +18,8 @@ namespace DraconiusGoGUI.DracoManager
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
-            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+            if (UserSettings.EnableHumanization)
+                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             return new MethodResult
             {

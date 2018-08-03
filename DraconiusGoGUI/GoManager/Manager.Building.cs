@@ -104,7 +104,8 @@ namespace DraconiusGoGUI.DracoManager
             _totalZeroExpStops = 0;
             _potentialBuildingBan = false;
 
-            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+            if (UserSettings.EnableHumanization)
+                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             return new MethodResult
             {
