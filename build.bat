@@ -32,7 +32,7 @@ echo Build initialised .... Wait..
 echo.
 echo ............ Build: %Release% - %Platform%
 echo.
-nuget.exe restore "PokemonGoGUI.sln"
+nuget.exe restore "DraconiusGoGUI.sln"
 echo.
 echo ............ Search builders ............
 echo.
@@ -40,10 +40,10 @@ echo ............ Wait ............
 echo.
 echo ............ Search ............
 echo.
-for /f "delims=" %%i in ('dir /s /b /a-d "%programfiles(x86)%\MSBuild.exe"') do (set PokemonGoGUI="%%i")
-%PokemonGoGUI% "PokemonGoGUI.sln" /property:Configuration="%Release%" /property:Platform="%Platform%"
+for /f "delims=" %%i in ('dir /s /b /a-d "%programfiles(x86)%\MSBuild.exe"') do (set DraconiusGoGUI="%%i")
+%DraconiusGoGUI% "DraconiusGoGUI.sln" /property:Configuration="%Release%" /property:Platform="%Platform%"
 echo.
-set PokemonGoGUI=
+set DraconiusGoGUI=
 echo.
 echo ............ Build Finished :)
 echo.
