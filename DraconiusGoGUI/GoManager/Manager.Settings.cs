@@ -14,7 +14,7 @@ namespace DraconiusGoGUI.DracoManager
     {
         public int CalculateDelay(int baseDelay, int offset)
         {
-            if (!UserSettings.EnableHumanization)
+            if (!UserSettings.EnableHumanization && !UserSettings.MimicWalking)
                 return 0;
 
             lock(_rand)
