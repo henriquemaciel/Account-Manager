@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
+using DracoLib.Core.Utils;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -305,7 +306,8 @@ namespace DraconiusGoGUI.DracoManager
                     userSettings.AccountName = String.Empty;
                     userSettings.Password = String.Empty;
                     userSettings.Username = String.Empty;
-                    userSettings.MsToRefreshMap = 10100;
+                    userSettings.MsToRefreshMap = 1000;
+                    userSettings.DeviceId = DracoUtils.GenerateDeviceId();
 
                     // gyms
                     userSettings.DefaultTeam = "Neutral";
