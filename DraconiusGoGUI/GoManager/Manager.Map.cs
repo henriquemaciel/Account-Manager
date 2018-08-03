@@ -28,7 +28,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            FCreatureUpdate creatures = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            FCreatureUpdate creatures = UserMap.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
             FHatchedEggs hatched = UserMap.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
             FChestUpdate chests = UserMap.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
             FBuildingUpdate buildings = UserMap.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
