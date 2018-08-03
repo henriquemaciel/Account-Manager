@@ -15,9 +15,9 @@ namespace DraconiusGoGUI.DracoManager
         private List<FChest> AllChestsInRange { get; set; } = new List<FChest>();
         private List<FHatchedEggs> HatchedEggs { get; set; } = new List<FHatchedEggs>();
 
-        private async Task<MethodResult<bool>> UpdateMap(double lat, double lng, float accro)
+        private async Task<MethodResult<bool>> UpdateMap(double lat, double lng, float horizontalAcc)
         {
-            FUpdate UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(lat, lng, accro));
+            FUpdate UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(lat, lng, horizontalAcc));
 
             if (UserMap == null || UserMap.items.Count == 0)
             {
