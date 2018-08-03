@@ -125,7 +125,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            MethodResult<List<FWildCreature>> catchableResponse = GetCatchableCreatures();
+            MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatures();
 
             if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count <= 0)
             {

@@ -131,8 +131,11 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private MethodResult<List<FWildCreature>> GetCatchableCreatures()
+        private async Task<MethodResult<List<FWildCreature>>> GetCatchableCreatures()
         {
+            if (!UserSettings.MimicWalking)
+                await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+
             if (CatchableCreatures == null || CatchableCreatures.Count == 0)
             {
                 return new MethodResult<List<FWildCreature>>
@@ -148,8 +151,11 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private MethodResult<List<FChest>> GetAllChestsInRange()
+        private async Task<MethodResult<List<FChest>>> GetAllChestsInRange()
         {
+            if (!UserSettings.MimicWalking)
+                await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+
             if (AllChestsInRange == null || AllChestsInRange.Count == 0)
             {
                 return new MethodResult<List<FChest>>
@@ -165,8 +171,11 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private MethodResult<List<FHatchedEggs>> GetHatchedEggs()
+        private async Task<MethodResult<List<FHatchedEggs>>> GetHatchedEggs()
         {
+            if (!UserSettings.MimicWalking)
+                await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+
             if (HatchedEggs == null || HatchedEggs.Count == 0)
             {
                 return new MethodResult<List<FHatchedEggs>>

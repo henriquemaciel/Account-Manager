@@ -705,7 +705,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (UserSettings.OpenChests)
                         {
-                            var chestsResult = GetAllChestsInRange();
+                            var chestsResult = await GetAllChestsInRange();
                             if (chestsResult.Success && chestsResult.Data.Count > 0 && chestsResult.Data != null)
                             {
                                 // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
