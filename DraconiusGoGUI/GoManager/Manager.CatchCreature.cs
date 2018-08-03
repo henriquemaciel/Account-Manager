@@ -92,13 +92,10 @@ namespace DraconiusGoGUI.DracoManager
 
         public void RemoveMapCreature(FWildCreature wildCreature)
         {
-            if (UserMap == null || UserMap.items == null)
+            if (CatchableCreatures == null || CatchableCreatures.Count == 0)
                 return;
-            var wildCreatures = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
-            if (wildCreatures != null)
-            {
-                wildCreatures.wilds.Remove(wildCreature);
-            }
+
+                CatchableCreatures.Remove(wildCreature);
         }
 
         private async Task<MethodResult> CatchNeabyCreature()
@@ -128,7 +125,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatureAsync();
+            MethodResult<List<FWildCreature>> catchableResponse = GetCatchableCreatures();
 
             if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count <= 0)
             {

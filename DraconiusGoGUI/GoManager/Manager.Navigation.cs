@@ -5,6 +5,7 @@ using DraconiusGoGUI.Extensions;
 using DracoLib.Core.Extensions;
 using DracoProtos.Core.Base;
 using DracoProtos.Core.Objects;
+using DracoLib.Core.Exceptions;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -183,7 +184,10 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                UserMap = await Task.Run(() =>_client.DracoClient.GetMapUpdate(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy));
+                var realpos = await UpdateMap(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
+
+                if (!realpos.Success)
+                    throw new DracoError(realpos.Message);
 
                 UserSettings.Latitude = moveTo.Latitude;
                 UserSettings.Longitude = moveTo.Longitude;

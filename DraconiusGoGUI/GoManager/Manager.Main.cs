@@ -443,8 +443,6 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        UserMap = new FUpdate();
-
                         result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
 
                         if (!result.Success)
@@ -464,7 +462,7 @@ namespace DraconiusGoGUI.DracoManager
                     reloadAllBuildings:
 
                     LogCaller(new LoggerEventArgs("Getting buildings...", LoggerTypes.Info));                   
-                    MethodResult<List<FBuilding>> Buildings = await GetAllBuildingsAsync();
+                    MethodResult<List<FBuilding>> Buildings = GetAllBuildings();
 
                     if (!Buildings.Success)
                     {
@@ -707,7 +705,7 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (UserSettings.OpenChests)
                         {
-                            var chestsResult = await GetAllChestsInRangeAsync();
+                            var chestsResult = GetAllChestsInRange();
                             if (chestsResult.Success && chestsResult.Data.Count > 0 && chestsResult.Data != null)
                             {
                                 // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
@@ -718,7 +716,7 @@ namespace DraconiusGoGUI.DracoManager
                                     {
                                         continue;
                                     }
-                                    RemoveChest(chest);
+
                                     var text = "Chest Opened. Award Received: ";
                                     foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
                                     {
@@ -1167,14 +1165,6 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        public void RemoveChest(FChest chestobj)
-        {
-            var chestContainer = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-            if (chestContainer != null)
-            {
-                chestContainer.chests.Remove(chestobj);
-            }
-        }
         public void ClearStats()
         {
             _fleeingCreatureResponses = 0;

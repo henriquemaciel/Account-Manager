@@ -10,82 +10,45 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        private List<FWildCreature> CatchableCreatures { get; set; }
+        private List<FBuilding> AllBuildings { get; set; }
+        private List<FChest> AllChestsInRange { get; set; }
+        private List<FHatchedEggs> HatchedEggs { get; set; }
         private FUpdate UserMap { get; set; }
 
-        private async Task<MethodResult<List<FWildCreature>>> GetCatchableCreatureAsync()
+        private async Task<MethodResult<bool>> UpdateMap(double lat, double lng, float accro)
         {
-            return await Task.Run(async () =>
+            UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(lat, lng, accro));
+
+            if (UserMap == null || UserMap.items.Count == 0)
             {
-                //This is not good but refresh map at faster change pos, need maybe other solution
-                if (!UserSettings.MimicWalking)
-                    UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy));
-
-                if (UserMap == null || UserMap.items.Count == 0)
-                    return new MethodResult<List<FWildCreature>>();
-
-                var creatures = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
-                //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
-                //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-                //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
-                FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
-                FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
-
-                if (avatar != null)
-                    Stats = avatar;
-
-                if (playerdata != null)
-                    PlayerData = playerdata;
-
-                if (creatures == null && creatures.wilds.Count == 0)
+                return new MethodResult<bool>
                 {
-                    return new MethodResult<List<FWildCreature>>
-                    {
-                        Data = new List<FWildCreature>(),
-                        Message = "No Creatures Found",
-                        Success = false
-                    };
-                }
-
-                return new MethodResult<List<FWildCreature>>
-                {
-                    Data = creatures.wilds,
-                    Success = true,
-                    Message = "Success"
+                    Success = false,
+                    Message = "Unable to set player position."
                 };
-            });
-        }
+            }
 
-        private async Task<MethodResult<List<FBuilding>>> GetAllBuildingsAsync()
-        {
-            return await Task.Run(() =>
+            FCreatureUpdate creatures = UserMap.items.FirstOrDefault(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
+            FHatchedEggs hatched = UserMap.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
+            FChestUpdate chests = UserMap.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
+            FBuildingUpdate buildings = UserMap.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
+            FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
+            FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
+
+            if (avatar != null)
+                Stats = avatar;
+
+            if (playerdata != null)
+                PlayerData = playerdata;
+
+            if (creatures != null && creatures.wilds.Count > 0)
             {
-                //if (!UserSettings.MimicWalking)
-                //   UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy));
+                CatchableCreatures = creatures.wilds;
+            }
 
-                if (UserMap == null || UserMap.items == null || UserMap.items.Count == 0)
-                    return new MethodResult<List<FBuilding>>();
-
-                //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
-                //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
-                //FChestUpdate chests = map.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-                FBuildingUpdate buildings = UserMap.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
-                FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
-                FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
-
-                if (!buildings.tileBuildings.Any())
-                {
-                    return new MethodResult<List<FBuilding>>
-                    {
-                        Message = "No buildings data found. Potential temp IP ban or bad location",
-                    };
-                }
-
-                if (avatar != null)
-                    Stats = avatar;
-
-                if (playerdata != null)
-                    PlayerData = playerdata;
-
+            if (buildings.tileBuildings.Any())
+            {
                 var ALLBuildings = buildings.tileBuildings.Values.ToArray().SelectMany(t => t.buildings).ToList();
 
                 if (!ALLBuildings.Any())
@@ -125,66 +88,99 @@ namespace DraconiusGoGUI.DracoManager
                     throw new DracoError("Not Buildings.");
                 }
 
-                return new MethodResult<List<FBuilding>>
-                {
-                    Message = "Success",
-                    Success = true,
-                    Data = BuildingData
-                };
-            });
-        }
+                AllBuildings = BuildingData;
+            }
 
-        private async Task<MethodResult<List<FChest>>> GetAllChestsInRangeAsync()
-        {
-            return await Task.Run(() =>
+            if (chests.chests.Any())
             {
-                //if (!UserSettings.MimicWalking)
-                //    UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy));
-
-                if (UserMap == null || UserMap.items.Count == 0)
-                    return new MethodResult<List<FChest>>();
-
-                //FCreatureUpdate creatures = map.items.Find(o => o.GetType() == typeof(FCreatureUpdate)) as FCreatureUpdate;
-                //FHatchedEggs hatched = map.items.Find(o => o.GetType() == typeof(FHatchedEggs)) as FHatchedEggs;
-                //FBuildingUpdate buildings = map.items.Find(o => o.GetType() == typeof(FBuildingUpdate)) as FBuildingUpdate;
-                FChestUpdate chests = UserMap.items.Find(o => o.GetType() == typeof(FChestUpdate)) as FChestUpdate;
-                FAvaUpdate avatar = UserMap.items.Find(o => o.GetType() == typeof(FAvaUpdate)) as FAvaUpdate;
-                FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
-
-                if (avatar != null)
-                    Stats = avatar;
-
-                if (playerdata != null)
-                    PlayerData = playerdata;
-
-                if (chests.chests.Any())
-                {
-                    return new MethodResult<List<FChest>>
-                    {
-                        Message = "No chests found in range.",
-                    };
-                }
-
                 var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
 
-                if (_chests.Count() == 0)
+                if (_chests.Count() > 0)
                 {
-                    return new MethodResult<List<FChest>>
-                    {
-                        Message = "No chests found in range.",
-                    };
+                    LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
+                    LogCaller(new LoggerEventArgs("in range chests: " + _chests.Count(), Enums.LoggerTypes.Debug));
+                    AllChestsInRange = _chests.ToList();
                 }
+            }
 
-                LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
-                LogCaller(new LoggerEventArgs("in range chests: " + _chests.Count(), Enums.LoggerTypes.Debug));
+            if (hatched != null)
+            {
+                //GetHatchedEggs = hatched...... need review..
+            }
 
+            return new MethodResult<bool>
+            {
+                Message = "Success",
+                Success = true
+            };
+        } 
+
+        private MethodResult<List<FBuilding>> GetAllBuildings()
+        {
+            if (AllBuildings == null)
+            {
+                return new MethodResult<List<FBuilding>>
+                {
+                    Message = "No buildings data found. Potential temp IP ban or bad location."
+                };
+            }
+
+            return new MethodResult<List<FBuilding>>
+            {
+                Data = AllBuildings,
+                Success = true
+            };
+        }
+
+        private MethodResult<List<FWildCreature>> GetCatchableCreatures()
+        {
+            if (CatchableCreatures == null)
+            {
+                return new MethodResult<List<FWildCreature>>
+                {
+                    Message = "No Creatures Found."
+                };
+            }
+
+            return new MethodResult<List<FWildCreature>>
+            {
+                Data = CatchableCreatures,
+                Success = true
+            };
+        }
+
+        private MethodResult<List<FChest>> GetAllChestsInRange()
+        {
+            if (AllChestsInRange == null)
+            {
                 return new MethodResult<List<FChest>>
                 {
-                    Message = "Success",
-                    Success = true,
-                    Data = _chests.ToList()
+                    Message = "No chests found in range."
                 };
-            });
+            }
+
+            return new MethodResult<List<FChest>>
+            {
+                Data = AllChestsInRange,
+                Success = true
+            };
+        }
+
+        private MethodResult<List<FHatchedEggs>> GetHatchedEggs()
+        {
+            if (HatchedEggs == null)
+            {
+                return new MethodResult<List<FHatchedEggs>>
+                {
+                    Message = "No HatchedEggs."
+                };
+            }
+
+            return new MethodResult<List<FHatchedEggs>>
+            {
+                Data = HatchedEggs,
+                Success = true
+            };
         }
 
         /*
