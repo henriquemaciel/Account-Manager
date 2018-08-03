@@ -716,7 +716,7 @@ namespace DraconiusGoGUI.DracoManager
                                     {
                                         continue;
                                     }
-
+                                    RemoveChest(chest);
                                     var text = "Chest Opened. Award Received: ";
                                     foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
                                     {
@@ -1163,6 +1163,14 @@ namespace DraconiusGoGUI.DracoManager
                     Name = "Amsterdam, Netherlands"
                 }
             };
+        }
+
+        public void RemoveChest(FChest chestobj)
+        {
+            if (AllChestsInRange != null)
+            {
+                AllChestsInRange.Remove(chestobj);
+            }
         }
 
         public void ClearStats()

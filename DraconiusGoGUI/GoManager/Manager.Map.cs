@@ -10,15 +10,14 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        private List<FWildCreature> CatchableCreatures { get; set; }
-        private List<FBuilding> AllBuildings { get; set; }
-        private List<FChest> AllChestsInRange { get; set; }
-        private List<FHatchedEggs> HatchedEggs { get; set; }
-        private FUpdate UserMap { get; set; }
+        private List<FWildCreature> CatchableCreatures { get; set; } = new List<FWildCreature>();
+        private List<FBuilding> AllBuildings { get; set; } = new List<FBuilding>();
+        private List<FChest> AllChestsInRange { get; set; } = new List<FChest>();
+        private List<FHatchedEggs> HatchedEggs { get; set; } = new List<FHatchedEggs>();
 
         private async Task<MethodResult<bool>> UpdateMap(double lat, double lng, float accro)
         {
-            UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(lat, lng, accro));
+            FUpdate UserMap = await Task.Run(() => _client.DracoClient.GetMapUpdate(lat, lng, accro));
 
             if (UserMap == null || UserMap.items.Count == 0)
             {
