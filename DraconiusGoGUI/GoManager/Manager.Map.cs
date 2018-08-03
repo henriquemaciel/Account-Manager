@@ -116,7 +116,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private MethodResult<List<FBuilding>> GetAllBuildings()
         {
-            if (AllBuildings == null)
+            if (AllBuildings == null || AllBuildings.Count == 0)
             {
                 return new MethodResult<List<FBuilding>>
                 {
@@ -133,7 +133,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private MethodResult<List<FWildCreature>> GetCatchableCreatures()
         {
-            if (CatchableCreatures == null)
+            if (CatchableCreatures == null || CatchableCreatures.Count == 0)
             {
                 return new MethodResult<List<FWildCreature>>
                 {
@@ -150,7 +150,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private MethodResult<List<FChest>> GetAllChestsInRange()
         {
-            if (AllChestsInRange == null)
+            if (AllChestsInRange == null || AllChestsInRange.Count == 0)
             {
                 return new MethodResult<List<FChest>>
                 {
@@ -167,7 +167,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private MethodResult<List<FHatchedEggs>> GetHatchedEggs()
         {
-            if (HatchedEggs == null)
+            if (HatchedEggs == null || HatchedEggs.Count == 0)
             {
                 return new MethodResult<List<FHatchedEggs>>
                 {
