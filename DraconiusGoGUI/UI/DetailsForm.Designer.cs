@@ -90,7 +90,7 @@
             this.olvColumnDPS = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAttack = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnStamina = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnBaseCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTotalHP = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripCreatureDetails = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.favoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFavoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -636,7 +636,7 @@
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnDPS);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnAttack);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnStamina);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnBaseCp);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnTotalHP);
             this.fastObjectListViewCreature.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewCreature.CellEditUseWholeCell = false;
             this.fastObjectListViewCreature.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -654,7 +654,7 @@
             this.olvColumnDPS,
             this.olvColumnAttack,
             this.olvColumnStamina,
-            this.olvColumnBaseCp});
+            this.olvColumnTotalHP});
             this.fastObjectListViewCreature.ContextMenuStrip = this.contextMenuStripCreatureDetails;
             this.fastObjectListViewCreature.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewCreature.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -752,11 +752,11 @@
             this.olvColumnStamina.UseFiltering = false;
             this.olvColumnStamina.Width = 63;
             // 
-            // olvColumnBaseCp
+            // olvColumnTotalHP
             // 
-            this.olvColumnBaseCp.AspectName = "baseCp";
-            this.olvColumnBaseCp.Text = "BaseCp";
-            this.olvColumnBaseCp.Width = 65;
+            this.olvColumnTotalHP.AspectName = "totalHp";
+            this.olvColumnTotalHP.Text = "TotalHP";
+            this.olvColumnTotalHP.Width = 65;
             // 
             // contextMenuStripCreatureDetails
             // 
@@ -1232,7 +1232,7 @@
         private System.Windows.Forms.Label labelPokeCoins;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnBaseCp;
+        private BrightIdeasSoftware.OLVColumn olvColumnTotalHP;
         private BrightIdeasSoftware.OLVColumn olvColumnEPS;
         private BrightIdeasSoftware.OLVColumn olvColumnDPSmain;
         private BrightIdeasSoftware.OLVColumn olvColumnDPS;
