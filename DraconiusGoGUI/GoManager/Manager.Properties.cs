@@ -147,7 +147,7 @@ namespace DraconiusGoGUI.DracoManager
         public List<FUserCreature> Creature { get; private set; } = new List<FUserCreature>();
 
         [JsonIgnore]
-        public List<FCreadexEntry> Pokedex { get; private set; }  = new List<FCreadexEntry>();
+        public List<FCreadexEntry> DracoDex { get; private set; }  = new List<FCreadexEntry>();
 
         [JsonIgnore]
         public Dictionary<CreatureType, int> CreatureCandy { get; private set; } = new Dictionary<CreatureType, int>();

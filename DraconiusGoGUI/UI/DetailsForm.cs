@@ -233,7 +233,7 @@ namespace DraconiusGoGUI.UI
                 labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.totalDistanceF);
                 labelCreatureCaught.Text = _manager.Stats.monstersCaughtCount.ToString();
                 //labelBuildingVisits.Text = _manager.Stats.BuildingVisits.ToString();
-                //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
+                labelUniqueCreature.Text = _manager.DracoDex.Count().ToString();
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.Stats.registerDate);
                 labelCreateDate.Text = date.ToString();
                 labelCreatureBuddy.Text = (_manager.Stats.buddy != null && _manager.Strings != null) ? String.Format("{0}", _manager.Strings.GetCreatureName(_manager.Stats.buddy.creature)) : "Not set";
@@ -505,7 +505,7 @@ namespace DraconiusGoGUI.UI
             else if (tabControlMain.SelectedTab == tabPagePokedex)
             {
                 _manager.UpdateInventory(InventoryRefresh.Pokedex);
-                fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
+                fastObjectListViewPokedex.SetObjects(_manager.DracoDex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {

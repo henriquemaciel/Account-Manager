@@ -42,7 +42,7 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
-            if (Pokedex.Count == 0) {
+            if (DracoDex.Count == 0) {
                 LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
@@ -52,7 +52,7 @@ namespace DraconiusGoGUI.DracoManager
                 Type = UserSettings.AuthType,
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
-                Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
+                Pokedex = DracoDex.Select(x => new PokedexEntryExportModel(x)).ToList(),
                 Creature = Creature.Select(x => new CreatureDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),

@@ -215,13 +215,13 @@ namespace DraconiusGoGUI.DracoManager
                     case InventoryRefresh.All:
                         Items.Clear();
                         Creature.Clear();
-                        Pokedex.Clear();
+                        DracoDex.Clear();
                         CreatureCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
                         //Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
-                        Pokedex = GetPokedex().ToList();
+                        DracoDex = GetPokedex().ToList();
                         CreatureCandy = GetCandies();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
@@ -236,8 +236,8 @@ namespace DraconiusGoGUI.DracoManager
                         Creature = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Pokedex:
-                        Pokedex.Clear();
-                        Pokedex = GetPokedex().ToList();
+                        DracoDex.Clear();
+                        DracoDex = GetPokedex().ToList();
                         break;
                     case InventoryRefresh.CreatureCandy:
                         CreatureCandy.Clear();
