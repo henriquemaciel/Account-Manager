@@ -314,18 +314,16 @@ namespace DraconiusGoGUI.DracoManager
 
         private bool CanEvolveCreature(FUserCreature Creature)
         {
-            /*
+            
             // Can't evolve Creature in gyms.
-            if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
                 return false;
-
-            var settings = PokeSettings.SingleOrDefault(x => x.Value.CreatureId == Creature.CreatureId);
 
             // Can't evolve Creature that are not evolvable.
-            if (settings.Value.EvolutionIds.Count == 0 && settings.Value.EvolutionBranch.Count == 0)
+            if (Creature.possibleEvolutions.Count == 0)
                 return false;
 
-            int familyCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == settings.Value.FamilyId).Candy_;
+            /*int familyCandy = CreatureCandy.FirstOrDefault(x => x.Key == Creature.candyType).Value;
 
             bool canEvolve = false;
             // Check requirements for all branches, if we meet the requirements for any of them then we return true.
@@ -348,7 +346,7 @@ namespace DraconiusGoGUI.DracoManager
                 canEvolve = true;
             }
             */
-            return false;// canEvolve;
+            return true;// canEvolve;
         }
     }
 }
