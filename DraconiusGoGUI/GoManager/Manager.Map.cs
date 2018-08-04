@@ -12,7 +12,7 @@ namespace DraconiusGoGUI.DracoManager
     {
         private List<FWildCreature> CatchableCreatures { get; set; } = new List<FWildCreature>();
         private List<FBuilding> AllBuildings { get; set; } = new List<FBuilding>();
-        private List<FChest> AllChestsInRange { get; set; } = new List<FChest>();
+        private List<FChest> AllChests { get; set; } = new List<FChest>();
         private List<FHatchedEggs> HatchedEggs { get; set; } = new List<FHatchedEggs>();
 
         private async Task<MethodResult<bool>> UpdateMap(double lat, double lng, float horizontalAcc)
@@ -92,13 +92,12 @@ namespace DraconiusGoGUI.DracoManager
 
             if (chests.chests.Any())
             {
-                var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
+                var _chests = chests.chests;
 
-                if (_chests.Count() > 0)
+                if (_chests.Count > 0)
                 {
                     LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
-                    LogCaller(new LoggerEventArgs("in range chests: " + _chests.Count(), Enums.LoggerTypes.Debug));
-                    AllChestsInRange = _chests.ToList();
+                    AllChests = _chests.ToList();
                 }
             }
 
@@ -151,12 +150,12 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private async Task<MethodResult<List<FChest>>> GetAllChestsInRange()
+        private async Task<MethodResult<List<FChest>>> GetAllChests()
         {
             if (!UserSettings.MimicWalking)
                 await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
 
-            if (AllChestsInRange == null || AllChestsInRange.Count == 0)
+            if (AllChests == null || AllChests.Count == 0)
             {
                 return new MethodResult<List<FChest>>
                 {
@@ -166,7 +165,7 @@ namespace DraconiusGoGUI.DracoManager
 
             return new MethodResult<List<FChest>>
             {
-                Data = AllChestsInRange,
+                Data = AllChests,
                 Success = true
             };
         }

@@ -705,12 +705,20 @@ namespace DraconiusGoGUI.DracoManager
 
                         if (UserSettings.OpenChests)
                         {
-                            var chestsResult = await GetAllChestsInRange();
+                            var chestsResult = await GetAllChests();
                             if (chestsResult.Success && chestsResult.Data.Count > 0 && chestsResult.Data != null)
                             {
                                 // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
                                 foreach (var chest in chestsResult.Data.ToArray())
                                 {
+                                    MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
+                                    if (!walkToChestResult.Success)
+                                    {
+                                        LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
+                                        RemoveChest(chest);
+                                        continue;
+                                    }
+
                                     var openResult =  _client.DracoClient.OpenChest(chest);
                                     if (openResult.loot==null)
                                     {
@@ -1167,9 +1175,9 @@ namespace DraconiusGoGUI.DracoManager
 
         public void RemoveChest(FChest chestobj)
         {
-            if (AllChestsInRange != null)
+            if (AllChests != null)
             {
-                AllChestsInRange.Remove(chestobj);
+                AllChests.Remove(chestobj);
             }
         }
 
