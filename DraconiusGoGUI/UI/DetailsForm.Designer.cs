@@ -68,7 +68,7 @@
             this.labelPlayerLevel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPagePokedex = new System.Windows.Forms.TabPage();
+            this.tabPageDracoDex = new System.Windows.Forms.TabPage();
             this.fastObjectListViewPokedex = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnPokedexFriendlyName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokedexId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -130,7 +130,7 @@
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
-            this.tabPagePokedex.SuspendLayout();
+            this.tabPageDracoDex.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewPokedex)).BeginInit();
             this.tabPageCreature.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCreature)).BeginInit();
@@ -150,7 +150,7 @@
             // tabControlMain
             // 
             this.tabControlMain.Controls.Add(this.tabPageStats);
-            this.tabControlMain.Controls.Add(this.tabPagePokedex);
+            this.tabControlMain.Controls.Add(this.tabPageDracoDex);
             this.tabControlMain.Controls.Add(this.tabPageCreature);
             this.tabControlMain.Controls.Add(this.tabPageEggs);
             this.tabControlMain.Controls.Add(this.tabPageInventory);
@@ -549,16 +549,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Team:";
             // 
-            // tabPagePokedex
+            // tabPageDracoDex
             // 
-            this.tabPagePokedex.Controls.Add(this.fastObjectListViewPokedex);
-            this.tabPagePokedex.Location = new System.Drawing.Point(4, 25);
-            this.tabPagePokedex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPagePokedex.Name = "tabPagePokedex";
-            this.tabPagePokedex.Size = new System.Drawing.Size(1124, 440);
-            this.tabPagePokedex.TabIndex = 3;
-            this.tabPagePokedex.Text = "Pokedex";
-            this.tabPagePokedex.UseVisualStyleBackColor = true;
+            this.tabPageDracoDex.Controls.Add(this.fastObjectListViewPokedex);
+            this.tabPageDracoDex.Location = new System.Drawing.Point(4, 25);
+            this.tabPageDracoDex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPageDracoDex.Name = "tabPageDracoDex";
+            this.tabPageDracoDex.Size = new System.Drawing.Size(1124, 440);
+            this.tabPageDracoDex.TabIndex = 3;
+            this.tabPageDracoDex.Text = "DracoDex";
+            this.tabPageDracoDex.UseVisualStyleBackColor = true;
             // 
             // fastObjectListViewPokedex
             // 
@@ -1116,7 +1116,7 @@
             this.tabControlMain.ResumeLayout(false);
             this.tabPageStats.ResumeLayout(false);
             this.tabPageStats.PerformLayout();
-            this.tabPagePokedex.ResumeLayout(false);
+            this.tabPageDracoDex.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewPokedex)).EndInit();
             this.tabPageCreature.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCreature)).EndInit();
@@ -1141,7 +1141,7 @@
         private System.Windows.Forms.TabPage tabPageStats;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPagePokedex;
+        private System.Windows.Forms.TabPage tabPageDracoDex;
         private System.Windows.Forms.TabPage tabPageCreature;
         private System.Windows.Forms.TabPage tabPageInventory;
         private System.Windows.Forms.Label label3;

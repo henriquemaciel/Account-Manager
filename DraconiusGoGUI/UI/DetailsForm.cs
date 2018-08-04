@@ -502,7 +502,7 @@ namespace DraconiusGoGUI.UI
                 _manager.UpdateInventory(InventoryRefresh.Items);
                 fastObjectListViewInventory.SetObjects(_manager.Items);
             }
-            else if (tabControlMain.SelectedTab == tabPagePokedex)
+            else if (tabControlMain.SelectedTab == tabPageDracoDex)
             {
                 _manager.UpdateInventory(InventoryRefresh.Pokedex);
                 fastObjectListViewPokedex.SetObjects(_manager.DracoDex);
