@@ -134,7 +134,7 @@ namespace DraconiusGoGUI
                     ClientManager.PlayerData.serverTime = login.info.serverTime;
                     ClientManager.PlayerData.userId = login.info.userId;
 
-                    if (ClientManager.UserSettings.GetSpeedOfServer)
+                    if (ClientManager.UserSettings.GetSpeedOfServer && ClientManager.UserSettings.MimicWalking)
                     {
                         ClientManager.UserSettings.WalkingSpeed = (int)(0.9 * fConfig.avatarMoveRunSpeed);
                         ClientManager.LogCaller(new LoggerEventArgs($"Auto speed set to { ClientManager.UserSettings.WalkingSpeed } km/h.", LoggerTypes.Success));

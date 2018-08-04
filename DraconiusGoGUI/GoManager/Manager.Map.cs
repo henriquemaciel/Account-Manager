@@ -13,7 +13,7 @@ namespace DraconiusGoGUI.DracoManager
         private List<FWildCreature> CatchableCreatures { get; set; } = new List<FWildCreature>();
         private List<FBuilding> AllBuildings { get; set; } = new List<FBuilding>();
         private List<FChest> AllChests { get; set; } = new List<FChest>();
-        private List<FHatchedEggs> HatchedEggs { get; set; } = new List<FHatchedEggs>();
+        //private List<FHatchedEggs> HatchedEggs { get; set; } = new List<FHatchedEggs>();
 
         private async Task<MethodResult<bool>> UpdateMap(double lat, double lng, float horizontalAcc)
         {
@@ -103,7 +103,8 @@ namespace DraconiusGoGUI.DracoManager
 
             if (hatched != null)
             {
-                //GetHatchedEggs = hatched...... need review..
+                if (hatched.egg.isHatching)
+                    LogCaller(new LoggerEventArgs("Hatched Eggs: " + hatched.egg.eggType, Enums.LoggerTypes.Success));
             }
 
             return new MethodResult<bool>
@@ -166,26 +167,6 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult<List<FChest>>
             {
                 Data = AllChests,
-                Success = true
-            };
-        }
-
-        private async Task<MethodResult<List<FHatchedEggs>>> GetHatchedEggs()
-        {
-            if (!UserSettings.MimicWalking)
-                await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
-
-            if (HatchedEggs == null || HatchedEggs.Count == 0)
-            {
-                return new MethodResult<List<FHatchedEggs>>
-                {
-                    Message = "No HatchedEggs."
-                };
-            }
-
-            return new MethodResult<List<FHatchedEggs>>
-            {
-                Data = HatchedEggs,
                 Success = true
             };
         }
