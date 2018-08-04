@@ -366,7 +366,7 @@ namespace DraconiusGoGUI.DracoManager
                 if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
                 {
                     string message = String.Format("Current speed: {0:0.00}km/h. Randomized speed {1:0.00}km/h", currentSpeed, randomicSpeed);
-                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                     return randomicSpeed;
                 }
             }
@@ -382,7 +382,7 @@ namespace DraconiusGoGUI.DracoManager
                 if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
                 {
                     string message = String.Format("Current speed: {0:0.00}km/h. Randomized speed {1:0.00}km/h", currentSpeed, randomicSpeed);
-                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                     return randomicSpeed;
                 }
             }
