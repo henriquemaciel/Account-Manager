@@ -170,7 +170,15 @@ namespace DraconiusGoGUI.DracoManager
                 if ( result.Data.isCreatureStorageFull)
                 {
                     LogCaller(new LoggerEventArgs("Creature Storage is full. Ignoring catching", LoggerTypes.Debug));
-                    break;
+
+                    var transferResult = await TransferFilteredCreature();
+
+                    if (transferResult.Success)
+                    {
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    }
+
+                    continue;
                 }
 
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
