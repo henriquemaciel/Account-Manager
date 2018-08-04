@@ -160,26 +160,18 @@ namespace DraconiusGoGUI
                     //
                 }
             }
-            //else 
-            // 
+
             await LoadSettings();
-            //
-            /*
+
             if (_autoupdate)
             {
                 bool IsLatest = await VersionCheckState.IsLatest();
                 if (!IsLatest)
                     await VersionCheckState.Execute();
-            }
-            
+            }         
 
             await VersionCheckState.CleanupOldFiles();
-            */
-            //TODO: need review
-            //var plugins = new PluginsEx();
-
-            //await plugins.LoadPlugins();
-
+ 
             if (_showStartup)
             {
                 var startForm = new StartupForm

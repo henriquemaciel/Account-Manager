@@ -19,11 +19,11 @@ namespace DraconiusGoGUI.Extensions
 {
     public class VersionCheckState
     {
-        public const string VersionUri = "https://raw.githubusercontent.com/Furtif/Account-Manager/master/DraconiusGoGUI/Properties/AssemblyInfo.cs";
+        public const string VersionUri = "https://raw.githubusercontent.com/Account-Managers/Account-Manager/draco_manager/DraconiusGoGUI/Properties/AssemblyInfo.cs";
 
-        public const string RemoteReleaseUrl = "https://github.com/Furtif/Account-Manager/releases/download/v";
+        public const string RemoteReleaseUrl = "https://github.com/Account-Managers/Account-Manager/releases/download/v";
 
-        public const string ChangelogUri = "https://raw.githubusercontent.com/Furtif/Account-Manager/master/CHANGELOG.md";
+        public const string ChangelogUri = "https://github.com/Account-Managers/Account-Manager/blob/draco_manager/README.md#account-manager-draconiusgo-is-now-compatible-with-192-api";
 
         public static Version RemoteVersion;
 
@@ -83,20 +83,6 @@ namespace DraconiusGoGUI.Extensions
 
             var di = new DirectoryInfo(Directory.GetCurrentDirectory());
             var files = di.GetFiles("*.old", SearchOption.AllDirectories);
-
-            foreach (var file in files)
-            {
-                try
-                {
-                    if (file.Name.Contains("chromedriver.exe.old"))
-                        continue;
-                    File.Delete(file.FullName);
-                }
-                catch (Exception)
-                {
-                    //Logger.Write(e.ToString());
-                }
-            }
             await Task.Delay(200);
         }
         
