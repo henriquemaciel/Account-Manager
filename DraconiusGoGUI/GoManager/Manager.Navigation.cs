@@ -42,6 +42,7 @@ namespace DraconiusGoGUI.DracoManager
                         walkingIncenceFunction = CatchInsenceCreature;
                     }
 
+                    
                     MethodResult walkResponse = await WalkToLocation(location, walkingFunction, walkingIncenceFunction);
 
                     if (walkResponse.Success)
@@ -109,11 +110,12 @@ namespace DraconiusGoGUI.DracoManager
             var requestSendDateTime = DateTime.Now;
             var requestVariantDateTime = DateTime.Now;
 
+            /*
             MethodResult _result = await UpdateLocation(waypoint);
 
             if (!_result.Success)
                 return new MethodResult();
-
+            */
             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
             do
