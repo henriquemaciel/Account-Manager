@@ -32,6 +32,7 @@ namespace DraconiusGoGUI
         private bool _spf = false;
         private bool _showStartup = true;
         private bool _autoupdate = true;
+        private bool _minimizeToTray = true;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Based on Account Manager";
         private static string[] _args;
@@ -209,17 +210,20 @@ namespace DraconiusGoGUI
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            Trayicon.Visible = false;
-            Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-            if (FormWindowState.Minimized == this.WindowState)
+            if (_minimizeToTray)
             {
-                Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
-                Trayicon.BalloonTipTitle = $"Account Manager is minimized";
-                Trayicon.BalloonTipText = "Click on this icon to restore";
-                Trayicon.Text = $"Account Manager, Click here to restore";
-                Trayicon.Visible = true;
-                Trayicon.ShowBalloonTip(5000);
-                Hide();
+                Trayicon.Visible = false;
+                Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+                if (FormWindowState.Minimized == this.WindowState)
+                {
+                    Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
+                    Trayicon.BalloonTipTitle = $"Account Manager is minimized";
+                    Trayicon.BalloonTipText = "Click on this icon to restore";
+                    Trayicon.Text = $"Account Manager, Click here to restore";
+                    Trayicon.Visible = true;
+                    Trayicon.ShowBalloonTip(5000);
+                    Hide();
+                }
             }
         }
 
@@ -255,6 +259,7 @@ namespace DraconiusGoGUI
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 _autoupdate = model.AutoUpdate;
+                _minimizeToTray = model.MinimizeToTray;
 
                 foreach (Manager manager in tempManagers)
                 {
@@ -305,6 +310,7 @@ namespace DraconiusGoGUI
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup,
                     AutoUpdate = _autoupdate,
+                    MinimizeToTray = _minimizeToTray
                 };
 
                 string data = Serializer.ToJson(model);
@@ -351,12 +357,14 @@ namespace DraconiusGoGUI
 
             var asForm = new AccountSettingsForm(manager)
             {
-                AutoUpdate = _autoupdate
+                AutoUpdate = _autoupdate,
+                MinimizeToTray = _minimizeToTray
             };
 
             if (asForm.ShowDialog() == DialogResult.OK)
             {
                 _autoupdate = asForm.AutoUpdate;
+                _minimizeToTray = asForm.MinimizeToTray;              
                 AddManager(manager);
             }
 
@@ -422,12 +430,14 @@ namespace DraconiusGoGUI
             {
                 var asForm = new AccountSettingsForm(manager)
                 {
-                    AutoUpdate = _autoupdate
+                    AutoUpdate = _autoupdate,
+                    MinimizeToTray = _minimizeToTray
                 };
 
                 if (asForm.ShowDialog() == DialogResult.OK)
                 {
                     _autoupdate = asForm.AutoUpdate;
+                    _minimizeToTray = asForm.MinimizeToTray;
                 }
             }
 

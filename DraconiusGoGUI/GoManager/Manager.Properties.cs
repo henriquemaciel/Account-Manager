@@ -149,8 +149,8 @@ namespace DraconiusGoGUI.DracoManager
         [JsonIgnore]
         public List<FCreadexEntry> Pokedex { get; private set; }  = new List<FCreadexEntry>();
 
-        //[JsonIgnore]
-        //public List<Candy> CreatureCandy { get; private set; } = new List<Candy>();
+        [JsonIgnore]
+        public Dictionary<CreatureType, int> CreatureCandy { get; private set; } = new Dictionary<CreatureType, int>();
 
         [JsonIgnore]
         public List<FIncubator> Incubators { get; private set; } = new List<FIncubator>();
@@ -212,8 +212,7 @@ namespace DraconiusGoGUI.DracoManager
 
         [JsonIgnore]
         public int Level
-        {
-            
+        {          
             get
             {
                 return Stats == null ? 0 : Stats.level;

@@ -101,7 +101,6 @@ namespace DraconiusGoGUI
         public int MaxFailBeforeReset { get; set; }
         public bool UseBerries { get; set; }
         public bool OnlyUnlimitedIncubator { get; set; }
-        public bool TransferSlashCreatures { get; set; }
         public bool ShuffleBuildings { get; set; }
         public bool GetArBonus { get; set; }
         public decimal ARBonusProximity { get; set; }
@@ -116,7 +115,6 @@ namespace DraconiusGoGUI
         public bool UseSoftBanBypass { get; set; }
         public string PGPoolEndpoint { get; set; }
         public bool EnablePGPool { get; set; }
-
 
         public AccountState StopAtMinAccountState { get; set; }
 

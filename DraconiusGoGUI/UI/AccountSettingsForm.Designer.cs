@@ -82,7 +82,6 @@
             this.checkBoxOnlyUnlimitedIncubator = new System.Windows.Forms.CheckBox();
             this.checkBoxEvolve = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.checkBoxTransferSlashCreatures = new System.Windows.Forms.CheckBox();
             this.numericUpDownSearchBuildingBelow = new System.Windows.Forms.NumericUpDown();
             this.checkBoxRecycle = new System.Windows.Forms.CheckBox();
             this.checkBoxUseLuckyEgg = new System.Windows.Forms.CheckBox();
@@ -112,6 +111,7 @@
             this.label44 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPageSettingsNavigation = new System.Windows.Forms.TabPage();
+            this.checkBoxGetSpeedServer = new System.Windows.Forms.CheckBox();
             this.checkBoxEncounterWalk = new System.Windows.Forms.CheckBox();
             this.textBoxMaxTravel = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -232,7 +232,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxGetSpeedServer = new System.Windows.Forms.CheckBox();
+            this.checkBoxMinimizeToTray = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -332,6 +332,7 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxMinimizeToTray);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxDevLogs);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxLogs);
             this.tabPageSettingsGeneral.Controls.Add(this.label43);
@@ -353,7 +354,7 @@
             // checkBoxDevLogs
             // 
             this.checkBoxDevLogs.AutoSize = true;
-            this.checkBoxDevLogs.Location = new System.Drawing.Point(204, 160);
+            this.checkBoxDevLogs.Location = new System.Drawing.Point(260, 161);
             this.checkBoxDevLogs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDevLogs.Name = "checkBoxDevLogs";
             this.checkBoxDevLogs.Size = new System.Drawing.Size(202, 21);
@@ -479,9 +480,9 @@
             this.tabPageActions.Controls.Add(this.checkBoxStopOnAPIUpdate);
             this.tabPageActions.Controls.Add(this.checkBoxOpenChests);
             this.tabPageActions.Location = new System.Drawing.Point(4, 25);
-            this.tabPageActions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageActions.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Name = "tabPageActions";
-            this.tabPageActions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageActions.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Size = new System.Drawing.Size(633, 445);
             this.tabPageActions.TabIndex = 6;
             this.tabPageActions.Text = "Actions";
@@ -525,7 +526,7 @@
             // textBoxPercTransItems
             // 
             this.textBoxPercTransItems.Location = new System.Drawing.Point(491, 412);
-            this.textBoxPercTransItems.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxPercTransItems.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPercTransItems.Name = "textBoxPercTransItems";
             this.textBoxPercTransItems.Size = new System.Drawing.Size(43, 22);
             this.textBoxPercTransItems.TabIndex = 86;
@@ -533,7 +534,7 @@
             // textBoxPercTransPoke
             // 
             this.textBoxPercTransPoke.Location = new System.Drawing.Point(491, 382);
-            this.textBoxPercTransPoke.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxPercTransPoke.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPercTransPoke.Name = "textBoxPercTransPoke";
             this.textBoxPercTransPoke.Size = new System.Drawing.Size(43, 22);
             this.textBoxPercTransPoke.TabIndex = 85;
@@ -689,7 +690,6 @@
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxOnlyUnlimitedIncubator);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxEvolve);
             this.groupBoxPlayerActions.Controls.Add(this.label9);
-            this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransferSlashCreatures);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownSearchBuildingBelow);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxRecycle);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseLuckyEgg);
@@ -697,9 +697,9 @@
             this.groupBoxPlayerActions.Controls.Add(this.textBoxCreatureBeforeEvolve);
             this.groupBoxPlayerActions.Controls.Add(this.label46);
             this.groupBoxPlayerActions.Location = new System.Drawing.Point(8, 11);
-            this.groupBoxPlayerActions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxPlayerActions.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxPlayerActions.Name = "groupBoxPlayerActions";
-            this.groupBoxPlayerActions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxPlayerActions.Padding = new System.Windows.Forms.Padding(4);
             this.groupBoxPlayerActions.Size = new System.Drawing.Size(319, 426);
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
@@ -732,7 +732,7 @@
             // 
             this.cbUseLuckEggConst.AutoSize = true;
             this.cbUseLuckEggConst.Location = new System.Drawing.Point(5, 402);
-            this.cbUseLuckEggConst.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbUseLuckEggConst.Margin = new System.Windows.Forms.Padding(4);
             this.cbUseLuckEggConst.Name = "cbUseLuckEggConst";
             this.cbUseLuckEggConst.Size = new System.Drawing.Size(229, 21);
             this.cbUseLuckEggConst.TabIndex = 85;
@@ -944,18 +944,6 @@
             this.label9.Size = new System.Drawing.Size(181, 16);
             this.label9.TabIndex = 66;
             this.label9.Text = "Creature Before Evolve:";
-            // 
-            // checkBoxTransferSlashCreatures
-            // 
-            this.checkBoxTransferSlashCreatures.AutoSize = true;
-            this.checkBoxTransferSlashCreatures.Enabled = false;
-            this.checkBoxTransferSlashCreatures.Location = new System.Drawing.Point(15, 201);
-            this.checkBoxTransferSlashCreatures.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxTransferSlashCreatures.Name = "checkBoxTransferSlashCreatures";
-            this.checkBoxTransferSlashCreatures.Size = new System.Drawing.Size(189, 21);
-            this.checkBoxTransferSlashCreatures.TabIndex = 70;
-            this.checkBoxTransferSlashCreatures.Text = "Transfer Slash Creatures";
-            this.checkBoxTransferSlashCreatures.UseVisualStyleBackColor = true;
             // 
             // numericUpDownSearchBuildingBelow
             // 
@@ -1301,6 +1289,17 @@
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxGetSpeedServer
+            // 
+            this.checkBoxGetSpeedServer.AutoSize = true;
+            this.checkBoxGetSpeedServer.Location = new System.Drawing.Point(408, 130);
+            this.checkBoxGetSpeedServer.Name = "checkBoxGetSpeedServer";
+            this.checkBoxGetSpeedServer.Size = new System.Drawing.Size(174, 21);
+            this.checkBoxGetSpeedServer.TabIndex = 60;
+            this.checkBoxGetSpeedServer.Text = "Get Speed from server";
+            this.checkBoxGetSpeedServer.UseVisualStyleBackColor = true;
+            this.checkBoxGetSpeedServer.CheckedChanged += new System.EventHandler(this.CheckBoxGetSpeedServer_CheckedChanged);
             // 
             // checkBoxEncounterWalk
             // 
@@ -2469,16 +2468,16 @@
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
             // 
-            // checkBoxGetSpeedServer
+            // checkBoxMinimizeToTray
             // 
-            this.checkBoxGetSpeedServer.AutoSize = true;
-            this.checkBoxGetSpeedServer.Location = new System.Drawing.Point(408, 130);
-            this.checkBoxGetSpeedServer.Name = "checkBoxGetSpeedServer";
-            this.checkBoxGetSpeedServer.Size = new System.Drawing.Size(174, 21);
-            this.checkBoxGetSpeedServer.TabIndex = 60;
-            this.checkBoxGetSpeedServer.Text = "Get Speed from server";
-            this.checkBoxGetSpeedServer.UseVisualStyleBackColor = true;
-            this.checkBoxGetSpeedServer.CheckedChanged += new System.EventHandler(this.CheckBoxGetSpeedServer_CheckedChanged);
+            this.checkBoxMinimizeToTray.AutoSize = true;
+            this.checkBoxMinimizeToTray.Location = new System.Drawing.Point(28, 161);
+            this.checkBoxMinimizeToTray.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxMinimizeToTray.Name = "checkBoxMinimizeToTray";
+            this.checkBoxMinimizeToTray.Size = new System.Drawing.Size(128, 21);
+            this.checkBoxMinimizeToTray.TabIndex = 71;
+            this.checkBoxMinimizeToTray.Text = "Minimize to tray";
+            this.checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2674,7 +2673,6 @@
         private System.Windows.Forms.CheckBox checkBoxOnlyUnlimitedIncubator;
         private System.Windows.Forms.CheckBox checkBoxEvolve;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.CheckBox checkBoxTransferSlashCreatures;
         private System.Windows.Forms.NumericUpDown numericUpDownSearchBuildingBelow;
         private System.Windows.Forms.CheckBox checkBoxRecycle;
         private System.Windows.Forms.CheckBox checkBoxUseLuckyEgg;
@@ -2754,5 +2752,6 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.NumericUpDown numericUpDownDelayBetweenPlayerActions;
         private System.Windows.Forms.CheckBox checkBoxGetSpeedServer;
+        private System.Windows.Forms.CheckBox checkBoxMinimizeToTray;
     }
 }

@@ -17,6 +17,7 @@ namespace DraconiusGoGUI.UI
         private Manager _manager;
 
         public bool AutoUpdate { get; set; }
+        public bool MinimizeToTray { get; set; }
 
         public AccountSettingsForm(Manager manager)
         {
@@ -130,7 +131,7 @@ namespace DraconiusGoGUI.UI
             checkBoxRecycle.Checked = settings.RecycleItems;
             checkBoxEvolve.Checked = settings.EvolveCreature;
             checkBoxTransfers.Checked = settings.TransferCreature;
-            checkBoxTransferSlashCreatures.Checked = settings.TransferSlashCreatures;
+            checkBoxMinimizeToTray.Checked = MinimizeToTray;
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
@@ -349,7 +350,6 @@ namespace DraconiusGoGUI.UI
             userSettings.WalkingSpeed = walkingSpeed;
             userSettings.AccountName = textBoxName.Text;
             userSettings.TransferCreature = checkBoxTransfers.Checked;
-            userSettings.TransferSlashCreatures = checkBoxTransferSlashCreatures.Checked;
             userSettings.EvolveCreature = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
             userSettings.MinCreatureBeforeEvolve = minCreatureBeforeEvolve;
@@ -370,6 +370,7 @@ namespace DraconiusGoGUI.UI
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             userSettings.DeployCreature = checkBoxDeployToGym.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
+            MinimizeToTray = checkBoxMinimizeToTray.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
             userSettings.UseIncense = cbUseIncense.Checked;

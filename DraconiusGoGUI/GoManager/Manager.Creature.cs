@@ -216,21 +216,6 @@ namespace DraconiusGoGUI.DracoManager
                         break;
                 }
             }
-
-            if (UserSettings.TransferSlashCreatures)
-            {
-                /*
-                var slashCreatures = Creature.Where(x => x.IsBad);
-                foreach (var slashCreature in slashCreatures)
-                {
-                    var inlist = CreatureToTransfer.FirstOrDefault(x => x.Id == slashCreature.Id);
-                    if (inlist == null)
-                    {
-                        CreatureToTransfer.Add(slashCreature);
-                    }
-                }
-                */
-            }
             
             return new MethodResult<List<FUserCreature>>
             {

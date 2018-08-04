@@ -1001,7 +1001,7 @@
             // 
             // olvColumnCandyAmount
             // 
-            this.olvColumnCandyAmount.AspectName = "Candy_";
+            this.olvColumnCandyAmount.AspectName = "";
             this.olvColumnCandyAmount.Text = "Amount";
             // 
             // tabPageLogs

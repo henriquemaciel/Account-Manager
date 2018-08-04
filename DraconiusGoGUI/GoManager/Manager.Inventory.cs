@@ -119,14 +119,12 @@ namespace DraconiusGoGUI.DracoManager
         {
             return _client.DracoClient.Inventory.GetUserCreatures().userCreatures;
         }
-        /*
-        private IEnumerable<Candy> GetCandies()
+
+        private Dictionary<CreatureType, int> GetCandies()
         {
-            return InventoryItems
-                .Select(kvp => kvp.Value.InventoryItemData?.Candy)
-                .Where(p => p != null && p.FamilyId > 0);
+            return Stats.candies;
         }
-        */
+
         private IEnumerable<FCreadexEntry> GetPokedex()
         {
             return _client.DracoClient.Inventory.GetCreadex().entries;
@@ -218,13 +216,13 @@ namespace DraconiusGoGUI.DracoManager
                         Items.Clear();
                         Creature.Clear();
                         Pokedex.Clear();
-                        //CreatureCandy.Clear();
+                        CreatureCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
                         //Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
                         Pokedex = GetPokedex().ToList();
-                        //CreatureCandy = GetCandies().ToList();
+                        CreatureCandy = GetCandies();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
                         Creature = GetCreatures().ToList();
@@ -242,8 +240,8 @@ namespace DraconiusGoGUI.DracoManager
                         Pokedex = GetPokedex().ToList();
                         break;
                     case InventoryRefresh.CreatureCandy:
-                        //CreatureCandy.Clear();
-                        //CreatureCandy = GetCandies().ToList();
+                        CreatureCandy.Clear();
+                        CreatureCandy = GetCandies();
                         break;
                     case InventoryRefresh.Incubators:
                         Incubators.Clear();

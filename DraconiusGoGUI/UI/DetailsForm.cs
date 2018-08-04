@@ -65,12 +65,11 @@ namespace DraconiusGoGUI.UI
 
             olvColumnCreatureId.AspectGetter = (Creature) => (Creature as FUserCreature).id;
 
-            /*
 
             olvColumnCandyToEvolve.AspectGetter = delegate (object Creature)
             {
-                //CreatureSettings CreatureSettings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
-                return CreatureSettings == null ? 0 : CreatureSettings.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
+                int cost = (Creature as FUserCreature).improveCandiesCost;
+                return cost == 0 ? 0 : cost;
             };
 
             olvColumnCreatureCandy.AspectGetter = delegate (object Creature)
@@ -80,18 +79,11 @@ namespace DraconiusGoGUI.UI
                     return 0;
                 }
 
-                CreatureSettings settings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
+                var candy = _manager.CreatureCandy[(Creature as FUserCreature).candyType];
 
-                if (settings == null)
-                {
-                    return 0;
-                }
-
-                Candy family = _manager.CreatureCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
-
-                return family == null ? 0 : family.Candy_;
+                return candy == 0 ? 0 : candy;
             };
-            */
+            
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
                 return String.IsNullOrEmpty((Creature as FUserCreature).alias) ? _manager.Strings.GetCreatureName((Creature as FUserCreature).name) : (Creature as FUserCreature).alias;
@@ -107,16 +99,27 @@ namespace DraconiusGoGUI.UI
             #endregion
 
             #region Candy
-            /*
+
             olvColumnCandyFamily.AspectGetter = delegate (object x)
             {
-                var family = (Candy)x;
-
-                return family.FamilyId.ToString().Replace("Family", "");
+                //var creatureType = (FUserCreature)x;
+                return 0;// creatureType.candyType;
             };
-            */
+
+            olvColumnCandyAmount.AspectGetter = delegate (object x)
+            {
+                if (!_manager.CreatureCandy.Any())
+                {
+                    return 0;
+                }
+
+                var candy = 0;// _manager.CreatureCandy[(CreatureType)x];
+
+                return candy == 0 ? 0 : candy;
+            };
+
             #endregion
-            
+
             #region Inventory
 
             olvColumnInventoryItem.AspectGetter = delegate (object x)
@@ -488,7 +491,7 @@ namespace DraconiusGoGUI.UI
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
                 _manager.UpdateInventory(InventoryRefresh.CreatureCandy);
-                //fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
+                fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
