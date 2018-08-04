@@ -719,9 +719,9 @@ namespace DraconiusGoGUI.DracoManager
                                         continue;
                                     }
 
-                                    var openResult = _client.DracoClient.Call(new MapService().OpenChestResult(chest));// OpenChest(chest);
+                                    var openResult = _client.DracoClient.Call(new MapService().StartOpeningChest(chest)) as FOpenChestResult;// OpenChest(chest);
 
-                                    if (openResult == null)
+                                    if (openResult == null || openResult.loot.lootList.Count == 0)
                                     {
                                         continue;
                                     }
