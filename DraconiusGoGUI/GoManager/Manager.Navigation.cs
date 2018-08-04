@@ -116,7 +116,9 @@ namespace DraconiusGoGUI.DracoManager
             if (!_result.Success)
                 return new MethodResult();
             */
-            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
+            // Uneeded pause
+            //await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
             do
             {
