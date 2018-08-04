@@ -210,10 +210,11 @@ namespace DraconiusGoGUI
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
+            Trayicon.Visible = false;
+            Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
             if (_minimizeToTray)
             {
-                Trayicon.Visible = false;
-                Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
                 if (FormWindowState.Minimized == this.WindowState)
                 {
                     Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
