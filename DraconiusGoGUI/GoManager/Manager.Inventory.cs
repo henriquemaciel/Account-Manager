@@ -96,7 +96,7 @@ namespace DraconiusGoGUI.DracoManager
         */
         private int GetItemsCount()
         {
-            return _client.DracoClient.Inventory.GetUserItems().items.Count();
+            return UserBag.items.Count();
         }
         /*
         private PlayerStats GetPlayerStats()
@@ -125,7 +125,7 @@ namespace DraconiusGoGUI.DracoManager
             return Stats.candies;
         }
 
-        private IEnumerable<FCreadexEntry> GetPokedex()
+        private IEnumerable<FCreadexEntry> GetDracoDex()
         {
             return _client.DracoClient.Inventory.GetCreadex().entries;
         }
@@ -221,7 +221,7 @@ namespace DraconiusGoGUI.DracoManager
                         Eggs.Clear();
                         //Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
-                        DracoDex = GetPokedex().ToList();
+                        DracoDex = GetDracoDex().ToList();
                         CreatureCandy = GetCandies();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
@@ -237,7 +237,7 @@ namespace DraconiusGoGUI.DracoManager
                         break;
                     case InventoryRefresh.Pokedex:
                         DracoDex.Clear();
-                        DracoDex = GetPokedex().ToList();
+                        DracoDex = GetDracoDex().ToList();
                         break;
                     case InventoryRefresh.CreatureCandy:
                         CreatureCandy.Clear();
