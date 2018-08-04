@@ -88,7 +88,6 @@
             this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
             this.textBoxCreatureBeforeEvolve = new System.Windows.Forms.TextBox();
             this.label46 = new System.Windows.Forms.Label();
-            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
             this.comboBoxMinAccountState = new System.Windows.Forms.ComboBox();
             this.numericUpDownRunForHours = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
@@ -233,6 +232,7 @@
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxMinimizeToTray = new System.Windows.Forms.CheckBox();
+            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -332,6 +332,7 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.cbAutoUpdate);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxMinimizeToTray);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxDevLogs);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxLogs);
@@ -354,7 +355,7 @@
             // checkBoxDevLogs
             // 
             this.checkBoxDevLogs.AutoSize = true;
-            this.checkBoxDevLogs.Location = new System.Drawing.Point(260, 161);
+            this.checkBoxDevLogs.Location = new System.Drawing.Point(187, 161);
             this.checkBoxDevLogs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDevLogs.Name = "checkBoxDevLogs";
             this.checkBoxDevLogs.Size = new System.Drawing.Size(202, 21);
@@ -465,7 +466,6 @@
             this.tabPageActions.Controls.Add(this.cbTeam);
             this.tabPageActions.Controls.Add(this.checkBoxCompleteTutorial);
             this.tabPageActions.Controls.Add(this.groupBoxPlayerActions);
-            this.tabPageActions.Controls.Add(this.cbAutoUpdate);
             this.tabPageActions.Controls.Add(this.comboBoxMinAccountState);
             this.tabPageActions.Controls.Add(this.numericUpDownRunForHours);
             this.tabPageActions.Controls.Add(this.label15);
@@ -1007,17 +1007,6 @@
             this.label46.Size = new System.Drawing.Size(211, 23);
             this.label46.TabIndex = 63;
             this.label46.Text = "Search Buildings when below ";
-            // 
-            // cbAutoUpdate
-            // 
-            this.cbAutoUpdate.AutoSize = true;
-            this.cbAutoUpdate.Location = new System.Drawing.Point(332, 325);
-            this.cbAutoUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cbAutoUpdate.Name = "cbAutoUpdate";
-            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
-            this.cbAutoUpdate.TabIndex = 69;
-            this.cbAutoUpdate.Text = "Auto Update";
-            this.cbAutoUpdate.UseVisualStyleBackColor = true;
             // 
             // comboBoxMinAccountState
             // 
@@ -2479,6 +2468,17 @@
             this.checkBoxMinimizeToTray.Text = "Minimize to tray";
             this.checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
             // 
+            // cbAutoUpdate
+            // 
+            this.cbAutoUpdate.AutoSize = true;
+            this.cbAutoUpdate.Location = new System.Drawing.Point(438, 161);
+            this.cbAutoUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbAutoUpdate.Name = "cbAutoUpdate";
+            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
+            this.cbAutoUpdate.TabIndex = 72;
+            this.cbAutoUpdate.Text = "Auto Update";
+            this.cbAutoUpdate.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2679,7 +2679,6 @@
         private System.Windows.Forms.CheckBox checkBoxIncubateEggs;
         private System.Windows.Forms.TextBox textBoxCreatureBeforeEvolve;
         private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.CheckBox cbAutoUpdate;
         private System.Windows.Forms.ComboBox comboBoxMinAccountState;
         private System.Windows.Forms.NumericUpDown numericUpDownRunForHours;
         private System.Windows.Forms.Label label15;
@@ -2753,5 +2752,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownDelayBetweenPlayerActions;
         private System.Windows.Forms.CheckBox checkBoxGetSpeedServer;
         private System.Windows.Forms.CheckBox checkBoxMinimizeToTray;
+        private System.Windows.Forms.CheckBox cbAutoUpdate;
     }
 }
