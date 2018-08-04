@@ -59,6 +59,13 @@ namespace DraconiusGoGUI.DracoManager
                     }
                     catch (Exception)
                     {
+                        if (currentTries >= 3)
+                        {
+                            AccountState = AccountState.SoftBan;
+                            LogCaller(new LoggerEventArgs(String.Format("Possible SoftBan, please wait one moment.."), LoggerTypes.Warning));
+                            Stop();
+                        }
+
                         LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
                         _failedBuildingResponse++;
                     }
