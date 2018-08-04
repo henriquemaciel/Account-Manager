@@ -22,6 +22,20 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
+            if (Stats.isEggBagFull)
+            {
+                LogCaller(new LoggerEventArgs($"You Egg bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
+                await RecycleFilteredItems();
+                return new MethodResult();
+            }
+
+            if (Stats.isArtifactsBagFull)
+            {
+                LogCaller(new LoggerEventArgs($"You Artifacts bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
+                await RecycleFilteredItems();
+                return new MethodResult();
+            }
+
             int ExperienceAwarded = 0;
 
             if (!_client.LoggedIn)
