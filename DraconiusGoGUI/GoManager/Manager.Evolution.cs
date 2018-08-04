@@ -138,6 +138,8 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<int>> GetEvolutionCandy(CreatureType CreatureId)
         {
+            //remove warn
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             /*
             if (PokeSettings == null)
             {
@@ -256,6 +258,9 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
+            //remove warn
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
             /*
             if (UsedAlready)
             {
@@ -266,7 +271,7 @@ namespace DraconiusGoGUI.DracoManager
             }
             */
             return new MethodResult { Message = Strings.GetItemName(ItemType.EXPERIENCE_BOOSTER) + " Not released yet" };
-
+            /*
             var data = Items.FirstOrDefault(x => x.type == ItemType.EXPERIENCE_BOOSTER);
 
             if (data == null || data.count == 0)
@@ -300,6 +305,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 Success = true
             };
+            */
         }
 
         public double FilledCreatureInventorySpace()

@@ -365,12 +365,11 @@ namespace DraconiusGoGUI.DracoManager
             foreach (FUserCreature Creature in CreatureToFavorite)
             {
                 bool isFavorited = true;
-                string message = "unfavorited";
 
                 if (Creature.group < 1)
                 {
                     isFavorited = false;
-                    message = "favorited";
+                    //message = "favorited";
                 }
 
                 if (isFavorited == favorite)

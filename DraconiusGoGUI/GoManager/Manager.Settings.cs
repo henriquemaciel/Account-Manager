@@ -68,6 +68,9 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<Dictionary<string, string/*CreatureId, CreatureSettings*/>>> GetItemTemplates()
         {
+            //remove warn
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
             /*
             if (PokeSettings != null && PokeSettings.Count != 0)
             {
