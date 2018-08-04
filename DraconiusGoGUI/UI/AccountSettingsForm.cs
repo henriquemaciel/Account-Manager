@@ -99,6 +99,7 @@ namespace DraconiusGoGUI.UI
 
             textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
             checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+            textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked;
         }
 
         private void UpdateListViews()
@@ -177,6 +178,7 @@ namespace DraconiusGoGUI.UI
             cbUseIncense.Checked = settings.UseIncense;
             cbUseLuckEggConst.Checked = settings.UseLuckEggConst;
             checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
+            checkBoxGetSpeedServer.Checked = settings.GetSpeedOfServer;
 
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
 
@@ -206,7 +208,6 @@ namespace DraconiusGoGUI.UI
             cbAutoUpdate.Checked = AutoUpdate;
             numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
 
-            numericUpDownAutoRefreshMap.Value = new Decimal(settings.MsToRefreshMap);
             checkBoxSniperNoInPokedex.Checked = settings.SnipeAllCreaturesNoInPokedex;
             checkBoxTooBalls.Checked = settings.IgnoreStopsIfTooBalls;
             numericUpDownTooBalls.Value = new Decimal(settings.BallsToIgnoreStops);
@@ -399,6 +400,7 @@ namespace DraconiusGoGUI.UI
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
             userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
             userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
+            userSettings.GetSpeedOfServer = checkBoxGetSpeedServer.Checked;
 
             if (proxyEx != null)
             {
@@ -418,7 +420,6 @@ namespace DraconiusGoGUI.UI
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
             userSettings.UpgradeCreature = checkBoxUpgradeCreatures.Checked;
-            userSettings.MsToRefreshMap = (int) numericUpDownAutoRefreshMap.Value;
             userSettings.SnipeAllCreaturesNoInPokedex = checkBoxSniperNoInPokedex.Checked;
             userSettings.UseSoftBanBypass = checkBoxSoftBypass.Checked;
             userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;           
@@ -912,6 +913,11 @@ namespace DraconiusGoGUI.UI
             numericUpDownDelayBetweenLocationUpdates.Enabled = checkBoxHumanise.Checked;
             numericUpDownLocationupdateDelayRandom.Enabled = checkBoxHumanise.Checked;
             numericUpDownPlayerActionDelayRandom.Enabled = checkBoxHumanise.Checked;
+        }
+
+        private void CheckBoxGetSpeedServer_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked;
         }
     }
 }

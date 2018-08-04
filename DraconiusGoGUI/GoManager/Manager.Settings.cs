@@ -306,7 +306,6 @@ namespace DraconiusGoGUI.DracoManager
                     userSettings.AccountName = String.Empty;
                     userSettings.Password = String.Empty;
                     userSettings.Username = String.Empty;
-                    userSettings.MsToRefreshMap = 1000;
                     userSettings.DeviceId = DracoUtils.GenerateDeviceId();
 
                     // gyms

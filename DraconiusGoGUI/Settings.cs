@@ -31,8 +31,6 @@ namespace DraconiusGoGUI
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
 
-
-        public int MsToRefreshMap { get; set; }
         public bool UseIncense { get; set; }
         public bool UseLuckEggConst { get; set; }
         public int LevelForConstLukky { get; set; }
@@ -111,7 +109,7 @@ namespace DraconiusGoGUI
         public bool CompleteTutorial { get; set; }
         public bool TransferAtOnce { get; set; }
         public bool ShowDebugLogs { get; set; }
-        public bool DownloadResources { get; set; }
+        public bool GetSpeedOfServer { get; set; }
         public bool RequestBuildingDetails { get; set; }
         public int BallsToIgnoreStops { get; set; }
         public bool IgnoreStopsIfTooBalls { get; set; }
@@ -196,11 +194,10 @@ namespace DraconiusGoGUI
             TimeZone = "America/New_York";
             POSIX = "en-us";
             DisableCatchDelay = 3;
-            DownloadResources = false;
+            GetSpeedOfServer = true;
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
-            MsToRefreshMap = 10100;
             SnipeAllCreaturesNoInPokedex = false;
             EncounterWhileWalking = true;
             RequestBuildingDetails = false;

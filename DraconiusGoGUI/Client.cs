@@ -22,6 +22,7 @@ namespace DraconiusGoGUI
         public bool LoggedIn = false;
         public Manager ClientManager;
         public DracoClient DracoClient;
+        private FConfig fConfig;
         private CancellationTokenSource CancellationTokenSource;
 
         public Client()
@@ -99,7 +100,7 @@ namespace DraconiusGoGUI
                     if (!ping) throw new Exception();
 
                     ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                    DracoClient.Boot(config);
+                    fConfig = DracoClient.Boot(config);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
                     var login = DracoClient.Login().Result;
@@ -132,6 +133,12 @@ namespace DraconiusGoGUI
                     ClientManager.PlayerData.nickname = login.info.nickname;
                     ClientManager.PlayerData.serverTime = login.info.serverTime;
                     ClientManager.PlayerData.userId = login.info.userId;
+
+                    if (ClientManager.UserSettings.GetSpeedOfServer)
+                    {
+                        ClientManager.UserSettings.WalkingSpeed = (int)(0.9 * fConfig.avatarMoveRunSpeed);
+                        ClientManager.LogCaller(new LoggerEventArgs($"Auto speed set to { ClientManager.UserSettings.WalkingSpeed } km/h.", LoggerTypes.Success));
+                    }
 
                     ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 

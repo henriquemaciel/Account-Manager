@@ -654,16 +654,34 @@ namespace DraconiusGoGUI.UI
             {
                 if (eggIncubator.eggId != null)
                 {
-                    e.SubItem.Text = String.Format("{0:0.00} km", egg.totalDistance - egg.passedDistance);
+                    if (egg.isEggForRoost)
+                    {
+                        DateTime time = new DateTime(egg.totalIncubationTime);
+                        e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
+                    }
+                    else
+                        e.SubItem.Text = String.Format("{0:0.00} km", (egg.totalDistance - egg.passedDistance) / 1000);
                 }
                 else
                     e.SubItem.Text = "0.00 km";
             }
             else if (e.Column == olvColumnEggDistance)
             {
-                e.SubItem.Text = String.Format("{0:0.00}km", egg.totalDistance);
+                if (egg.isEggForRoost)
+                {
+                    DateTime time = new DateTime(egg.totalIncubationTime);
+                    e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
+                }
+                else
+                    e.SubItem.Text = String.Format("{0:0.00}km", egg.totalDistance / 1000);
             }
-             
+            else if (e.Column == olvColumnEggIncubator)
+            {
+                e.SubItem.Text = String.Format("{0}", egg.incubatorId);
+
+                if (egg.isEggForRoost)
+                    e.SubItem.ForeColor = Color.Blue;
+            }
         }
 
         private async void SetABuddyToolStripMenuItem_Click(object sender, EventArgs e)
