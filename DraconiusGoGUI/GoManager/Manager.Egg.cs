@@ -35,7 +35,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            FEgg egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.id));
+            FEgg egg = Eggs.Find(x =>  isAKmEgg(x.eggType) && string.IsNullOrEmpty(x.incubatorId) );
 
             if (egg == null)
             {
@@ -61,7 +61,7 @@ namespace DraconiusGoGUI.DracoManager
             if (response == null)
                 return new MethodResult();
 
-            var incitem = incubatorResponse.Data.eggId;
+            var incitem = Strings.GetItemName(incubatorResponse.Data.itemType.Value);
             var _egg = egg.id;
 
             LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Creature Id: {1}", incitem, _egg), LoggerTypes.Incubate));
@@ -113,5 +113,10 @@ namespace DraconiusGoGUI.DracoManager
                 Message = "No unused incubators"
             };
         }
+        private bool isAKmEgg(ItemType egg)
+        {
+            return (egg == ItemType.EGG_KM_2 || egg == ItemType.EGG_KM_5 || egg == ItemType.EGG_KM_10);
+        }
+
     }
 }
