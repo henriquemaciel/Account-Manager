@@ -64,6 +64,61 @@ namespace DraconiusGoGUI.DracoManager
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.Warning));
+                if (_potentialBuildingBan)
+                {
+                    if (AccountState != AccountState.SoftBan)
+                    {
+                        LogCaller(new LoggerEventArgs("Building ban detected. Marking state", LoggerTypes.Warning));
+                    }
+
+                    AccountState = AccountState.SoftBan;
+                    var _loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
+                    var _xpqty = _loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                    if (_xpqty == 0)
+                    {
+                        if (!_potentialCreatureBan && _fleeingCreatureResponses >= _fleeingCreatureUntilBan)
+                        {
+                            LogCaller(new LoggerEventArgs("Potential Creature ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
+
+                            _potentialCreatureBan = true;
+                            _fleeingCreatureResponses = 0;
+                        }
+                        else if (_fleeingCreatureResponses >= _fleeingCreatureUntilBan)
+                        {
+                            //Already Building banned
+                            if (AccountState == AccountState.SoftBan)
+                            {
+                                _potentialCreatureBan = true;
+                                _potentialBuildingBan = true;
+                            }
+
+                            if (AccountState != AccountState.SoftBan)
+                            {
+                                //Only occurs when out of range is found
+                                if (_xpqty == 0)
+                                {
+                                    LogCaller(new LoggerEventArgs("Creature fleeing and failing to grab stops. Potential Creature & Building ban or daily limit reached.", LoggerTypes.Warning));
+                                }
+                                else
+                                {
+                                    LogCaller(new LoggerEventArgs("Creature fleeing, yet grabbing stops. Potential Creature ban or daily limit reached.", LoggerTypes.Warning));
+                                }
+                            }
+
+                            if (UserSettings.StopAtMinAccountState == AccountState.SoftBan)
+                            {
+                                LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                                Stop();
+                            }
+
+                            return new MethodResult
+                            {
+                                Message = "Bans detected",
+                            };
+                        }
+                    }
+                }
                 return new MethodResult();
             }
 
@@ -125,7 +180,6 @@ namespace DraconiusGoGUI.DracoManager
                 Success = true,
                 Message = "Success"
             };
-
 
             /*
             BuildingResponse = BuildingSearchResponse.Parser.ParseFrom(response);

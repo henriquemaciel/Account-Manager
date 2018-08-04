@@ -53,34 +53,8 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
             else
+                // Need suite
                 return new MethodResult();
-
-           /* MethodResult<MapCreature> iResponse = await GetIncenseCreatures();
-
-            if (!iResponse.Success || iResponse.Data == null || iResponse.Data.CreatureId == CreatureId.Missingno)
-            {
-                return new MethodResult();
-            }
-
-            if (iResponse.Data.CreatureId == CreatureId.Missingno)
-                return new MethodResult();
-
-            if (!CreatureWithinCatchSettings(iResponse.Data.CreatureId))
-            {
-                return new MethodResult();
-            }
-
-            MethodResult<IncenseEncounterResponse> result = await EncounterIncenseCreature(iResponse.Data);
-
-            if (!result.Success)
-            {
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                return new MethodResult();
-            }
-
-            MethodResult catchResult = await CatchCreature(result.Data, iResponse.Data);
-            */
 
             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
@@ -324,7 +298,7 @@ namespace DraconiusGoGUI.DracoManager
             return false;
         }
 
-
+        //TODO: Maybe look this for better ball
         /*
         private ItemType GetBestBall(FCreatureUpdate CreatureData)
         {

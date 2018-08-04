@@ -29,7 +29,7 @@ namespace DraconiusGoGUI.DracoManager
         private int _failedInventoryReponses = 0;
         private const int _failedInventoryUntilBan = 3;
         private int _fleeingCreatureResponses = 0;
-        //private bool _potentialCreatureBan = false;
+        private bool _potentialCreatureBan = false;
         private const int _fleeingCreatureUntilBan = 3;
         private bool _potentialBuildingBan = false;
         private int _failedBuildingResponse = 0;
