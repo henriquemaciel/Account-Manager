@@ -98,13 +98,12 @@ namespace DraconiusGoGUI.DracoManager
         {
             return UserBag.items.Count();
         }
-        /*
-        private PlayerStats GetPlayerStats()
+        
+        private FAvaUpdate GetPlayerStats()
         {
-            return InventoryItems.Select(i => i.Value.InventoryItemData?.PlayerStats)
-                .Where(i => i != null).FirstOrDefault();
+            return Stats;
         }
-        */
+        
         private IEnumerable<FIncubator> GetIncubators()
         {
             return _client.DracoClient.Eggs.GetHatchingInfo().incubators;
@@ -207,9 +206,6 @@ namespace DraconiusGoGUI.DracoManager
 
             try
             {
-                //foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
-                //    AddRemoveOrUpdateItem(item);
-
                 switch (type)
                 {
                     case InventoryRefresh.All:
@@ -219,7 +215,7 @@ namespace DraconiusGoGUI.DracoManager
                         CreatureCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
-                        //Stats = GetPlayerStats();
+                        Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
                         DracoDex = GetDracoDex().ToList();
                         CreatureCandy = GetCandies();
@@ -252,7 +248,7 @@ namespace DraconiusGoGUI.DracoManager
                         Eggs = GetEggs().ToList();
                         break;
                     case InventoryRefresh.Stats:
-                        //Stats = GetPlayerStats();
+                        Stats = GetPlayerStats();
                         break;
                 }
             }
