@@ -92,9 +92,10 @@ namespace DraconiusGoGUI.DracoManager
 
             if (chests.chests.Any())
             {
-                var _chests = chests.chests;
+                //TODO: if item vision is actived this line < 20 is bed nedd set this to distance vision
+                var _chests = chests.chests.Where(x => x.coords.distanceTo(new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }) < 20);
 
-                if (_chests.Count > 0)
+                if (_chests.Count() > 0)
                 {
                     LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
                     AllChests = _chests.ToList();
