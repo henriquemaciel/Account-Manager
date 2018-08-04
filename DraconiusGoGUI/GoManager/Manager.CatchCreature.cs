@@ -247,7 +247,6 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        //Catch lured Creature
         private async Task<MethodResult> CatchCreature(FCatchingCreature catchingCreaure, FWildCreature wildCreature)
         {
             if (!_client.LoggedIn)
@@ -264,7 +263,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 if (RemainingPokeballs() < 1)
                 {
-                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
                     CatchDisabled = true;
                     TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                     return new MethodResult();
@@ -308,7 +307,7 @@ namespace DraconiusGoGUI.DracoManager
                 if (times<= 0)
                     message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp {resCatch.userCreature.cp}, not caught after of {maxTries} tries.";
 
-                LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Warning));
 
                 Tracker.AddValues(1, 0);
 
