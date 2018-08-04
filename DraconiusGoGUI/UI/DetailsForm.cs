@@ -294,7 +294,6 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnCreatureCandy)
             {
-                /*
                 int candy = (int)olvColumnCreatureCandy.GetValue(CreatureData);
                 int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(CreatureData);
 
@@ -302,7 +301,6 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = candy >= candyToEvolve ? Color.Green : Color.Red;
                 }
-                */
             }
             else if (e.Column == olvColumnPerfectPercent)
             {
