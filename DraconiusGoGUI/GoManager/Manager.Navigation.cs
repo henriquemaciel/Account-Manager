@@ -42,21 +42,27 @@ namespace DraconiusGoGUI.DracoManager
                         walkingIncenceFunction = CatchInsenceCreature;
                     }
 
-                    
-                    MethodResult walkResponse = await WalkToLocation(location, walkingFunction, walkingIncenceFunction);
-
-                    if (walkResponse.Success)
+                    MethodResult walkResponse = new MethodResult();
+                    try
                     {
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
-
-                        return new MethodResult
+                        walkResponse = await WalkToLocation(location, walkingFunction, walkingIncenceFunction);
+                        if (walkResponse.Success)
                         {
-                            Success = true,
-                            Message = "Successfully walked to location"
-                        };
-                    }
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
+                            return new MethodResult
+                            {
+                                Success = true,
+                                Message = "Successfully walked to location"
+                            };
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
+                        _failedBuildingResponse++;
+                    }
+                    return new MethodResult();
                 }
                 catch (TaskCanceledException ex)
                 {

@@ -28,11 +28,11 @@ namespace DraconiusGoGUI.DracoManager
         private bool _firstRun = true;
         private int _failedInventoryReponses = 0;
         private const int _failedInventoryUntilBan = 3;
-        //private int _fleeingCreatureResponses = 0;
+        private int _fleeingCreatureResponses = 0;
         //private bool _potentialCreatureBan = false;
         private const int _fleeingCreatureUntilBan = 3;
         private bool _potentialBuildingBan = false;
-        //private int _failedBuildingResponse = 0;
+        private int _failedBuildingResponse = 0;
         private bool _autoRestart = false;
         private bool _wasAutoRestarted = false;
         private ManualResetEvent _pauser = new ManualResetEvent(true);
