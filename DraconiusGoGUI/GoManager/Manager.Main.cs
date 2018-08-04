@@ -719,11 +719,13 @@ namespace DraconiusGoGUI.DracoManager
                                         continue;
                                     }
 
-                                    var openResult =  _client.DracoClient.OpenChest(chest);
-                                    if (openResult.loot==null)
+                                    var openResult = _client.DracoClient.Call(new MapService().OpenChestResult(chest));// OpenChest(chest);
+
+                                    if (openResult == null)
                                     {
                                         continue;
                                     }
+
                                     RemoveChest(chest);
                                     var text = "Chest Opened. Award Received: ";
                                     foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
