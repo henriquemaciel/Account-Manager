@@ -32,41 +32,41 @@ namespace DraconiusGoGUI.UI
 
                 return (int)setting.Id;
             };
- 
+
             #endregion
 
             #region Evolving
-            
+
             olvColumnEvolveId.AspectGetter = delegate (object x)
             {
                 var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
-            
+
             #endregion
 
             #region Transfer
-            
+
             olvColumnTransferId.AspectGetter = delegate (object x)
             {
                 var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
-            
+
 
             #endregion
 
             #region Upgrade
-            
+
             olvColumnUpgradeId.AspectGetter = delegate (object x)
             {
                 var setting = (UpgradeSetting)x;
 
                 return (int)setting.Id;
             };
-            
+
             #endregion
 
         }
@@ -98,8 +98,11 @@ namespace DraconiusGoGUI.UI
             comboBoxLocationPresets.DisplayMember = "Name";
 
             textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
+            numericUpDownWalkingOffset.Enabled = cbMimicWalking.Checked;
             checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+            checkBoxGetSpeedServer.Enabled = cbMimicWalking.Checked;
             textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked;
+            numericUpDownWalkingOffset.Enabled = !checkBoxGetSpeedServer.Checked;
         }
 
         private void UpdateListViews()
@@ -422,10 +425,10 @@ namespace DraconiusGoGUI.UI
             userSettings.UpgradeCreature = checkBoxUpgradeCreatures.Checked;
             userSettings.SnipeAllCreaturesNoInPokedex = checkBoxSniperNoInPokedex.Checked;
             userSettings.UseSoftBanBypass = checkBoxSoftBypass.Checked;
-            userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;           
-            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationupdateDelayRandom.Value;            
+            userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;
+            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationupdateDelayRandom.Value;
             userSettings.DelayBetweenLocationUpdates = (int)numericUpDownDelayBetweenLocationUpdates.Value;
-            userSettings.DelayBetweenPlayerActions = (int) numericUpDownDelayBetweenPlayerActions.Value;
+            userSettings.DelayBetweenPlayerActions = (int)numericUpDownDelayBetweenPlayerActions.Value;
             userSettings.PlayerActionDelayRandom = (int)numericUpDownPlayerActionDelayRandom.Value;
             userSettings.GeneralDelayRandom = (int)numericUpDownGeneralDelayRandom.Value;
             userSettings.GeneralDelay = (int)numericUpDownGeneralDelay.Value;
@@ -813,7 +816,7 @@ namespace DraconiusGoGUI.UI
                 }
 
                 SaveSettings();
-                
+
                 bool full = false;
                 DialogResult dialogResult = MessageBox.Show("Export full config? ", "Info", MessageBoxButtons.YesNo);
 
@@ -901,8 +904,10 @@ namespace DraconiusGoGUI.UI
 
         private void CbMimicWalking_Click(object sender, EventArgs e)
         {
-            textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
+            textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked && cbMimicWalking.Checked;
+            numericUpDownWalkingOffset.Enabled = !checkBoxGetSpeedServer.Checked && cbMimicWalking.Checked;
             checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+            checkBoxGetSpeedServer.Enabled = cbMimicWalking.Checked;
         }
 
         private void CheckBoxHumanise_Click(object sender, EventArgs e)
@@ -918,6 +923,7 @@ namespace DraconiusGoGUI.UI
         private void CheckBoxGetSpeedServer_CheckedChanged(object sender, EventArgs e)
         {
             textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked;
+            numericUpDownWalkingOffset.Enabled = !checkBoxGetSpeedServer.Checked;
         }
     }
 }
