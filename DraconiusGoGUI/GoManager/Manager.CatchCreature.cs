@@ -175,6 +175,8 @@ namespace DraconiusGoGUI.DracoManager
 
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
 
+                if (!catchResult.Success)
+                    return new MethodResult();
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
