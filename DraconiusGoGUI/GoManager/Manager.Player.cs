@@ -62,9 +62,9 @@ namespace DraconiusGoGUI.DracoManager
 
             builder.AppendLine("=== Creature ===");
 
-            if (Creature != null)
+            if (Creatures != null)
             {
-                foreach (FUserCreature Creature in Creature.OrderByDescending(x => x.cp))
+                foreach (FUserCreature Creature in Creatures.OrderByDescending(x => x.cp))
                 {
                     string candy = "Unknown";
                     /*

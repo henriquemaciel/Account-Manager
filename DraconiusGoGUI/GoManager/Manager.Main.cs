@@ -55,9 +55,6 @@ namespace DraconiusGoGUI.DracoManager
         [JsonConstructor]
         public Manager()
         {
-            Stats = new FAvaUpdate();
-            PlayerData = new FUserInfo();
-            UserBag = new FBagUpdate();
             Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
@@ -67,9 +64,6 @@ namespace DraconiusGoGUI.DracoManager
         {
             UserSettings = new Settings();
             Logs = new List<Log>();
-            Stats = new FAvaUpdate();
-            PlayerData = new FUserInfo();
-            UserBag = new FBagUpdate();
             Tracker = new Tracker();
             ProxyHandler = handler;
             LoadFarmLocations();

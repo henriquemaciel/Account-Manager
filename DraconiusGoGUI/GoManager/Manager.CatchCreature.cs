@@ -195,8 +195,7 @@ namespace DraconiusGoGUI.DracoManager
                 var times = maxTries; 
                 var success = false;
                 var message = "";
-                int expGained = 0;
-                int candyGained = 0;
+
                 do
                 {
                     var ball = Items.FirstOrDefault(x => (x.type == ItemType.MAGIC_BALL_SIMPLE || x.type == ItemType.MAGIC_BALL_NORMAL || x.type == ItemType.MAGIC_BALL_GOOD) && x.count > 0 );
@@ -207,6 +206,9 @@ namespace DraconiusGoGUI.DracoManager
                     resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
                     if (resCatch.caught)
                     {
+                        int expGained = 0;
+                        int candyGained = 0;
+
                         if (resCatch.expCreatureExisting > 0)
                             expGained = resCatch.expCreatureExisting;
                         else
@@ -217,6 +219,14 @@ namespace DraconiusGoGUI.DracoManager
                         message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught using a {Strings.GetItemName(ball.type)}, exp { expGained }, candies { candyGained }";
                         success = true;
                         RemoveMapCreature(wildCreature);
+
+                        Tracker.AddValues(1, 0);
+
+                        ExpIncrease(expGained);
+
+                        UpdateInventory(InventoryRefresh.CreatureCandy);
+
+                        UpdateInventory(InventoryRefresh.Creature);
                     }
                     else if (resCatch.runAway)
                     {
@@ -231,10 +241,6 @@ namespace DraconiusGoGUI.DracoManager
                     message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp {resCatch.userCreature.cp}, not caught after of {maxTries} tries.";
 
                 LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Warning));
-
-                Tracker.AddValues(1, 0);
-
-                ExpIncrease(expGained);
 
                 return new MethodResult
                 {

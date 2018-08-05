@@ -132,10 +132,10 @@ namespace DraconiusGoGUI.DracoManager
         public BotState State { get; set; }
 
         [JsonIgnore]
-        public FUserInfo PlayerData { get; set; }
+        public FUserInfo PlayerData { get; set; } = new FUserInfo();
 
         [JsonIgnore]
-        public FBagUpdate UserBag { get; set; }
+        public FBagUpdate UserBag { get; set; } = new FBagUpdate();
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
@@ -144,7 +144,7 @@ namespace DraconiusGoGUI.DracoManager
         public List<FBagItem> Items { get; private set; } = new List<FBagItem>();
 
         [JsonIgnore]
-        public List<FUserCreature> Creature { get; private set; } = new List<FUserCreature>();
+        public List<FUserCreature> Creatures { get; private set; } = new List<FUserCreature>();
 
         [JsonIgnore]
         public List<FCreadexEntry> DracoDex { get; private set; }  = new List<FCreadexEntry>();

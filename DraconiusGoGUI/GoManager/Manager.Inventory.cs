@@ -79,7 +79,8 @@ namespace DraconiusGoGUI.DracoManager
         */
         private IEnumerable<FBagItem> GetItemsData()
         {
-            UserBag = _client.DracoClient.Inventory.GetUserItems();
+            UserBag = new FBagUpdate();
+            UserBag = _client.DracoClient.Inventory.GetUserItems() ;
             return UserBag.items;
         }
         /*
@@ -210,7 +211,7 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     case InventoryRefresh.All:
                         Items.Clear();
-                        Creature.Clear();
+                        Creatures.Clear();
                         DracoDex.Clear();
                         CreatureCandy.Clear();
                         Incubators.Clear();
@@ -221,15 +222,15 @@ namespace DraconiusGoGUI.DracoManager
                         CreatureCandy = GetCandies();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
-                        Creature = GetCreatures().ToList();
+                        Creatures = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Items:
                         Items.Clear();
                         Items = GetItemsData().ToList();
                         break;
                     case InventoryRefresh.Creature:
-                        Creature.Clear();
-                        Creature = GetCreatures().ToList();
+                        Creatures.Clear();
+                        Creatures = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Pokedex:
                         DracoDex.Clear();
@@ -426,12 +427,12 @@ namespace DraconiusGoGUI.DracoManager
 
         public double FilledCreatureStorage()
         {
-            if (Creature == null || Stats == null)
+            if (Creatures == null || Stats == null)
             {
                 return 100;
             }
 
-            return (double)(Creature.Count /*+ Eggs.Count*/) / Stats.creatureStorageSize * 100;
+            return (double)(Creatures.Count /*+ Eggs.Count*/) / Stats.creatureStorageSize * 100;
         }
     }
 }

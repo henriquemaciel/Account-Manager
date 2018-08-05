@@ -130,10 +130,8 @@ namespace DraconiusGoGUI
                     ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
                     DracoClient.Load();
 
-                    ClientManager.PlayerData.nickname = login.info.nickname;
-                    ClientManager.PlayerData.serverTime = login.info.serverTime;
-                    ClientManager.PlayerData.userId = login.info.userId;
-
+                    ClientManager.PlayerData = login.info;
+ 
                     if (ClientManager.UserSettings.GetSpeedOfServer && ClientManager.UserSettings.MimicWalking)
                     {
                         ClientManager.UserSettings.WalkingSpeed = (int)(0.9 * fConfig.avatarMoveRunSpeed);

@@ -53,7 +53,7 @@ namespace DraconiusGoGUI.DracoManager
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
                 Pokedex = DracoDex.Select(x => new PokedexEntryExportModel(x)).ToList(),
-                Creature = Creature.Select(x => new CreatureDataExportModel(x, CalculateIVPerfection(x))).ToList(),
+                Creature = Creatures.Select(x => new CreatureDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),
                 ExportTime = DateTime.Now

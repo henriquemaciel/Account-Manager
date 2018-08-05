@@ -57,8 +57,6 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            int ExperienceAwarded = 0;
-
             if (!_client.LoggedIn)
             {
                 return new MethodResult();
@@ -77,6 +75,7 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             FUpdate response = null;
+            int ExperienceAwarded = 0;
 
             try
             {

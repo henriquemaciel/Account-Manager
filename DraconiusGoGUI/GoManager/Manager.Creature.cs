@@ -59,7 +59,6 @@ namespace DraconiusGoGUI.DracoManager
                     //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
                     UpdateInventory(InventoryRefresh.CreatureCandy);
 
-
                     UpdateInventory(InventoryRefresh.Creature);
 
                     return new MethodResult
@@ -113,7 +112,7 @@ namespace DraconiusGoGUI.DracoManager
 
             double percentCreature = Stats.creatureStorageSize * configPercentCreatures;
 
-            if (percentCreature > Creature.Count)
+            if (percentCreature > Creatures.Count)
             {
                 return new MethodResult
                 {
@@ -152,7 +151,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (Creature == null)
+            if (Creatures == null)
             {
                 LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
@@ -164,7 +163,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var CreatureToTransfer = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.GroupBy(x => x.name);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creatures.GroupBy(x => x.name);
 
             foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {
@@ -662,7 +661,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (!Creature.Any())
+            if (!Creatures.Any())
             {
                 LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
@@ -674,7 +673,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var CreatureToUpgrade = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.GroupBy(x => x.name);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creatures.GroupBy(x => x.name);
 
             foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {

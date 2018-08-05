@@ -187,7 +187,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var CreatureToEvolve = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.OrderByDescending(x => x.name).GroupBy(x => x.name);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creatures.OrderByDescending(x => x.name).GroupBy(x => x.name);
 
             foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {
@@ -206,7 +206,7 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
                 
-                var setting = Creature.FirstOrDefault().possibleEvolutions.Keys.FirstOrDefault();
+                var setting = Creatures.FirstOrDefault().possibleEvolutions.Keys.FirstOrDefault();
                 /*
                 if (!PokeSettings.TryGetValue(group.Key, out setting))
                 {
@@ -225,7 +225,7 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
                 */
-                int candyToEvolve = Creature.FirstOrDefault().improveCandiesCost;
+                int candyToEvolve = Creatures.FirstOrDefault().improveCandiesCost;
 
                 if (candyToEvolve == 0)
                 {
@@ -235,7 +235,7 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 int totalCreature = CreatureGroupToEvolve.Count;
-                int totalCandy = Creature.FirstOrDefault().GetCandyCount(Stats);
+                int totalCandy = Creatures.FirstOrDefault().GetCandyCount(Stats);
 
                 int maxCreature = totalCandy / candyToEvolve;
 
@@ -310,12 +310,12 @@ namespace DraconiusGoGUI.DracoManager
 
         public double FilledCreatureInventorySpace()
         {
-            if (Creature == null || PlayerData == null)
+            if (Creatures == null || PlayerData == null)
             {
                 return 0;
             }
 
-            return (double)(Creature.Count) / Stats.creatureStorageSize * 100;
+            return (double)(Creatures.Count) / Stats.creatureStorageSize * 100;
         }
 
         private bool CanEvolveCreature(FUserCreature Creature)
