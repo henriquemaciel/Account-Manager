@@ -518,9 +518,6 @@ namespace DraconiusGoGUI.DracoManager
                         if (BuildingsToFarm.Count < 1)
                             continue;
 
-                        if (UserSettings.GoOnlyToGyms && Building.type != BuildingType.ARENA)
-                            continue;
-
                         Building = BuildingsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Building DeQueued: " + Building.id, LoggerTypes.Debug));
 
@@ -705,25 +702,37 @@ namespace DraconiusGoGUI.DracoManager
                                     if (roost == null)
                                     {
                                         LogCaller(new LoggerEventArgs("No mother of dragons found. Leaving dungeon...", LoggerTypes.Success));
+                                        _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                     }
-                                    else {
+                                    else
+                                    {
                                         // Go to the location of the roost
                                         MethodResult walkToRoostResult = await GoToLocation(new GeoCoordinate(roost.coords.latitude, roost.coords.longitude));
                                         if (!walkToRoostResult.Success)
                                         {
                                             LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Debug));
+                                            _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                         }
-
                                         // Incubate the egg
 
                                         var fbreq = new FBuildingRequest(roost.id, new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }, roost.dungeonId);
-                                    
-                                        _client.DracoClient.Call(new UserCreatureService().StartHatchingEggInRoost(egg.id, fbreq, 0));
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                    }
 
-                                    _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        //TODO: error here causes maybe already in uses or not slots free
+                                        try
+                                        {
+                                            _client.DracoClient.Call(new UserCreatureService().StartHatchingEggInRoost(egg.id, fbreq, 0));
+                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + ex.Message, LoggerTypes.Warning));
+                                            _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                            continue;
+                                        }
+                                    }
                                 }
                                 else
                                 {
