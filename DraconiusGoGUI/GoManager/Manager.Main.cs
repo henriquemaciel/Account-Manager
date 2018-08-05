@@ -702,6 +702,56 @@ namespace DraconiusGoGUI.DracoManager
                                 ++currentFailedStops;
                             }
                         }
+                        else if (Building.type == BuildingType.PORTAL)
+                        {
+                            FEgg egg = Eggs.Find(x => x.isEggForRoost && !x.isHatching);
+                            if (egg != null && UserSettings.IncubateEggs) { 
+                                MethodResult searchResult = await EnterInPortal(Building);
+                                if (searchResult.Success)
+                                {
+                                    currentFailedStops = 0;
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                                    // Force get the new buidings inside of the dungeon
+                                    await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+
+                                    var roost = AllBuildings.Find(x => x.type == BuildingType.ROOST);
+                                    if ( roost == null)
+                                    {
+                                        LogCaller(new LoggerEventArgs("No mother of dragons found. Leaving dungeon...", LoggerTypes.Success));
+                                        _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    }
+                                    else {
+                                        // Go to the location of the roost
+                                        MethodResult walkToRoostResult = await GoToLocation(new GeoCoordinate(roost.coords.latitude, roost.coords.longitude));
+                                        if (!walkToRoostResult.Success)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Debug));
+                                            _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                        }
+
+                                        // Incubate the egg
+
+                                        var fbreq = new FBuildingRequest(roost.id, new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }, roost.dungeonId);
+                                    
+                                        _client.DracoClient.Call(new UserCreatureService().StartHatchingEggInRoost(egg.id, fbreq, 0));
+
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (currentFailedStops > 10)
+                                    {
+                                        break;
+                                    }
+                                    ++currentFailedStops;
+                                }
+                            }
+                        }
 
                         if (UserSettings.OpenChests)
                         {
@@ -719,8 +769,15 @@ namespace DraconiusGoGUI.DracoManager
                                         continue;
                                     }
 
-                                    var openResult = _client.DracoClient.Call(new MapService().StartOpeningChest(chest)) as FOpenChestResult;// OpenChest(chest);
+                                    // We need do the two things, start opening and open the chest
+                                    var openResult = _client.DracoClient.Call(new MapService().StartOpeningChest(chest)) as FOpenChestResult;
+                                    if (openResult == null )
+                                    {
+                                        continue;
+                                    }
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
+                                    openResult = _client.DracoClient.Call(new MapService().OpenChestResult(chest)) as FOpenChestResult;
                                     if (openResult == null || openResult.loot.lootList.Count == 0)
                                     {
                                         continue;

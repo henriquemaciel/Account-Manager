@@ -86,8 +86,8 @@ namespace DraconiusGoGUI.DracoManager
                 {
                     throw new DracoError("Not Buildings.");
                 }
-
-                AllBuildings = BuildingData.OrderBy(x=> x.coords.distanceTo(new GeoCoords { latitude = lat,longitude = lng})).ToList();
+                // Not need sort the buildings, will be sorted after.
+                AllBuildings = BuildingData;
             }
 
             if (chests.chests.Any())
