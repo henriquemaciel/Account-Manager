@@ -720,15 +720,16 @@ namespace DraconiusGoGUI.DracoManager
                                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                             continue;
                                         }
-                                        // Incubate the egg
-
-                                        var fbreq = new FBuildingRequest(roost.id, new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }, roost.dungeonId);
 
                                         //TODO: error here causes maybe already in uses or not slots free
                                         try
                                         {
+                                            // Incubate the egg
+                                            var fbreq = new FBuildingRequest(roost.id, new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }, roost.dungeonId);
+
                                             _client.DracoClient.Call(new UserCreatureService().StartHatchingEggInRoost(egg.id, fbreq, 0));
                                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                            LogCaller(new LoggerEventArgs("Start Hatching Egg In Roost: " + egg.eggType.ToString(), LoggerTypes.Success));
                                         }
                                         catch (Exception ex)
                                         {
