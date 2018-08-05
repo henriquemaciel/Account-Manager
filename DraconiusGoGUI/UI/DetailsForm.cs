@@ -652,18 +652,14 @@ namespace DraconiusGoGUI.UI
 
             if (e.Column == olvColumnEggWalked)
             {
-                if (eggIncubator.eggId != null)
+                if (egg.isEggForRoost)
                 {
-                    if (egg.isEggForRoost)
-                    {
-                        DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
-                        e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
-                    }
-                    else
-                        e.SubItem.Text = String.Format("{0:0.00} km", (egg.totalDistance - egg.passedDistance) / 1000);
+                    DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
+                    e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
+                    e.SubItem.ForeColor = Color.Blue;
                 }
                 else
-                    e.SubItem.Text = "0.00 km";
+                    e.SubItem.Text = String.Format("{0:0.00} km", (egg.totalDistance - egg.passedDistance) / 1000);
             }
             else if (e.Column == olvColumnEggDistance)
             {
@@ -671,6 +667,7 @@ namespace DraconiusGoGUI.UI
                 {
                     DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
                     e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
+                    e.SubItem.ForeColor = Color.Blue;
                 }
                 else
                     e.SubItem.Text = String.Format("{0:0.00}km", egg.totalDistance / 1000);
