@@ -127,18 +127,19 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
                 LogCaller(new LoggerEventArgs($"Trying to catch: " + Strings.GetCreatureName(Creature.name), LoggerTypes.Debug));
+                RemoveMapCreature(Creature);
 
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
                 if (!result.Success)
                 {
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    continue;
+                    break;
                 }
 
                 if (result.Data == null )
                 {
                     LogCaller(new LoggerEventArgs("Creature Data is null. Ignoring", LoggerTypes.Debug));
-                    continue;
+                    break;
                 }
 
                 if ( result.Data.isCreatureStorageFull)
@@ -152,13 +153,13 @@ namespace DraconiusGoGUI.DracoManager
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     }
 
-                    continue;
+                    break;
                 }
 
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
 
                 if (!catchResult.Success)
-                    return new MethodResult();
+                    return catchResult;
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
@@ -218,7 +219,6 @@ namespace DraconiusGoGUI.DracoManager
 
                         message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught using a {Strings.GetItemName(ball.type)}, exp { expGained }, candies { candyGained }";
                         success = true;
-                        RemoveMapCreature(wildCreature);
 
                         Tracker.AddValues(1, 0);
 
@@ -232,7 +232,6 @@ namespace DraconiusGoGUI.DracoManager
                     {
                         _fleeingCreatureResponses++;
                         message = $"Creature {Strings.GetCreatureName(catchingCreaure.name)}, with cp {catchingCreaure.cp}, fled.";
-                        RemoveMapCreature(wildCreature);
                     }
                     ball.count--;
                     times--;
