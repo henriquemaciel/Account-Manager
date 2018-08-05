@@ -875,6 +875,7 @@
             // checkBoxUseDungeons
             // 
             this.checkBoxUseDungeons.AutoSize = true;
+            this.checkBoxUseDungeons.Enabled = false;
             this.checkBoxUseDungeons.Location = new System.Drawing.Point(175, 22);
             this.checkBoxUseDungeons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseDungeons.Name = "checkBoxUseDungeons";
