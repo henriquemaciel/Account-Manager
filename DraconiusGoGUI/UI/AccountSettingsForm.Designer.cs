@@ -86,7 +86,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDownSearchBuildingBelow = new System.Windows.Forms.NumericUpDown();
             this.checkBoxRecycle = new System.Windows.Forms.CheckBox();
-            this.checkBoxUseLuckyEgg = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseCristals = new System.Windows.Forms.CheckBox();
             this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
             this.textBoxCreatureBeforeEvolve = new System.Windows.Forms.TextBox();
             this.label46 = new System.Windows.Forms.Label();
@@ -716,7 +716,7 @@
             this.groupBoxPlayerActions.Controls.Add(this.label9);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownSearchBuildingBelow);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxRecycle);
-            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseLuckyEgg);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseCristals);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxIncubateEggs);
             this.groupBoxPlayerActions.Controls.Add(this.textBoxCreatureBeforeEvolve);
             this.groupBoxPlayerActions.Controls.Add(this.label46);
@@ -758,9 +758,9 @@
             this.cbUseLuckEggConst.Location = new System.Drawing.Point(5, 402);
             this.cbUseLuckEggConst.Margin = new System.Windows.Forms.Padding(4);
             this.cbUseLuckEggConst.Name = "cbUseLuckEggConst";
-            this.cbUseLuckEggConst.Size = new System.Drawing.Size(229, 21);
+            this.cbUseLuckEggConst.Size = new System.Drawing.Size(223, 21);
             this.cbUseLuckEggConst.TabIndex = 85;
-            this.cbUseLuckEggConst.Text = "LuckEgg Constantly after level :";
+            this.cbUseLuckEggConst.Text = "Cristal\'s Constantly after level :";
             this.cbUseLuckEggConst.UseVisualStyleBackColor = true;
             // 
             // checkBoxTooBalls
@@ -824,9 +824,9 @@
             this.cbUseIncense.Location = new System.Drawing.Point(15, 176);
             this.cbUseIncense.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbUseIncense.Name = "cbUseIncense";
-            this.cbUseIncense.Size = new System.Drawing.Size(149, 21);
+            this.cbUseIncense.Size = new System.Drawing.Size(180, 21);
             this.cbUseIncense.TabIndex = 75;
-            this.cbUseIncense.Text = "Incense Constantly";
+            this.cbUseIncense.Text = "Pheromones Constantly";
             this.cbUseIncense.UseVisualStyleBackColor = true;
             // 
             // numericUpDownDisableCatchDelay
@@ -875,7 +875,6 @@
             // checkBoxUseDungeons
             // 
             this.checkBoxUseDungeons.AutoSize = true;
-            this.checkBoxUseDungeons.Enabled = false;
             this.checkBoxUseDungeons.Location = new System.Drawing.Point(175, 22);
             this.checkBoxUseDungeons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseDungeons.Name = "checkBoxUseDungeons";
@@ -994,16 +993,16 @@
             this.checkBoxRecycle.Text = "Recycle Items";
             this.checkBoxRecycle.UseVisualStyleBackColor = true;
             // 
-            // checkBoxUseLuckyEgg
+            // checkBoxUseCristals
             // 
-            this.checkBoxUseLuckyEgg.AutoSize = true;
-            this.checkBoxUseLuckyEgg.Location = new System.Drawing.Point(175, 100);
-            this.checkBoxUseLuckyEgg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxUseLuckyEgg.Name = "checkBoxUseLuckyEgg";
-            this.checkBoxUseLuckyEgg.Size = new System.Drawing.Size(125, 21);
-            this.checkBoxUseLuckyEgg.TabIndex = 48;
-            this.checkBoxUseLuckyEgg.Text = "Use Lucky Egg";
-            this.checkBoxUseLuckyEgg.UseVisualStyleBackColor = true;
+            this.checkBoxUseCristals.AutoSize = true;
+            this.checkBoxUseCristals.Location = new System.Drawing.Point(175, 100);
+            this.checkBoxUseCristals.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxUseCristals.Name = "checkBoxUseCristals";
+            this.checkBoxUseCristals.Size = new System.Drawing.Size(108, 21);
+            this.checkBoxUseCristals.TabIndex = 48;
+            this.checkBoxUseCristals.Text = "Use Cristal\'s";
+            this.checkBoxUseCristals.UseVisualStyleBackColor = true;
             // 
             // checkBoxIncubateEggs
             // 
@@ -2484,7 +2483,7 @@
             // checkBoxUseRoosts
             // 
             this.checkBoxUseRoosts.AutoSize = true;
-            this.checkBoxUseRoosts.Location = new System.Drawing.Point(175, 176);
+            this.checkBoxUseRoosts.Location = new System.Drawing.Point(197, 176);
             this.checkBoxUseRoosts.Name = "checkBoxUseRoosts";
             this.checkBoxUseRoosts.Size = new System.Drawing.Size(106, 21);
             this.checkBoxUseRoosts.TabIndex = 90;
@@ -2687,7 +2686,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown numericUpDownSearchBuildingBelow;
         private System.Windows.Forms.CheckBox checkBoxRecycle;
-        private System.Windows.Forms.CheckBox checkBoxUseLuckyEgg;
+        private System.Windows.Forms.CheckBox checkBoxUseCristals;
         private System.Windows.Forms.CheckBox checkBoxIncubateEggs;
         private System.Windows.Forms.TextBox textBoxCreatureBeforeEvolve;
         private System.Windows.Forms.Label label46;

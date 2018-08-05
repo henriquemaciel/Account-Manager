@@ -132,7 +132,7 @@ namespace DraconiusGoGUI.UI
             checkBoxEvolve.Checked = settings.EvolveCreature;
             checkBoxTransfers.Checked = settings.TransferCreature;
             checkBoxMinimizeToTray.Checked = MinimizeToTray;
-            checkBoxUseLuckyEgg.Checked = settings.UseCristal;
+            checkBoxUseCristals.Checked = settings.UseCristal;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
             checkBoxCatchCreature.Checked = settings.CatchCreature;
@@ -354,7 +354,7 @@ namespace DraconiusGoGUI.UI
             userSettings.EvolveCreature = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
             userSettings.MinCreatureBeforeEvolve = minCreatureBeforeEvolve;
-            userSettings.UseCristal = checkBoxUseLuckyEgg.Checked;
+            userSettings.UseCristal = checkBoxUseCristals.Checked;
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.OnlyUnlimitedIncubator = checkBoxOnlyUnlimitedIncubator.Checked;
             userSettings.MaxLevel = maxLevel;
