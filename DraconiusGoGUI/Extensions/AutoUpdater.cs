@@ -68,7 +68,7 @@ namespace DraconiusGoGUI.Extensions
                 return false;
 
             Process.Start(Assembly.GetEntryAssembly().Location);
-            Environment.Exit(0);
+            Environment.Exit(-1);
             return true;
         }
 
@@ -83,9 +83,23 @@ namespace DraconiusGoGUI.Extensions
 
             var di = new DirectoryInfo(Directory.GetCurrentDirectory());
             var files = di.GetFiles("*.old", SearchOption.AllDirectories);
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old") || file.Name.Contains("chromedriver.exe.old"))
+                        continue;
+                    File.Delete(file.FullName);
+                }
+                catch (Exception)
+                {
+                    // Notting
+                }
+            }
             await Task.Delay(200);
         }
-        
+
         private async static Task<string> DownloadServerVersion()
         {
             using (HttpClient client = new HttpClient())
@@ -130,7 +144,7 @@ namespace DraconiusGoGUI.Extensions
             var oldfiles = Directory.GetFiles(destFolder);
             foreach (var old in oldfiles)
             {
-                if (old.Contains("data.json.gz") || old.Contains("chromedriver.exe") || old.Contains("HashKeys.txt")) continue;
+                if (old.Contains("data.json.gz") || old.Contains("chromedriver.exe")) continue;
                 if (File.Exists(old + ".old")) continue;
                 File.Move(old, old + ".old");
             }
