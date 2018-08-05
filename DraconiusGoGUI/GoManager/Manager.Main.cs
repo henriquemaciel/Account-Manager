@@ -561,9 +561,14 @@ namespace DraconiusGoGUI.DracoManager
                                 _building = "Library";
                                 break;
                             case BuildingType.DUNGEON_STOP:
-                                /*if (!UserSettings.UseDungeons)
-                                    goto reloadAllBuildings;
-                                    */
+                                if (!UserSettings.UseDungeons)
+                                {
+                                    _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                                    continue;
+                                }
+                                    
                                 _building = "Dungeon";
                                 break;
                             default:

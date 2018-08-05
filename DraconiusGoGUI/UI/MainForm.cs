@@ -840,7 +840,7 @@ namespace DraconiusGoGUI
             }
             else if (e.Column == olvColumnUsername)
             {
-                if (manager.LuckyEggActive)
+                if (manager.CristalActive)
                 {
                     e.SubItem.ForeColor = Color.Gold;
                 }

@@ -229,7 +229,11 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return Stats == null ? "Neutral" : UserSettings.DefaultTeam;
+                return Stats?.alliance.Value.ToString() ?? "Neutral";
+            }
+            set
+            {
+                UserSettings.DefaultTeam = value;
             }
         }
 
@@ -409,14 +413,19 @@ namespace DraconiusGoGUI.DracoManager
             }
         }
 
+        public DateTime UseCristaldateTime { get; set; }
+
         [JsonIgnore]
-        public bool LuckyEggActive
+        public bool CristalActive
         {
             get
             {
                 if (_client.LoggedIn)
-                    return false;// _client.ClientSession.LuckyEggsUsed;
-                else
+                {
+                    if (UseCristaldateTime >= DateTime.Now)
+                        return true;
+
+                }
                     return false;
             }
         }

@@ -258,20 +258,24 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
-            //remove warn
-            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
 
-            /*
-            if (UsedAlready)
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
+            if (CristalActive)
             {
                 return new MethodResult
                 {
                     Message = "Lucky egg already active"
                 };
             }
-            */
-            return new MethodResult { Message = Strings.GetItemName(ItemType.EXPERIENCE_BOOSTER) + " Not released yet" };
-            /*
+
             var data = Items.FirstOrDefault(x => x.type == ItemType.EXPERIENCE_BOOSTER);
 
             if (data == null || data.count == 0)
@@ -284,28 +288,18 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await AcLogin();
-
-                if (!result.Success)
-                {
-                    return result;
-                }
-            }
-
             var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
  
             if (response == null)
                 return new MethodResult();
 
             LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
+            UseCristaldateTime = DateTime.Now.AddMinutes(30);
 
             return new MethodResult
             {
                 Success = true
             };
-            */
         }
 
         public double FilledCreatureInventorySpace()

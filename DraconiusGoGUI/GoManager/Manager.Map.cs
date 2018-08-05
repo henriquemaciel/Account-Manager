@@ -36,7 +36,11 @@ namespace DraconiusGoGUI.DracoManager
             FUserInfo playerdata = UserMap.items.Find(o => o.GetType() == typeof(FUserInfo)) as FUserInfo;
 
             if (avatar != null)
+            {
                 Stats = avatar;
+                if (UserSettings.DefaultTeam == "Neutral")
+                    Team = Stats?.alliance.Value.ToString() ?? "Neutral";
+            }
 
             if (playerdata != null)
                 PlayerData = playerdata;
