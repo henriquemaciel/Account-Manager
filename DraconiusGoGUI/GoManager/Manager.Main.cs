@@ -707,6 +707,7 @@ namespace DraconiusGoGUI.DracoManager
                                         LogCaller(new LoggerEventArgs("No mother of dragons found. Leaving dungeon...", LoggerTypes.Success));
                                         _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        continue;
                                     }
                                     else
                                     {
@@ -717,6 +718,7 @@ namespace DraconiusGoGUI.DracoManager
                                             LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Warning));
                                             _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                            continue;
                                         }
                                         // Incubate the egg
 
