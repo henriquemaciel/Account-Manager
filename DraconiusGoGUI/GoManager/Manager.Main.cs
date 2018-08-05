@@ -546,6 +546,9 @@ namespace DraconiusGoGUI.DracoManager
                                 _building = "Obelisk";
                                 break;
                             case BuildingType.ROOST:
+                                if (!UserSettings.UseRoosts)
+                                    continue;
+
                                 _building = "Roost";
                                 break;
                             case BuildingType.PORTAL:
