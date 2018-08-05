@@ -349,7 +349,7 @@ namespace DraconiusGoGUI.UI
             userSettings.Latitude = defaultLat;
             userSettings.Longitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
-            userSettings.AccountName = textBoxName.Text;
+            userSettings.AccountName = String.IsNullOrEmpty(textBoxName.Text) ? userSettings.Username : textBoxName.Text;
             userSettings.TransferCreature = checkBoxTransfers.Checked;
             userSettings.EvolveCreature = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
