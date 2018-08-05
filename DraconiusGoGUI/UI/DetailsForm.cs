@@ -656,7 +656,7 @@ namespace DraconiusGoGUI.UI
                 {
                     if (egg.isEggForRoost)
                     {
-                        DateTime time = new DateTime(egg.totalIncubationTime);
+                        DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
                         e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
                     }
                     else
@@ -669,7 +669,7 @@ namespace DraconiusGoGUI.UI
             {
                 if (egg.isEggForRoost)
                 {
-                    DateTime time = new DateTime(egg.totalIncubationTime);
+                    DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
                     e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
                 }
                 else
