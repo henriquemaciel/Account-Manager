@@ -422,6 +422,8 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
                         UpdateInventory(InventoryRefresh.All);
                     }
 
@@ -697,6 +699,7 @@ namespace DraconiusGoGUI.DracoManager
 
                                     // Force get the new buidings inside of the dungeon
                                     await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                                     var roost = AllBuildings.Find(x => x.type == BuildingType.ROOST);
                                     if (roost == null)
@@ -711,7 +714,7 @@ namespace DraconiusGoGUI.DracoManager
                                         MethodResult walkToRoostResult = await GoToLocation(new GeoCoordinate(roost.coords.latitude, roost.coords.longitude));
                                         if (!walkToRoostResult.Success)
                                         {
-                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Debug));
+                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Warning));
                                             _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                         }
