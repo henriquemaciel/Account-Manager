@@ -87,7 +87,7 @@ namespace DraconiusGoGUI.DracoManager
                     throw new DracoError("Not Buildings.");
                 }
 
-                AllBuildings = BuildingData;
+                AllBuildings = BuildingData.OrderBy(x=> x.coords.distanceTo(new GeoCoords { latitude = lat,longitude = lng})).ToList();
             }
 
             if (chests.chests.Any())
@@ -96,7 +96,7 @@ namespace DraconiusGoGUI.DracoManager
                 if (chests.chests.Count() > 0)
                 {
                     LogCaller(new LoggerEventArgs("visible chests: " + chests.chests.Count, Enums.LoggerTypes.Debug));
-                    AllChests = chests.chests.ToList();
+                    AllChests = chests.chests.OrderBy(x => x.coords.distanceTo(new GeoCoords { latitude = lat, longitude = lng })).ToList();
                 }
             }
 
