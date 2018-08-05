@@ -696,7 +696,7 @@ namespace DraconiusGoGUI.DracoManager
                                 ++currentFailedStops;
                             }
                         }
-                        else if (Building.type == BuildingType.PORTAL)
+                        else if (Building.type == BuildingType.PORTAL && UserSettings.UseRoosts)
                         {
                             FEgg egg = Eggs.Find(x => x.isEggForRoost && !x.isHatching);
                             if (egg != null && UserSettings.IncubateEggs) { 
@@ -713,7 +713,6 @@ namespace DraconiusGoGUI.DracoManager
                                     if (roost == null)
                                     {
                                         LogCaller(new LoggerEventArgs("No mother of dragons found. Leaving dungeon...", LoggerTypes.Success));
-                                        _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                     }
                                     else {
                                         // Go to the location of the roost
@@ -721,7 +720,6 @@ namespace DraconiusGoGUI.DracoManager
                                         if (!walkToRoostResult.Success)
                                         {
                                             LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Debug));
-                                            _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                         }
 
                                         // Incubate the egg
@@ -730,9 +728,9 @@ namespace DraconiusGoGUI.DracoManager
                                     
                                         _client.DracoClient.Call(new UserCreatureService().StartHatchingEggInRoost(egg.id, fbreq, 0));
                                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                                        _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                     }
+
+                                    _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                 }
                                 else

@@ -31,6 +31,7 @@ namespace DraconiusGoGUI
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
 
+        public bool UseRoosts { get; set; }
         public bool UseIncense { get; set; }
         public bool UseLuckEggConst { get; set; }
         public int LevelForConstLukky { get; set; }
@@ -186,6 +187,7 @@ namespace DraconiusGoGUI
             PercTransItems = 90;
             PercTransPoke = 40;
             StopOnAPIUpdate = true;
+            UseRoosts = true;
             SpinGyms = false;
             Latitude = 40.764665;
             Longitude = -73.973184;

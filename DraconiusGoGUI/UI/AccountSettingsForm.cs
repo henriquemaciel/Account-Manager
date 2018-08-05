@@ -183,6 +183,7 @@ namespace DraconiusGoGUI.UI
             cbUseLuckEggConst.Checked = settings.UseLuckEggConst;
             checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
             checkBoxGetSpeedServer.Checked = settings.GetSpeedOfServer;
+            checkBoxUseRoosts.Checked = settings.UseRoosts;
 
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
 
@@ -387,6 +388,7 @@ namespace DraconiusGoGUI.UI
             userSettings.MimicWalking = cbMimicWalking.Checked;
             userSettings.ShowDebugLogs = checkBoxDevLogs.Checked;
             userSettings.EnableHumanization = checkBoxHumanise.Checked;
+            userSettings.UseRoosts = checkBoxUseRoosts.Checked;
 
             userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
 

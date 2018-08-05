@@ -33,6 +33,8 @@
             this.tabPageDetails = new System.Windows.Forms.TabPage();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
+            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
+            this.checkBoxMinimizeToTray = new System.Windows.Forms.CheckBox();
             this.checkBoxDevLogs = new System.Windows.Forms.CheckBox();
             this.numericUpDownMaxLogs = new System.Windows.Forms.NumericUpDown();
             this.label43 = new System.Windows.Forms.Label();
@@ -231,8 +233,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxMinimizeToTray = new System.Windows.Forms.CheckBox();
-            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseRoosts = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -351,6 +352,28 @@
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoUpdate
+            // 
+            this.cbAutoUpdate.AutoSize = true;
+            this.cbAutoUpdate.Location = new System.Drawing.Point(438, 161);
+            this.cbAutoUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbAutoUpdate.Name = "cbAutoUpdate";
+            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
+            this.cbAutoUpdate.TabIndex = 72;
+            this.cbAutoUpdate.Text = "Auto Update";
+            this.cbAutoUpdate.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMinimizeToTray
+            // 
+            this.checkBoxMinimizeToTray.AutoSize = true;
+            this.checkBoxMinimizeToTray.Location = new System.Drawing.Point(28, 161);
+            this.checkBoxMinimizeToTray.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxMinimizeToTray.Name = "checkBoxMinimizeToTray";
+            this.checkBoxMinimizeToTray.Size = new System.Drawing.Size(128, 21);
+            this.checkBoxMinimizeToTray.TabIndex = 71;
+            this.checkBoxMinimizeToTray.Text = "Minimize to tray";
+            this.checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
             // 
             // checkBoxDevLogs
             // 
@@ -669,6 +692,7 @@
             // 
             // groupBoxPlayerActions
             // 
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseRoosts);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownLvForConsLukky);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseLuckEggConst);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxTooBalls);
@@ -2457,27 +2481,15 @@
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
             // 
-            // checkBoxMinimizeToTray
+            // checkBoxUseRoosts
             // 
-            this.checkBoxMinimizeToTray.AutoSize = true;
-            this.checkBoxMinimizeToTray.Location = new System.Drawing.Point(28, 161);
-            this.checkBoxMinimizeToTray.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxMinimizeToTray.Name = "checkBoxMinimizeToTray";
-            this.checkBoxMinimizeToTray.Size = new System.Drawing.Size(128, 21);
-            this.checkBoxMinimizeToTray.TabIndex = 71;
-            this.checkBoxMinimizeToTray.Text = "Minimize to tray";
-            this.checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
-            // 
-            // cbAutoUpdate
-            // 
-            this.cbAutoUpdate.AutoSize = true;
-            this.cbAutoUpdate.Location = new System.Drawing.Point(438, 161);
-            this.cbAutoUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cbAutoUpdate.Name = "cbAutoUpdate";
-            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
-            this.cbAutoUpdate.TabIndex = 72;
-            this.cbAutoUpdate.Text = "Auto Update";
-            this.cbAutoUpdate.UseVisualStyleBackColor = true;
+            this.checkBoxUseRoosts.AutoSize = true;
+            this.checkBoxUseRoosts.Location = new System.Drawing.Point(175, 176);
+            this.checkBoxUseRoosts.Name = "checkBoxUseRoosts";
+            this.checkBoxUseRoosts.Size = new System.Drawing.Size(106, 21);
+            this.checkBoxUseRoosts.TabIndex = 90;
+            this.checkBoxUseRoosts.Text = "Use Roost\'s";
+            this.checkBoxUseRoosts.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2753,5 +2765,6 @@
         private System.Windows.Forms.CheckBox checkBoxGetSpeedServer;
         private System.Windows.Forms.CheckBox checkBoxMinimizeToTray;
         private System.Windows.Forms.CheckBox cbAutoUpdate;
+        private System.Windows.Forms.CheckBox checkBoxUseRoosts;
     }
 }
