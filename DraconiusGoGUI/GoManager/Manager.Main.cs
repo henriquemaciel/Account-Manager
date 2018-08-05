@@ -558,6 +558,9 @@ namespace DraconiusGoGUI.DracoManager
                                 _building = "Library";
                                 break;
                             case BuildingType.DUNGEON_STOP:
+                                if (!UserSettings.UseDungeons)
+                                    continue;
+
                                 _building = "Dungeon";
                                 break;
                             default:
