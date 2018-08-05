@@ -397,28 +397,6 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }*/
 
-                    //Auto complete tutorials
-                    if (UserSettings.CompleteTutorial)
-                    {
-                        /*
-                        if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
-                        {
-                            result = await MarkStartUpTutorialsComplete(true);
-
-                            if (!result.Success)
-                            {
-                                LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
-
-                                break;
-                            }
-
-                            LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                        }
-                        */
-                    }
-
                     _failedInventoryReponses = 0;
 
                     WaitPaused();
@@ -552,27 +530,33 @@ namespace DraconiusGoGUI.DracoManager
                         switch (Building.type)
                         {
                             case BuildingType.ARENA:
+                                if (!UserSettings.SpinGyms)
+                                    continue;
+
                                 _building = "Arena";
                                 if (Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
                                 {
                                     loggerTypes = LoggerTypes.Gym;
                                 }
-                                continue;
+                                break;
                             case BuildingType.STOP:
                                 _building = "Pillar of Abundance";
                                 break;
                             case BuildingType.OBELISK:
                                 _building = "Obelisk";
-                                continue;
+                                break;
                             case BuildingType.ROOST:
                                 _building = "Roost";
-                                continue;
+                                break;
                             case BuildingType.PORTAL:
+                                if (!UserSettings.UseRoosts)
+                                    continue;
+
                                 _building = "Portal";
                                 break;
                             case BuildingType.LIBRARY:
                                 _building = "Library";
-                                continue;
+                                break;
                             case BuildingType.DUNGEON_STOP:
                                 _building = "Dungeon";
                                 break;
@@ -580,9 +564,6 @@ namespace DraconiusGoGUI.DracoManager
                                 _building = Building.type.ToString();
                                 break;
                         }
-
-                        if (!UserSettings.SpinGyms && Building.type == BuildingType.ARENA)
-                            continue;
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", _building, BuildingNumber, totalStops, distance), loggerTypes));
 
@@ -696,7 +677,7 @@ namespace DraconiusGoGUI.DracoManager
                                 ++currentFailedStops;
                             }
                         }
-                        else if (Building.type == BuildingType.PORTAL && UserSettings.UseRoosts)
+                        else if (Building.type == BuildingType.PORTAL)
                         {
                             FEgg egg = Eggs.Find(x => x.isEggForRoost && !x.isHatching);
                             if (egg != null && UserSettings.IncubateEggs) { 

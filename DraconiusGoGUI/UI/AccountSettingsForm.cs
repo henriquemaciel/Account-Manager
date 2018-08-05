@@ -132,7 +132,7 @@ namespace DraconiusGoGUI.UI
             checkBoxEvolve.Checked = settings.EvolveCreature;
             checkBoxTransfers.Checked = settings.TransferCreature;
             checkBoxMinimizeToTray.Checked = MinimizeToTray;
-            checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
+            checkBoxUseLuckyEgg.Checked = settings.UseCristal;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
             checkBoxCatchCreature.Checked = settings.CatchCreature;
@@ -206,7 +206,7 @@ namespace DraconiusGoGUI.UI
             //End device settings
 
             checkBoxUseBerries.Checked = settings.UseBerries;
-            checkBoxGetARBonus.Checked = settings.GetArBonus;
+            checkBoxUseDungeons.Checked = settings.UseDungeons;
             checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
             checkBoxUpgradeCreatures.Checked = settings.UpgradeCreature;
@@ -354,7 +354,7 @@ namespace DraconiusGoGUI.UI
             userSettings.EvolveCreature = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
             userSettings.MinCreatureBeforeEvolve = minCreatureBeforeEvolve;
-            userSettings.UseLuckyEgg = checkBoxUseLuckyEgg.Checked;
+            userSettings.UseCristal = checkBoxUseLuckyEgg.Checked;
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.OnlyUnlimitedIncubator = checkBoxOnlyUnlimitedIncubator.Checked;
             userSettings.MaxLevel = maxLevel;
@@ -403,7 +403,7 @@ namespace DraconiusGoGUI.UI
             userSettings.FirmwareType = textBoxFirmwareType.Text;
             //End device settings
 
-            userSettings.GetArBonus = checkBoxGetARBonus.Checked;
+            userSettings.UseDungeons = checkBoxUseDungeons.Checked;
             userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
             userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
             userSettings.GetSpeedOfServer = checkBoxGetSpeedServer.Checked;

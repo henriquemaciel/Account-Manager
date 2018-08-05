@@ -75,7 +75,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.checkBoxTransferAtOnce = new System.Windows.Forms.CheckBox();
-            this.checkBoxGetARBonus = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseDungeons = new System.Windows.Forms.CheckBox();
             this.checkBoxCatchCreature = new System.Windows.Forms.CheckBox();
             this.checkBoxUseBerries = new System.Windows.Forms.CheckBox();
             this.numericUpDownForceEvolveAbove = new System.Windows.Forms.NumericUpDown();
@@ -705,7 +705,7 @@
             this.groupBoxPlayerActions.Controls.Add(this.label16);
             this.groupBoxPlayerActions.Controls.Add(this.label14);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransferAtOnce);
-            this.groupBoxPlayerActions.Controls.Add(this.checkBoxGetARBonus);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseDungeons);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxCatchCreature);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseBerries);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownForceEvolveAbove);
@@ -872,17 +872,16 @@
             this.checkBoxTransferAtOnce.Text = "Transfer At Once";
             this.checkBoxTransferAtOnce.UseVisualStyleBackColor = true;
             // 
-            // checkBoxGetARBonus
+            // checkBoxUseDungeons
             // 
-            this.checkBoxGetARBonus.AutoSize = true;
-            this.checkBoxGetARBonus.Enabled = false;
-            this.checkBoxGetARBonus.Location = new System.Drawing.Point(175, 22);
-            this.checkBoxGetARBonus.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxGetARBonus.Name = "checkBoxGetARBonus";
-            this.checkBoxGetARBonus.Size = new System.Drawing.Size(122, 21);
-            this.checkBoxGetARBonus.TabIndex = 73;
-            this.checkBoxGetARBonus.Text = "Use AR Bonus";
-            this.checkBoxGetARBonus.UseVisualStyleBackColor = true;
+            this.checkBoxUseDungeons.AutoSize = true;
+            this.checkBoxUseDungeons.Location = new System.Drawing.Point(175, 22);
+            this.checkBoxUseDungeons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxUseDungeons.Name = "checkBoxUseDungeons";
+            this.checkBoxUseDungeons.Size = new System.Drawing.Size(127, 21);
+            this.checkBoxUseDungeons.TabIndex = 73;
+            this.checkBoxUseDungeons.Text = "Use Dungeon\'s";
+            this.checkBoxUseDungeons.UseVisualStyleBackColor = true;
             // 
             // checkBoxCatchCreature
             // 
@@ -2676,7 +2675,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.CheckBox checkBoxTransferAtOnce;
-        private System.Windows.Forms.CheckBox checkBoxGetARBonus;
+        private System.Windows.Forms.CheckBox checkBoxUseDungeons;
         private System.Windows.Forms.CheckBox checkBoxCatchCreature;
         private System.Windows.Forms.CheckBox checkBoxUseBerries;
         private System.Windows.Forms.NumericUpDown numericUpDownForceEvolveAbove;

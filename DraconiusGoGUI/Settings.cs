@@ -51,7 +51,7 @@ namespace DraconiusGoGUI
         public double MaxBuildingMeters { get; set; }
         public int MaxBuildingMetersRandom { get; set; }
         public int MaxTravelDistance { get; set; }
-        public bool UseLuckyEgg { get; set; }
+        public bool UseCristal { get; set; }
         public bool OpenChests { get; set; }
         public int MinCreatureBeforeEvolve { get; set; }
         public bool RecycleItems { get; set; }
@@ -103,9 +103,7 @@ namespace DraconiusGoGUI
         public bool UseBerries { get; set; }
         public bool OnlyUnlimitedIncubator { get; set; }
         public bool ShuffleBuildings { get; set; }
-        public bool GetArBonus { get; set; }
-        public decimal ARBonusProximity { get; set; }
-        public decimal ARBonusAwareness { get; set; }
+        public bool UseDungeons { get; set; }
         public bool CompleteTutorial { get; set; }
         public bool TransferAtOnce { get; set; }
         public bool ShowDebugLogs { get; set; }
@@ -210,8 +208,9 @@ namespace DraconiusGoGUI
             SoftBanBypassTimes = 40;
             LevelForConstLukky = 9;
             UseLuckEggConst = false;
-            UseLuckyEgg = true;
+            UseCristal = true;
             UseIncense = true;
+            UseDungeons = true;
             OpenChests = true;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";

@@ -37,7 +37,7 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            if (UserSettings.UseLuckyEgg && !UserSettings.UseLuckEggConst)
+            if (UserSettings.UseCristal && !UserSettings.UseLuckEggConst)
             {
                 MethodResult result = await UseLuckyEgg();
 
