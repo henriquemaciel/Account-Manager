@@ -10,23 +10,23 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult> EnterInPortal(FBuilding Building)
+        private async Task<MethodResult<FUpdate>> EnterInPortal(FBuilding Building)
         {
             try
             {
-                var response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                FUpdate response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
                 await Task.Delay(200);
-                return new MethodResult
+                return new MethodResult<FUpdate>
                 {
+                    Data = response,
                     Success = true,
                     Message = "Success"
                 };
             }
             catch (Exception ex)
             {
-                return new MethodResult
+                return new MethodResult<FUpdate>
                 {
-                    Success = false,
                     Message = ex.Message
                 };
             }
