@@ -33,8 +33,8 @@ namespace DraconiusGoGUI
 
         public bool UseRoosts { get; set; }
         public bool UseIncense { get; set; }
-        public bool UseLuckEggConst { get; set; }
-        public int LevelForConstLukky { get; set; }
+        public bool UseCristalConst { get; set; }
+        public int LevelForConstCristal { get; set; }
         public string DefaultTeam { get; set; }
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
@@ -206,8 +206,8 @@ namespace DraconiusGoGUI
             MinCreatureBeforeEvolve = 1;
             UseSoftBanBypass = true;
             SoftBanBypassTimes = 40;
-            LevelForConstLukky = 9;
-            UseLuckEggConst = false;
+            LevelForConstCristal = 9;
+            UseCristalConst = false;
             UseCristal = true;
             UseIncense = true;
             UseDungeons = true;

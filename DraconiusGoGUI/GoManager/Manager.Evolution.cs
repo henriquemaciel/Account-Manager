@@ -37,9 +37,9 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            if (UserSettings.UseCristal && !UserSettings.UseLuckEggConst)
+            if (UserSettings.UseCristal && !UserSettings.UseCristalConst)
             {
-                MethodResult result = await UseLuckyEgg();
+                MethodResult result = await UseCristal();
 
                 if (!result.Success)
                 {
@@ -256,7 +256,7 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
-        private async Task<MethodResult> UseLuckyEgg()
+        private async Task<MethodResult> UseCristal()
         {
             if (!_client.LoggedIn)
             {
@@ -272,7 +272,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult
                 {
-                    Message = "Lucky egg already active"
+                    Message = "Cristak already active"
                 };
             }
 
@@ -280,11 +280,11 @@ namespace DraconiusGoGUI.DracoManager
 
             if (data == null || data.count == 0)
             {
-                LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs("Cristal's left", LoggerTypes.Info));
 
                 return new MethodResult
                 {
-                    Message = "No lucky eggs"
+                    Message = "No Cristal's"
                 };
             }
 
@@ -293,7 +293,7 @@ namespace DraconiusGoGUI.DracoManager
             if (response == null)
                 return new MethodResult();
 
-            LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
+            LogCaller(new LoggerEventArgs(String.Format("Cristal used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
             UseCristaldateTime = DateTime.Now.AddMinutes(30);
 
             return new MethodResult

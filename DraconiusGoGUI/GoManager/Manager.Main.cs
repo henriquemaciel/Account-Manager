@@ -1071,11 +1071,11 @@ namespace DraconiusGoGUI.DracoManager
                             Stop();
                         }
 
-                        if (UserSettings.UseLuckEggConst && Level >= UserSettings.LevelForConstLukky && IsRunning)
+                        if (UserSettings.UseCristalConst && Level >= UserSettings.LevelForConstCristal && IsRunning)
                         {
-                            MethodResult luckEggResult = await UseLuckyEgg();
+                            MethodResult cristalResult = await UseCristal();
 
-                            if (luckEggResult.Success)
+                            if (cristalResult.Success)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }

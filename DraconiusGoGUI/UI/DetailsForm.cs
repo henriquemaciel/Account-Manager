@@ -65,22 +65,9 @@ namespace DraconiusGoGUI.UI
 
             olvColumnCreatureId.AspectGetter = (Creature) => (Creature as FUserCreature).id;
 
-            olvColumnCandyToEvolve.AspectGetter = delegate (object Creature)
-            {
-                int cost = (Creature as FUserCreature).improveCandiesCost;
-                return cost == 0 ? 0 : cost;
-            };
-
             olvColumnCreatureCandy.AspectGetter = delegate (object Creature)
             {
-                if (!_manager.CreatureCandy.Any())
-                {
-                    return 0;
-                }
-
-                var candy = _manager.CreatureCandy[(Creature as FUserCreature).candyType];
-
-                return candy == 0 ? 0 : candy;
+                return (Creature as FUserCreature).GetCandyCount(_manager.Stats);
             };
 
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
@@ -113,7 +100,7 @@ namespace DraconiusGoGUI.UI
                     return 0;
                 }
 
-                var candy = 0;// _manager.CreatureCandy[(CreatureType)x];
+                var candy = 0;//_manager.CreatureCandy[(CreatureType)x];
 
                 return candy == 0 ? 0 : candy;
             };

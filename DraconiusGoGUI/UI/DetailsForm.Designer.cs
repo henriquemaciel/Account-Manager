@@ -79,6 +79,7 @@
             this.olvColumnCreatureId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCreatureLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureCandy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCandyToEvolve = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -629,6 +630,7 @@
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureId);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureGroup);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureName);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureLevel);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCp);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureCandy);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCandyToEvolve);
@@ -647,6 +649,7 @@
             this.olvColumnCreatureId,
             this.olvColumnCreatureGroup,
             this.olvColumnCreatureName,
+            this.olvColumnCreatureLevel,
             this.olvColumnCp,
             this.olvColumnCreatureCandy,
             this.olvColumnCandyToEvolve,
@@ -694,6 +697,11 @@
             this.olvColumnCreatureName.Text = "Name";
             this.olvColumnCreatureName.Width = 75;
             // 
+            // olvColumnCreatureLevel
+            // 
+            this.olvColumnCreatureLevel.AspectName = "level";
+            this.olvColumnCreatureLevel.Text = "Level";
+            // 
             // olvColumnCp
             // 
             this.olvColumnCp.AspectName = "cp";
@@ -707,6 +715,7 @@
             // 
             // olvColumnCandyToEvolve
             // 
+            this.olvColumnCandyToEvolve.AspectName = "improveCandiesCost";
             this.olvColumnCandyToEvolve.Text = "Candies To Evolve";
             this.olvColumnCandyToEvolve.Width = 106;
             // 
@@ -1241,5 +1250,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnEPS;
         private BrightIdeasSoftware.OLVColumn olvColumnDPSmain;
         private BrightIdeasSoftware.OLVColumn olvColumnDPS;
+        private BrightIdeasSoftware.OLVColumn olvColumnCreatureLevel;
     }
 }

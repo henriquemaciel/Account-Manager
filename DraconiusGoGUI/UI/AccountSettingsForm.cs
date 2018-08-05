@@ -180,7 +180,7 @@ namespace DraconiusGoGUI.UI
             }
 
             cbUseIncense.Checked = settings.UseIncense;
-            cbUseLuckEggConst.Checked = settings.UseLuckEggConst;
+            cbUseLuckEggConst.Checked = settings.UseCristalConst;
             checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
             checkBoxGetSpeedServer.Checked = settings.GetSpeedOfServer;
             checkBoxUseRoosts.Checked = settings.UseRoosts;
@@ -218,7 +218,7 @@ namespace DraconiusGoGUI.UI
             numericUpDownTooBalls.Value = new Decimal(settings.BallsToIgnoreStops);
             checkBoxSoftBypass.Checked = settings.UseSoftBanBypass;
             numericUpDownSoftBypass.Value = new Decimal(settings.SoftBanBypassTimes);
-            numericUpDownLvForConsLukky.Value = new Decimal(settings.LevelForConstLukky);
+            numericUpDownLvForConsLukky.Value = new Decimal(settings.LevelForConstCristal);
 
             for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -375,7 +375,7 @@ namespace DraconiusGoGUI.UI
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
             userSettings.UseIncense = cbUseIncense.Checked;
-            userSettings.UseLuckEggConst = cbUseLuckEggConst.Checked;
+            userSettings.UseCristalConst = cbUseLuckEggConst.Checked;
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
             userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
@@ -458,7 +458,7 @@ namespace DraconiusGoGUI.UI
                 MessageBox.Show("Min level for use lukky constantly value", "Warning");
                 return false;
             }
-            userSettings.LevelForConstLukky = lvforconslukky;
+            userSettings.LevelForConstCristal = lvforconslukky;
 
             return true;
         }

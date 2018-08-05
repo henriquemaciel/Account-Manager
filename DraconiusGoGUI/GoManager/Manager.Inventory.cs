@@ -97,7 +97,7 @@ namespace DraconiusGoGUI.DracoManager
         */
         private int GetItemsCount()
         {
-            return UserBag.items.Count();
+            return UserBag?.items.Count() == 0 ? 0 : UserBag.items.Count();
         }
         
         private FAvaUpdate GetPlayerStats()
@@ -122,7 +122,7 @@ namespace DraconiusGoGUI.DracoManager
 
         private Dictionary<CreatureType, int> GetCandies()
         {
-            return Stats.candies;
+            return Stats?.candies;
         }
 
         private IEnumerable<FCreadexEntry> GetDracoDex()
