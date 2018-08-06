@@ -85,6 +85,7 @@ namespace DraconiusGoGUI.DracoManager
             try
             {
                 response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                UpdateInventory(InventoryRefresh.Items);
             }
             catch (Exception ex)
             {
