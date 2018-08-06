@@ -18,9 +18,9 @@ namespace DraconiusGoGUI.DracoManager
         public byte[] LogHeaderSettings { get; set; }
         public AccountState AccountState { get; set; }
         public Settings UserSettings { get; set; }
-        public Tracker Tracker { get; set; }
-        public Scheduler AccountScheduler { get; set; }
-        public FAvaUpdate Stats { get; set; }
+        public Tracker Tracker { get; private set; }
+        public Scheduler AccountScheduler { get; private set; }
+        public FAvaUpdate Stats { get; private set; } = new FAvaUpdate();
         
         //[JsonIgnore]
         //public Dictionary<CreatureMove, MoveSettings> MoveSettings { get; private set; }
@@ -135,7 +135,7 @@ namespace DraconiusGoGUI.DracoManager
         public FUserInfo PlayerData { get; set; } = new FUserInfo();
 
         [JsonIgnore]
-        public FBagUpdate UserBag { get; set; } = new FBagUpdate();
+        public FBagUpdate UserBag { get; private set; } = new FBagUpdate();
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }

@@ -79,7 +79,6 @@ namespace DraconiusGoGUI.DracoManager
         */
         private IEnumerable<FBagItem> GetItemsData()
         {
-            UserBag = new FBagUpdate();
             UserBag = _client.DracoClient.Inventory.GetUserItems() ;
             return UserBag.items;
         }
