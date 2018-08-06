@@ -241,8 +241,11 @@ namespace DraconiusGoGUI.DracoManager
 
                 foreach (FUserCreature pData in CreatureGroupToEvolve.Take(maxCreature))
                 {
-                    if (!CanTransferOrEvoleCreature(pData, true))
-                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", Strings.GetCreatureName(pData.name)), LoggerTypes.Info));
+                    if (!CanEvoleCreature(pData))
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be evolued maybe is a favorit, is deployed or is a buddy Creature.", Strings.GetCreatureName(pData.name)), LoggerTypes.Info));
+                        continue;
+                    }
                     else
                         CreatureToEvolve.Add(pData);
                 }
@@ -272,7 +275,8 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult
                 {
-                    Message = "Cristak already active"
+                    Message = "Cristak already active",
+                    Success = true                    
                 };
             }
 

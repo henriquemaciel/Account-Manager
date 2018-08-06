@@ -20,7 +20,6 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult
                 {
                     Message = "Incubate eggs disabled",
-                    Success = true
                 };
             }
 
@@ -31,18 +30,32 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult
                 {
                     Message = incubatorResponse.Message,
-                    Success = true
                 };
             }
 
-            FEgg egg = Eggs.Find(x =>  isAKmEgg(x.eggType) && string.IsNullOrEmpty(x.incubatorId) );
+            if (!String.IsNullOrEmpty(incubatorResponse.Data.eggId))
+            {
+                return new MethodResult
+                {
+                    Message = incubatorResponse.Message,
+                };
+            }
+
+            if (!String.IsNullOrEmpty(incubatorResponse.Data.roostBuildingId))
+            {
+                return new MethodResult
+                {
+                    Message = incubatorResponse.Message,
+                };
+            }
+
+            FEgg egg = Eggs.Find(x => !x.isEggForRoost && string.IsNullOrEmpty(x.incubatorId) );
 
             if (egg == null)
             {
                 return new MethodResult
                 {
                     Message = "No egg to incubate",
-                    Success = true
                 };
             }
 
@@ -56,8 +69,18 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
-            var response = _client.DracoClient.Eggs.StartHatchingEgg(egg.id, incubatorResponse.Data.incubatorId);
-                
+            object response = null;
+
+            try
+            {
+                response = _client.DracoClient.Eggs.StartHatchingEgg(egg.id, incubatorResponse.Data.incubatorId);
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs(String.Format("Faill to put egg {0} in incubator Id: {1}", egg.id, incubatorResponse.Data.incubatorId), LoggerTypes.Exception, ex));
+                return new MethodResult();
+            }
+
             if (response == null)
                 return new MethodResult();
 
@@ -113,10 +136,5 @@ namespace DraconiusGoGUI.DracoManager
                 Message = "No unused incubators"
             };
         }
-        private bool isAKmEgg(ItemType egg)
-        {
-            return (egg == ItemType.EGG_KM_2 || egg == ItemType.EGG_KM_5 || egg == ItemType.EGG_KM_10);
-        }
-
     }
 }

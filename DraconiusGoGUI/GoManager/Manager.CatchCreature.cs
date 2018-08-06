@@ -213,7 +213,7 @@ namespace DraconiusGoGUI.DracoManager
                     catch (Exception ex)
                     {
                         _fleeingCreatureResponses++;
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to Catching Creature {0}.", catchingCreaure.id), LoggerTypes.Warning, ex));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to Catching Creature {0}.", catchingCreaure.id), LoggerTypes.Exception, ex));
                         return new MethodResult<FCatchingCreature> { Message = ex.Message };
                     }
                     if (resCatch.caught)
@@ -294,7 +294,7 @@ namespace DraconiusGoGUI.DracoManager
             catch (Exception ex)
             {
                 _fleeingCreatureResponses++;
-                LogCaller(new LoggerEventArgs(String.Format("Failed to Encounter Creature {0}.", mapCreature.id), LoggerTypes.Warning, ex));
+                LogCaller(new LoggerEventArgs(String.Format("Failed to Encounter Creature {0}.", mapCreature.id), LoggerTypes.Exception, ex));
                 return new MethodResult<FCatchingCreature> { Message = ex.Message };
             }
 

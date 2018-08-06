@@ -415,7 +415,7 @@ namespace DraconiusGoGUI.DracoManager
 
         public DateTime UseCristaldateTime { get; set; } = DateTime.Now;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public bool CristalActive
         {
             get
@@ -432,7 +432,7 @@ namespace DraconiusGoGUI.DracoManager
 
         public DateTime UseDragonVisiondateTime { get; set; } = DateTime.Now;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public bool DragonVisonActive
         {
             get

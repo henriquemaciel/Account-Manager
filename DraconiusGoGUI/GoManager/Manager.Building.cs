@@ -88,7 +88,7 @@ namespace DraconiusGoGUI.DracoManager
             }
             catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs($"Building {Building.id} fail", LoggerTypes.Exception, ex));
                 if (_potentialBuildingBan)
                 {
                     if (AccountState != AccountState.SoftBan)

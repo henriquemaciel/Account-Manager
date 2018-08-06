@@ -18,8 +18,11 @@ namespace DraconiusGoGUI.DracoManager
 
             foreach (var pokToTranfer in CreaturesToTransfer)
             {
-                if (!CanTransferOrEvoleCreature(pokToTranfer))
+                if (!CanTransferCreature(pokToTranfer))
+                {
                     LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", Strings.GetCreatureName(pokToTranfer.name)), LoggerTypes.Info));
+                    continue;
+                }
                 else
                     CreatureToTransfer.Add(pokToTranfer);
             }
@@ -570,15 +573,11 @@ namespace DraconiusGoGUI.DracoManager
             return (float)(Math.Round((level) * 2) / 2.0);
         }
 
-        private bool CanTransferOrEvoleCreature(FUserCreature Creature, bool allmodes = false)
+        private bool CanTransferCreature(FUserCreature Creature, bool allmodes = false)
         {
             // Can't transfer Creature null.
             if (Creature == null)
                 return false;
-
-            // Can't transfer Creature check all modes.
-            //if (allmodes && Creature.IsBad)
-            //    return false;
 
             // Can't transfer Creature in gyms.
             if (Creature.isArenaDefender || Creature.isLibraryDefender)
@@ -596,29 +595,59 @@ namespace DraconiusGoGUI.DracoManager
             return true;
         }
 
+        private bool CanEvoleCreature(FUserCreature Creature)
+        {
+            // Can't evolve Creature null.
+            if (Creature == null)
+                return false;
+
+            // Can't evolve Creature in gyms.
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
+                return false;
+
+            // Can't evolve buddy Creature
+            var buddy = Stats.buddy;
+            if (buddy != null && buddy.id == Creature.id)
+                return false;
+
+            int familyCandy = Creature.GetCandyCount(Stats);
+
+            // Can't evolve if not enough candy.
+            int CreatureCandyNeededAlready = Creature.improveCandiesCost;
+            if (familyCandy < CreatureCandyNeededAlready)
+                return false;
+
+            // Can't evolve if not enough stardust.
+            var stardustToUpgrade = Creature.improveDustCost;
+            if (TotalStardust < stardustToUpgrade)
+                return false;
+
+            return true;
+        }
+
         private bool CanUpgradeCreature(FUserCreature Creature)
         {
             // Can't upgrade Creature in gyms.
-            //if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
-            //    return false;
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
+               return false;
 
-            //int CreatureLevel = (int)GetLevelFromCpMultiplier(Creature.CpMultiplier + Creature.AdditionalCpMultiplier);
+            int CreatureLevel = Creature.level;
 
             // Can't evolve unless Creature level is lower than trainer.
-            //if (CreatureLevel >= Level + 2)
-            //    return false;
+            if (CreatureLevel >= Level + 2)
+                return false;
 
-            //int familyCandy = CreatureCandy.Where(x => x.FamilyId == GetCreatureSetting(Creature.CreatureId).Data.FamilyId).FirstOrDefault().Candy_;
+            int familyCandy = Creature.GetCandyCount(Stats);
 
             // Can't evolve if not enough candy.
-            //int CreatureCandyNeededAlready = UpgradeSettings.CandyCost[CreatureLevel];
-            //if (familyCandy < CreatureCandyNeededAlready)
-            //    return false;
+            int CreatureCandyNeededAlready = Creature.improveCandiesCost;
+            if (familyCandy < CreatureCandyNeededAlready)
+                return false;
 
             // Can't evolve if not enough stardust.
-            //var stardustToUpgrade = UpgradeSettings.StardustCost[CreatureLevel];
-            //if (TotalStardust < stardustToUpgrade)
-            //    return false;
+            var stardustToUpgrade = Creature.improveDustCost;
+            if (TotalStardust < stardustToUpgrade)
+                return false;
 
             return true;
         }

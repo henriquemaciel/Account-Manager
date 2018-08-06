@@ -382,7 +382,8 @@ namespace DraconiusGoGUI.DracoManager
             {
                 return new MethodResult
                 {
-                    Message = "Dragon Vision already active"
+                    Message = "Dragon Vision already active",
+                    Success = true
                 };
             }
 
@@ -411,6 +412,7 @@ namespace DraconiusGoGUI.DracoManager
                 Success = true
             };
         }
+
         private async Task<MethodResult> UseIncense(ItemType item = ItemType.INCENSE)
         {
             if (!_client.LoggedIn)
