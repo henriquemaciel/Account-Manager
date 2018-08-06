@@ -206,7 +206,16 @@ namespace DraconiusGoGUI.DracoManager
                         message = $"No balls. Skipping catching creature {Strings.GetCreatureName(catchingCreaure.name)}";
                         break;
                     }
-                    resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
+                    try
+                    {
+                        resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
+                    }
+                    catch (Exception ex)
+                    {
+                        _fleeingCreatureResponses++;
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to Catching Creature {0}.", catchingCreaure.id), LoggerTypes.Warning, ex));
+                        return new MethodResult<FCatchingCreature> { Message = ex.Message };
+                    }
                     if (resCatch.caught)
                     {
                         int expGained = 0;
