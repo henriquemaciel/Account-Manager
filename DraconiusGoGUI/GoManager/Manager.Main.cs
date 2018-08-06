@@ -596,7 +596,7 @@ namespace DraconiusGoGUI.DracoManager
                             var now = DateTime.Now;
                             LogCaller(new LoggerEventArgs("Now: " + now.ToLongDateString() + " " + now.ToLongTimeString(), LoggerTypes.Info));
                             LogCaller(new LoggerEventArgs("TimeAutoCatch: " + TimeAutoCatch.ToLongDateString() + " " + TimeAutoCatch.ToLongTimeString(), LoggerTypes.Info));
-                            if (now > TimeAutoCatch)
+                            if (now >= TimeAutoCatch)
                             {
                                 CatchDisabled = false;
                                 LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));

@@ -237,6 +237,8 @@ namespace DraconiusGoGUI.DracoManager
 
                         _fleeingCreatureResponses = 0;
 
+                        //Creatures.Add(resCatch.userCreature);
+
                         UpdateInventory(InventoryRefresh.CreatureCandy);
 
                         UpdateInventory(InventoryRefresh.Creature);

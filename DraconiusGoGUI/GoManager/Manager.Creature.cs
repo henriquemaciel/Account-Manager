@@ -60,6 +60,8 @@ namespace DraconiusGoGUI.DracoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
+                    //Creatures.Remove(Creature);
+
                     UpdateInventory(InventoryRefresh.CreatureCandy);
 
                     UpdateInventory(InventoryRefresh.Creature);
@@ -84,7 +86,7 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                if (CreatureIds.Count != 0)
+                if (CreatureIds.Count > 0)
                 {
                     var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
                 }
@@ -96,6 +98,11 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs(String.Format("Successully transfer {0} Creatures.", CreatureToTransfer.Count()), LoggerTypes.Transfer));
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                /*
+                foreach (var creat in CreatureToTransfer)
+                    Creatures.Remove(creat);
+                */
 
                 UpdateInventory(InventoryRefresh.CreatureCandy);
 
@@ -132,7 +139,6 @@ namespace DraconiusGoGUI.DracoManager
 
             await TransferCreature(transferResult.Data);
 
-            await Task.Delay(0);
             return new MethodResult
             {
                 Success = true,
@@ -282,34 +288,35 @@ namespace DraconiusGoGUI.DracoManager
 
         private List<FUserCreature> GetCreatureByPossibleEvolve(IGrouping<CreatureType, FUserCreature> Creature, int limit)
         {
-            /*
-            CreatureSettings setting = null;
-            if (!PokeSettings.TryGetValue(Creature.Key, out setting))
+            FUserCreature setting = null;
+            if (Creatures.Where(c => c.name == Creature.Key).FirstOrDefault() == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for Creature {0}", Creature.Key), LoggerTypes.Info));
 
                 return new List<FUserCreature>();
             }
 
-            int CreatureCandy = 0;
+            setting = Creatures.Where(c => c.name == Creature.Key).FirstOrDefault();
 
-            if (CreatureCandy.Any(x => x.FamilyId == setting.FamilyId))
+            int creatureCandy = 0;
+
+            if (CreatureCandy.Any(x => x.Key == setting.name))
             {
-                CreatureCandy = CreatureCandy.Where(x => x.FamilyId == setting.FamilyId).FirstOrDefault().Candy_;
+                creatureCandy = CreatureCandy.Where(x => x.Key == setting.name).FirstOrDefault().Value;
                 //int CreatureCandy = CreatureCandy.SingleOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
             }
 
-            int candyToEvolve = setting.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
+            int candyToEvolve = setting.improveCandiesCost;
             int totalCreature = Creature.Count();
 
             if (candyToEvolve == 0)
             {
                 //Not thinks good
-                return Creature.OrderByDescending(x => x.Cp).ToList();
+                return Creature.OrderByDescending(x => x.cp).ToList();
                 //return new List<CreatureData>();
             }
 
-            int maxCreature = CreatureCandy / candyToEvolve;
+            int maxCreature = creatureCandy / candyToEvolve;
 
             if (maxCreature > limit)
             {
@@ -317,8 +324,8 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             return Creature.OrderByDescending(x => x.cp).Skip(maxCreature).ToList();
-            */
-            return new List<FUserCreature>();
+
+           // return new List<FUserCreature>();
         }
 
         // NOTE: this is the real IV Percent, using only Individual values.
@@ -362,11 +369,11 @@ namespace DraconiusGoGUI.DracoManager
         {
             foreach (FUserCreature Creature in CreatureToFavorite)
             {
-                bool isFavorited = true;
+                bool isFavorited = false;
 
-                if (Creature.group < 1)
+                if (Creature.group > 0)
                 {
-                    isFavorited = false;
+                    isFavorited = true;
                     //message = "favorited";
                 }
 
