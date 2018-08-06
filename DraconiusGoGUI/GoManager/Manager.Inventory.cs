@@ -327,8 +327,9 @@ namespace DraconiusGoGUI.DracoManager
                     Success = true
                 };
             }
-            catch
+            catch (Exception ex)
             {
+                LogCaller(new LoggerEventArgs(String.Format("Fail to Delete item."), LoggerTypes.Exception, ex));
                 return new MethodResult();
             }
         }
