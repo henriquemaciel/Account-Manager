@@ -216,7 +216,7 @@ namespace DraconiusGoGUI.UI
             {
                 labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.totalDistanceF);
                 labelCreatureCaught.Text = _manager.Stats.monstersCaughtCount.ToString();
-                //labelBuildingVisits.Text = _manager.Stats.BuildingVisits.ToString();
+                labelBuildingVisits.Text = _manager.BuildingsFarmed.ToString() + "/" + _manager.UserSettings.SpinBuildingsDayLimit.ToString();
                 labelUniqueCreature.Text = _manager.DracoDex.Where(d => d.caughtQuantity > 0).Count().ToString() + "/" + _manager.DracoDex.Count().ToString();
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.Stats.registerDate);
                 labelCreateDate.Text = date.ToString();

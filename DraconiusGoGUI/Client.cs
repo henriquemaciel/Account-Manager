@@ -22,7 +22,7 @@ namespace DraconiusGoGUI
         public bool LoggedIn = false;
         public Manager ClientManager;
         public DracoClient DracoClient;
-        private FConfig fConfig;
+
         private CancellationTokenSource CancellationTokenSource;
 
         public Client()
@@ -100,7 +100,7 @@ namespace DraconiusGoGUI
                     if (!ping) throw new Exception();
 
                     ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                    fConfig = DracoClient.Boot(config);
+                    ClientManager.fConfig = DracoClient.Boot(config);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
                     var login = DracoClient.Login().Result;
@@ -134,7 +134,7 @@ namespace DraconiusGoGUI
  
                     if (ClientManager.UserSettings.GetSpeedOfServer && ClientManager.UserSettings.MimicWalking)
                     {
-                        ClientManager.UserSettings.WalkingSpeed = (int)(0.9 * fConfig.avatarMoveRunSpeed);
+                        ClientManager.UserSettings.WalkingSpeed = (int)(0.9 * ClientManager.fConfig.avatarMoveRunSpeed);
                         ClientManager.LogCaller(new LoggerEventArgs($"Auto speed set to { ClientManager.UserSettings.WalkingSpeed } km/h.", LoggerTypes.Success));
                     }
 

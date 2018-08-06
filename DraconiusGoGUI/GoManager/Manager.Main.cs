@@ -46,6 +46,7 @@ namespace DraconiusGoGUI.DracoManager
 
         //DracoText for translations
         public Strings Strings { get; set; }
+        public FConfig fConfig { get; set; }
 
         [JsonIgnore]
         public ProxyHandler ProxyHandler { get; set; }
