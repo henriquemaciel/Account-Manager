@@ -46,6 +46,7 @@ namespace DraconiusGoGUI.DracoManager
 
         //DracoText for translations
         public Strings Strings { get; set; }
+        public FConfig fConfig { get; set; }
 
         [JsonIgnore]
         public ProxyHandler ProxyHandler { get; set; }
@@ -55,9 +56,6 @@ namespace DraconiusGoGUI.DracoManager
         [JsonConstructor]
         public Manager()
         {
-            Stats = new FAvaUpdate();
-            PlayerData = new FUserInfo();
-            UserBag = new FBagUpdate();
             Logs = new List<Log>();
             Tracker = new Tracker();
             LoadFarmLocations();
@@ -67,9 +65,6 @@ namespace DraconiusGoGUI.DracoManager
         {
             UserSettings = new Settings();
             Logs = new List<Log>();
-            Stats = new FAvaUpdate();
-            PlayerData = new FUserInfo();
-            UserBag = new FBagUpdate();
             Tracker = new Tracker();
             ProxyHandler = handler;
             LoadFarmLocations();
@@ -175,8 +170,8 @@ namespace DraconiusGoGUI.DracoManager
             LogCaller(new LoggerEventArgs("Bot started", LoggerTypes.Info));
 
             _runningStopwatch.Start();
-            _potentialCreatureBan = false;
-            _fleeingCreatureResponses = 0;
+            //_potentialCreatureBan = false;
+            //_fleeingCreatureResponses = 0;
 
             t.Start();
 
@@ -387,44 +382,6 @@ namespace DraconiusGoGUI.DracoManager
                         }
                     }
 
-                    //Get Creature settings
-                    /*if (PokeSettings == null)
-                    {
-                        LogCaller(new LoggerEventArgs("Grabbing Creature settings ...", LoggerTypes.Debug));
-
-                        result = await GetItemTemplates();
-
-                        if (!result.Success)
-                        {
-                            //if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
-                            //    AccountState = AccountState.TemporalBan;
-                            LogCaller(new LoggerEventArgs("Load Creature settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
-                            break;
-                        }
-                    }*/
-
-                    //Auto complete tutorials
-                    if (UserSettings.CompleteTutorial)
-                    {
-                        /*
-                        if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
-                        {
-                            result = await MarkStartUpTutorialsComplete(true);
-
-                            if (!result.Success)
-                            {
-                                LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
-
-                                break;
-                            }
-
-                            LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                        }
-                        */
-                    }
-
                     _failedInventoryReponses = 0;
 
                     WaitPaused();
@@ -450,6 +407,8 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
                         UpdateInventory(InventoryRefresh.All);
                     }
 
@@ -462,7 +421,7 @@ namespace DraconiusGoGUI.DracoManager
                     reloadAllBuildings:
 
                     LogCaller(new LoggerEventArgs("Getting buildings...", LoggerTypes.Info));                   
-                    MethodResult<List<FBuilding>> Buildings = await GetAllBuildingsAsync();
+                    MethodResult<List<FBuilding>> Buildings = GetAllBuildings();
 
                     if (!Buildings.Success)
                     {
@@ -496,7 +455,7 @@ namespace DraconiusGoGUI.DracoManager
 
                     int currentFailedStops = 0;
 
-                    var BuildingsToFarm = new Queue<FBuilding>(Buildings.Data);
+                    var BuildingsToFarm = new Queue<FBuilding>(Buildings.Data.Where(x=>x!=null));
 
                     while (BuildingsToFarm.Any())
                     {
@@ -546,9 +505,6 @@ namespace DraconiusGoGUI.DracoManager
                         if (BuildingsToFarm.Count < 1)
                             continue;
 
-                        if (UserSettings.GoOnlyToGyms && Building.type != BuildingType.ARENA)
-                            continue;
-
                         Building = BuildingsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Building DeQueued: " + Building.id, LoggerTypes.Debug));
 
@@ -558,6 +514,9 @@ namespace DraconiusGoGUI.DracoManager
                         switch (Building.type)
                         {
                             case BuildingType.ARENA:
+                                if (!UserSettings.SpinGyms)
+                                    continue;
+
                                 _building = "Arena";
                                 if (Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
                                 {
@@ -568,27 +527,41 @@ namespace DraconiusGoGUI.DracoManager
                                 _building = "Pillar of Abundance";
                                 break;
                             case BuildingType.OBELISK:
+                                if (!UserSettings.UseObelisks)
+                                    continue;
+
                                 _building = "Obelisk";
-                                continue;
+                                break;
                             case BuildingType.ROOST:
+                                if (!UserSettings.UseRoosts)
+                                    continue;
+
                                 _building = "Roost";
-                                continue;
+                                break;
                             case BuildingType.PORTAL:
+                                if (!UserSettings.UseRoosts)
+                                    continue;
+
                                 _building = "Portal";
                                 break;
                             case BuildingType.LIBRARY:
                                 _building = "Library";
                                 continue;
                             case BuildingType.DUNGEON_STOP:
+                                if (!UserSettings.UseDungeons)
+                                {
+                                    _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                                    continue;
+                                }
+                                    
                                 _building = "Dungeon";
-                                break;
+                                continue;
                             default:
                                 _building = Building.type.ToString();
-                                break;
+                                continue;
                         }
-
-                        if (!UserSettings.SpinGyms && Building.type == BuildingType.ARENA)
-                            continue;
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", _building, BuildingNumber, totalStops, distance), loggerTypes));
 
@@ -608,7 +581,7 @@ namespace DraconiusGoGUI.DracoManager
                             var now = DateTime.Now;
                             LogCaller(new LoggerEventArgs("Now: " + now.ToLongDateString() + " " + now.ToLongTimeString(), LoggerTypes.Info));
                             LogCaller(new LoggerEventArgs("TimeAutoCatch: " + TimeAutoCatch.ToLongDateString() + " " + TimeAutoCatch.ToLongTimeString(), LoggerTypes.Info));
-                            if (now > TimeAutoCatch)
+                            if (now >= TimeAutoCatch)
                             {
                                 CatchDisabled = false;
                                 LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
@@ -619,12 +592,12 @@ namespace DraconiusGoGUI.DracoManager
                         {
                             int remainingPokeballs = RemainingPokeballs();
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingPokeballs, LoggerTypes.Info));
-                            //double filledCreatureStorage = FilledCreatureStorage();
+                            double filledCreatureStorage = FilledCreatureStorage();
 
                             if (remainingPokeballs > 0)
                             {
-                                //if (filledCreatureStorage <= 100)
-                                //{
+                                if (filledCreatureStorage <= 100)
+                                {
                                     //Catch nearby Creature
                                     MethodResult nearbyCreatureResponse = await CatchNeabyCreature();
                                     if (nearbyCreatureResponse.Success)
@@ -648,13 +621,13 @@ namespace DraconiusGoGUI.DracoManager
                                         //this as walk to Creature sinpe pos is not good .. continue for new pos..
                                     //    continue;
                                     //}
-                                //}
-                                //else
-                                //{
-                                //   LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
-                                //    await TransferFilteredCreature();
-                                //    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                //}
+                                }
+                                else
+                                {
+                                   LogCaller(new LoggerEventArgs("You inventory Creature storage is full please transfer some Creatures.", LoggerTypes.Warning));
+                                    await TransferFilteredCreature();
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                }
                             }
                             else
                             {
@@ -702,16 +675,114 @@ namespace DraconiusGoGUI.DracoManager
                                 ++currentFailedStops;
                             }
                         }
+                        else if (Building.type == BuildingType.PORTAL)
+                        {
+                            FEgg egg = Eggs.Find(x => x.isEggForRoost && !x.isHatching);
+                            if (egg != null && UserSettings.IncubateEggs) { 
+                                MethodResult<FUpdate> searchResult = await EnterInPortal(Building);
+
+                                if (searchResult.Success && searchResult.Data.items.Count > 0)
+                                {
+                                    currentFailedStops = 0;
+
+                                    // Force get the new buidings inside of the dungeon
+                                    await UpdateMap(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
+                                    var roost = AllBuildings.Find(x => x.type == BuildingType.ROOST);
+                                    if (roost == null)
+                                    {
+                                        LogCaller(new LoggerEventArgs("No mother of dragons found. Leaving dungeon...", LoggerTypes.Success));
+                                        _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        // Go to the location of the roost
+                                        MethodResult walkToRoostResult = await GoToLocation(new GeoCoordinate(roost.coords.latitude, roost.coords.longitude));
+                                        if (!walkToRoostResult.Success)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + walkToRoostResult.Message, LoggerTypes.Warning));
+                                            _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                            continue;
+                                        }
+
+                                        //TODO: error here causes maybe already in uses or not slots free
+                                        try
+                                        {
+                                            // Incubate the egg
+                                            var fbreq = new FBuildingRequest(roost.id, new GeoCoords { latitude = UserSettings.Latitude, longitude = UserSettings.Longitude }, roost.dungeonId);
+
+                                            _client.DracoClient.Call(new UserCreatureService().StartHatchingEggInRoost(egg.id, fbreq, 0));
+                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                            LogCaller(new LoggerEventArgs("Start Hatching Egg In Roost: " + egg.eggType.ToString(), LoggerTypes.Success));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: ", LoggerTypes.Exception, ex));
+                                            _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
+                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                            continue;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (currentFailedStops > 10)
+                                    {
+                                        break;
+                                    }
+                                    ++currentFailedStops;
+                                }
+                            }
+                        }
 
                         if (UserSettings.OpenChests)
                         {
-                            var chestsResult = await GetAllChestsInRangeAsync();
-                            if (chestsResult.Success)
+                            var chestsResult = await GetAllChests();
+                            if (chestsResult.Success && chestsResult.Data.Count > 0 && chestsResult.Data != null)
                             {
-                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                foreach (var chest in chestsResult.Data)
+                                // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
+                                foreach (var chest in chestsResult.Data.ToArray())
                                 {
-                                    var openResult =  _client.DracoClient.OpenChest(chest);
+                                    if (!DragonVisonActive)
+                                    {
+                                        MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
+                                        if (!walkToChestResult.Success)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
+                                            continue;
+                                        }
+                                    }
+
+                                    // We need do the two things, start opening and open the chest
+                                    FOpenChestResult openResult = null;
+
+                                    try
+                                    {
+                                        openResult = _client.DracoClient.Call(new MapService().StartOpeningChest(chest)) as FOpenChestResult;
+                                        if (openResult == null)
+                                        {
+                                            continue;
+                                        }
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                                        openResult = _client.DracoClient.Call(new MapService().OpenChestResult(chest)) as FOpenChestResult;
+                                        if (openResult == null || openResult.loot.lootList.Count == 0)
+                                        {
+                                            continue;
+                                        }
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        LogCaller(new LoggerEventArgs("Faile Opening Chest. Result: " + ex.Message, LoggerTypes.Warning));
+                                        continue;
+                                    }
+
+                                    RemoveChest(chest);
                                     var text = "Chest Opened. Award Received: ";
                                     foreach (var item in openResult.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
                                     {
@@ -721,7 +792,7 @@ namespace DraconiusGoGUI.DracoManager
                                     if (xpqty > 0)
                                     {
                                         text += $"[{xpqty}] XP, ";
-                                        ExpIncrease( xpqty);
+                                        ExpIncrease(xpqty);
                                     }
 
                                     LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
@@ -736,183 +807,21 @@ namespace DraconiusGoGUI.DracoManager
                                         if (xpqty > 0)
                                         {
                                             text += $"[{xpqty}] XP, ";
-                                            ExpIncrease( xpqty);
+                                            ExpIncrease(xpqty);
                                         }
                                         LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
-                                    }
-                                }                                
-                            }
-
-                        }
-
-                        /* Search Old Refs:
-                        double filledInventorySpace = FilledInventoryStorage();
-                        LogCaller(new LoggerEventArgs(String.Format("Filled Inventory Storage: {0:0.00}%", filledInventorySpace), LoggerTypes.Debug));
-
-                        if ((filledInventorySpace < UserSettings.SearchBuildingBelowPercent) && (filledInventorySpace <= 100))
-                        {
-                            if (Building.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                            {
-                                if (Building.Type == BuildingType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
-                                {
-                                    if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && UserSettings.CompleteTutorial)
-                                    {
-                                        if (PlayerData.Team == TeamColor.Neutral)
-                                        {
-                                            TeamColor team = TeamColor.Neutral;
-
-                                            foreach (TeamColor _team in Enum.GetValues(typeof(TeamColor)))
-                                            {
-                                                if (UserSettings.DefaultTeam == _team.ToString())
-                                                {
-                                                    team = _team;
-                                                }
-                                            }
-
-                                            if (team != TeamColor.Neutral)
-                                            {
-                                                var setplayerteam = await SetPlayerTeam(team);
-
-                                                if (setplayerteam.Success)
-                                                {
-                                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                                                    result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
-
-                                                    if (!result.Success)
-                                                    {
-                                                        LogCaller(new LoggerEventArgs("Failed. Marking Gym tutorials completed..", LoggerTypes.Warning));
-                                                        continue;
-                                                    }
-
-                                                    LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
-
-                                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if (PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && UserSettings.CompleteTutorial)
-                                    {
-                                        //Check for missed tutorials
-                                        foreach (TutorialState tuto in Enum.GetValues(typeof(TutorialState)))
-                                        {
-                                            if (!PlayerData.TutorialState.Contains(tuto))
-                                            {
-                                                DialogResult box = MessageBox.Show($"Tutorial {tuto.ToString()} is not completed on this account {PlayerData.Username}! Complete this?", "Confirmation", MessageBoxButtons.YesNo);
-
-                                                if (box == DialogResult.Yes)
-                                                {
-                                                    result = await MarkTutorialsComplete(new[] { tuto });
-                                                    if (result.Success)
-                                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                                }
-                                            }
-                                        }
-
-                                        var gyminfo = await GymGetInfo(Building);
-                                        if (gyminfo.Success)
-                                        {
-                                            LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
-                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                        }
-                                        else
-                                            continue;
-
-                                        MethodResult spingym = await SearchBuilding(Building);
-
-                                        //OutOfRange will show up as a success
-                                        if (spingym.Success)
-                                        {
-                                            currentFailedStops = 0;
-                                            //Try to deploy, full gym is 6 now
-                                            if (gyminfo.Data.GymStatusAndDefenders.GymDefender.Count < 6)
-                                            {
-                                                //Checks team color if same of player or Neutral
-                                                if (Building.OwnedByTeam == PlayerData.Team || Building.OwnedByTeam == TeamColor.Neutral)
-                                                {
-                                                    //Check if config as deploy actived
-                                                    if (UserSettings.DeployCreature)
-                                                    {
-                                                        //Try to deploy
-                                                        await GymDeploy(Building);
-                                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                                    }
-                                                }
-                                            }
-                                            //Here try to attack gym not released yet
-                                            //
-                                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                        }
-                                        else
-                                        {
-                                            if (currentFailedStops > 10)
-                                            {
-                                                break;
-                                            }
-                                            ++currentFailedStops;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (!PlayerData.TutorialState.Contains(TutorialState.BuildingTutorial) && UserSettings.CompleteTutorial)
-                                    {
-                                        result = await MarkTutorialsComplete(new[] { TutorialState.BuildingTutorial, TutorialState.CreatureBerry, TutorialState.UseItem });
-
-                                        if (!result.Success)
-                                        {
-                                            LogCaller(new LoggerEventArgs("Failed. Marking Building, Creatureberry, useitem, Creaturecapture tutorials completed..", LoggerTypes.Warning));
-
-                                            break;
-                                        }
-
-                                        LogCaller(new LoggerEventArgs("Marking Building, Creatureberry, useitem, Creaturecapture tutorials completed.", LoggerTypes.Success));
-
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                    }
-
-                                    if (UserSettings.RequestBuildingDetails)
-                                    {
-                                        var BuildingDetails = await BuildingDetails(Building);
-                                        if (BuildingDetails.Success)
-                                        {
-                                            LogCaller(new LoggerEventArgs("Building Name: " + BuildingDetails.Data.Name, LoggerTypes.Info));
-                                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                        }
-                                        else
-                                            continue;
-                                    }
-                                    
-                                    MethodResult searchResult = await SearchBuilding(Building);
-
-                                    //OutOfRange will show up as a success
-                                    if (searchResult.Success)
-                                    {
-                                        currentFailedStops = 0;
-                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                    }
-                                    else
-                                    {
-                                        if (currentFailedStops > 10)
-                                        {
-                                            break;
-                                        }
-                                        ++currentFailedStops;
                                     }
                                 }
                             }
                             else
                             {
-                                LogCaller(new LoggerEventArgs(String.Format("Skipping Building. In cooldown"), LoggerTypes.Info));
+                                if (currentFailedStops > 10)
+                                {
+                                    break;
+                                }
+                                ++currentFailedStops;
                             }
                         }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Skipping Building. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
-                        }
-                        */
 
                         //Stop bot instantly
                         if (!IsRunning)
@@ -923,7 +832,6 @@ namespace DraconiusGoGUI.DracoManager
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((BuildingNumber > 4 && BuildingNumber % 10 == 0) || BuildingNumber == 1))
                         {
-
                             if (UserSettings.EvolveCreature)
                             {
                                 MethodResult evolveResult = await EvolveFilteredCreature();
@@ -995,21 +903,38 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit && Tracker.BuildingsFarmed >= UserSettings.SpinBuildingsDayLimit)
+                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit)
                         {
-                            LogCaller(new LoggerEventArgs("Daily limits reached. Stoping ...", LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs("Daily limits catching reached. Stoping ...", LoggerTypes.Warning));
                             Stop();
                         }
 
-                        if (UserSettings.UseLuckEggConst && Level >= UserSettings.LevelForConstLukky && IsRunning)
+                        if (Tracker.BuildingsFarmed >= UserSettings.SpinBuildingsDayLimit)
                         {
-                            MethodResult luckEggResult = await UseLuckyEgg();
+                            LogCaller(new LoggerEventArgs("Daily limits buildings reached. Stoping ...", LoggerTypes.Warning));
+                            Stop();
+                        }
 
-                            if (luckEggResult.Success)
+                        if (UserSettings.UseCristalConst && Level >= UserSettings.LevelForConstCristal && IsRunning)
+                        {
+                            MethodResult cristalResult = await UseCristal();
+
+                            if (cristalResult.Success)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                         }
+                       
+                        if (UserSettings.UseDragonVisionConst && IsRunning)
+                        {
+                            MethodResult dragonvisionResult = await UseDragonVision();
+
+                            if (dragonvisionResult.Success)
+                            {
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                            }
+                        }
+                        //UpdateInventory(InventoryRefresh.All); //all inventory
                     }
                 }
                 catch (StackOverflowException ex)
@@ -1046,6 +971,7 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             Stop();
+            //Bot stopped all task end
             State = BotState.Stopped;
             LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
@@ -1064,7 +990,8 @@ namespace DraconiusGoGUI.DracoManager
                 return;
             }
 
-            State = BotState.Stopped;
+            //Bot wait for end actions in progress...
+            State = BotState.Stopping;
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
             //Remove proxy
@@ -1158,9 +1085,17 @@ namespace DraconiusGoGUI.DracoManager
             };
         }
 
+        public void RemoveChest(FChest chestobj)
+        {
+            if (AllChests != null)
+            {
+                AllChests.Remove(chestobj);
+            }
+        }
+
         public void ClearStats()
         {
-            _fleeingCreatureResponses = 0;
+            //_fleeingCreatureResponses = 0;
             TotalBuildingExp = 0;
             Tracker.Values.Clear();
             Tracker.CalculatedTrackingHours();

@@ -46,48 +46,30 @@ namespace DraconiusGoGUI.DracoManager
             {
                 if (RemainingPokeballs() < 1)
                 {
-                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
                     CatchDisabled = true;
                     TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                     return new MethodResult();
                 }
             }
             else
+                // Need suite
                 return new MethodResult();
-
-           /* MethodResult<MapCreature> iResponse = await GetIncenseCreatures();
-
-            if (!iResponse.Success || iResponse.Data == null || iResponse.Data.CreatureId == CreatureId.Missingno)
-            {
-                return new MethodResult();
-            }
-
-            if (iResponse.Data.CreatureId == CreatureId.Missingno)
-                return new MethodResult();
-
-            if (!CreatureWithinCatchSettings(iResponse.Data.CreatureId))
-            {
-                return new MethodResult();
-            }
-
-            MethodResult<IncenseEncounterResponse> result = await EncounterIncenseCreature(iResponse.Data);
-
-            if (!result.Success)
-            {
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                return new MethodResult();
-            }
-
-            MethodResult catchResult = await CatchCreature(result.Data, iResponse.Data);
 
             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-    */
             return new MethodResult
             {
                 Success = true
             };
+        }
+
+        public void RemoveMapCreature(FWildCreature wildCreature)
+        {
+            if (CatchableCreatures == null || CatchableCreatures.Count == 0)
+                return;
+
+                CatchableCreatures.Remove(wildCreature);
         }
 
         private async Task<MethodResult> CatchNeabyCreature()
@@ -117,122 +99,79 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatureAsync();
-            foreach (var Creature in catchableResponse.Data)
+            MethodResult<List<FWildCreature>> catchableResponse = await GetCatchableCreatures();
+
+            if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count <= 0)
             {
+                return new MethodResult();
+            }
+
+            string creatures = null;
+
+            foreach (var creature in catchableResponse.Data)
+            {
+                if (String.IsNullOrEmpty(creatures))
+                    creatures = Strings.GetCreatureName(creature.name);
+                else
+                    creatures = creatures + " " + Strings.GetCreatureName(creature.name);
+            }
+
+            LogCaller(new LoggerEventArgs($"{catchableResponse.Data.Count} Creatures Found: " + creatures, LoggerTypes.Info));
+
+            // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
+            foreach (var Creature in catchableResponse.Data.Where(x => x != null).ToArray())
+            {
+                if (Creature == null)
+                {
+                    LogCaller(new LoggerEventArgs("Creature is null. Ignoring", LoggerTypes.Debug));
+                    return new MethodResult();
+                }
+                LogCaller(new LoggerEventArgs($"Trying to catch: " + Strings.GetCreatureName(Creature.name), LoggerTypes.Debug));
+                RemoveMapCreature(Creature);
+
                 MethodResult<FCatchingCreature> result = await EncounterCreature(Creature);
+
                 if (!result.Success)
                 {
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    continue;
+                    return new MethodResult();
                 }
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                if (result.Data == null )
+                {
+                    LogCaller(new LoggerEventArgs("Creature Data is null. Ignoring", LoggerTypes.Debug));
+                    return new MethodResult();
+                }
+
+                if ( result.Data.isCreatureStorageFull)
+                {
+                    LogCaller(new LoggerEventArgs("Creature Storage is full. Ignoring catching", LoggerTypes.Debug));
+
+                    var transferResult = await TransferFilteredCreature();
+
+                    if (transferResult.Success)
+                    {
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    }
+
+                    return new MethodResult();
+                }
+
                 MethodResult catchResult = await CatchCreature(result.Data, Creature);
+
+                if (!catchResult.Success)
+                    return catchResult;
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
        
-            /*
-            MethodResult<List<MapCreature>> catchableResponse = await GetCatchableCreatureAsync();
-
-            if (!catchableResponse.Success || catchableResponse.Data == null || catchableResponse.Data.Count == 0)
-            {
-                return new MethodResult();
-            }
-
-            foreach (MapCreature Creature in catchableResponse.Data)
-            {
-                if (Creature.CreatureId == CreatureId.Missingno)
-                    continue;
-
-                if (!CreatureWithinCatchSettings(Creature))
-                {
-                    continue;
-                }
-
-                MethodResult<EncounterResponse> result = await EncounterCreature(Creature);
-
-                if (!result.Success)
-                {
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    continue;
-                }
-
-                MethodResult catchResult = await CatchCreature(result.Data, Creature);
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-            }
-            */
-
             return new MethodResult
             {
                 Success = true
             };
         }
 
-        private async Task<MethodResult> CatchLuredCreature(FBuilding BuildingData)
-        {
-            /*
-            if (BuildingData.pitstop.lureBy == null)
-            {
-                return new MethodResult
-                {
-                    Message = "No lure on Building",
-                };
-            }
-
-            if (!UserSettings.CatchCreature)
-            {
-                return new MethodResult
-                {
-                    Message = "Catching Creature disabled"
-                };
-            }
-
-            if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit)
-            {
-                LogCaller(new LoggerEventArgs("Catch Creature limit actived", LoggerTypes.Info));
-                return new MethodResult
-                {
-                    Message = "Limit actived"
-                };
-            }
-
-            if (!CatchDisabled)
-            {
-                if (RemainingPokeballs() < 1)
-                {
-                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                    CatchDisabled = true;
-                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                    return new MethodResult();
-                }
-            }
-
-            if (BuildingData.pitstop.personalized.Value.ActiveCreatureId == CreatureId.Missingno)
-            {
-                return new MethodResult
-                {
-                    Message = "No lured Creature",
-                };
-            }
-
-            if (!CreatureWithinCatchSettings(BuildingData.LureInfo.ActiveCreatureId))
-            {
-                return new MethodResult();
-            }
-
-            MethodResult catchResult = await CatchCreature(BuildingData);
-
-            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-            */
-            return new MethodResult
-            {
-                Success = true
-            };
-        }
-
-        //Catch lured Creature
         private async Task<MethodResult> CatchCreature(FCatchingCreature catchingCreaure, FWildCreature wildCreature)
         {
             if (!_client.LoggedIn)
@@ -249,7 +188,7 @@ namespace DraconiusGoGUI.DracoManager
             {
                 if (RemainingPokeballs() < 1)
                 {
-                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
                     CatchDisabled = true;
                     TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                     return new MethodResult();
@@ -259,8 +198,7 @@ namespace DraconiusGoGUI.DracoManager
                 var times = maxTries; 
                 var success = false;
                 var message = "";
-                int expGained = 0;
-                int candyGained = 0;
+
                 do
                 {
                     var ball = Items.FirstOrDefault(x => (x.type == ItemType.MAGIC_BALL_SIMPLE || x.type == ItemType.MAGIC_BALL_NORMAL || x.type == ItemType.MAGIC_BALL_GOOD) && x.count > 0 );
@@ -268,9 +206,21 @@ namespace DraconiusGoGUI.DracoManager
                         message = $"No balls. Skipping catching creature {Strings.GetCreatureName(catchingCreaure.name)}";
                         break;
                     }
-                    resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
+                    try
+                    {
+                        resCatch = _client.DracoClient.Creatures.Catch(catchingCreaure.id, ball.type, catchingCreaure.quality, new Random().NextDouble() >= 0.5);
+                    }
+                    catch (Exception ex)
+                    {
+                        _fleeingCreatureResponses++;
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to Catching Creature {0}.", catchingCreaure.id), LoggerTypes.Exception, ex));
+                        return new MethodResult<FCatchingCreature> { Message = ex.Message };
+                    }
                     if (resCatch.caught)
                     {
+                        int expGained = 0;
+                        int candyGained = 0;
+
                         if (resCatch.expCreatureExisting > 0)
                             expGained = resCatch.expCreatureExisting;
                         else
@@ -280,9 +230,22 @@ namespace DraconiusGoGUI.DracoManager
 
                         message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp { resCatch.userCreature.cp }, caught using a {Strings.GetItemName(ball.type)}, exp { expGained }, candies { candyGained }";
                         success = true;
+
+                        Tracker.AddValues(1, 0);
+
+                        ExpIncrease(expGained);
+
+                        _fleeingCreatureResponses = 0;
+
+                        Creatures.Add(resCatch.userCreature);
+
+                        //UpdateInventory(InventoryRefresh.CreatureCandy);
+
+                        //UpdateInventory(InventoryRefresh.Creature);
                     }
                     else if (resCatch.runAway)
                     {
+                        _fleeingCreatureResponses++;
                         message = $"Creature {Strings.GetCreatureName(catchingCreaure.name)}, with cp {catchingCreaure.cp}, fled.";
                     }
                     ball.count--;
@@ -291,11 +254,7 @@ namespace DraconiusGoGUI.DracoManager
                 if (times<= 0)
                     message = $"Creature {Strings.GetCreatureName(resCatch.userCreature.name)}, with cp {resCatch.userCreature.cp}, not caught after of {maxTries} tries.";
 
-                LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Info));
-
-                Tracker.AddValues(1, 0);
-
-                ExpIncrease(expGained);
+                LogCaller(new LoggerEventArgs(message, success ? LoggerTypes.Success : LoggerTypes.Warning));
 
                 return new MethodResult
                 {
@@ -304,235 +263,6 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
             return new MethodResult();
-            /*
-            if (BuildingData.LureInfo == null || BuildingData.LureInfo.ActiveCreatureId == CreatureId.Missingno)
-                return new MethodResult();
-
-            if (LastedEncountersIds.Contains(BuildingData.LureInfo.EncounterId))
-                return new MethodResult();
-
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.DiskEncounter,
-                RequestMessage = new DiskEncounterMessage
-                {
-                    EncounterId = BuildingData.LureInfo.EncounterId,
-                    BuildingId = BuildingData.Id,
-                    GymLatDegrees = BuildingData.Latitude,
-                    GymLngDegrees = BuildingData.Longitude,
-                    PlayerLatitude = _client.ClientSession.Player.Latitude,
-                    PlayerLongitude = _client.ClientSession.Player.Longitude
-                }.ToByteString()
-            });
-
-            if (response == null)
-                return new MethodResult();
-
-            DiskEncounterResponse eResponse = DiskEncounterResponse.Parser.ParseFrom(response);
-
-            switch (eResponse.Result)
-            {
-                case DiskEncounterResponse.Types.Result.Success:
-                    if (LastedEncountersIds.Count > 30)
-                        LastedEncountersIds.Clear();
-
-                    LastedEncountersIds.Add(eResponse.CreatureData.Id);
-
-                    CatchCreatureResponse catchCreatureResponse = null;
-                    int attemptCount = 1;
-                    var berryUsed = false;
-
-                    if (eResponse.CreatureData == null || eResponse.CreatureData.CreatureId == CreatureId.Missingno)
-                        return new MethodResult();
-
-                    do
-                    {
-                        if (!CatchDisabled)
-                        {
-                            if (RemainingPokeballs() < 1)
-                            {
-                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                                CatchDisabled = true;
-                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                                return new MethodResult();
-                            }
-                        }
-                        else
-                            return new MethodResult();
-
-                        //Uses lowest capture probability
-                        float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                        ItemId pokeBall = GetBestBall(eResponse.CreatureData);
-
-                        if (UserSettings.UseBerries)
-                        {
-                            bool isLowProbability = probability < 0.35;
-                            bool isHighCp = eResponse.CreatureData.Cp > 700;
-                            bool isHighPerfection = CalculateIVPerfection(eResponse.CreatureData) > 90;
-
-                            if (!berryUsed)
-                            {
-                                if ((isLowProbability && isHighCp) || isHighPerfection)
-                                {
-                                    await UseBerry(BuildingData.LureInfo.EncounterId, BuildingData.Id, ItemId.ItemRazzBerry);
-                                    berryUsed = true;
-                                }
-                                else
-                                {
-                                    bool isHighProbability = probability > 0.65;
-                                    var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == eResponse.CreatureData.CreatureId);
-                                    if (isHighProbability && catchSettings.UsePinap)
-                                    {
-                                        await UseBerry(BuildingData.LureInfo.EncounterId, BuildingData.Id, ItemId.ItemPinapBerry);
-                                        berryUsed = true;
-                                    }
-                                    else if (new Random().Next(0, 100) < 50)
-                                    {
-                                        // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                                        await UseBerry(BuildingData.LureInfo.EncounterId, BuildingData.Id, ItemId.ItemNanabBerry);
-                                        berryUsed = true;
-                                    }
-                                }
-                            }
-                        }
-
-                        double reticuleSize = 1.95;
-                        bool hitInsideReticule = true;
-
-                        //Humanization
-                        if (UserSettings.EnableHumanization)
-                        {
-                            reticuleSize = (double)_rand.Next(10, 195) / 100;
-                            hitInsideReticule = HitInsideReticle();
-                        }
-
-                        //End humanization
-                        var arPlusValues = new ARPlusEncounterValues();
-                        if (UserSettings.GetArBonus)
-                        {
-                            LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Info));
-                            arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
-                            arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
-                            arPlusValues.CreatureFrightened = false;
-                        }
-
-                        if (!_client.LoggedIn)
-                        {
-                            MethodResult result = await AcLogin();
-
-                            if (!result.Success)
-                            {
-                                return result;
-                            }
-                        }
-
-                        var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                        {
-                            RequestType = RequestType.CatchCreature,
-                            RequestMessage = new CatchCreatureMessage
-                            {
-                                ArPlusValues = arPlusValues,
-                                EncounterId = BuildingData.LureInfo.EncounterId,
-                                HitCreature = hitInsideReticule,
-                                NormalizedHitPosition = 1,
-                                NormalizedReticleSize = reticuleSize,
-                                Pokeball = pokeBall,
-                                SpawnPointId = BuildingData.Id,
-                                SpinModifier = 1
-                            }.ToByteString()
-                        });
-
-                        if (catchresponse == null)
-                            return new MethodResult();
-
-                        catchCreatureResponse = CatchCreatureResponse.Parser.ParseFrom(catchresponse);
-                        string Creature = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", BuildingData.LureInfo.ActiveCreatureId, eResponse.CreatureData.Cp, CalculateIVPerfection(eResponse.CreatureData));
-                        string pokeBallName = pokeBall.ToString().Replace("Item", "");
-
-                        switch (catchCreatureResponse.Status)
-                        {
-                            case CatchCreatureResponse.Types.CatchStatus.CatchError:
-                                LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", Creature, attemptCount, catchCreatureResponse.Status), LoggerTypes.Warning));
-                                continue;
-                            case CatchCreatureResponse.Types.CatchStatus.CatchEscape:
-                                //If we get this response, means we're good
-                                _fleeingCreatureResponses = 0;
-                                _potentialCreatureBan = false;
-
-                                if (AccountState == AccountState.SoftBan || AccountState == AccountState.HashIssues)
-                                {
-                                    AccountState = AccountState.Good;
-
-                                    LogCaller(new LoggerEventArgs("Creature ban was lifted", LoggerTypes.Info));
-                                }
-
-                                LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}. Ball: {2}", Creature, attemptCount, pokeBallName), LoggerTypes.CreatureEscape));
-                                continue;
-                            case CatchCreatureResponse.Types.CatchStatus.CatchFlee:
-                                ++_fleeingCreatureResponses;
-                                LogCaller(new LoggerEventArgs(String.Format("Creature fled. {0}. Attempt #{1}. Ball: {2}", Creature, attemptCount, pokeBallName), LoggerTypes.CreatureFlee));
-                                continue;
-                            case CatchCreatureResponse.Types.CatchStatus.CatchMissed:
-                                LogCaller(new LoggerEventArgs(String.Format("Missed. {0}. Attempt #{1}. Status: {2}", Creature, attemptCount, catchCreatureResponse.Status), LoggerTypes.Warning));
-                                continue;
-                            case CatchCreatureResponse.Types.CatchStatus.CatchSuccess:
-                                int expGained = catchCreatureResponse.CaptureAward.Xp.Sum();
-                                int candyGained = catchCreatureResponse.CaptureAward.Candy.Sum();
-
-                                Tracker.AddValues(1, 0);
-
-                                ExpIncrease(expGained);
-
-                                //_expGained += expGained;
-
-                                BuildingData.LureInfo = null;
-
-                                LogCaller(new LoggerEventArgs(String.Format("[Lured] Creature Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", Creature, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
-
-                                //Auto favorit shiny
-                                if (UserSettings.AutoFavoritShiny && eResponse.CreatureData.CreatureDisplay.Shiny)
-                                {
-                                    LogCaller(new LoggerEventArgs(String.Format("[{0}] Creature shiny. Auto favorit this Creature.", eResponse.CreatureData.CreatureId.ToString()), LoggerTypes.Info));
-                                    await FavoriteCreature(new List<CreatureData> { eResponse.CreatureData }, true);
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                                }
-
-                                //Creature.Add(eResponse.CreatureData);
-                                UpdateInventory(InventoryRefresh.Creature);
-
-                                return new MethodResult
-                                {
-                                    Message = "Creature caught",
-                                    Success = true
-                                };
-                        }
-                        ++attemptCount;
-
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    } while (catchCreatureResponse.Status == CatchCreatureResponse.Types.CatchStatus.CatchMissed || catchCreatureResponse.Status == CatchCreatureResponse.Types.CatchStatus.CatchEscape);
-                    return new MethodResult();
-                case DiskEncounterResponse.Types.Result.EncounterAlreadyFinished:
-                    break;
-                case DiskEncounterResponse.Types.Result.NotAvailable:
-                    break;
-                case DiskEncounterResponse.Types.Result.NotInRange:
-                    break;
-                case DiskEncounterResponse.Types.Result.CreatureInventoryFull:
-                    //Transfert if full
-                    LogCaller(new LoggerEventArgs("Faill CreatureInventoryFull.", LoggerTypes.Warning));
-                    await TransferFilteredCreature();
-                    break;
-                case DiskEncounterResponse.Types.Result.Unknown:
-                    break;
-            }
-
-            if (LastedEncountersIds.Count > 30)
-                LastedEncountersIds.Clear();
-
-            LastedEncountersIds.Add(BuildingData.LureInfo.EncounterId);
-
-            LogCaller(new LoggerEventArgs(String.Format("Faill cath lure on Building {0}. {1}.",BuildingData.Id, eResponse.Result), LoggerTypes.Warning));
-            */
         }
 
         private async Task<MethodResult<FCatchingCreature>> EncounterCreature(FWildCreature mapCreature)
@@ -558,7 +288,20 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult<FCatchingCreature>();
             }
 
-            var eResponse = _client.DracoClient.Creatures.Encounter(mapCreature.id);
+            FCatchingCreature eResponse = null;
+            try
+            {
+                eResponse = _client.DracoClient.Creatures.Encounter(mapCreature.id);
+            }
+            catch (Exception ex)
+            {
+                _fleeingCreatureResponses++;
+                LogCaller(new LoggerEventArgs(String.Format("Failed to Encounter Creature {0}.", mapCreature.id), LoggerTypes.Exception, ex));
+                return new MethodResult<FCatchingCreature> { Message = ex.Message };
+            }
+
+            if (eResponse == null)
+                return new MethodResult<FCatchingCreature>();
 
             return new MethodResult<FCatchingCreature>
             {
@@ -567,326 +310,7 @@ namespace DraconiusGoGUI.DracoManager
                 Message = "Success"
             };
         }
-        /*
-        private async Task<MethodResult<EncounterResponse>> EncounterCreature(MapCreature mapCreature)
-        {
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await AcLogin();
-
-                if (!result.Success)
-                {
-                    return new MethodResult<EncounterResponse>();
-                }
-            }
-
-            if (mapCreature == null || mapCreature.CreatureId == CreatureId.Missingno)
-                return new MethodResult<EncounterResponse>();
-
-            if (AlreadySnipped || mapCreature.EncounterId == _lastPokeSniperId)
-                return new MethodResult<EncounterResponse>();
-
-            if (LastedEncountersIds.Contains(mapCreature.EncounterId))
-                return new MethodResult<EncounterResponse>();
-
-            if (!CatchDisabled)
-            {
-                if (RemainingPokeballs() < 1)
-                {
-                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                    CatchDisabled = true;
-                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                    return new MethodResult<EncounterResponse>();
-                }
-            }
-            else
-                return new MethodResult<EncounterResponse>();
-
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.Encounter,
-                RequestMessage = new EncounterMessage
-                {
-                    EncounterId = mapCreature.EncounterId,
-                    PlayerLatitude = _client.ClientSession.Player.Latitude,
-                    PlayerLongitude = _client.ClientSession.Player.Longitude,
-                    SpawnPointId = mapCreature.SpawnPointId
-                }.ToByteString()
-            });
-
-            if (response == null)
-                return new MethodResult<EncounterResponse>();
-
-            EncounterResponse eResponse = EncounterResponse.Parser.ParseFrom(response);
-
-            switch (eResponse.Status)
-            {
-                case EncounterResponse.Types.Status.EncounterAlreadyHappened:
-                    break;
-                case EncounterResponse.Types.Status.EncounterClosed:
-                    break;
-                case EncounterResponse.Types.Status.EncounterError:
-                    break;
-                case EncounterResponse.Types.Status.EncounterNotFound:
-                    break;
-                case EncounterResponse.Types.Status.EncounterNotInRange:
-                    break;
-                case EncounterResponse.Types.Status.EncounterCreatureFled:
-                    break;
-                case EncounterResponse.Types.Status.EncounterSuccess:
-                    if (LastedEncountersIds.Count > 30)
-                        LastedEncountersIds.Clear();
-
-                    LastedEncountersIds.Add(eResponse.WildCreature.EncounterId);
-
-                    return new MethodResult<EncounterResponse>
-                    {
-                        Data = eResponse,
-                        Success = true,
-                        Message = "Success"
-                    };
-                case EncounterResponse.Types.Status.CreatureInventoryFull:
-                    //Transfert if full
-                    LogCaller(new LoggerEventArgs("Faill CreatureInventoryFull.", LoggerTypes.Warning));
-                    await TransferFilteredCreature();
-                    break;
-            }
-
-            if (LastedEncountersIds.Count > 30)
-                LastedEncountersIds.Clear();
-
-            LastedEncountersIds.Add(mapCreature.EncounterId);
-
-            LogCaller(new LoggerEventArgs(String.Format("Faill encounter Creature. {0}.", eResponse.Status), LoggerTypes.Warning));
-            return new MethodResult<EncounterResponse> { Message = eResponse.Status.ToString() };
-        }
-        */
-
-        //Catch encountered Creature
-        private async Task<MethodResult> CatchCreature(dynamic eResponse, /*MapCreature mapCreature,*/ bool snipped = false)
-        {
-            /*
-            CreatureData _encounteredCreature = null;
-            long _unixTimeStamp = 0;
-            ulong _encounterId = 0;
-            string _spawnPointId = null;
-            string _CreatureType = null;
-            //Default catch success
-            LoggerTypes _loggerType = LoggerTypes.Success;
-
-            // Calling from CatchNormalCreature
-            if (eResponse is EncounterResponse &&
-                    (eResponse?.Status == EncounterResponse.Types.Status.EncounterSuccess))
-            {
-                _encounteredCreature = eResponse.WildCreature?.CreatureData;
-                _unixTimeStamp = eResponse.WildCreature?.LastModifiedTimestampMs
-                                + eResponse.WildCreature?.TimeTillHiddenMs;
-                _spawnPointId = eResponse.WildCreature?.SpawnPointId;
-                _encounterId = eResponse.WildCreature?.EncounterId;
-                _CreatureType = "Normal";
-            }
-            // Calling from CatchIncenseCreature
-            else if (eResponse is IncenseEncounterResponse &&
-                         (eResponse?.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess))
-            {
-                _encounteredCreature = eResponse?.CreatureData;
-                _unixTimeStamp = mapCreature.ExpirationTimestampMs;
-                _spawnPointId = mapCreature.SpawnPointId;
-                _encounterId = mapCreature.EncounterId;
-                _CreatureType = "Incense";
-            }
-
-            if (_encounterId == _lastPokeSniperId || snipped)
-            {
-                _CreatureType = "Local Snipe: " + _CreatureType;
-                _loggerType = LoggerTypes.Snipe;
-                AlreadySnipped = true;
-            }
-
-            CatchCreatureResponse catchCreatureResponse = null;
-            int attemptCount = 1;
-            bool berryUsed = false;
-
-            if (_encounteredCreature == null || _encounteredCreature.CreatureId == CreatureId.Missingno)
-                return new MethodResult();
-
-            do
-            {
-                if (!CatchDisabled)
-                {
-                    if (RemainingPokeballs() < 1)
-                    {
-                        LogCaller(new LoggerEventArgs("You don't have any pokeball catching Creature will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                        CatchDisabled = true;
-                        TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                        return new MethodResult();
-                    }
-                }
-                else
-                    return new MethodResult();
-
-                //Uses lowest capture probability
-                float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                ItemId pokeBall = GetBestBall(_encounteredCreature);
-
-                if (UserSettings.UseBerries)
-                {
-                    bool isLowProbability = probability < 0.40;
-                    bool isHighCp = _encounteredCreature.Cp > 800;
-                    bool isHighPerfection = CalculateIVPerfection(_encounteredCreature) > 95;
-
-                    if (!berryUsed)
-                    {
-                        if ((isLowProbability && isHighCp) || isHighPerfection)
-                        {
-                            await UseBerry(mapCreature, ItemId.ItemRazzBerry);
-                            berryUsed = true;
-                        }
-                        else
-                        {
-                            bool isHighProbability = probability > 0.65;
-                            var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == _encounteredCreature.CreatureId);
-                            if (isHighProbability && catchSettings.UsePinap)
-                            {
-                                await UseBerry(mapCreature, ItemId.ItemPinapBerry);
-                                berryUsed = true;
-                            }
-                            else if (new Random().Next(0, 100) < 50)
-                            {
-                                // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                                await UseBerry(mapCreature, ItemId.ItemNanabBerry);
-                                berryUsed = true;
-                            }
-                        }
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    }
-                }
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                double reticuleSize = 1.95;
-                bool hitInsideReticule = true;
-
-                //Humanization
-                if (UserSettings.EnableHumanization)
-                {
-                    reticuleSize = (double)_rand.Next(10, 195) / 100;
-                    hitInsideReticule = HitInsideReticle();
-                }
-
-                var arPlusValues = new ARPlusEncounterValues();
-                if (UserSettings.GetArBonus)
-                {
-                    LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Info));
-                    arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
-                    arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
-                    arPlusValues.CreatureFrightened = false;
-                }
-
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
-                }
-
-                var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.CatchCreature,
-                    RequestMessage = new CatchCreatureMessage
-                    {
-                        ArPlusValues = arPlusValues,
-                        EncounterId = _encounterId,
-                        HitCreature = hitInsideReticule,
-                        NormalizedHitPosition = 1,
-                        NormalizedReticleSize = reticuleSize,
-                        Pokeball = pokeBall,
-                        SpawnPointId = _spawnPointId,
-                        SpinModifier = 1
-                    }.ToByteString()
-                });
-
-                if (catchresponse == null)
-                    return new MethodResult();
-
-                catchCreatureResponse = CatchCreatureResponse.Parser.ParseFrom(catchresponse);
-
-                string Creature = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", _encounteredCreature.CreatureId.ToString(), _encounteredCreature.Cp, CalculateIVPerfection(_encounteredCreature));
-                string pokeBallName = pokeBall.ToString().Replace("Item", "");
-
-                switch (catchCreatureResponse.Status)
-                {
-                    case CatchCreatureResponse.Types.CatchStatus.CatchError:
-                        LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", Creature, attemptCount, catchCreatureResponse.Status), LoggerTypes.Warning));
-                        ++attemptCount;
-                        continue;
-                    case CatchCreatureResponse.Types.CatchStatus.CatchEscape:
-                        //If we get this response, means we're good
-                        _fleeingCreatureResponses = 0;
-                        _potentialCreatureBan = false;
-
-                        if (AccountState == Enums.AccountState.SoftBan)
-                        {
-                            AccountState = Enums.AccountState.Good;
-
-                            LogCaller(new LoggerEventArgs("Creature ban was lifted", LoggerTypes.Info));
-                        }
-
-                        LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}. Ball: {2}", Creature, attemptCount, pokeBallName), LoggerTypes.CreatureEscape));
-                        ++attemptCount;
-                        continue;
-                    case CatchCreatureResponse.Types.CatchStatus.CatchFlee:
-                        ++_fleeingCreatureResponses;
-                        LogCaller(new LoggerEventArgs(String.Format("Creature fled. {0}. Attempt #{1}. Ball: {2}", Creature, attemptCount, pokeBallName), LoggerTypes.CreatureFlee));
-                        ++attemptCount;
-                        continue;
-                    case CatchCreatureResponse.Types.CatchStatus.CatchMissed:
-                        LogCaller(new LoggerEventArgs(String.Format("Missed. {0}. Attempt #{1}. Status: {2}", Creature, attemptCount, catchCreatureResponse.Status), LoggerTypes.Warning));
-                        ++attemptCount;
-                        continue;
-                    case CatchCreatureResponse.Types.CatchStatus.CatchSuccess:
-                        //Reset data
-                        _fleeingCreatureResponses = 0;
-                        Tracker.AddValues(1, 0);
-                        _potentialCreatureBan = false;
-
-                        int expGained = catchCreatureResponse.CaptureAward.Xp.Sum();
-                        int candyGained = catchCreatureResponse.CaptureAward.Candy.Sum();
-
-                        ExpIncrease(expGained);
-
-                        //_expGained += expGained;
-
-                        LogCaller(new LoggerEventArgs(String.Format("[{0}] Creature Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _CreatureType, Creature, expGained, candyGained, attemptCount, pokeBallName), _loggerType));
-
-                        //Auto favorit shiny
-                        if (UserSettings.AutoFavoritShiny && _encounteredCreature.CreatureDisplay.Shiny)
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("[{0}] Creature shiny. Auto favorit this Creature.", _encounteredCreature.CreatureId.ToString()), LoggerTypes.Info));
-                            await FavoriteCreature(new List<CreatureData> { _encounteredCreature }, true);
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        }
-
-                        //Creature.Add(_encounteredCreature);
-                        UpdateInventory(InventoryRefresh.Creature);
-                        UpdateInventory(InventoryRefresh.CreatureCandy);
-
-                        return new MethodResult
-                        {
-                            Message = "Creature caught",
-                            Success = true
-                        };
-                }
-                
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-            } while (catchCreatureResponse.Status == CatchCreatureResponse.Types.CatchStatus.CatchMissed || catchCreatureResponse.Status == CatchCreatureResponse.Types.CatchStatus.CatchEscape);
-            */
-            return new MethodResult();
-        }
-
+ 
         private bool CreatureWithinCatchSettings(CreatureType CreatureId)
         { 
             CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == CreatureId);
@@ -906,30 +330,9 @@ namespace DraconiusGoGUI.DracoManager
             LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", CreatureId), LoggerTypes.Info));
             return false;
         }
-        
+
+        //TODO: Maybe look this for better ball
         /*
-        private bool CreatureWithinCatchSettings(MapCreature Creature)
-        {
-            if (Creature == null || Creature.CreatureId == CreatureId.Missingno)
-                return false;
-
-            CatchSetting catchSettings = UserSettings?.CatchSettings.FirstOrDefault(x => x.Id == Creature.CreatureId);
-
-            if (catchSettings == null)
-            {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to find catch setting for {0}. Attempting to catch", Creature.CreatureId), LoggerTypes.Warning));
-                return false;
-            }
-
-            if (catchSettings.Catch)
-            {
-                return true;
-            }
-
-            LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", Creature.CreatureId.ToString()), LoggerTypes.Info));
-            return false;
-        }        
-
         private ItemType GetBestBall(FCreatureUpdate CreatureData)
         {
             if (Items == null || CreatureData == null || CreatureData.CreatureId == CreatureId.Missingno)

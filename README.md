@@ -12,12 +12,12 @@
 
 ![alt text][1.1] <strong><em>`The contents of this repo are a proof of concept and are for educational use only`</em></strong>![alt text][1.1]<br/>
 
-## Account Manager (DraconiusGo) is now compatible with 1.9.1 API.
+## Account Manager (DraconiusGo) is now compatible with 1.9.2 API.
 
 [![Stories in Ready](https://discordapp.com/api/guilds/335455302965002242/widget.png?style=banner3&time-)](https://discord.gg/rkm4xhX)
 
 ## `Download`
-Download the bot from the [release](https://github.com/Furtif/Account-Manager/releases) tab.  
+Download the bot from the [release](https://github.com/Account-Managers/Account-Manager/releases) tab.  
 
 ### `Dependencies`
  - Microsoft [.NET 4.7 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=55170&desc=dotnet47)
@@ -38,13 +38,13 @@ To contribute to development, you will need to download and install the required
 Next, you need to get the source code.  This source code repository uses git submodules. So when you clone the source code, you will need to clone recursively:
 
 ```
-git clone --recursive https://github.com/Furtif/Account-Manager.git
+git clone --recursive https://github.com/Account-Managers/Account-Manager.git
 ```
 
 Or if you already cloned without the recursive option, you can update the submodules by running:
 
 ```
-git clone --recursive https://github.com/Furtif/Account-Manager.git
+git clone --recursive https://github.com/Account-Managers/Account-Manager.git
 cd Account-Manager
 git submodule update --init --recursive
 ```
@@ -55,14 +55,14 @@ git submodule update --init --recursive
  We have more and more users everyday, so we have a lot of questions from new users who haven't fully understand how the bot works yet. If you want to help them out, join our official discord channel :)
 
 ### `Answer questions`
- Same as above, you can help by answering questions in the [issues](https://github.com/Furtif/Account-Manager/issues) tab!
+ Same as above, you can help by answering questions in the [issues](https://github.com/Account-Managers/Account-Manager/issues) tab!
 
 ### `Report bugs`
- Report bugs you found in [issues](https://github.com/Furtif/Account-Manager/issues).  
+ Report bugs you found in [issues](https://github.com/Account-Managers/Account-Manager/issues).  
 In order to help us fix the problem, please take a screenshot of the error you get and also attach your log file (under the Logs folder) as well. Add [Bug] to the title to help us quickly identify the category of the issue.
 
 ### `Suggestions/ideas`
- Tell us what you think we can do better in [issues](https://github.com/Furtif/Account-Manager/issues).  
+ Tell us what you think we can do better in [issues](https://github.com/Account-Managers/Account-Manager/issues).  
 Give detailed discription to help us understand what you are looking for. Add [Suggestion] to the title to help us quickly identify the category of the issue. Your suggestion might not be accept, but hey, maybe we will accept your suggestion next time! :)
 
 ### `Legal Disclaimer`

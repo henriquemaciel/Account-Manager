@@ -1,8 +1,11 @@
-﻿using DraconiusGoGUI.Enums;
+using DraconiusGoGUI.Enums;
 using System;
 using System.Threading.Tasks;
 using DraconiusGoGUI.Extensions;
 using DracoLib.Core.Extensions;
+using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
+using DracoLib.Core.Exceptions;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -39,20 +42,34 @@ namespace DraconiusGoGUI.DracoManager
                         walkingIncenceFunction = CatchInsenceCreature;
                     }
 
-                    MethodResult walkResponse = await WalkToLocation(location, walkingFunction, walkingIncenceFunction);
-
-                    if (walkResponse.Success)
+                    MethodResult walkResponse = new MethodResult();
+                    try
                     {
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
-
-                        return new MethodResult
+                        walkResponse = await WalkToLocation(location, walkingFunction, walkingIncenceFunction);
+                        if (walkResponse.Success)
                         {
-                            Success = true,
-                            Message = "Successfully walked to location"
-                        };
-                    }
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
+                            return new MethodResult
+                            {
+                                Success = true,
+                                Message = "Successfully walked to location"
+                            };
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        if (currentTries >= 3)
+                        {
+                            AccountState = AccountState.SoftBan;
+                            LogCaller(new LoggerEventArgs(String.Format("Possible SoftBan, please wait one moment.."), LoggerTypes.Warning));
+                            Stop();
+                        }
+
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
+                        _failedBuildingResponse++;
+                    }
+                    return new MethodResult();
                 }
                 catch (TaskCanceledException ex)
                 {
@@ -106,8 +123,15 @@ namespace DraconiusGoGUI.DracoManager
             var requestSendDateTime = DateTime.Now;
             var requestVariantDateTime = DateTime.Now;
 
-            //MethodResult _result = await UpdateLocation(waypoint);
-            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+            /*
+            MethodResult _result = await UpdateLocation(waypoint);
+
+            if (!_result.Success)
+                return new MethodResult();
+            */
+
+            // Uneeded pause
+            //await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
             do
             {
@@ -143,7 +167,16 @@ namespace DraconiusGoGUI.DracoManager
                 requestSendDateTime = DateTime.Now;
 
                 MethodResult result = await UpdateLocation(waypoint);
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
+                // In this point we are sure that we are mimic walking but dont know if enable humazation is true
+                var delay = CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom);
+                
+                // if enable humanization is false, then delay is 0 so we put a minimum delay of 10 seconds.
+                delay = (delay == 0) ? 10000 + new Random().Next(0, 200): delay; 
+                await Task.Delay(delay);
+
+                if (!result.Success)
+                    return new MethodResult();
 
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for Creature
@@ -169,7 +202,7 @@ namespace DraconiusGoGUI.DracoManager
                 double distance = CalculateDistanceInMeters(previousLocation, location);
 
                 //Prevent less than 1 meter hops
-                if (distance < 1)
+                if (distance < 1 && !_firstRun)
                 {
                     return new MethodResult
                     {
@@ -179,13 +212,15 @@ namespace DraconiusGoGUI.DracoManager
 
                 var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
 
-                await Task.Run(() => _client.DracoClient.GetMapUpdate(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy));
+                var realpos = await UpdateMap(moveTo.Latitude, moveTo.Longitude, (float)moveTo.HorizontalAccuracy);
+
+                if (!realpos.Success)
+                    throw new DracoError(realpos.Message);
 
                 UserSettings.Latitude = moveTo.Latitude;
                 UserSettings.Longitude = moveTo.Longitude;
                 UserSettings.HorizontalAccuracy = moveTo.HorizontalAccuracy;
 
-                //string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
                 string message = String.Format("Walked distance: {0:0.00}m", distance);
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.LocationUpdate));
@@ -330,8 +365,8 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
                 {
-                    string message = String.Format("Old Speed: {0:0.00}km/h, new speed {1:0.00}km/h", currentSpeed, randomicSpeed);
-                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Info));
+                    string message = String.Format("Current speed: {0:0.00}km/h. Randomized speed {1:0.00}km/h", currentSpeed, randomicSpeed);
+                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                     return randomicSpeed;
                 }
             }
@@ -346,8 +381,8 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
                 {
-                    string message = String.Format("Old Speed: {0:0.00}km/h, new speed {1:0.00}km/h", currentSpeed, randomicSpeed);
-                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Info));
+                    string message = String.Format("Current speed: {0:0.00}km/h. Randomized speed {1:0.00}km/h", currentSpeed, randomicSpeed);
+                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                     return randomicSpeed;
                 }
             }

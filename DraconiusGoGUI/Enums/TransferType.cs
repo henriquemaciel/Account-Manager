@@ -9,7 +9,6 @@
         BelowCP,
         KeepXHighestIV,
         BelowCPOrIVAmount,
-        BelowCPAndIVAmount,
-        Slashed
+        BelowCPAndIVAmount
     };
 }

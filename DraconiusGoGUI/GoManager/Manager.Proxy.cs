@@ -43,7 +43,7 @@ namespace DraconiusGoGUI.DracoManager
             UserSettings.ProxyPassword = CurrentProxy.Password;
 
 
-            LogCaller(new LoggerEventArgs(String.Format("Changing proxy to {0}", CurrentProxy.ToString()), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Changing proxy to {0}", CurrentProxy.ToString()), LoggerTypes.Success));
 
             return true;
         }

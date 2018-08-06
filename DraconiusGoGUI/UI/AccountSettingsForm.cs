@@ -17,6 +17,7 @@ namespace DraconiusGoGUI.UI
         private Manager _manager;
 
         public bool AutoUpdate { get; set; }
+        public bool MinimizeToTray { get; set; }
 
         public AccountSettingsForm(Manager manager)
         {
@@ -32,41 +33,41 @@ namespace DraconiusGoGUI.UI
 
                 return (int)setting.Id;
             };
- 
+
             #endregion
 
             #region Evolving
-            
+
             olvColumnEvolveId.AspectGetter = delegate (object x)
             {
                 var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
-            
+
             #endregion
 
             #region Transfer
-            
+
             olvColumnTransferId.AspectGetter = delegate (object x)
             {
                 var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
-            
+
 
             #endregion
 
             #region Upgrade
-            
+
             olvColumnUpgradeId.AspectGetter = delegate (object x)
             {
                 var setting = (UpgradeSetting)x;
 
                 return (int)setting.Id;
             };
-            
+
             #endregion
 
         }
@@ -96,7 +97,14 @@ namespace DraconiusGoGUI.UI
 
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
-         }
+
+            textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
+            numericUpDownWalkingOffset.Enabled = cbMimicWalking.Checked;
+            checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+            checkBoxGetSpeedServer.Enabled = cbMimicWalking.Checked;
+            textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked;
+            numericUpDownWalkingOffset.Enabled = !checkBoxGetSpeedServer.Checked;
+        }
 
         private void UpdateListViews()
         {
@@ -123,8 +131,8 @@ namespace DraconiusGoGUI.UI
             checkBoxRecycle.Checked = settings.RecycleItems;
             checkBoxEvolve.Checked = settings.EvolveCreature;
             checkBoxTransfers.Checked = settings.TransferCreature;
-            checkBoxTransferSlashCreatures.Checked = settings.TransferSlashCreatures;
-            checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
+            checkBoxMinimizeToTray.Checked = MinimizeToTray;
+            checkBoxUseCristals.Checked = settings.UseCristal;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
             checkBoxCatchCreature.Checked = settings.CatchCreature;
@@ -152,14 +160,19 @@ namespace DraconiusGoGUI.UI
             numericUpDownDelayBetweenLocationUpdates.Value = new Decimal(settings.DelayBetweenLocationUpdates);
             numericUpDownLocationupdateDelayRandom.Value = new Decimal(settings.LocationupdateDelayRandom);
 
+
             if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
             {
+                /*
+                 * not released yet
+                 * 
                 checkBoxSpinGyms.Enabled = true;
                 checkBoxSpinGyms.Checked = settings.SpinGyms;
                 checkBoxDeployToGym.Enabled = true;
                 checkBoxDeployToGym.Checked = settings.DeployCreature;
                 checkBoxGoToGymsOnly.Enabled = true;
                 checkBoxGoToGymsOnly.Checked = settings.GoOnlyToGyms;
+                */
             }
             else
             {
@@ -172,8 +185,12 @@ namespace DraconiusGoGUI.UI
             }
 
             cbUseIncense.Checked = settings.UseIncense;
-            cbUseLuckEggConst.Checked = settings.UseLuckEggConst;
-            checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
+            cbUseLuckEggConst.Checked = settings.UseCristalConst;
+            checkBoxUseObelisks.Checked = settings.UseObelisks;
+            checkBoxGetSpeedServer.Checked = settings.GetSpeedOfServer;
+            checkBoxUseRoosts.Checked = settings.UseRoosts;
+            checkBoxPGPool.Checked = settings.EnablePGPool;
+            textBoxUrlPGPool.Text = settings.PGPoolEndpoint;
 
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
 
@@ -196,20 +213,19 @@ namespace DraconiusGoGUI.UI
             //End device settings
 
             checkBoxUseBerries.Checked = settings.UseBerries;
-            checkBoxGetARBonus.Checked = settings.GetArBonus;
-            checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
+            checkBoxUseDungeons.Checked = settings.UseDungeons;
+            checkBoxUseDragonVisionConst.Checked = settings.UseDragonVisionConst;
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
             checkBoxUpgradeCreatures.Checked = settings.UpgradeCreature;
             cbAutoUpdate.Checked = AutoUpdate;
             numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
 
-            checkBoxAutoFavShiny.Checked = settings.AutoFavoritShiny;
-            checkBoxSniperNoInPokedex.Checked = settings.SnipeAllCreaturesNoInPokedex;
+            checkBoxSniperNoInDracoDex.Checked = settings.SnipeAllCreaturesNoInDracoDex;
             checkBoxTooBalls.Checked = settings.IgnoreStopsIfTooBalls;
             numericUpDownTooBalls.Value = new Decimal(settings.BallsToIgnoreStops);
             checkBoxSoftBypass.Checked = settings.UseSoftBanBypass;
             numericUpDownSoftBypass.Value = new Decimal(settings.SoftBanBypassTimes);
-            numericUpDownLvForConsLukky.Value = new Decimal(settings.LevelForConstLukky);
+            numericUpDownLvForConsLukky.Value = new Decimal(settings.LevelForConstCristal);
 
             for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -340,13 +356,12 @@ namespace DraconiusGoGUI.UI
             userSettings.Latitude = defaultLat;
             userSettings.Longitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
-            userSettings.AccountName = textBoxName.Text;
+            userSettings.AccountName = String.IsNullOrEmpty(textBoxName.Text) ? userSettings.Username : textBoxName.Text;
             userSettings.TransferCreature = checkBoxTransfers.Checked;
-            userSettings.TransferSlashCreatures = checkBoxTransferSlashCreatures.Checked;
             userSettings.EvolveCreature = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
             userSettings.MinCreatureBeforeEvolve = minCreatureBeforeEvolve;
-            userSettings.UseLuckyEgg = checkBoxUseLuckyEgg.Checked;
+            userSettings.UseCristal = checkBoxUseCristals.Checked;
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.OnlyUnlimitedIncubator = checkBoxOnlyUnlimitedIncubator.Checked;
             userSettings.MaxLevel = maxLevel;
@@ -363,22 +378,26 @@ namespace DraconiusGoGUI.UI
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             userSettings.DeployCreature = checkBoxDeployToGym.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
+            MinimizeToTray = checkBoxMinimizeToTray.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
             userSettings.UseIncense = cbUseIncense.Checked;
-            userSettings.UseLuckEggConst = cbUseLuckEggConst.Checked;
+            userSettings.UseCristalConst = cbUseLuckEggConst.Checked;
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
             userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
             userSettings.MaxFailBeforeReset = (int)numericUpDownMaxFailBeforeReset.Value;
             userSettings.AutoRotateProxies = checkBoxAutoRotateProxies.Checked;
             userSettings.AutoRemoveOnStop = checkBoxRemoveOnStop.Checked;
-            userSettings.RequestBuildingDetails = checkBoxReqBuildingDetails.Checked;
+            userSettings.UseObelisks = checkBoxUseObelisks.Checked;
             userSettings.IgnoreStopsIfTooBalls = checkBoxTooBalls.Checked;
             userSettings.BallsToIgnoreStops = (int)numericUpDownTooBalls.Value;
             userSettings.MimicWalking = cbMimicWalking.Checked;
             userSettings.ShowDebugLogs = checkBoxDevLogs.Checked;
             userSettings.EnableHumanization = checkBoxHumanise.Checked;
+            userSettings.UseRoosts = checkBoxUseRoosts.Checked;
+            userSettings.EnablePGPool = checkBoxPGPool.Checked;
+            userSettings.PGPoolEndpoint = textBoxUrlPGPool.Text;
 
             userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
 
@@ -393,9 +412,10 @@ namespace DraconiusGoGUI.UI
             userSettings.FirmwareType = textBoxFirmwareType.Text;
             //End device settings
 
-            userSettings.GetArBonus = checkBoxGetARBonus.Checked;
-            userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
+            userSettings.UseDungeons = checkBoxUseDungeons.Checked;
+            userSettings.UseDragonVisionConst = checkBoxUseDragonVisionConst.Checked;
             userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
+            userSettings.GetSpeedOfServer = checkBoxGetSpeedServer.Checked;
 
             if (proxyEx != null)
             {
@@ -412,17 +432,15 @@ namespace DraconiusGoGUI.UI
                 userSettings.ProxyPort = 0;
             }
 
-
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
             userSettings.UpgradeCreature = checkBoxUpgradeCreatures.Checked;
-            userSettings.AutoFavoritShiny = checkBoxAutoFavShiny.Checked;
-            userSettings.SnipeAllCreaturesNoInPokedex = checkBoxSniperNoInPokedex.Checked;
+            userSettings.SnipeAllCreaturesNoInDracoDex = checkBoxSniperNoInDracoDex.Checked;
             userSettings.UseSoftBanBypass = checkBoxSoftBypass.Checked;
-            userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;           
-            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationupdateDelayRandom.Value;            
+            userSettings.EncounterWhileWalking = checkBoxEncounterWalk.Checked;
+            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationupdateDelayRandom.Value;
             userSettings.DelayBetweenLocationUpdates = (int)numericUpDownDelayBetweenLocationUpdates.Value;
-            userSettings.DelayBetweenPlayerActions = (int) numericUpDownDelayBetweenPlayerActions.Value;
+            userSettings.DelayBetweenPlayerActions = (int)numericUpDownDelayBetweenPlayerActions.Value;
             userSettings.PlayerActionDelayRandom = (int)numericUpDownPlayerActionDelayRandom.Value;
             userSettings.GeneralDelayRandom = (int)numericUpDownGeneralDelayRandom.Value;
             userSettings.GeneralDelay = (int)numericUpDownGeneralDelay.Value;
@@ -449,7 +467,7 @@ namespace DraconiusGoGUI.UI
                 MessageBox.Show("Min level for use lukky constantly value", "Warning");
                 return false;
             }
-            userSettings.LevelForConstLukky = lvforconslukky;
+            userSettings.LevelForConstCristal = lvforconslukky;
 
             return true;
         }
@@ -810,7 +828,7 @@ namespace DraconiusGoGUI.UI
                 }
 
                 SaveSettings();
-                
+
                 bool full = false;
                 DialogResult dialogResult = MessageBox.Show("Export full config? ", "Info", MessageBoxButtons.YesNo);
 
@@ -881,9 +899,13 @@ namespace DraconiusGoGUI.UI
         {
             if (cbTeam.SelectedItem.ToString() != "Neutral")
             {
+                /*
+                 * not release yet
+                 * 
                 checkBoxSpinGyms.Enabled = true;
                 checkBoxDeployToGym.Enabled = true;
                 checkBoxGoToGymsOnly.Enabled = true;
+                */
             }
             else
             {
@@ -898,11 +920,13 @@ namespace DraconiusGoGUI.UI
 
         private void CbMimicWalking_Click(object sender, EventArgs e)
         {
-            textBoxWalkSpeed.Enabled = cbMimicWalking.Checked;
+            textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked && cbMimicWalking.Checked;
+            numericUpDownWalkingOffset.Enabled = !checkBoxGetSpeedServer.Checked && cbMimicWalking.Checked;
             checkBoxEncounterWalk.Enabled = cbMimicWalking.Checked;
+            checkBoxGetSpeedServer.Enabled = cbMimicWalking.Checked;
         }
 
-        private void checkBoxHumanise_Click(object sender, EventArgs e)
+        private void CheckBoxHumanise_Click(object sender, EventArgs e)
         {
             numericUpDownGeneralDelay.Enabled = checkBoxHumanise.Checked;
             numericUpDownGeneralDelayRandom.Enabled = checkBoxHumanise.Checked;
@@ -910,6 +934,12 @@ namespace DraconiusGoGUI.UI
             numericUpDownDelayBetweenLocationUpdates.Enabled = checkBoxHumanise.Checked;
             numericUpDownLocationupdateDelayRandom.Enabled = checkBoxHumanise.Checked;
             numericUpDownPlayerActionDelayRandom.Enabled = checkBoxHumanise.Checked;
+        }
+
+        private void CheckBoxGetSpeedServer_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxWalkSpeed.Enabled = !checkBoxGetSpeedServer.Checked;
+            numericUpDownWalkingOffset.Enabled = !checkBoxGetSpeedServer.Checked;
         }
     }
 }

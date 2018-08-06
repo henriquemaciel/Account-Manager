@@ -68,17 +68,19 @@
             this.labelPlayerLevel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPagePokedex = new System.Windows.Forms.TabPage();
+            this.tabPageDracoDex = new System.Windows.Forms.TabPage();
             this.fastObjectListViewPokedex = new BrightIdeasSoftware.FastObjectListView();
-            this.olvColumnPokedexFriendlyName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPokedexId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnDracoDexFriendlyName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnDraccoDexId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureEncountered = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPageCreature = new System.Windows.Forms.TabPage();
             this.fastObjectListViewCreature = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumncreadexIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCreatureLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureCandy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCandyToEvolve = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -90,7 +92,7 @@
             this.olvColumnDPS = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAttack = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnStamina = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnBaseCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTotalHP = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripCreatureDetails = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.favoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFavoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,7 +132,7 @@
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
-            this.tabPagePokedex.SuspendLayout();
+            this.tabPageDracoDex.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewPokedex)).BeginInit();
             this.tabPageCreature.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCreature)).BeginInit();
@@ -150,7 +152,7 @@
             // tabControlMain
             // 
             this.tabControlMain.Controls.Add(this.tabPageStats);
-            this.tabControlMain.Controls.Add(this.tabPagePokedex);
+            this.tabControlMain.Controls.Add(this.tabPageDracoDex);
             this.tabControlMain.Controls.Add(this.tabPageCreature);
             this.tabControlMain.Controls.Add(this.tabPageEggs);
             this.tabControlMain.Controls.Add(this.tabPageInventory);
@@ -549,30 +551,31 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Team:";
             // 
-            // tabPagePokedex
+            // tabPageDracoDex
             // 
-            this.tabPagePokedex.Controls.Add(this.fastObjectListViewPokedex);
-            this.tabPagePokedex.Location = new System.Drawing.Point(4, 25);
-            this.tabPagePokedex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPagePokedex.Name = "tabPagePokedex";
-            this.tabPagePokedex.Size = new System.Drawing.Size(1124, 440);
-            this.tabPagePokedex.TabIndex = 3;
-            this.tabPagePokedex.Text = "Pokedex";
-            this.tabPagePokedex.UseVisualStyleBackColor = true;
+            this.tabPageDracoDex.Controls.Add(this.fastObjectListViewPokedex);
+            this.tabPageDracoDex.Location = new System.Drawing.Point(4, 25);
+            this.tabPageDracoDex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPageDracoDex.Name = "tabPageDracoDex";
+            this.tabPageDracoDex.Size = new System.Drawing.Size(1124, 440);
+            this.tabPageDracoDex.TabIndex = 3;
+            this.tabPageDracoDex.Text = "DracoDex";
+            this.tabPageDracoDex.UseVisualStyleBackColor = true;
             // 
             // fastObjectListViewPokedex
             // 
-            this.fastObjectListViewPokedex.AllColumns.Add(this.olvColumnPokedexFriendlyName);
-            this.fastObjectListViewPokedex.AllColumns.Add(this.olvColumnPokedexId);
+            this.fastObjectListViewPokedex.AllColumns.Add(this.olvColumnDracoDexFriendlyName);
+            this.fastObjectListViewPokedex.AllColumns.Add(this.olvColumnDraccoDexId);
             this.fastObjectListViewPokedex.AllColumns.Add(this.olvColumnCreatureEncountered);
             this.fastObjectListViewPokedex.AllColumns.Add(this.olvColumnCreatureCaught);
             this.fastObjectListViewPokedex.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewPokedex.CellEditUseWholeCell = false;
             this.fastObjectListViewPokedex.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnPokedexFriendlyName,
-            this.olvColumnPokedexId,
+            this.olvColumnDracoDexFriendlyName,
+            this.olvColumnDraccoDexId,
             this.olvColumnCreatureEncountered,
             this.olvColumnCreatureCaught});
+            this.fastObjectListViewPokedex.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewPokedex.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewPokedex.FullRowSelect = true;
             this.fastObjectListViewPokedex.Location = new System.Drawing.Point(0, 0);
@@ -581,20 +584,23 @@
             this.fastObjectListViewPokedex.ShowGroups = false;
             this.fastObjectListViewPokedex.Size = new System.Drawing.Size(1124, 440);
             this.fastObjectListViewPokedex.TabIndex = 0;
+            this.fastObjectListViewPokedex.UseCellFormatEvents = true;
             this.fastObjectListViewPokedex.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewPokedex.UseFiltering = true;
             this.fastObjectListViewPokedex.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewPokedex.VirtualMode = true;
+            this.fastObjectListViewPokedex.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewPokedex_FormatCell);
             // 
-            // olvColumnPokedexFriendlyName
+            // olvColumnDracoDexFriendlyName
             // 
-            this.olvColumnPokedexFriendlyName.AspectName = "";
-            this.olvColumnPokedexFriendlyName.Text = "#";
+            this.olvColumnDracoDexFriendlyName.AspectName = "";
+            this.olvColumnDracoDexFriendlyName.Text = "#";
             // 
-            // olvColumnPokedexId
+            // olvColumnDraccoDexId
             // 
-            this.olvColumnPokedexId.AspectName = "id";
-            this.olvColumnPokedexId.Text = "Name";
-            this.olvColumnPokedexId.Width = 105;
+            this.olvColumnDraccoDexId.AspectName = "id";
+            this.olvColumnDraccoDexId.Text = "Name";
+            this.olvColumnDraccoDexId.Width = 105;
             // 
             // olvColumnCreatureEncountered
             // 
@@ -622,9 +628,11 @@
             // 
             // fastObjectListViewCreature
             // 
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumncreadexIndex);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureId);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureGroup);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureName);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureLevel);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCp);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureCandy);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCandyToEvolve);
@@ -636,13 +644,15 @@
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnDPS);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnAttack);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnStamina);
-            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnBaseCp);
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnTotalHP);
             this.fastObjectListViewCreature.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewCreature.CellEditUseWholeCell = false;
             this.fastObjectListViewCreature.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumncreadexIndex,
             this.olvColumnCreatureId,
             this.olvColumnCreatureGroup,
             this.olvColumnCreatureName,
+            this.olvColumnCreatureLevel,
             this.olvColumnCp,
             this.olvColumnCreatureCandy,
             this.olvColumnCandyToEvolve,
@@ -654,7 +664,7 @@
             this.olvColumnDPS,
             this.olvColumnAttack,
             this.olvColumnStamina,
-            this.olvColumnBaseCp});
+            this.olvColumnTotalHP});
             this.fastObjectListViewCreature.ContextMenuStrip = this.contextMenuStripCreatureDetails;
             this.fastObjectListViewCreature.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewCreature.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -672,10 +682,15 @@
             this.fastObjectListViewCreature.VirtualMode = true;
             this.fastObjectListViewCreature.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewCreature_FormatCell);
             // 
+            // olvColumncreadexIndex
+            // 
+            this.olvColumncreadexIndex.AspectName = "creadexIndex";
+            this.olvColumncreadexIndex.Text = "# id";
+            this.olvColumncreadexIndex.Width = 43;
+            // 
             // olvColumnCreatureId
             // 
             this.olvColumnCreatureId.AspectName = "id";
-            this.olvColumnCreatureId.IsVisible = false;
             this.olvColumnCreatureId.Text = "Creature Id";
             // 
             // olvColumnCreatureGroup
@@ -690,6 +705,11 @@
             this.olvColumnCreatureName.Text = "Name";
             this.olvColumnCreatureName.Width = 75;
             // 
+            // olvColumnCreatureLevel
+            // 
+            this.olvColumnCreatureLevel.AspectName = "level";
+            this.olvColumnCreatureLevel.Text = "Level";
+            // 
             // olvColumnCp
             // 
             this.olvColumnCp.AspectName = "cp";
@@ -703,6 +723,7 @@
             // 
             // olvColumnCandyToEvolve
             // 
+            this.olvColumnCandyToEvolve.AspectName = "improveCandiesCost";
             this.olvColumnCandyToEvolve.Text = "Candies To Evolve";
             this.olvColumnCandyToEvolve.Width = 106;
             // 
@@ -752,11 +773,11 @@
             this.olvColumnStamina.UseFiltering = false;
             this.olvColumnStamina.Width = 63;
             // 
-            // olvColumnBaseCp
+            // olvColumnTotalHP
             // 
-            this.olvColumnBaseCp.AspectName = "baseCp";
-            this.olvColumnBaseCp.Text = "BaseCp";
-            this.olvColumnBaseCp.Width = 65;
+            this.olvColumnTotalHP.AspectName = "totalHp";
+            this.olvColumnTotalHP.Text = "TotalHP";
+            this.olvColumnTotalHP.Width = 65;
             // 
             // contextMenuStripCreatureDetails
             // 
@@ -996,12 +1017,13 @@
             // 
             // olvColumnCandyFamily
             // 
+            this.olvColumnCandyFamily.AspectName = "";
             this.olvColumnCandyFamily.Text = "Candy Type";
             this.olvColumnCandyFamily.Width = 212;
             // 
             // olvColumnCandyAmount
             // 
-            this.olvColumnCandyAmount.AspectName = "Candy_";
+            this.olvColumnCandyAmount.AspectName = "";
             this.olvColumnCandyAmount.Text = "Amount";
             // 
             // tabPageLogs
@@ -1116,7 +1138,7 @@
             this.tabControlMain.ResumeLayout(false);
             this.tabPageStats.ResumeLayout(false);
             this.tabPageStats.PerformLayout();
-            this.tabPagePokedex.ResumeLayout(false);
+            this.tabPageDracoDex.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewPokedex)).EndInit();
             this.tabPageCreature.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCreature)).EndInit();
@@ -1141,7 +1163,7 @@
         private System.Windows.Forms.TabPage tabPageStats;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPagePokedex;
+        private System.Windows.Forms.TabPage tabPageDracoDex;
         private System.Windows.Forms.TabPage tabPageCreature;
         private System.Windows.Forms.TabPage tabPageInventory;
         private System.Windows.Forms.Label label3;
@@ -1161,8 +1183,8 @@
         private BrightIdeasSoftware.OLVColumn olvColumnMessage;
         private BrightIdeasSoftware.OLVColumn olvColumnException;
         private BrightIdeasSoftware.FastObjectListView fastObjectListViewPokedex;
-        private BrightIdeasSoftware.OLVColumn olvColumnPokedexFriendlyName;
-        private BrightIdeasSoftware.OLVColumn olvColumnPokedexId;
+        private BrightIdeasSoftware.OLVColumn olvColumnDracoDexFriendlyName;
+        private BrightIdeasSoftware.OLVColumn olvColumnDraccoDexId;
         private BrightIdeasSoftware.OLVColumn olvColumnCreatureEncountered;
         private BrightIdeasSoftware.OLVColumn olvColumnCreatureCaught;
         private BrightIdeasSoftware.FastObjectListView fastObjectListViewCreature;
@@ -1232,9 +1254,11 @@
         private System.Windows.Forms.Label labelPokeCoins;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnBaseCp;
+        private BrightIdeasSoftware.OLVColumn olvColumnTotalHP;
         private BrightIdeasSoftware.OLVColumn olvColumnEPS;
         private BrightIdeasSoftware.OLVColumn olvColumnDPSmain;
         private BrightIdeasSoftware.OLVColumn olvColumnDPS;
+        private BrightIdeasSoftware.OLVColumn olvColumnCreatureLevel;
+        private BrightIdeasSoftware.OLVColumn olvColumncreadexIndex;
     }
 }

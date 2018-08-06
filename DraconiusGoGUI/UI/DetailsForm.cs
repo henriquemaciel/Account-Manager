@@ -29,7 +29,7 @@ namespace DraconiusGoGUI.UI
             fastObjectListViewLogs.PrimarySortOrder = SortOrder.Descending;
             fastObjectListViewLogs.ListFilter = new TailFilter(500);
 
-            fastObjectListViewPokedex.PrimarySortColumn = olvColumnPokedexFriendlyName;
+            fastObjectListViewPokedex.PrimarySortColumn = olvColumnDracoDexFriendlyName;
             fastObjectListViewPokedex.PrimarySortOrder = SortOrder.Ascending;
 
             fastObjectListViewLogs.BackColor = Color.FromArgb(43, 43, 43);
@@ -52,11 +52,11 @@ namespace DraconiusGoGUI.UI
             #region Pokedex
 
             //ToString for sorting purposes
-            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).element;
+            olvColumnDracoDexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).element;
 
-            olvColumnPokedexId.AspectGetter = (entry) => _manager.Strings.GetCreatureName((entry as FCreadexEntry).name);
+            olvColumnDraccoDexId.AspectGetter = (entry) => _manager.Strings.GetCreatureName((entry as FCreadexEntry).name);
 
-            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).name;
+            olvColumnDracoDexFriendlyName.AspectGetter = (entry) => (int)(entry as FCreadexEntry).name;
 
             #endregion
 
@@ -65,33 +65,8 @@ namespace DraconiusGoGUI.UI
 
             olvColumnCreatureId.AspectGetter = (Creature) => (Creature as FUserCreature).id;
 
-            /*
+            olvColumnCreatureCandy.AspectGetter = (Creature) => (Creature as FUserCreature).GetCandyCount(_manager.Stats);
 
-            olvColumnCandyToEvolve.AspectGetter = delegate (object Creature)
-            {
-                //CreatureSettings CreatureSettings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
-                return CreatureSettings == null ? 0 : CreatureSettings.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
-            };
-
-            olvColumnCreatureCandy.AspectGetter = delegate (object Creature)
-            {
-                if (!_manager.CreatureCandy.Any())
-                {
-                    return 0;
-                }
-
-                CreatureSettings settings = _manager.GetCreatureSetting((Creature as CreatureData).CreatureId).Data;
-
-                if (settings == null)
-                {
-                    return 0;
-                }
-
-                Candy family = _manager.CreatureCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
-
-                return family == null ? 0 : family.Candy_;
-            };
-            */
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {
                 return String.IsNullOrEmpty((Creature as FUserCreature).alias) ? _manager.Strings.GetCreatureName((Creature as FUserCreature).name) : (Creature as FUserCreature).alias;
@@ -107,16 +82,28 @@ namespace DraconiusGoGUI.UI
             #endregion
 
             #region Candy
-            /*
+
+            
             olvColumnCandyFamily.AspectGetter = delegate (object x)
             {
-                var family = (Candy)x;
-
-                return family.FamilyId.ToString().Replace("Family", "");
+                //var creatureType = (FUserCreature)x;
+                return 0;// creatureType.candyType;
             };
-            */
-            #endregion
             
+            olvColumnCandyAmount.AspectGetter = delegate (object x)
+            {
+                if (!_manager.CreatureCandy.Any())
+                {
+                    return 0;
+                }
+
+                var candy = 0;//_manager.CreatureCandy[(CreatureType)x];
+
+                return candy == 0 ? 0 : candy;
+            };
+
+            #endregion
+
             #region Inventory
 
             olvColumnInventoryItem.AspectGetter = delegate (object x)
@@ -125,7 +112,7 @@ namespace DraconiusGoGUI.UI
 
                 return _manager.Strings.GetItemName(item.type);
             };
-            
+
 
             #endregion
         }
@@ -169,7 +156,7 @@ namespace DraconiusGoGUI.UI
         {
             if (!_manager.IsRunning)
                 return;
-                
+
             if (fastObjectListViewLogs.IsDisposed || fastObjectListViewLogs.Disposing)
             {
                 return;
@@ -224,29 +211,29 @@ namespace DraconiusGoGUI.UI
             labelExpPerHour.Text = String.Format("{0:0}", _manager.ExpPerHour);
             labelExpGained.Text = _manager.ExpGained.ToString();
             labelPokeCoins.Text = _manager.TotalPokeCoins.ToString();
-            
+
             if (_manager.Stats != null)
             {
                 labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.totalDistanceF);
                 labelCreatureCaught.Text = _manager.Stats.monstersCaughtCount.ToString();
-                //labelBuildingVisits.Text = _manager.Stats.BuildingVisits.ToString();
-                //labelUniqueCreature.Text = _manager.Stats.UniquePokedexEntries.ToString();
+                labelBuildingVisits.Text = _manager.BuildingsFarmed.ToString() + "/" + _manager.UserSettings.SpinBuildingsDayLimit.ToString();
+                labelUniqueCreature.Text = _manager.DracoDex.Where(d => d.caughtQuantity > 0).Count().ToString() + "/" + _manager.DracoDex.Count().ToString();
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.Stats.registerDate);
                 labelCreateDate.Text = date.ToString();
                 labelCreatureBuddy.Text = (_manager.Stats.buddy != null && _manager.Strings != null) ? String.Format("{0}", _manager.Strings.GetCreatureName(_manager.Stats.buddy.creature)) : "Not set";
             }
 
-            if (_manager.Creature != null)
+            if (_manager.Creatures != null)
             {
-                labelCreatureCount.Text = String.Format("{0}/{1}", _manager.Creature.Count + _manager.Eggs.Count, _manager.MaxCreatureStorage);
-                labelDeployedCreatures.Text = _manager.Creature.Where(i => i.isArenaDefender).Count().ToString();
+                labelCreatureCount.Text = String.Format("{0}/{1}", _manager.Creatures.Count + _manager.Eggs.Count, _manager.MaxCreatureStorage);
+                labelDeployedCreatures.Text = _manager.Creatures.Where(i => i.isArenaDefender || i.isLibraryDefender).Count().ToString();
             }
 
             if (_manager.Items != null)
             {
                 labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.count), _manager.MaxItemStorage);
             }
-            
+
             if (_manager.PlayerData != null)
             {
                 labelPlayerUsername.Text = _manager.PlayerData.nickname;
@@ -291,7 +278,6 @@ namespace DraconiusGoGUI.UI
             }
             else if (e.Column == olvColumnCreatureCandy)
             {
-                /*
                 int candy = (int)olvColumnCreatureCandy.GetValue(CreatureData);
                 int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(CreatureData);
 
@@ -299,7 +285,6 @@ namespace DraconiusGoGUI.UI
                 {
                     e.SubItem.ForeColor = candy >= candyToEvolve ? Color.Green : Color.Red;
                 }
-                */
             }
             else if (e.Column == olvColumnPerfectPercent)
             {
@@ -406,7 +391,7 @@ namespace DraconiusGoGUI.UI
             {
                 return;
             }
-           
+
             if (fastObjectListViewCreature.SelectedObjects.Count == 0 || fastObjectListViewCreature.SelectedObjects.Cast<FUserCreature>().FirstOrDefault() == null)
                 return;
 
@@ -418,7 +403,7 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished upgrade Creature");
         }
@@ -443,7 +428,7 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished transferring Creature");
         }
@@ -468,7 +453,7 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished evolving Creature");
         }
@@ -483,12 +468,12 @@ namespace DraconiusGoGUI.UI
             else if (tabControlMain.SelectedTab == tabPageCreature)
             {
                 _manager.UpdateInventory(InventoryRefresh.Creature);
-                fastObjectListViewCreature.SetObjects(_manager.Creature);
+                fastObjectListViewCreature.SetObjects(_manager.Creatures);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
                 _manager.UpdateInventory(InventoryRefresh.CreatureCandy);
-                //fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
+                fastObjectListViewCandy.SetObjects(_manager.CreatureCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
@@ -501,10 +486,10 @@ namespace DraconiusGoGUI.UI
                 _manager.UpdateInventory(InventoryRefresh.Items);
                 fastObjectListViewInventory.SetObjects(_manager.Items);
             }
-            else if (tabControlMain.SelectedTab == tabPagePokedex)
+            else if (tabControlMain.SelectedTab == tabPageDracoDex)
             {
                 _manager.UpdateInventory(InventoryRefresh.Pokedex);
-                fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
+                fastObjectListViewPokedex.SetObjects(_manager.DracoDex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {
@@ -555,7 +540,7 @@ namespace DraconiusGoGUI.UI
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished favoriting Creature");
         }
@@ -570,7 +555,7 @@ namespace DraconiusGoGUI.UI
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished unfavoriting Creature");
         }
@@ -640,7 +625,6 @@ namespace DraconiusGoGUI.UI
 
         private void FastObjectListViewEggs_FormatCell(object sender, FormatCellEventArgs e)
         {
-
             var egg = (FEgg)e.Model;
             var eggIncubator = new FIncubator();
 
@@ -652,18 +636,33 @@ namespace DraconiusGoGUI.UI
 
             if (e.Column == olvColumnEggWalked)
             {
-                if (eggIncubator.eggId != null)
+                if (egg.isEggForRoost)
                 {
-                    e.SubItem.Text = String.Format("{0:0.00} km", egg.totalDistance - egg.passedDistance);
+                    DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
+                    e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
+                    e.SubItem.ForeColor = Color.Blue;
                 }
                 else
-                    e.SubItem.Text = "0.00 km";
+                    e.SubItem.Text = String.Format("{0:0.00} km", (egg.totalDistance - egg.passedDistance) / 1000);
             }
             else if (e.Column == olvColumnEggDistance)
             {
-                e.SubItem.Text = String.Format("{0:0.00}km", egg.totalDistance);
+                if (egg.isEggForRoost)
+                {
+                    DateTime time = DateTime.Now.AddTicks(egg.totalIncubationTime);
+                    e.SubItem.Text = String.Format("{0}h", time.ToString("t"));
+                    e.SubItem.ForeColor = Color.Blue;
+                }
+                else
+                    e.SubItem.Text = String.Format("{0:0.00}km", egg.totalDistance / 1000);
             }
-             
+            else if (e.Column == olvColumnEggIncubator)
+            {
+                e.SubItem.Text = String.Format("{0}", egg.incubatorId);
+
+                if (egg.isEggForRoost)
+                    e.SubItem.ForeColor = Color.Blue;
+            }
         }
 
         private async void SetABuddyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -690,7 +689,7 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished set a buddy Creature");
         }
@@ -712,9 +711,22 @@ namespace DraconiusGoGUI.UI
 
             contextMenuStripCreatureDetails.Enabled = true;
 
-            fastObjectListViewCreature.SetObjects(_manager.Creature);
+            fastObjectListViewCreature.SetObjects(_manager.Creatures);
 
             MessageBox.Show("Finished to rename Creature(s)");
+        }
+
+        private void FastObjectListViewPokedex_FormatCell(object sender, FormatCellEventArgs e)
+        {
+            var entry = (FCreadexEntry)e.Model;
+
+            if (e.Column != null)
+            {
+                if (entry.caughtQuantity > 0)
+                    e.SubItem.ForeColor = Color.Green;
+                else
+                    e.SubItem.ForeColor = Color.Red;
+            }
         }
     }
 }

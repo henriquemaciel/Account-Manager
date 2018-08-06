@@ -22,6 +22,7 @@ namespace DraconiusGoGUI
         public bool LoggedIn = false;
         public Manager ClientManager;
         public DracoClient DracoClient;
+
         private CancellationTokenSource CancellationTokenSource;
 
         public Client()
@@ -84,7 +85,6 @@ namespace DraconiusGoGUI
                     TimeOut = 20 * 1000,
                     UtcOffset = (int)TimeZoneInfo.Utc.GetUtcOffset(DateTime.Now).TotalSeconds,
                     Delay = 1000,
-                    // AutoRefreshMap = true // TODO: new feature in dracolib. need dracolibv119
                 };
 
                 string proxy = ClientManager.Proxy;
@@ -92,14 +92,15 @@ namespace DraconiusGoGUI
                 try
                 {
                     DracoClient = new DracoClient(proxy, options);
-                    //DracoClient.Logger = dracoLogger; // TODO: new feature in dracolib. need dracolibv119
+                    //DracoClient.Logger = dracoLogger;
+                    //DracoClient.SetPosition(ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Ping...", LoggerTypes.Info));
                     var ping = DracoClient.Ping();
                     if (!ping) throw new Exception();
 
                     ClientManager.LogCaller(new LoggerEventArgs("Boot...", LoggerTypes.Info));
-                    DracoClient.Boot(config);
+                    ClientManager.fConfig = DracoClient.Boot(config);
 
                     ClientManager.LogCaller(new LoggerEventArgs("Login...", LoggerTypes.Info));
                     var login = DracoClient.Login().Result;
@@ -129,9 +130,13 @@ namespace DraconiusGoGUI
                     ClientManager.LogCaller(new LoggerEventArgs("Init client...", LoggerTypes.Info));
                     DracoClient.Load();
 
-                    ClientManager.PlayerData.nickname = login.info.nickname;
-                    ClientManager.PlayerData.serverTime = login.info.serverTime;
-                    ClientManager.PlayerData.userId = login.info.userId;
+                    ClientManager.PlayerData = login.info;
+ 
+                    if (ClientManager.UserSettings.GetSpeedOfServer && ClientManager.UserSettings.MimicWalking)
+                    {
+                        ClientManager.UserSettings.WalkingSpeed = (int)(0.9 * ClientManager.fConfig.avatarMoveRunSpeed);
+                        ClientManager.LogCaller(new LoggerEventArgs($"Auto speed set to { ClientManager.UserSettings.WalkingSpeed } km/h.", LoggerTypes.Success));
+                    }
 
                     ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 

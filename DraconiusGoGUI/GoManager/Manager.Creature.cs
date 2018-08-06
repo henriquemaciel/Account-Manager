@@ -18,8 +18,11 @@ namespace DraconiusGoGUI.DracoManager
 
             foreach (var pokToTranfer in CreaturesToTransfer)
             {
-                if (!CanTransferOrEvoleCreature(pokToTranfer))
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pokToTranfer.name), LoggerTypes.Info));
+                if (!CanTransferCreature(pokToTranfer))
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", Strings.GetCreatureName(pokToTranfer.name)), LoggerTypes.Info));
+                    continue;
+                }
                 else
                     CreatureToTransfer.Add(pokToTranfer);
             }
@@ -57,10 +60,11 @@ namespace DraconiusGoGUI.DracoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
-                    UpdateInventory(InventoryRefresh.CreatureCandy);
+                    Creatures.Remove(Creature);
 
+                    //UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                    UpdateInventory(InventoryRefresh.Creature);
+                    //UpdateInventory(InventoryRefresh.Creature);
 
                     return new MethodResult
                     {
@@ -82,7 +86,7 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                if (CreatureIds.Count != 0)
+                if (CreatureIds.Count > 0)
                 {
                     var response = _client.DracoClient.Call(new UserCreatureService().ConvertCreaturesToCandies(CreatureIds, true));
                 }
@@ -94,10 +98,13 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs(String.Format("Successully transfer {0} Creatures.", CreatureToTransfer.Count()), LoggerTypes.Transfer));
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+               
+                foreach (var creat in CreatureToTransfer)
+                    Creatures.Remove(creat);
+                
+                //UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                UpdateInventory(InventoryRefresh.CreatureCandy);
-
-                UpdateInventory(InventoryRefresh.Creature);
+                //UpdateInventory(InventoryRefresh.Creature);
 
                 return new MethodResult
                 {
@@ -113,7 +120,7 @@ namespace DraconiusGoGUI.DracoManager
 
             double percentCreature = Stats.creatureStorageSize * configPercentCreatures;
 
-            if (percentCreature > Creature.Count)
+            if (percentCreature > Creatures.Count)
             {
                 return new MethodResult
                 {
@@ -130,7 +137,6 @@ namespace DraconiusGoGUI.DracoManager
 
             await TransferCreature(transferResult.Data);
 
-            await Task.Delay(0);
             return new MethodResult
             {
                 Success = true,
@@ -152,7 +158,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (Creature == null)
+            if (Creatures == null)
             {
                 LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
@@ -164,7 +170,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var CreatureToTransfer = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.GroupBy(x => x.name);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creatures.GroupBy(x => x.name);
 
             foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {
@@ -210,26 +216,7 @@ namespace DraconiusGoGUI.DracoManager
                         CreatureToTransfer.AddRange(GetCreatureBelowCP(group, settings.MinCP));
                         CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.id).ToList();
                         break;
-                    case TransferType.Slashed:
-                        //CreatureToTransfer.AddRange(group.ToList());
-                        //CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.IsDead).ToList();
-                        break;
                 }
-            }
-
-            if (UserSettings.TransferSlashCreatures)
-            {
-                /*
-                var slashCreatures = Creature.Where(x => x.IsBad);
-                foreach (var slashCreature in slashCreatures)
-                {
-                    var inlist = CreatureToTransfer.FirstOrDefault(x => x.Id == slashCreature.Id);
-                    if (inlist == null)
-                    {
-                        CreatureToTransfer.Add(slashCreature);
-                    }
-                }
-                */
             }
             
             return new MethodResult<List<FUserCreature>>
@@ -299,34 +286,35 @@ namespace DraconiusGoGUI.DracoManager
 
         private List<FUserCreature> GetCreatureByPossibleEvolve(IGrouping<CreatureType, FUserCreature> Creature, int limit)
         {
-            /*
-            CreatureSettings setting = null;
-            if (!PokeSettings.TryGetValue(Creature.Key, out setting))
+            FUserCreature setting = null;
+            if (Creatures.Where(c => c.name == Creature.Key).FirstOrDefault() == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for Creature {0}", Creature.Key), LoggerTypes.Info));
 
                 return new List<FUserCreature>();
             }
 
-            int CreatureCandy = 0;
+            setting = Creatures.Where(c => c.name == Creature.Key).FirstOrDefault();
 
-            if (CreatureCandy.Any(x => x.FamilyId == setting.FamilyId))
+            int creatureCandy = 0;
+
+            if (CreatureCandy.Any(x => x.Key == setting.name))
             {
-                CreatureCandy = CreatureCandy.Where(x => x.FamilyId == setting.FamilyId).FirstOrDefault().Candy_;
+                creatureCandy = CreatureCandy.Where(x => x.Key == setting.name).FirstOrDefault().Value;
                 //int CreatureCandy = CreatureCandy.SingleOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
             }
 
-            int candyToEvolve = setting.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
+            int candyToEvolve = setting.improveCandiesCost;
             int totalCreature = Creature.Count();
 
             if (candyToEvolve == 0)
             {
                 //Not thinks good
-                return Creature.OrderByDescending(x => x.Cp).ToList();
+                return Creature.OrderByDescending(x => x.cp).ToList();
                 //return new List<CreatureData>();
             }
 
-            int maxCreature = CreatureCandy / candyToEvolve;
+            int maxCreature = creatureCandy / candyToEvolve;
 
             if (maxCreature > limit)
             {
@@ -334,8 +322,8 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             return Creature.OrderByDescending(x => x.cp).Skip(maxCreature).ToList();
-            */
-            return new List<FUserCreature>();
+
+           // return new List<FUserCreature>();
         }
 
         // NOTE: this is the real IV Percent, using only Individual values.
@@ -379,13 +367,12 @@ namespace DraconiusGoGUI.DracoManager
         {
             foreach (FUserCreature Creature in CreatureToFavorite)
             {
-                bool isFavorited = true;
-                string message = "unfavorited";
+                bool isFavorited = false;
 
-                if (Creature.group < 1)
+                if (Creature.group > 0)
                 {
-                    isFavorited = false;
-                    message = "favorited";
+                    isFavorited = true;
+                    //message = "favorited";
                 }
 
                 if (isFavorited == favorite)
@@ -591,15 +578,11 @@ namespace DraconiusGoGUI.DracoManager
             return (float)(Math.Round((level) * 2) / 2.0);
         }
 
-        private bool CanTransferOrEvoleCreature(FUserCreature Creature, bool allmodes = false)
+        private bool CanTransferCreature(FUserCreature Creature, bool allmodes = false)
         {
             // Can't transfer Creature null.
             if (Creature == null)
                 return false;
-
-            // Can't transfer Creature check all modes.
-            //if (allmodes && Creature.IsBad)
-            //    return false;
 
             // Can't transfer Creature in gyms.
             if (Creature.isArenaDefender || Creature.isLibraryDefender)
@@ -617,29 +600,59 @@ namespace DraconiusGoGUI.DracoManager
             return true;
         }
 
+        private bool CanEvoleCreature(FUserCreature Creature)
+        {
+            // Can't evolve Creature null.
+            if (Creature == null)
+                return false;
+
+            // Can't evolve Creature in gyms.
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
+                return false;
+
+            // Can't evolve buddy Creature
+            var buddy = Stats.buddy;
+            if (buddy != null && buddy.id == Creature.id)
+                return false;
+
+            int familyCandy = Creature.GetCandyCount(Stats);
+
+            // Can't evolve if not enough candy.
+            int CreatureCandyNeededAlready = Creature.improveCandiesCost;
+            if (familyCandy < CreatureCandyNeededAlready)
+                return false;
+
+            // Can't evolve if not enough stardust.
+            var stardustToUpgrade = Creature.improveDustCost;
+            if (TotalStardust < stardustToUpgrade)
+                return false;
+
+            return true;
+        }
+
         private bool CanUpgradeCreature(FUserCreature Creature)
         {
             // Can't upgrade Creature in gyms.
-            //if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
-            //    return false;
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
+               return false;
 
-            //int CreatureLevel = (int)GetLevelFromCpMultiplier(Creature.CpMultiplier + Creature.AdditionalCpMultiplier);
+            int CreatureLevel = Creature.level;
 
             // Can't evolve unless Creature level is lower than trainer.
-            //if (CreatureLevel >= Level + 2)
-            //    return false;
+            if (CreatureLevel >= Level + 2)
+                return false;
 
-            //int familyCandy = CreatureCandy.Where(x => x.FamilyId == GetCreatureSetting(Creature.CreatureId).Data.FamilyId).FirstOrDefault().Candy_;
+            int familyCandy = Creature.GetCandyCount(Stats);
 
             // Can't evolve if not enough candy.
-            //int CreatureCandyNeededAlready = UpgradeSettings.CandyCost[CreatureLevel];
-            //if (familyCandy < CreatureCandyNeededAlready)
-            //    return false;
+            int CreatureCandyNeededAlready = Creature.improveCandiesCost;
+            if (familyCandy < CreatureCandyNeededAlready)
+                return false;
 
             // Can't evolve if not enough stardust.
-            //var stardustToUpgrade = UpgradeSettings.StardustCost[CreatureLevel];
-            //if (TotalStardust < stardustToUpgrade)
-            //    return false;
+            var stardustToUpgrade = Creature.improveDustCost;
+            if (TotalStardust < stardustToUpgrade)
+                return false;
 
             return true;
         }
@@ -678,7 +691,7 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
 
-            if (!Creature.Any())
+            if (!Creatures.Any())
             {
                 LogCaller(new LoggerEventArgs("You have no Creature", LoggerTypes.Info));
 
@@ -690,7 +703,7 @@ namespace DraconiusGoGUI.DracoManager
 
             var CreatureToUpgrade = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creature.GroupBy(x => x.name);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creatures.GroupBy(x => x.name);
 
             foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {

@@ -19,11 +19,11 @@ namespace DraconiusGoGUI.Extensions
 {
     public class VersionCheckState
     {
-        public const string VersionUri = "https://raw.githubusercontent.com/Furtif/Account-Manager/master/DraconiusGoGUI/Properties/AssemblyInfo.cs";
+        public const string VersionUri = "https://raw.githubusercontent.com/Account-Managers/Account-Manager/draco_manager/DraconiusGoGUI/Properties/AssemblyInfo.cs";
 
-        public const string RemoteReleaseUrl = "https://github.com/Furtif/Account-Manager/releases/download/v";
+        public const string RemoteReleaseUrl = "https://github.com/Account-Managers/Account-Manager/releases/download/v";
 
-        public const string ChangelogUri = "https://raw.githubusercontent.com/Furtif/Account-Manager/master/CHANGELOG.md";
+        public const string ChangelogUri = "https://github.com/Account-Managers/Account-Manager/blob/draco_manager/README.md#account-manager-draconiusgo-is-now-compatible-with-192-api";
 
         public static Version RemoteVersion;
 
@@ -88,18 +88,18 @@ namespace DraconiusGoGUI.Extensions
             {
                 try
                 {
-                    if (file.Name.Contains("chromedriver.exe.old"))
+                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old") || file.Name.Contains("chromedriver.exe.old"))
                         continue;
                     File.Delete(file.FullName);
                 }
                 catch (Exception)
                 {
-                    //Logger.Write(e.ToString());
+                    // Notting
                 }
             }
             await Task.Delay(200);
         }
-        
+
         private async static Task<string> DownloadServerVersion()
         {
             using (HttpClient client = new HttpClient())
@@ -144,7 +144,7 @@ namespace DraconiusGoGUI.Extensions
             var oldfiles = Directory.GetFiles(destFolder);
             foreach (var old in oldfiles)
             {
-                if (old.Contains("data.json.gz") || old.Contains("chromedriver.exe") || old.Contains("HashKeys.txt")) continue;
+                if (old.Contains("data.json.gz") || old.Contains("chromedriver.exe")) continue;
                 if (File.Exists(old + ".old")) continue;
                 File.Move(old, old + ".old");
             }

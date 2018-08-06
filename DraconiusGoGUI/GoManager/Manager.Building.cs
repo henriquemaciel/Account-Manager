@@ -10,8 +10,44 @@ namespace DraconiusGoGUI.DracoManager
 {
     public partial class Manager
     {
+        private async Task<MethodResult<FUpdate>> EnterInPortal(FBuilding Building)
+        {
+            try
+            {
+                FUpdate response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+
+                if (response == null)
+                    return new MethodResult<FUpdate>();
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                return new MethodResult<FUpdate>
+                {
+                    Data = response,
+                    Success = true,
+                    Message = "Success"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new MethodResult<FUpdate>
+                {
+                    Message = ex.Message
+                };
+            }
+        }
         private async Task<MethodResult> SearchBuilding(FBuilding Building)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             if (Building == null)
                 return new MethodResult();
 
@@ -19,16 +55,21 @@ namespace DraconiusGoGUI.DracoManager
             {
                 LogCaller(new LoggerEventArgs($"You bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
                 await RecycleFilteredItems();
-                return new MethodResult();
             }
 
-            int ExperienceAwarded = 0;
-
-            if (!_client.LoggedIn)
+            if (Stats.isEggBagFull)
             {
-                return new MethodResult();
+                LogCaller(new LoggerEventArgs($"You Egg bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
+                await RecycleFilteredItems();
             }
-            if (Building.pitstop!=null && Building.pitstop.cooldown)
+
+            if (Stats.isArtifactsBagFull)
+            {
+                LogCaller(new LoggerEventArgs($"You Artifacts bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
+                await RecycleFilteredItems();
+            }
+
+            if (Building.pitstop != null && Building.pitstop.cooldown)
             {
                 LogCaller(new LoggerEventArgs($"Building {Building.id} in cooldowm", LoggerTypes.Warning));
                 return new MethodResult();
@@ -41,14 +82,71 @@ namespace DraconiusGoGUI.DracoManager
             }
 
             FUpdate response = null;
+            int ExperienceAwarded = 0;
 
             try
             {
                 response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
+                UpdateInventory(InventoryRefresh.Items);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs($"Building {Building.id} fail" + ex, LoggerTypes.FatalError));
+                LogCaller(new LoggerEventArgs($"Building {Building.id} fail", LoggerTypes.Exception, ex));
+                if (_potentialBuildingBan)
+                {
+                    if (AccountState != AccountState.SoftBan)
+                    {
+                        LogCaller(new LoggerEventArgs("Building ban detected. Marking state", LoggerTypes.Warning));
+                    }
+
+                    AccountState = AccountState.SoftBan;
+                    var _loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
+                    var _xpqty = _loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
+                    if (_xpqty == 0)
+                    {
+                        if (!_potentialCreatureBan && _fleeingCreatureResponses >= _fleeingCreatureUntilBan)
+                        {
+                            LogCaller(new LoggerEventArgs("Potential Creature ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
+
+                            _potentialCreatureBan = true;
+                            _fleeingCreatureResponses = 0;
+                        }
+                        else if (_fleeingCreatureResponses >= _fleeingCreatureUntilBan)
+                        {
+                            //Already Building banned
+                            if (AccountState == AccountState.SoftBan)
+                            {
+                                _potentialCreatureBan = true;
+                                _potentialBuildingBan = true;
+                            }
+
+                            if (AccountState != AccountState.SoftBan)
+                            {
+                                //Only occurs when out of range is found
+                                if (_xpqty == 0)
+                                {
+                                    LogCaller(new LoggerEventArgs("Creature fleeing and failing to grab stops. Potential Creature & Building ban or daily limit reached.", LoggerTypes.Warning));
+                                }
+                                else
+                                {
+                                    LogCaller(new LoggerEventArgs("Creature fleeing, yet grabbing stops. Potential Creature ban or daily limit reached.", LoggerTypes.Warning));
+                                }
+                            }
+
+                            if (UserSettings.StopAtMinAccountState == AccountState.SoftBan)
+                            {
+                                LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                                Stop();
+                            }
+
+                            return new MethodResult
+                            {
+                                Message = "Bans detected",
+                            };
+                        }
+                    }
+                }
                 return new MethodResult();
             }
 
@@ -57,18 +155,25 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs($"Invalid response", LoggerTypes.Warning));
                 return new MethodResult();
             }
+
             var text = "Award Received: ";
             var loot = response.items.FirstOrDefault(x => x is FPickItemsResponse) as FPickItemsResponse;
-            foreach (var item in loot.loot.lootList.Where(x=> x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item)) {
-                    text += $"[{item.Sum(x=>x.qty)}] {Strings.GetItemName(item.Key)}, ";
+
+            foreach (var item in loot.loot.lootList.Where(x => x is FLootItemItem).GroupBy(y => (y as FLootItemItem).item))
+            {
+                text += $"[{item.Sum(x => x.qty)}] {Strings.GetItemName(item.Key)}, ";
             }
+
             var xpqty = loot.loot.lootList.Where(x => x is FLootItemExp).Sum(x => x.qty);
-            if (xpqty > 0) { 
+
+            if (xpqty > 0)
+            {
                 text += $"[{xpqty}] XP, ";
                 ExperienceAwarded = xpqty;
             }
 
             LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
+
             if (loot.levelUpLoot != null)
             {
                 text = "Level Up Award: ";
@@ -103,7 +208,6 @@ namespace DraconiusGoGUI.DracoManager
                 Success = true,
                 Message = "Success"
             };
-
 
             /*
             BuildingResponse = BuildingSearchResponse.Parser.ParseFrom(response);

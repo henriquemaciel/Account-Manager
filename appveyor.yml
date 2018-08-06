@@ -176,7 +176,7 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: '[README.md](https://github.com/Furtif/Account-Manager/blob/draco_manager/README.md)'
+    description: '[README.md](https://github.com/Account-Managers/Account-Manager/blob/draco_manager/README.md)'
     release: DraconiusGoGUI $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(auth_token)
     artifact: DraconiusGoGUI

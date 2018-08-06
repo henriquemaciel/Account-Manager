@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Linq;
+using DracoLib.Core.Utils;
 
 namespace DraconiusGoGUI.DracoManager
 {
@@ -13,6 +15,9 @@ namespace DraconiusGoGUI.DracoManager
     {
         public int CalculateDelay(int baseDelay, int offset)
         {
+            if (!UserSettings.EnableHumanization)
+                return 0;
+
             lock(_rand)
             {
                 int maxOffset = offset * 2;
@@ -28,42 +33,44 @@ namespace DraconiusGoGUI.DracoManager
 
         public MethodResult<AccountExportModel> GetAccountExport()
         {
-            /*
             if(Stats == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
-            if (!Items.Any()) {
+            if (Items.Count == 0) {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
-            if (!Pokedex.Any()) {
+            if (DracoDex.Count == 0) {
                 LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
             }
 
             var exportModel = new AccountExportModel()
             {
-                Level = Stats.Level,
+                Level = Stats.level,
                 Type = UserSettings.AuthType,
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
-                Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
-                Creature = Creature.Select(x => new CreatureDataExportModel(x, CalculateIVPerfection(x))).ToList(),
+                Pokedex = DracoDex.Select(x => new PokedexEntryExportModel(x)).ToList(),
+                Creature = Creatures.Select(x => new CreatureDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),
                 ExportTime = DateTime.Now
             };
-            */
+
             return new MethodResult<AccountExportModel>
             {
-                //Data = exportModel,
+                Data = exportModel,
                 Success = true
             };
         }
 
         private async Task<MethodResult<Dictionary<string, string/*CreatureId, CreatureSettings*/>>> GetItemTemplates()
         {
+            //remove warn
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
             /*
             if (PokeSettings != null && PokeSettings.Count != 0)
             {
@@ -302,7 +309,7 @@ namespace DraconiusGoGUI.DracoManager
                     userSettings.AccountName = String.Empty;
                     userSettings.Password = String.Empty;
                     userSettings.Username = String.Empty;
-                    userSettings.AutoFavoritShiny = true;
+                    userSettings.DeviceId = DracoUtils.GenerateDeviceId();
 
                     // gyms
                     userSettings.DefaultTeam = "Neutral";

@@ -18,9 +18,9 @@ namespace DraconiusGoGUI.DracoManager
         public byte[] LogHeaderSettings { get; set; }
         public AccountState AccountState { get; set; }
         public Settings UserSettings { get; set; }
-        public Tracker Tracker { get; set; }
-        public Scheduler AccountScheduler { get; set; }
-        public FAvaUpdate Stats { get; set; }
+        public Tracker Tracker { get; private set; }
+        public Scheduler AccountScheduler { get; private set; }
+        public FAvaUpdate Stats { get; private set; } = new FAvaUpdate();
         
         //[JsonIgnore]
         //public Dictionary<CreatureMove, MoveSettings> MoveSettings { get; private set; }
@@ -132,10 +132,10 @@ namespace DraconiusGoGUI.DracoManager
         public BotState State { get; set; }
 
         [JsonIgnore]
-        public FUserInfo PlayerData { get; set; }
+        public FUserInfo PlayerData { get; set; } = new FUserInfo();
 
         [JsonIgnore]
-        public FBagUpdate UserBag { get; set; }
+        public FBagUpdate UserBag { get; private set; } = new FBagUpdate();
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
@@ -144,13 +144,13 @@ namespace DraconiusGoGUI.DracoManager
         public List<FBagItem> Items { get; private set; } = new List<FBagItem>();
 
         [JsonIgnore]
-        public List<FUserCreature> Creature { get; private set; } = new List<FUserCreature>();
+        public List<FUserCreature> Creatures { get; private set; } = new List<FUserCreature>();
 
         [JsonIgnore]
-        public List<FCreadexEntry> Pokedex { get; private set; }  = new List<FCreadexEntry>();
+        public List<FCreadexEntry> DracoDex { get; private set; }  = new List<FCreadexEntry>();
 
-        //[JsonIgnore]
-        //public List<Candy> CreatureCandy { get; private set; } = new List<Candy>();
+        [JsonIgnore]
+        public Dictionary<CreatureType, int> CreatureCandy { get; private set; } = new Dictionary<CreatureType, int>();
 
         [JsonIgnore]
         public List<FIncubator> Incubators { get; private set; } = new List<FIncubator>();
@@ -212,8 +212,7 @@ namespace DraconiusGoGUI.DracoManager
 
         [JsonIgnore]
         public int Level
-        {
-            
+        {          
             get
             {
                 return Stats == null ? 0 : Stats.level;
@@ -230,7 +229,11 @@ namespace DraconiusGoGUI.DracoManager
         {
             get
             {
-                return Stats == null ? "Neutral" : UserSettings.DefaultTeam;
+                return Stats?.alliance.Value.ToString() ?? "Neutral";
+            }
+            set
+            {
+                UserSettings.DefaultTeam = value;
             }
         }
 
@@ -410,17 +413,40 @@ namespace DraconiusGoGUI.DracoManager
             }
         }
 
-        [JsonIgnore]
-        public bool LuckyEggActive
+        public DateTime UseCristaldateTime { get; set; } = DateTime.Now;
+
+        //[JsonIgnore]
+        public bool CristalActive
         {
             get
             {
                 if (_client.LoggedIn)
-                    return false;// _client.ClientSession.LuckyEggsUsed;
-                else
+                {
+                    if (UseCristaldateTime >= DateTime.Now)
+                        return true;
+
+                }
                     return false;
             }
         }
+
+        public DateTime UseDragonVisiondateTime { get; set; } = DateTime.Now;
+
+        //[JsonIgnore]
+        public bool DragonVisonActive
+        {
+            get
+            {
+                if (_client.LoggedIn)
+                {
+                    if (UseDragonVisiondateTime >= DateTime.Now)
+                        return true;
+
+                }
+                return false;
+            }
+        }
+
 
         private Stopwatch _runningStopwatch = new Stopwatch();
 

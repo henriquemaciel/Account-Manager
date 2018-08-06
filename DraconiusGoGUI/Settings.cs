@@ -31,11 +31,10 @@ namespace DraconiusGoGUI
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
 
-
-        public bool AutoFavoritShiny { get; set; }
+        public bool UseRoosts { get; set; }
         public bool UseIncense { get; set; }
-        public bool UseLuckEggConst { get; set; }
-        public int LevelForConstLukky { get; set; }
+        public bool UseCristalConst { get; set; }
+        public int LevelForConstCristal { get; set; }
         public string DefaultTeam { get; set; }
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
@@ -52,7 +51,7 @@ namespace DraconiusGoGUI
         public double MaxBuildingMeters { get; set; }
         public int MaxBuildingMetersRandom { get; set; }
         public int MaxTravelDistance { get; set; }
-        public bool UseLuckyEgg { get; set; }
+        public bool UseCristal { get; set; }
         public bool OpenChests { get; set; }
         public int MinCreatureBeforeEvolve { get; set; }
         public bool RecycleItems { get; set; }
@@ -69,7 +68,7 @@ namespace DraconiusGoGUI
         public double SearchBuildingBelowPercent { get; set; }
         public int CatchCreatureDayLimit { get; set; }
         public int SpinBuildingsDayLimit { get; set; }
-        public bool SnipeAllCreaturesNoInPokedex { get; set; }
+        public bool SnipeAllCreaturesNoInDracoDex { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
         public int SoftBanBypassTimes { get; set; }
@@ -103,22 +102,18 @@ namespace DraconiusGoGUI
         public int MaxFailBeforeReset { get; set; }
         public bool UseBerries { get; set; }
         public bool OnlyUnlimitedIncubator { get; set; }
-        public bool TransferSlashCreatures { get; set; }
         public bool ShuffleBuildings { get; set; }
-        public bool GetArBonus { get; set; }
-        public decimal ARBonusProximity { get; set; }
-        public decimal ARBonusAwareness { get; set; }
-        public bool CompleteTutorial { get; set; }
+        public bool UseDungeons { get; set; }
+        public bool UseDragonVisionConst { get; set; }
         public bool TransferAtOnce { get; set; }
         public bool ShowDebugLogs { get; set; }
-        public bool DownloadResources { get; set; }
-        public bool RequestBuildingDetails { get; set; }
+        public bool GetSpeedOfServer { get; set; }
+        public bool UseObelisks { get; set; }
         public int BallsToIgnoreStops { get; set; }
         public bool IgnoreStopsIfTooBalls { get; set; }
         public bool UseSoftBanBypass { get; set; }
         public string PGPoolEndpoint { get; set; }
         public bool EnablePGPool { get; set; }
-
 
         public AccountState StopAtMinAccountState { get; set; }
 
@@ -172,22 +167,25 @@ namespace DraconiusGoGUI
             EncounterWhileWalking = true;
             EnableHumanization = false;
             InsideReticuleChance = 100;
-            MinCreatureBeforeEvolve = 0;
+            MinCreatureBeforeEvolve = 1;
             StopAtMinAccountState = AccountState.Unknown;
             GeneralDelay = 200;
-            DelayBetweenPlayerActions = 200;
+            DelayBetweenPlayerActions = 800;
             DelayBetweenLocationUpdates = 1000;
-            GeneralDelay = 800;
-            MaxLogs = 400;
+            EnableHumanization = true;
+            GetSpeedOfServer = true;
+            MaxLogs = 1000;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
             SearchBuildingBelowPercent = 1000;
-            CatchCreatureDayLimit = 500;
-            SpinBuildingsDayLimit = 700;
+            CatchCreatureDayLimit = 700;
+            SpinBuildingsDayLimit = 1500;
             ForceEvolveAbovePercent = 1000;
             PercTransItems = 90;
             PercTransPoke = 40;
+            MaxLevel = 50;
             StopOnAPIUpdate = true;
+            UseRoosts = true;
             SpinGyms = false;
             Latitude = 40.764665;
             Longitude = -73.973184;
@@ -196,23 +194,23 @@ namespace DraconiusGoGUI
             TimeZone = "America/New_York";
             POSIX = "en-us";
             DisableCatchDelay = 3;
-            DownloadResources = false;
+            GetSpeedOfServer = true;
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
-            AutoFavoritShiny = true;
-            SnipeAllCreaturesNoInPokedex = false;
+            SnipeAllCreaturesNoInDracoDex = false;
             EncounterWhileWalking = true;
-            RequestBuildingDetails = false;
+            UseObelisks = false;
             BallsToIgnoreStops = 80;
             IgnoreStopsIfTooBalls = false;
-            MinCreatureBeforeEvolve = 1;
             UseSoftBanBypass = true;
             SoftBanBypassTimes = 40;
-            LevelForConstLukky = 9;
-            UseLuckEggConst = false;
-            UseLuckyEgg = true;
+            LevelForConstCristal = 9;
+            UseCristalConst = false;
+            UseDragonVisionConst = true;
+            UseCristal = true;
             UseIncense = true;
+            UseDungeons = false;
             OpenChests = true;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";

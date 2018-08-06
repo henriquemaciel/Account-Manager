@@ -13,5 +13,6 @@ namespace DraconiusGoGUI.Models
         public bool SPF { get; set; }
         public bool ShowWelcomeMessage { get; set; }
         public bool AutoUpdate { get; set; }
+        public bool MinimizeToTray { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DraconiusGoGUI.Enums;
 using DraconiusGoGUI.Extensions;
+using DraconiusGoGUI.Models;
 using DracoProtos.Core.Base;
 using DracoProtos.Core.Objects;
 using System;
@@ -13,8 +14,7 @@ namespace DraconiusGoGUI.DracoManager
     {
         private async Task<MethodResult> EvolveFilteredCreature()
         {
-            /*
-            MethodResult<List<CreatureData>> response = GetCreatureToEvolve();
+            MethodResult<List<FUserCreature>> response = GetCreatureToEvolve();
 
             if (response.Data.Count == 0)
             {
@@ -37,9 +37,9 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            if (UserSettings.UseLuckyEgg && !UserSettings.UseLuckEggConst)
+            if (UserSettings.UseCristal && !UserSettings.UseCristalConst)
             {
-                MethodResult result = await UseLuckyEgg();
+                MethodResult result = await UseCristal();
 
                 if (!result.Success)
                 {
@@ -56,13 +56,12 @@ namespace DraconiusGoGUI.DracoManager
                     Message = "Success"
                 };
             }
-            */
+
             return new MethodResult();
         }
 
         public async Task<MethodResult> EvolveCreature(IEnumerable<FUserCreature> CreatureToEvolve)
         {
-            /*
             //Shouldn't happen
             if (CreatureToEvolve.Count() < 1)
             {
@@ -71,7 +70,7 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult();
             }
 
-            foreach (CreatureData Creature in CreatureToEvolve)
+            foreach (FUserCreature Creature in CreatureToEvolve)
             {
                 if (Creature == null)
                 {
@@ -80,21 +79,21 @@ namespace DraconiusGoGUI.DracoManager
                     continue;
                 }
 
-                if (Creature.IsBad)
+                if (Creature.isArenaDefender || Creature.isLibraryDefender)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Creature {0} is slashed.", Creature.CreatureId), LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs(String.Format("Creature {0} is in library or arena.", Strings.GetCreatureName(Creature.name)), LoggerTypes.Warning));
                     //await TransferCreature(new List<CreatureData> { Creature });
                     continue;
                 }
 
                 if (!CanEvolveCreature(Creature))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be upgrated maybe is deployed Creature or you not have needed resources.", Creature.CreatureId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be evolued maybe is deployed Creature or you not have needed resources.", Strings.GetCreatureName(Creature.name)), LoggerTypes.Info));
                     continue;
                 }
 
-                CreatureSettings CreatureSettings = GetCreatureSetting((Creature).CreatureId).Data;
-                ItemId itemNeeded = CreatureSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault();
+                //CreatureSettings CreatureSettings = GetCreatureSetting((Creature).CreatureId).Data;
+                //ItemId itemNeeded = CreatureSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault();
 
                 if (!_client.LoggedIn)
                 {
@@ -106,63 +105,32 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.EvolveCreature,
-                    RequestMessage = new EvolveCreatureMessage
-                    {
-                        CreatureId = Creature.Id,
-                        EvolutionItemRequirement = itemNeeded
-                    }.ToByteString()
-                });
+                //TODO: evoleTo is allways same ... need review...
+                var totype = Creature.possibleEvolutions.Keys.FirstOrDefault();
+                var response = _client.DracoClient.Call(new UserCreatureService().EvolveCreature(Creature.id, totype));
 
                 if (response == null)
                     return new MethodResult();
 
-                EvolveCreatureResponse evolveCreatureResponse = EvolveCreatureResponse.Parser.ParseFrom(response);
-                switch (evolveCreatureResponse.Result)
-                {
-                    case EvolveCreatureResponse.Types.Result.Success:
-                        ExpIncrease(evolveCreatureResponse.ExperienceAwarded);
-                        //_expGained += evolveCreatureResponse.ExperienceAwarded;
+                int exp = response.loot.GetExp();
+                ExpIncrease(exp);
+                //_expGained += evolveCreatureResponse.ExperienceAwarded;
 
-                        LogCaller(new LoggerEventArgs(
-                                String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3} -> {4}. IV: {5:0.00}%",
-                                            Creature.CreatureId,
-                                            CreatureSettings.EvolutionBranch.Select(x => x.Evolution).FirstOrDefault(),
-                                            evolveCreatureResponse.ExperienceAwarded,
-                                            Creature.Cp,
-                                            evolveCreatureResponse.EvolvedCreatureData.Cp,
-                                            CalculateIVPerfection(evolveCreatureResponse.EvolvedCreatureData)),
-                                            LoggerTypes.Evolve));
+                LogCaller(new LoggerEventArgs(
+                        String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3}. IV: {4:0.00}%",
+                                    Strings.GetCreatureName(Creature.name),
+                                    Strings.GetCreatureName(totype),
+                                    exp,
+                                    Creature.cp,
+                                    CalculateIVPerfection(Creature)),
+                                    LoggerTypes.Evolve));
 
-                        UpdateInventory(InventoryRefresh.Creature);
-                        UpdateInventory(InventoryRefresh.CreatureCandy);
+                UpdateInventory(InventoryRefresh.Creature);
+                UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                        continue;
-                    case EvolveCreatureResponse.Types.Result.FailedInsufficientResources:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Warning));
-                        continue;
-                    case EvolveCreatureResponse.Types.Result.FailedInvalidItemRequirement:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Invalid Item Requirement", LoggerTypes.Warning));
-                        continue;
-                    case EvolveCreatureResponse.Types.Result.FailedCreatureCannotEvolve:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Creature Cannot Evolve", LoggerTypes.Warning));
-                        continue;
-                    case EvolveCreatureResponse.Types.Result.FailedCreatureIsDeployed:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Creature IsDeployed", LoggerTypes.Warning));
-                        continue;
-                    case EvolveCreatureResponse.Types.Result.FailedCreatureMissing:
-                        LogCaller(new LoggerEventArgs("Evolve request failed: Failed Creature Missing", LoggerTypes.Warning));
-                        continue;
-                    case EvolveCreatureResponse.Types.Result.Unset:
-                        LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Warning));
-                        continue;
-                }
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
-            */
+
             return new MethodResult
             {
                 Success = true
@@ -171,6 +139,8 @@ namespace DraconiusGoGUI.DracoManager
 
         private async Task<MethodResult<int>> GetEvolutionCandy(CreatureType CreatureId)
         {
+            //remove warn
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             /*
             if (PokeSettings == null)
             {
@@ -204,24 +174,23 @@ namespace DraconiusGoGUI.DracoManager
 
         private MethodResult<List<FUserCreature>> GetCreatureToEvolve()
         {
-            /*
             if (!UserSettings.EvolveCreature)
             {
                 LogCaller(new LoggerEventArgs("Evolving disabled", LoggerTypes.Info));
 
-                return new MethodResult<List<CreatureData>>
+                return new MethodResult<List<FUserCreature>>
                 {
-                    Data = new List<CreatureData>(),
+                    Data = new List<FUserCreature>(),
                     Message = "Evolving disabled",
                     Success = true
                 };
             }
 
-            var CreatureToEvolve = new List<CreatureData>();
+            var CreatureToEvolve = new List<FUserCreature>();
 
-            IEnumerable<IGrouping<CreatureId, CreatureData>> groupedCreature = Creature.OrderByDescending(x => x.CreatureId).GroupBy(x => x.CreatureId);
+            IEnumerable<IGrouping<CreatureType, FUserCreature>> groupedCreature = Creatures.OrderByDescending(x => x.name).GroupBy(x => x.name);
 
-            foreach (IGrouping<CreatureId, CreatureData> group in groupedCreature)
+            foreach (IGrouping<CreatureType, FUserCreature> group in groupedCreature)
             {
                 EvolveSetting evolveSetting = UserSettings.EvolveSettings.FirstOrDefault(x => x.Id == group.Key);
 
@@ -237,25 +206,27 @@ namespace DraconiusGoGUI.DracoManager
                     //Don't evolve
                     continue;
                 }
-                CreatureSettings setting;
+                
+                var setting = Creatures.FirstOrDefault().possibleEvolutions.Keys.FirstOrDefault();
+                /*
                 if (!PokeSettings.TryGetValue(group.Key, out setting))
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for Creature {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
-
-                Candy CreatureCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
-                List<CreatureData> CreatureGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
-
+                */
+                //Candy CreatureCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+                List<FUserCreature> CreatureGroupToEvolve = group.Where(x => x.cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
+                /*
                 if (CreatureCandy == null)
                 {
                     LogCaller(new LoggerEventArgs(String.Format("No candy found for Creature {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
-
-                int candyToEvolve = setting.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
+                */
+                int candyToEvolve = Creatures.FirstOrDefault().improveCandiesCost;
 
                 if (candyToEvolve == 0)
                 {
@@ -265,53 +236,32 @@ namespace DraconiusGoGUI.DracoManager
                 }
 
                 int totalCreature = CreatureGroupToEvolve.Count;
-                int totalCandy = CreatureCandy.Candy_;
+                int totalCandy = Creatures.FirstOrDefault().GetCandyCount(Stats);
 
                 int maxCreature = totalCandy / candyToEvolve;
 
-                foreach (CreatureData pData in CreatureGroupToEvolve.Take(maxCreature))
+                foreach (FUserCreature pData in CreatureGroupToEvolve.Take(maxCreature))
                 {
-                    if (!CanTransferOrEvoleCreature(pData, true))
-                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be transfered maybe is a favorit, is deployed or is a buddy Creature.", pData.CreatureId), LoggerTypes.Info));
+                    if (!CanEvoleCreature(pData))
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be evolued maybe is a favorit, is deployed or is a buddy Creature.", Strings.GetCreatureName(pData.name)), LoggerTypes.Info));
+                        continue;
+                    }
                     else
                         CreatureToEvolve.Add(pData);
                 }
             }
-            */
 
             return new MethodResult<List<FUserCreature>>
             {
-                //Data = CreatureToEvolve,
+                Data = CreatureToEvolve,
                 Message = "Success",
                 Success = true
             };
         }
 
-        private async Task<MethodResult> UseLuckyEgg()
+        private async Task<MethodResult> UseCristal()
         {
-            /*
-            if (UsedAlready)
-            {
-                return new MethodResult
-                {
-                    Message = "Lucky egg already active"
-                };
-            }
-            */
-            return new MethodResult { Message = Strings.GetItemName(ItemType.EXPERIENCE_BOOSTER) + " Not released yet" };
-
-            var data = Items.FirstOrDefault(x => x.type == ItemType.EXPERIENCE_BOOSTER);
-
-            if (data == null || data.count == 0)
-            {
-                LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Message = "No lucky eggs"
-                };
-            }
-
             if (!_client.LoggedIn)
             {
                 MethodResult result = await AcLogin();
@@ -322,12 +272,29 @@ namespace DraconiusGoGUI.DracoManager
                 }
             }
 
+            if (CristalActive)
+            {
+                return new MethodResult
+                {
+                    Message = "Cristak already active",
+                    Success = true                    
+                };
+            }
+
+            var data = Items.FirstOrDefault(x => x.type == ItemType.EXPERIENCE_BOOSTER);
+
+            if (data == null || data.count == 0)
+            {
+                return new MethodResult();
+            }
+
             var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
  
             if (response == null)
                 return new MethodResult();
 
-            LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
+            LogCaller(new LoggerEventArgs(String.Format("Cristal used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
+            UseCristaldateTime = DateTime.Now.AddMinutes(30);
 
             return new MethodResult
             {
@@ -337,28 +304,26 @@ namespace DraconiusGoGUI.DracoManager
 
         public double FilledCreatureInventorySpace()
         {
-            if (Creature == null || PlayerData == null)
+            if (Creatures == null || PlayerData == null)
             {
                 return 0;
             }
 
-            return (double)(Creature.Count) / Stats.creatureStorageSize * 100;
+            return (double)(Creatures.Count) / Stats.creatureStorageSize * 100;
         }
 
         private bool CanEvolveCreature(FUserCreature Creature)
         {
-            /*
+            
             // Can't evolve Creature in gyms.
-            if (!string.IsNullOrEmpty(Creature.DeployedBuildingId))
+            if (Creature.isArenaDefender || Creature.isLibraryDefender)
                 return false;
-
-            var settings = PokeSettings.SingleOrDefault(x => x.Value.CreatureId == Creature.CreatureId);
 
             // Can't evolve Creature that are not evolvable.
-            if (settings.Value.EvolutionIds.Count == 0 && settings.Value.EvolutionBranch.Count == 0)
+            if (Creature.possibleEvolutions.Count == 0)
                 return false;
 
-            int familyCandy = CreatureCandy.FirstOrDefault(x => x.FamilyId == settings.Value.FamilyId).Candy_;
+            /*int familyCandy = CreatureCandy.FirstOrDefault(x => x.Key == Creature.candyType).Value;
 
             bool canEvolve = false;
             // Check requirements for all branches, if we meet the requirements for any of them then we return true.
@@ -381,7 +346,7 @@ namespace DraconiusGoGUI.DracoManager
                 canEvolve = true;
             }
             */
-            return false;// canEvolve;
+            return true;// canEvolve;
         }
     }
 }

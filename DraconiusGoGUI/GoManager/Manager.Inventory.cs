@@ -79,7 +79,7 @@ namespace DraconiusGoGUI.DracoManager
         */
         private IEnumerable<FBagItem> GetItemsData()
         {
-            UserBag = _client.DracoClient.Inventory.GetUserItems();
+            UserBag = _client.DracoClient.Inventory.GetUserItems() ;
             return UserBag.items;
         }
         /*
@@ -96,15 +96,14 @@ namespace DraconiusGoGUI.DracoManager
         */
         private int GetItemsCount()
         {
-            return _client.DracoClient.Inventory.GetUserItems().items.Count();
+            return UserBag?.items.Count() == 0 ? 0 : UserBag.items.Count();
         }
-        /*
-        private PlayerStats GetPlayerStats()
+        
+        private FAvaUpdate GetPlayerStats()
         {
-            return InventoryItems.Select(i => i.Value.InventoryItemData?.PlayerStats)
-                .Where(i => i != null).FirstOrDefault();
+            return Stats;
         }
-        */
+        
         private IEnumerable<FIncubator> GetIncubators()
         {
             return _client.DracoClient.Eggs.GetHatchingInfo().incubators;
@@ -119,15 +118,13 @@ namespace DraconiusGoGUI.DracoManager
         {
             return _client.DracoClient.Inventory.GetUserCreatures().userCreatures;
         }
-        /*
-        private IEnumerable<Candy> GetCandies()
+
+        private Dictionary<CreatureType, int> GetCandies()
         {
-            return InventoryItems
-                .Select(kvp => kvp.Value.InventoryItemData?.Candy)
-                .Where(p => p != null && p.FamilyId > 0);
+            return Stats?.candies;
         }
-        */
-        private IEnumerable<FCreadexEntry> GetPokedex()
+
+        private IEnumerable<FCreadexEntry> GetDracoDex()
         {
             return _client.DracoClient.Inventory.GetCreadex().entries;
         }
@@ -209,41 +206,38 @@ namespace DraconiusGoGUI.DracoManager
 
             try
             {
-                //foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
-                //    AddRemoveOrUpdateItem(item);
-
                 switch (type)
                 {
                     case InventoryRefresh.All:
                         Items.Clear();
-                        Creature.Clear();
-                        Pokedex.Clear();
-                        //CreatureCandy.Clear();
+                        Creatures.Clear();
+                        DracoDex.Clear();
+                        CreatureCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
-                        //Stats = GetPlayerStats();
+                        Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
-                        Pokedex = GetPokedex().ToList();
-                        //CreatureCandy = GetCandies().ToList();
+                        DracoDex = GetDracoDex().ToList();
+                        CreatureCandy = GetCandies();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
-                        Creature = GetCreatures().ToList();
+                        Creatures = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Items:
                         Items.Clear();
                         Items = GetItemsData().ToList();
                         break;
                     case InventoryRefresh.Creature:
-                        Creature.Clear();
-                        Creature = GetCreatures().ToList();
+                        Creatures.Clear();
+                        Creatures = GetCreatures().ToList();
                         break;
                     case InventoryRefresh.Pokedex:
-                        Pokedex.Clear();
-                        Pokedex = GetPokedex().ToList();
+                        DracoDex.Clear();
+                        DracoDex = GetDracoDex().ToList();
                         break;
                     case InventoryRefresh.CreatureCandy:
-                        //CreatureCandy.Clear();
-                        //CreatureCandy = GetCandies().ToList();
+                        CreatureCandy.Clear();
+                        CreatureCandy = GetCandies();
                         break;
                     case InventoryRefresh.Incubators:
                         Incubators.Clear();
@@ -254,7 +248,7 @@ namespace DraconiusGoGUI.DracoManager
                         Eggs = GetEggs().ToList();
                         break;
                     case InventoryRefresh.Stats:
-                        //Stats = GetPlayerStats();
+                        Stats = GetPlayerStats();
                         break;
                 }
             }
@@ -332,8 +326,9 @@ namespace DraconiusGoGUI.DracoManager
                     Success = true
                 };
             }
-            catch
+            catch (Exception ex)
             {
+                LogCaller(new LoggerEventArgs(String.Format("Fail to Delete item."), LoggerTypes.Exception, ex));
                 return new MethodResult();
             }
         }
@@ -369,6 +364,48 @@ namespace DraconiusGoGUI.DracoManager
                 };
             }
             return new MethodResult();
+        }
+
+        private async Task<MethodResult> UseDragonVision()
+        {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
+            if (DragonVisonActive)
+            {
+                return new MethodResult
+                {
+                    Message = "Dragon Vision already active",
+                    Success = true
+                };
+            }
+
+            var data = Items.FirstOrDefault(x => x.type == ItemType.SUPER_VISION);
+
+            if (data == null || data.count == 0)
+            {
+                return new MethodResult();
+            }
+
+            var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
+
+            if (response == null)
+                return new MethodResult();
+
+            LogCaller(new LoggerEventArgs(String.Format("Dragon Vision used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
+            UseDragonVisiondateTime = DateTime.Now.AddMinutes(30);
+
+            return new MethodResult
+            {
+                Success = true
+            };
         }
 
         private async Task<MethodResult> UseIncense(ItemType item = ItemType.INCENSE)
@@ -432,12 +469,12 @@ namespace DraconiusGoGUI.DracoManager
 
         public double FilledCreatureStorage()
         {
-            if (Creature == null || Stats == null)
+            if (Creatures == null || Stats == null)
             {
                 return 100;
             }
 
-            return (double)(Creature.Count /*+ Eggs.Count*/) / Stats.creatureStorageSize * 100;
+            return (double)(Creatures.Count /*+ Eggs.Count*/) / Stats.creatureStorageSize * 100;
         }
     }
 }

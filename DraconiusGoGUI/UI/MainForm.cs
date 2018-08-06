@@ -32,6 +32,7 @@ namespace DraconiusGoGUI
         private bool _spf = false;
         private bool _showStartup = true;
         private bool _autoupdate = true;
+        private bool _minimizeToTray = true;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Based on Account Manager";
         private static string[] _args;
@@ -159,26 +160,18 @@ namespace DraconiusGoGUI
                     //
                 }
             }
-            //else 
-            // 
+
             await LoadSettings();
-            //
-            /*
+
             if (_autoupdate)
             {
                 bool IsLatest = await VersionCheckState.IsLatest();
                 if (!IsLatest)
                     await VersionCheckState.Execute();
-            }
-            
+            }         
 
             await VersionCheckState.CleanupOldFiles();
-            */
-            //TODO: need review
-            //var plugins = new PluginsEx();
-
-            //await plugins.LoadPlugins();
-
+ 
             if (_showStartup)
             {
                 var startForm = new StartupForm
@@ -211,15 +204,19 @@ namespace DraconiusGoGUI
         {
             Trayicon.Visible = false;
             Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-            if (FormWindowState.Minimized == this.WindowState)
+
+            if (_minimizeToTray)
             {
-                Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
-                Trayicon.BalloonTipTitle = $"Account Manager is minimized";
-                Trayicon.BalloonTipText = "Click on this icon to restore";
-                Trayicon.Text = $"Account Manager, Click here to restore";
-                Trayicon.Visible = true;
-                Trayicon.ShowBalloonTip(5000);
-                Hide();
+                if (FormWindowState.Minimized == this.WindowState)
+                {
+                    Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
+                    Trayicon.BalloonTipTitle = $"Account Manager is minimized";
+                    Trayicon.BalloonTipText = "Click on this icon to restore";
+                    Trayicon.Text = $"Account Manager, Click here to restore";
+                    Trayicon.Visible = true;
+                    Trayicon.ShowBalloonTip(5000);
+                    Hide();
+                }
             }
         }
 
@@ -255,6 +252,7 @@ namespace DraconiusGoGUI
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 _autoupdate = model.AutoUpdate;
+                _minimizeToTray = model.MinimizeToTray;
 
                 foreach (Manager manager in tempManagers)
                 {
@@ -305,6 +303,7 @@ namespace DraconiusGoGUI
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup,
                     AutoUpdate = _autoupdate,
+                    MinimizeToTray = _minimizeToTray
                 };
 
                 string data = Serializer.ToJson(model);
@@ -351,12 +350,14 @@ namespace DraconiusGoGUI
 
             var asForm = new AccountSettingsForm(manager)
             {
-                AutoUpdate = _autoupdate
+                AutoUpdate = _autoupdate,
+                MinimizeToTray = _minimizeToTray
             };
 
             if (asForm.ShowDialog() == DialogResult.OK)
             {
                 _autoupdate = asForm.AutoUpdate;
+                _minimizeToTray = asForm.MinimizeToTray;              
                 AddManager(manager);
             }
 
@@ -422,12 +423,14 @@ namespace DraconiusGoGUI
             {
                 var asForm = new AccountSettingsForm(manager)
                 {
-                    AutoUpdate = _autoupdate
+                    AutoUpdate = _autoupdate,
+                    MinimizeToTray = _minimizeToTray
                 };
 
                 if (asForm.ShowDialog() == DialogResult.OK)
                 {
                     _autoupdate = asForm.AutoUpdate;
+                    _minimizeToTray = asForm.MinimizeToTray;
                 }
             }
 
@@ -607,7 +610,7 @@ namespace DraconiusGoGUI
             newAccount.UserSettings.Password = password.Trim();
 
             newAccount.UserSettings.AuthType = AuthType.DEVICE;
-            newAccount.UserSettings.MaxLevel = 30;
+            newAccount.UserSettings.MaxLevel = 50;
             newAccount.Level = 0;
             newAccount.ExpGained = 0;
             newAccount.BuildingsFarmed = 0;
@@ -837,9 +840,17 @@ namespace DraconiusGoGUI
             }
             else if (e.Column == olvColumnUsername)
             {
-                if (manager.LuckyEggActive)
+                if (manager.CristalActive && !manager.DragonVisonActive)
                 {
                     e.SubItem.ForeColor = Color.Gold;
+                }
+                if (manager.DragonVisonActive && manager.CristalActive)
+                {
+                    e.SubItem.ForeColor = Color.Magenta;
+                }
+                if (manager.DragonVisonActive && !manager.CristalActive)
+                {
+                    e.SubItem.ForeColor = Color.Blue;
                 }
             }
             else if (e.Column == olvColumnExpPerHour)
@@ -1254,11 +1265,11 @@ namespace DraconiusGoGUI
 
         #region Fast Settings
 
-        private void ClaimLevelUpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenChestsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.OpenChests = !claimLevelUpToolStripMenuItem.Checked;
+                manager.UserSettings.OpenChests = !OpenChestsToolStripMenuItem.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1367,11 +1378,11 @@ namespace DraconiusGoGUI
             enableEvolveToolStripMenuItem1.Checked = manager.UserSettings.EvolveCreature;
             enableRecycleToolStripMenuItem4.Checked = manager.UserSettings.RecycleItems;
             enableIncubateEggsToolStripMenuItem5.Checked = manager.UserSettings.IncubateEggs;
-            enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseLuckyEgg;
+            enableCristalsToolStripMenuItem6.Checked = manager.UserSettings.UseCristal;
             enableCatchCreatureToolStripMenuItem2.Checked = manager.UserSettings.CatchCreature;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
-            claimLevelUpToolStripMenuItem.Checked = manager.UserSettings.OpenChests;
+            OpenChestsToolStripMenuItem.Checked = manager.UserSettings.OpenChests;
 
             //Remove all
             schedulerToolStripMenuItem.DropDownItems.Clear();
@@ -1461,11 +1472,11 @@ namespace DraconiusGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void EnableLuckyEggsToolStripMenuItem6_Click(object sender, EventArgs e)
+        private void EnableCristalsToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.UseLuckyEgg = !enableLuckyEggsToolStripMenuItem6.Checked;
+                manager.UserSettings.UseCristal = !enableCristalsToolStripMenuItem6.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -2221,7 +2232,7 @@ namespace DraconiusGoGUI
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
                     manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
 
-                    manager.UserSettings.MaxLevel = 30;
+                    manager.UserSettings.MaxLevel = 50;
                     if (parts.Length > 3)
                         manager.UserSettings.MaxLevel = int.Parse(parts[4]);
 

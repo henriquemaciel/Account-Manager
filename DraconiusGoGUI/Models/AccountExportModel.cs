@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using DracoProtos.Core.Base;
+using DracoProtos.Core.Objects;
 
 namespace DraconiusGoGUI.Models
 {
@@ -39,19 +40,17 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("timesEncountered")]
-        public int TimesEncountered { get; set; }
+        public bool TimesEncountered { get; set; }
         [JsonProperty("timesCaught")]
         public int TimesCaught { get; set; }
 
-        /*
-        public PokedexEntryExportModel(PokedexEntry entry)
+        public PokedexEntryExportModel(FCreadexEntry entry)
         {
-            Id = (int)entry.CreatureId;
-            Name = entry.CreatureId.ToString();
-            TimesEncountered = entry.TimesEncountered;
-            TimesCaught = entry.TimesCaptured;
+            Id = (int)entry.name;
+            Name = entry.name.ToString();
+            TimesEncountered = entry.seen;
+            TimesCaught = entry.caughtQuantity;
         }
-        */
     }
 
     public class ItemDataExportModel
@@ -61,13 +60,11 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("count")]
         public int Count { get; set; }
 
-        /*
-        public ItemDataExportModel(ItemData itemData)
+        public ItemDataExportModel(FBagItem itemData)
         {
-            ItemName = itemData.ItemId.ToString().Replace("Item", "");
-            Count = itemData.Count;
+            ItemName = itemData.type.ToString();
+            Count = itemData.count;
         }
-        */
     }
 
     public class CreatureDataExportModel
@@ -81,15 +78,13 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("iv")]
         public double IV { get; set; }
 
-        /*
-        public CreatureDataExportModel(CreatureData Creature, double iv)
+        public CreatureDataExportModel(FUserCreature Creature, double iv)
         {
-            PokedexEntry = (int)Creature.CreatureId;
-            CreatureName = Creature.CreatureId.ToString();
-            CP = Creature.Cp;
+            PokedexEntry = (int)Creature.name;
+            CreatureName = Creature.name.ToString();
+            CP = Creature.cp;
             IV = iv;
         }
-        */
     }
 
     public class EggDataExportModel
@@ -97,14 +92,12 @@ namespace DraconiusGoGUI.Models
         [JsonProperty("targetDistance")]
         public double TargetDistance { get; set; }
         [JsonProperty("id")]
-        public ulong Id { get; set; }
+        public string Id { get; set; }
 
-        /*
-        public EggDataExportModel(CreatureData Creature)
+        public EggDataExportModel(FEgg Creature)
         {
-            TargetDistance = Creature.EggKmWalkedTarget;
-            Id = Creature.Id;
+            TargetDistance = Creature.passedDistance;
+            Id = Creature.id;
         }
-        */
     }
 }
