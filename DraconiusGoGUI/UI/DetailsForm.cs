@@ -65,10 +65,7 @@ namespace DraconiusGoGUI.UI
 
             olvColumnCreatureId.AspectGetter = (Creature) => (Creature as FUserCreature).id;
 
-            olvColumnCreatureCandy.AspectGetter = delegate (object Creature)
-            {
-                return (Creature as FUserCreature).GetCandyCount(_manager.Stats);
-            };
+            olvColumnCreatureCandy.AspectGetter = (Creature) => (Creature as FUserCreature).GetCandyCount(_manager.Stats);
 
             olvColumnCreatureName.AspectGetter = delegate (object Creature)
             {

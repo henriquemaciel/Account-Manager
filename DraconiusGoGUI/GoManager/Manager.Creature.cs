@@ -209,10 +209,6 @@ namespace DraconiusGoGUI.DracoManager
                         CreatureToTransfer.AddRange(GetCreatureBelowCP(group, settings.MinCP));
                         CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.id).ToList();
                         break;
-                    case TransferType.Slashed:
-                        //CreatureToTransfer.AddRange(group.ToList());
-                        //CreatureToTransfer = CreatureToTransfer.DistinctBy(x => x.IsDead).ToList();
-                        break;
                 }
             }
             
