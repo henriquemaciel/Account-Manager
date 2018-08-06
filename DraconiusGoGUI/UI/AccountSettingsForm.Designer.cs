@@ -67,7 +67,7 @@
             this.checkBoxTooBalls = new System.Windows.Forms.CheckBox();
             this.numericUpDownTooBalls = new System.Windows.Forms.NumericUpDown();
             this.label54 = new System.Windows.Forms.Label();
-            this.checkBoxSniperNoInPokedex = new System.Windows.Forms.CheckBox();
+            this.checkBoxSniperNoInDracoDex = new System.Windows.Forms.CheckBox();
             this.checkBoxUpgradeCreatures = new System.Windows.Forms.CheckBox();
             this.checkBoxUseObelisks = new System.Windows.Forms.CheckBox();
             this.cbUseIncense = new System.Windows.Forms.CheckBox();
@@ -475,9 +475,6 @@
             // 
             // tabPageActions
             // 
-            this.tabPageActions.Controls.Add(this.label58);
-            this.tabPageActions.Controls.Add(this.numericUpDownSoftBypass);
-            this.tabPageActions.Controls.Add(this.checkBoxSoftBypass);
             this.tabPageActions.Controls.Add(this.textBoxPercTransItems);
             this.tabPageActions.Controls.Add(this.textBoxPercTransPoke);
             this.tabPageActions.Controls.Add(this.textBoxMaxLevel);
@@ -503,7 +500,6 @@
             this.tabPageActions.Controls.Add(this.checkBoxEnableBattles);
             this.tabPageActions.Controls.Add(this.checkBoxSpinGyms);
             this.tabPageActions.Controls.Add(this.checkBoxStopOnAPIUpdate);
-            this.tabPageActions.Controls.Add(this.checkBoxOpenChests);
             this.tabPageActions.Location = new System.Drawing.Point(4, 25);
             this.tabPageActions.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Name = "tabPageActions";
@@ -516,7 +512,7 @@
             // label58
             // 
             this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(560, 351);
+            this.label58.Location = new System.Drawing.Point(251, 227);
             this.label58.Name = "label58";
             this.label58.Size = new System.Drawing.Size(41, 17);
             this.label58.TabIndex = 89;
@@ -525,7 +521,7 @@
             // numericUpDownSoftBypass
             // 
             this.numericUpDownSoftBypass.Enabled = false;
-            this.numericUpDownSoftBypass.Location = new System.Drawing.Point(497, 350);
+            this.numericUpDownSoftBypass.Location = new System.Drawing.Point(180, 225);
             this.numericUpDownSoftBypass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numericUpDownSoftBypass.Maximum = new decimal(new int[] {
             40,
@@ -540,7 +536,7 @@
             // 
             this.checkBoxSoftBypass.AutoSize = true;
             this.checkBoxSoftBypass.Enabled = false;
-            this.checkBoxSoftBypass.Location = new System.Drawing.Point(332, 350);
+            this.checkBoxSoftBypass.Location = new System.Drawing.Point(15, 226);
             this.checkBoxSoftBypass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxSoftBypass.Name = "checkBoxSoftBypass";
             this.checkBoxSoftBypass.Size = new System.Drawing.Size(159, 21);
@@ -670,13 +666,16 @@
             // 
             // groupBoxPlayerActions
             // 
+            this.groupBoxPlayerActions.Controls.Add(this.label58);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseRoosts);
+            this.groupBoxPlayerActions.Controls.Add(this.numericUpDownSoftBypass);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownLvForConsLukky);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxSoftBypass);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseLuckEggConst);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxTooBalls);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownTooBalls);
             this.groupBoxPlayerActions.Controls.Add(this.label54);
-            this.groupBoxPlayerActions.Controls.Add(this.checkBoxSniperNoInPokedex);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxSniperNoInDracoDex);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUpgradeCreatures);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseObelisks);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseIncense);
@@ -698,6 +697,7 @@
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxRecycle);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseCristals);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxIncubateEggs);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxOpenChests);
             this.groupBoxPlayerActions.Controls.Add(this.textBoxCreatureBeforeEvolve);
             this.groupBoxPlayerActions.Controls.Add(this.label46);
             this.groupBoxPlayerActions.Location = new System.Drawing.Point(8, 11);
@@ -786,16 +786,16 @@
             this.label54.TabIndex = 83;
             this.label54.Text = "balls";
             // 
-            // checkBoxSniperNoInPokedex
+            // checkBoxSniperNoInDracoDex
             // 
-            this.checkBoxSniperNoInPokedex.AutoSize = true;
-            this.checkBoxSniperNoInPokedex.Location = new System.Drawing.Point(5, 380);
-            this.checkBoxSniperNoInPokedex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxSniperNoInPokedex.Name = "checkBoxSniperNoInPokedex";
-            this.checkBoxSniperNoInPokedex.Size = new System.Drawing.Size(242, 21);
-            this.checkBoxSniperNoInPokedex.TabIndex = 82;
-            this.checkBoxSniperNoInPokedex.Text = "Snipe all Creatures no in pokedex";
-            this.checkBoxSniperNoInPokedex.UseVisualStyleBackColor = true;
+            this.checkBoxSniperNoInDracoDex.AutoSize = true;
+            this.checkBoxSniperNoInDracoDex.Location = new System.Drawing.Point(5, 380);
+            this.checkBoxSniperNoInDracoDex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxSniperNoInDracoDex.Name = "checkBoxSniperNoInDracoDex";
+            this.checkBoxSniperNoInDracoDex.Size = new System.Drawing.Size(247, 21);
+            this.checkBoxSniperNoInDracoDex.TabIndex = 82;
+            this.checkBoxSniperNoInDracoDex.Text = "Snipe all Creatures no in dracodex";
+            this.checkBoxSniperNoInDracoDex.UseVisualStyleBackColor = true;
             // 
             // checkBoxUpgradeCreatures
             // 
@@ -811,7 +811,7 @@
             // checkBoxUseObelisks
             // 
             this.checkBoxUseObelisks.AutoSize = true;
-            this.checkBoxUseObelisks.Location = new System.Drawing.Point(197, 201);
+            this.checkBoxUseObelisks.Location = new System.Drawing.Point(197, 151);
             this.checkBoxUseObelisks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseObelisks.Name = "checkBoxUseObelisks";
             this.checkBoxUseObelisks.Size = new System.Drawing.Size(87, 21);
@@ -912,9 +912,9 @@
             this.checkBoxUseDragonVisionConst.Location = new System.Drawing.Point(15, 201);
             this.checkBoxUseDragonVisionConst.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseDragonVisionConst.Name = "checkBoxUseDragonVisionConst";
-            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(185, 21);
+            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(159, 21);
             this.checkBoxUseDragonVisionConst.TabIndex = 74;
-            this.checkBoxUseDragonVisionConst.Text = "DragonVision Constantly";
+            this.checkBoxUseDragonVisionConst.Text = "DragonVision Const.";
             this.checkBoxUseDragonVisionConst.UseVisualStyleBackColor = true;
             // 
             // numericUpDownForceEvolveAbove
@@ -956,9 +956,9 @@
             this.checkBoxOnlyUnlimitedIncubator.Location = new System.Drawing.Point(15, 151);
             this.checkBoxOnlyUnlimitedIncubator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxOnlyUnlimitedIncubator.Name = "checkBoxOnlyUnlimitedIncubator";
-            this.checkBoxOnlyUnlimitedIncubator.Size = new System.Drawing.Size(213, 21);
+            this.checkBoxOnlyUnlimitedIncubator.Size = new System.Drawing.Size(184, 21);
             this.checkBoxOnlyUnlimitedIncubator.TabIndex = 71;
-            this.checkBoxOnlyUnlimitedIncubator.Text = "Use Unlimited Incubator Only";
+            this.checkBoxOnlyUnlimitedIncubator.Text = "Unlimited Incubator Only";
             this.checkBoxOnlyUnlimitedIncubator.UseVisualStyleBackColor = true;
             // 
             // checkBoxEvolve
@@ -1178,7 +1178,7 @@
             // checkBoxOpenChests
             // 
             this.checkBoxOpenChests.AutoSize = true;
-            this.checkBoxOpenChests.Location = new System.Drawing.Point(332, 299);
+            this.checkBoxOpenChests.Location = new System.Drawing.Point(197, 201);
             this.checkBoxOpenChests.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxOpenChests.Name = "checkBoxOpenChests";
             this.checkBoxOpenChests.Size = new System.Drawing.Size(112, 21);
@@ -2687,7 +2687,7 @@
         private System.Windows.Forms.CheckBox checkBoxTooBalls;
         private System.Windows.Forms.NumericUpDown numericUpDownTooBalls;
         private System.Windows.Forms.Label label54;
-        private System.Windows.Forms.CheckBox checkBoxSniperNoInPokedex;
+        private System.Windows.Forms.CheckBox checkBoxSniperNoInDracoDex;
         private System.Windows.Forms.CheckBox checkBoxUpgradeCreatures;
         private System.Windows.Forms.CheckBox cbUseIncense;
         private System.Windows.Forms.NumericUpDown numericUpDownDisableCatchDelay;

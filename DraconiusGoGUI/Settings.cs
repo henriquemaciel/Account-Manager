@@ -68,7 +68,7 @@ namespace DraconiusGoGUI
         public double SearchBuildingBelowPercent { get; set; }
         public int CatchCreatureDayLimit { get; set; }
         public int SpinBuildingsDayLimit { get; set; }
-        public bool SnipeAllCreaturesNoInPokedex { get; set; }
+        public bool SnipeAllCreaturesNoInDracoDex { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
         public int SoftBanBypassTimes { get; set; }
@@ -198,7 +198,7 @@ namespace DraconiusGoGUI
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
-            SnipeAllCreaturesNoInPokedex = false;
+            SnipeAllCreaturesNoInDracoDex = false;
             EncounterWhileWalking = true;
             UseObelisks = false;
             BallsToIgnoreStops = 80;
