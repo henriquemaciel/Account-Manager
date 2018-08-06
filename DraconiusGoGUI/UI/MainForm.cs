@@ -1370,7 +1370,7 @@ namespace DraconiusGoGUI
             enableEvolveToolStripMenuItem1.Checked = manager.UserSettings.EvolveCreature;
             enableRecycleToolStripMenuItem4.Checked = manager.UserSettings.RecycleItems;
             enableIncubateEggsToolStripMenuItem5.Checked = manager.UserSettings.IncubateEggs;
-            enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseCristal;
+            enableCristalsToolStripMenuItem6.Checked = manager.UserSettings.UseCristal;
             enableCatchCreatureToolStripMenuItem2.Checked = manager.UserSettings.CatchCreature;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
@@ -1464,11 +1464,11 @@ namespace DraconiusGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void EnableLuckyEggsToolStripMenuItem6_Click(object sender, EventArgs e)
+        private void EnableCristalsToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.UseCristal = !enableLuckyEggsToolStripMenuItem6.Checked;
+                manager.UserSettings.UseCristal = !enableCristalsToolStripMenuItem6.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
