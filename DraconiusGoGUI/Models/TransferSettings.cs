@@ -16,10 +16,10 @@ namespace DraconiusGoGUI.Models
         public TransferSetting()
         {
             Id = CreatureType.MONSTER_WATER_1;
-            Type = TransferType.KeepStrongestX;
+            Type = TransferType.KeepXHighestIV;
             KeepMax = 1;
             MinCP = 0;
-            IVPercent = 80;
+            IVPercent = 90;
         }
 
         public string Name { get; set; }

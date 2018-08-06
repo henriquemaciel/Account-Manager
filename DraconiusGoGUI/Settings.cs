@@ -178,8 +178,8 @@ namespace DraconiusGoGUI
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
             SearchBuildingBelowPercent = 1000;
-            CatchCreatureDayLimit = 1000;
-            SpinBuildingsDayLimit = 00;
+            CatchCreatureDayLimit = 700;
+            SpinBuildingsDayLimit = 1500;
             ForceEvolveAbovePercent = 1000;
             PercTransItems = 90;
             PercTransPoke = 40;

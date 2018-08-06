@@ -129,6 +129,7 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.olvColumncreadexIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPageDracoDex.SuspendLayout();
@@ -627,6 +628,7 @@
             // 
             // fastObjectListViewCreature
             // 
+            this.fastObjectListViewCreature.AllColumns.Add(this.olvColumncreadexIndex);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureId);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureGroup);
             this.fastObjectListViewCreature.AllColumns.Add(this.olvColumnCreatureName);
@@ -646,6 +648,7 @@
             this.fastObjectListViewCreature.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewCreature.CellEditUseWholeCell = false;
             this.fastObjectListViewCreature.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumncreadexIndex,
             this.olvColumnCreatureId,
             this.olvColumnCreatureGroup,
             this.olvColumnCreatureName,
@@ -682,7 +685,6 @@
             // olvColumnCreatureId
             // 
             this.olvColumnCreatureId.AspectName = "id";
-            this.olvColumnCreatureId.IsVisible = false;
             this.olvColumnCreatureId.Text = "Creature Id";
             // 
             // olvColumnCreatureGroup
@@ -1115,6 +1117,12 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
+            // olvColumncreadexIndex
+            // 
+            this.olvColumncreadexIndex.AspectName = "creadexIndex";
+            this.olvColumncreadexIndex.Text = "# id";
+            this.olvColumncreadexIndex.Width = 43;
+            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1251,5 +1259,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnDPSmain;
         private BrightIdeasSoftware.OLVColumn olvColumnDPS;
         private BrightIdeasSoftware.OLVColumn olvColumnCreatureLevel;
+        private BrightIdeasSoftware.OLVColumn olvColumncreadexIndex;
     }
 }
