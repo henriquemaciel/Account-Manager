@@ -610,7 +610,7 @@ namespace DraconiusGoGUI
             newAccount.UserSettings.Password = password.Trim();
 
             newAccount.UserSettings.AuthType = AuthType.DEVICE;
-            newAccount.UserSettings.MaxLevel = 30;
+            newAccount.UserSettings.MaxLevel = 50;
             newAccount.Level = 0;
             newAccount.ExpGained = 0;
             newAccount.BuildingsFarmed = 0;
@@ -2224,7 +2224,7 @@ namespace DraconiusGoGUI
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
                     manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
 
-                    manager.UserSettings.MaxLevel = 30;
+                    manager.UserSettings.MaxLevel = 50;
                     if (parts.Length > 3)
                         manager.UserSettings.MaxLevel = int.Parse(parts[4]);
 

@@ -736,7 +736,7 @@ namespace DraconiusGoGUI.DracoManager
                                         }
                                         catch (Exception ex)
                                         {
-                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: " + ex.Message, LoggerTypes.Warning));
+                                            LogCaller(new LoggerEventArgs("Faile going to the Roost. Result: ", LoggerTypes.Exception, ex));
                                             _client.DracoClient.LeaveDungeon(UserSettings.Latitude, UserSettings.Longitude, (float)UserSettings.HorizontalAccuracy);
                                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                                             continue;
@@ -1054,12 +1054,12 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            UpdateInventory(InventoryRefresh.All); //all inventory
+                            //UpdateInventory(InventoryRefresh.All); //all inventory
                         }
 
                         WaitPaused();
 
-                        UpdateInventory(InventoryRefresh.Stats);
+                        //UpdateInventory(InventoryRefresh.Stats);
 
                         ++BuildingNumber;
 
@@ -1116,6 +1116,7 @@ namespace DraconiusGoGUI.DracoManager
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                         }
+                        UpdateInventory(InventoryRefresh.All); //all inventory
                     }
                 }
                 catch (StackOverflowException ex)
