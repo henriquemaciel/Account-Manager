@@ -105,6 +105,7 @@ namespace DraconiusGoGUI.DracoManager
                     }
                 }
 
+                //TODO: evoleTo is allways same ... need review...
                 var totype = Creature.possibleEvolutions.Keys.FirstOrDefault();
                 var response = _client.DracoClient.Call(new UserCreatureService().EvolveCreature(Creature.id, totype));
 
