@@ -88,7 +88,7 @@ namespace DraconiusGoGUI.DracoManager
 
                 if (!CanEvolveCreature(Creature))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be upgrated maybe is deployed Creature or you not have needed resources.", Strings.GetCreatureName(Creature.name)), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this Creature cant not be evolued maybe is deployed Creature or you not have needed resources.", Strings.GetCreatureName(Creature.name)), LoggerTypes.Info));
                     continue;
                 }
 

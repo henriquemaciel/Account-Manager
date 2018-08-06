@@ -60,11 +60,11 @@ namespace DraconiusGoGUI.DracoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     //RemoveInventoryItem(GetCreatureHashKey(Creature.Id));
-                    //Creatures.Remove(Creature);
+                    Creatures.Remove(Creature);
 
-                    UpdateInventory(InventoryRefresh.CreatureCandy);
+                    //UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                    UpdateInventory(InventoryRefresh.Creature);
+                    //UpdateInventory(InventoryRefresh.Creature);
 
                     return new MethodResult
                     {
@@ -98,15 +98,13 @@ namespace DraconiusGoGUI.DracoManager
                 LogCaller(new LoggerEventArgs(String.Format("Successully transfer {0} Creatures.", CreatureToTransfer.Count()), LoggerTypes.Transfer));
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                /*
+               
                 foreach (var creat in CreatureToTransfer)
                     Creatures.Remove(creat);
-                */
+                
+                //UpdateInventory(InventoryRefresh.CreatureCandy);
 
-                UpdateInventory(InventoryRefresh.CreatureCandy);
-
-                UpdateInventory(InventoryRefresh.Creature);
+                //UpdateInventory(InventoryRefresh.Creature);
 
                 return new MethodResult
                 {
