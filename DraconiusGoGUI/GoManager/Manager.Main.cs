@@ -537,11 +537,14 @@ namespace DraconiusGoGUI.DracoManager
                                 {
                                     loggerTypes = LoggerTypes.Gym;
                                 }
-                                break;
+                                continue;
                             case BuildingType.STOP:
                                 _building = "Pillar of Abundance";
                                 break;
                             case BuildingType.OBELISK:
+                                if (!UserSettings.UseObelisks)
+                                    continue;
+
                                 _building = "Obelisk";
                                 break;
                             case BuildingType.ROOST:
@@ -558,7 +561,7 @@ namespace DraconiusGoGUI.DracoManager
                                 break;
                             case BuildingType.LIBRARY:
                                 _building = "Library";
-                                break;
+                                continue;
                             case BuildingType.DUNGEON_STOP:
                                 if (!UserSettings.UseDungeons)
                                 {
@@ -569,10 +572,10 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                                     
                                 _building = "Dungeon";
-                                break;
+                                continue;
                             default:
                                 _building = Building.type.ToString();
-                                break;
+                                continue;
                         }
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to a {0}. Building {1} of {2}. Distance {3:0.00}m", _building, BuildingNumber, totalStops, distance), loggerTypes));
@@ -759,28 +762,35 @@ namespace DraconiusGoGUI.DracoManager
                                 // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
                                 foreach (var chest in chestsResult.Data.ToArray())
                                 {
-                                    if (!DragonVisonActive)
+                                    MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
+                                    if (!walkToChestResult.Success)
                                     {
-                                        MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
-                                        if (!walkToChestResult.Success)
-                                        {
-                                            LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
-                                            RemoveChest(chest);
-                                            continue;
-                                        }
+                                        LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
+                                        continue;
                                     }
 
                                     // We need do the two things, start opening and open the chest
-                                    var openResult = _client.DracoClient.Call(new MapService().StartOpeningChest(chest)) as FOpenChestResult;
-                                    if (openResult == null )
-                                    {
-                                        continue;
-                                    }
-                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    FOpenChestResult openResult = null;
 
-                                    openResult = _client.DracoClient.Call(new MapService().OpenChestResult(chest)) as FOpenChestResult;
-                                    if (openResult == null || openResult.loot.lootList.Count == 0)
+                                    try
                                     {
+                                        openResult = _client.DracoClient.Call(new MapService().StartOpeningChest(chest)) as FOpenChestResult;
+                                        if (openResult == null)
+                                        {
+                                            continue;
+                                        }
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                                        openResult = _client.DracoClient.Call(new MapService().OpenChestResult(chest)) as FOpenChestResult;
+                                        if (openResult == null || openResult.loot.lootList.Count == 0)
+                                        {
+                                            continue;
+                                        }
+                                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        LogCaller(new LoggerEventArgs("Faile Opening Chest. Result: " + ex.Message, LoggerTypes.Warning));
                                         continue;
                                     }
 
@@ -794,7 +804,7 @@ namespace DraconiusGoGUI.DracoManager
                                     if (xpqty > 0)
                                     {
                                         text += $"[{xpqty}] XP, ";
-                                        ExpIncrease( xpqty);
+                                        ExpIncrease(xpqty);
                                     }
 
                                     LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
@@ -809,12 +819,19 @@ namespace DraconiusGoGUI.DracoManager
                                         if (xpqty > 0)
                                         {
                                             text += $"[{xpqty}] XP, ";
-                                            ExpIncrease( xpqty);
+                                            ExpIncrease(xpqty);
                                         }
                                         LogCaller(new LoggerEventArgs(text, LoggerTypes.Success));
                                     }
                                 }
-                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                            }
+                            else
+                            {
+                                if (currentFailedStops > 10)
+                                {
+                                    break;
+                                }
+                                ++currentFailedStops;
                             }
                         }
 

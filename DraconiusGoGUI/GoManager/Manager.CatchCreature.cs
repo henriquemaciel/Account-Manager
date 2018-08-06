@@ -226,6 +226,8 @@ namespace DraconiusGoGUI.DracoManager
 
                         ExpIncrease(expGained);
 
+                        _fleeingCreatureResponses = 0;
+
                         UpdateInventory(InventoryRefresh.CreatureCandy);
 
                         UpdateInventory(InventoryRefresh.Creature);
@@ -275,7 +277,20 @@ namespace DraconiusGoGUI.DracoManager
                 return new MethodResult<FCatchingCreature>();
             }
 
-            var eResponse = _client.DracoClient.Creatures.Encounter(mapCreature.id);
+            FCatchingCreature eResponse = null;
+            try
+            {
+                eResponse = _client.DracoClient.Creatures.Encounter(mapCreature.id);
+            }
+            catch (Exception ex)
+            {
+                _fleeingCreatureResponses++;
+                LogCaller(new LoggerEventArgs(String.Format("Failed to Encounter Creature {0}.", mapCreature.id), LoggerTypes.Warning, ex));
+                return new MethodResult<FCatchingCreature> { Message = ex.Message };
+            }
+
+            if (eResponse == null)
+                return new MethodResult<FCatchingCreature>();
 
             return new MethodResult<FCatchingCreature>
             {

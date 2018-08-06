@@ -53,7 +53,7 @@
             this.textBoxMaxLevel = new System.Windows.Forms.TextBox();
             this.label56 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
-            this.checkBoxReqBuildingDetails = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseObelisks = new System.Windows.Forms.CheckBox();
             this.numericUpDownStopsDayLimit = new System.Windows.Forms.NumericUpDown();
             this.label52 = new System.Windows.Forms.Label();
             this.numericUpDownCreaturesDayLimit = new System.Windows.Forms.NumericUpDown();
@@ -61,7 +61,6 @@
             this.label48 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.cbTeam = new System.Windows.Forms.ComboBox();
-            this.checkBoxUseDragonVisionConst = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
             this.checkBoxUseRoosts = new System.Windows.Forms.CheckBox();
             this.numericUpDownLvForConsLukky = new System.Windows.Forms.NumericUpDown();
@@ -79,6 +78,7 @@
             this.checkBoxUseDungeons = new System.Windows.Forms.CheckBox();
             this.checkBoxCatchCreature = new System.Windows.Forms.CheckBox();
             this.checkBoxUseBerries = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseDragonVisionConst = new System.Windows.Forms.CheckBox();
             this.numericUpDownForceEvolveAbove = new System.Windows.Forms.NumericUpDown();
             this.checkBoxTransfers = new System.Windows.Forms.CheckBox();
             this.label49 = new System.Windows.Forms.Label();
@@ -479,7 +479,6 @@
             this.tabPageActions.Controls.Add(this.textBoxMaxLevel);
             this.tabPageActions.Controls.Add(this.label56);
             this.tabPageActions.Controls.Add(this.label55);
-            this.tabPageActions.Controls.Add(this.checkBoxReqBuildingDetails);
             this.tabPageActions.Controls.Add(this.numericUpDownStopsDayLimit);
             this.tabPageActions.Controls.Add(this.label52);
             this.tabPageActions.Controls.Add(this.numericUpDownCreaturesDayLimit);
@@ -589,17 +588,16 @@
             this.label55.TabIndex = 83;
             this.label55.Text = "% Transfer Creatures:";
             // 
-            // checkBoxReqBuildingDetails
+            // checkBoxUseObelisks
             // 
-            this.checkBoxReqBuildingDetails.AutoSize = true;
-            this.checkBoxReqBuildingDetails.Enabled = false;
-            this.checkBoxReqBuildingDetails.Location = new System.Drawing.Point(331, 325);
-            this.checkBoxReqBuildingDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxReqBuildingDetails.Name = "checkBoxReqBuildingDetails";
-            this.checkBoxReqBuildingDetails.Size = new System.Drawing.Size(184, 21);
-            this.checkBoxReqBuildingDetails.TabIndex = 82;
-            this.checkBoxReqBuildingDetails.Text = "Request Building Details";
-            this.checkBoxReqBuildingDetails.UseVisualStyleBackColor = true;
+            this.checkBoxUseObelisks.AutoSize = true;
+            this.checkBoxUseObelisks.Location = new System.Drawing.Point(197, 201);
+            this.checkBoxUseObelisks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxUseObelisks.Name = "checkBoxUseObelisks";
+            this.checkBoxUseObelisks.Size = new System.Drawing.Size(87, 21);
+            this.checkBoxUseObelisks.TabIndex = 82;
+            this.checkBoxUseObelisks.Text = "Obelisk\'s";
+            this.checkBoxUseObelisks.UseVisualStyleBackColor = true;
             // 
             // numericUpDownStopsDayLimit
             // 
@@ -677,17 +675,6 @@
             this.cbTeam.TabIndex = 75;
             this.cbTeam.TextChanged += new System.EventHandler(this.CbTeam_TextChanged);
             // 
-            // checkBoxUseDragonVisionConst
-            // 
-            this.checkBoxUseDragonVisionConst.AutoSize = true;
-            this.checkBoxUseDragonVisionConst.Location = new System.Drawing.Point(15, 201);
-            this.checkBoxUseDragonVisionConst.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxUseDragonVisionConst.Name = "checkBoxUseDragonVisionConst";
-            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(189, 21);
-            this.checkBoxUseDragonVisionConst.TabIndex = 74;
-            this.checkBoxUseDragonVisionConst.Text = "Dragon Vision Constantly";
-            this.checkBoxUseDragonVisionConst.UseVisualStyleBackColor = true;
-            // 
             // groupBoxPlayerActions
             // 
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseRoosts);
@@ -698,6 +685,7 @@
             this.groupBoxPlayerActions.Controls.Add(this.label54);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxSniperNoInPokedex);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUpgradeCreatures);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseObelisks);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseIncense);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownDisableCatchDelay);
             this.groupBoxPlayerActions.Controls.Add(this.label16);
@@ -913,6 +901,17 @@
             this.checkBoxUseBerries.TabIndex = 72;
             this.checkBoxUseBerries.Text = "Use Berries";
             this.checkBoxUseBerries.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUseDragonVisionConst
+            // 
+            this.checkBoxUseDragonVisionConst.AutoSize = true;
+            this.checkBoxUseDragonVisionConst.Location = new System.Drawing.Point(15, 201);
+            this.checkBoxUseDragonVisionConst.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxUseDragonVisionConst.Name = "checkBoxUseDragonVisionConst";
+            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(189, 21);
+            this.checkBoxUseDragonVisionConst.TabIndex = 74;
+            this.checkBoxUseDragonVisionConst.Text = "Dragon Vision Constantly";
+            this.checkBoxUseDragonVisionConst.UseVisualStyleBackColor = true;
             // 
             // numericUpDownForceEvolveAbove
             // 
@@ -2652,7 +2651,7 @@
         private System.Windows.Forms.TextBox textBoxMaxLevel;
         private System.Windows.Forms.Label label56;
         private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.CheckBox checkBoxReqBuildingDetails;
+        private System.Windows.Forms.CheckBox checkBoxUseObelisks;
         private System.Windows.Forms.NumericUpDown numericUpDownStopsDayLimit;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.NumericUpDown numericUpDownCreaturesDayLimit;

@@ -16,6 +16,9 @@ namespace DraconiusGoGUI.DracoManager
             {
                 FUpdate response = _client.DracoClient.TryUseBuilding(UserSettings.Latitude, UserSettings.Longitude, Building.id, Building.coords.latitude, Building.coords.longitude, Building.dungeonId);
 
+                if (response == null)
+                    return new MethodResult<FUpdate>();
+
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 return new MethodResult<FUpdate>

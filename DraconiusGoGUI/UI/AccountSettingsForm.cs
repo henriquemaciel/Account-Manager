@@ -186,7 +186,7 @@ namespace DraconiusGoGUI.UI
 
             cbUseIncense.Checked = settings.UseIncense;
             cbUseLuckEggConst.Checked = settings.UseCristalConst;
-            checkBoxReqBuildingDetails.Checked = settings.RequestBuildingDetails;
+            checkBoxUseObelisks.Checked = settings.UseObelisks;
             checkBoxGetSpeedServer.Checked = settings.GetSpeedOfServer;
             checkBoxUseRoosts.Checked = settings.UseRoosts;
 
@@ -387,7 +387,7 @@ namespace DraconiusGoGUI.UI
             userSettings.MaxFailBeforeReset = (int)numericUpDownMaxFailBeforeReset.Value;
             userSettings.AutoRotateProxies = checkBoxAutoRotateProxies.Checked;
             userSettings.AutoRemoveOnStop = checkBoxRemoveOnStop.Checked;
-            userSettings.RequestBuildingDetails = checkBoxReqBuildingDetails.Checked;
+            userSettings.UseObelisks = checkBoxUseObelisks.Checked;
             userSettings.IgnoreStopsIfTooBalls = checkBoxTooBalls.Checked;
             userSettings.BallsToIgnoreStops = (int)numericUpDownTooBalls.Value;
             userSettings.MimicWalking = cbMimicWalking.Checked;

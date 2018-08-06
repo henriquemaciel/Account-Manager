@@ -108,7 +108,7 @@ namespace DraconiusGoGUI
         public bool TransferAtOnce { get; set; }
         public bool ShowDebugLogs { get; set; }
         public bool GetSpeedOfServer { get; set; }
-        public bool RequestBuildingDetails { get; set; }
+        public bool UseObelisks { get; set; }
         public int BallsToIgnoreStops { get; set; }
         public bool IgnoreStopsIfTooBalls { get; set; }
         public bool UseSoftBanBypass { get; set; }
@@ -199,7 +199,7 @@ namespace DraconiusGoGUI
             GoOnlyToGyms = false;
             SnipeAllCreaturesNoInPokedex = false;
             EncounterWhileWalking = true;
-            RequestBuildingDetails = false;
+            UseObelisks = false;
             BallsToIgnoreStops = 80;
             IgnoreStopsIfTooBalls = false;
             UseSoftBanBypass = true;
