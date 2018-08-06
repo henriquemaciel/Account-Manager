@@ -392,12 +392,7 @@ namespace DraconiusGoGUI.DracoManager
 
             if (data == null || data.count == 0)
             {
-                LogCaller(new LoggerEventArgs("Dragon Vision's left", LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Message = "Dragon Vision's"
-                };
+                return new MethodResult();
             }
 
             var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());

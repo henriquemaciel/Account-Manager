@@ -284,12 +284,7 @@ namespace DraconiusGoGUI.DracoManager
 
             if (data == null || data.count == 0)
             {
-                LogCaller(new LoggerEventArgs("Cristal's left", LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Message = "No Cristal's"
-                };
+                return new MethodResult();
             }
 
             var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
