@@ -840,9 +840,17 @@ namespace DraconiusGoGUI
             }
             else if (e.Column == olvColumnUsername)
             {
-                if (manager.CristalActive)
+                if (manager.CristalActive && !manager.DragonVisonActive)
                 {
                     e.SubItem.ForeColor = Color.Gold;
+                }
+                if (manager.DragonVisonActive && manager.CristalActive)
+                {
+                    e.SubItem.ForeColor = Color.Magenta;
+                }
+                if (manager.DragonVisonActive && !manager.CristalActive)
+                {
+                    e.SubItem.ForeColor = Color.Blue;
                 }
             }
             else if (e.Column == olvColumnExpPerHour)

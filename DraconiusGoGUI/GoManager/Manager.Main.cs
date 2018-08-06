@@ -762,11 +762,14 @@ namespace DraconiusGoGUI.DracoManager
                                 // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
                                 foreach (var chest in chestsResult.Data.ToArray())
                                 {
-                                    MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
-                                    if (!walkToChestResult.Success)
+                                    if (!DragonVisonActive)
                                     {
-                                        LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
-                                        continue;
+                                        MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
+                                        if (!walkToChestResult.Success)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
+                                            continue;
+                                        }
                                     }
 
                                     // We need do the two things, start opening and open the chest
@@ -1013,7 +1016,6 @@ namespace DraconiusGoGUI.DracoManager
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((BuildingNumber > 4 && BuildingNumber % 10 == 0) || BuildingNumber == 1))
                         {
-
                             if (UserSettings.EvolveCreature)
                             {
                                 MethodResult evolveResult = await EvolveFilteredCreature();
@@ -1054,12 +1056,12 @@ namespace DraconiusGoGUI.DracoManager
                                 }
                             }
 
-                            //UpdateInventory(InventoryRefresh.All); //all inventory
+                            UpdateInventory(InventoryRefresh.All); //all inventory
                         }
 
                         WaitPaused();
 
-                        //UpdateInventory(InventoryRefresh.Stats);
+                        UpdateInventory(InventoryRefresh.Stats);
 
                         ++BuildingNumber;
 
@@ -1116,7 +1118,7 @@ namespace DraconiusGoGUI.DracoManager
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                         }
-                        UpdateInventory(InventoryRefresh.All); //all inventory
+                        //UpdateInventory(InventoryRefresh.All); //all inventory
                     }
                 }
                 catch (StackOverflowException ex)
