@@ -183,6 +183,7 @@ namespace DraconiusGoGUI
             ForceEvolveAbovePercent = 1000;
             PercTransItems = 90;
             PercTransPoke = 40;
+            MaxLevel = 50;
             StopOnAPIUpdate = true;
             UseRoosts = true;
             SpinGyms = false;
