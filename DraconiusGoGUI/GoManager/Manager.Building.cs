@@ -38,6 +38,16 @@ namespace DraconiusGoGUI.DracoManager
         }
         private async Task<MethodResult> SearchBuilding(FBuilding Building)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             if (Building == null)
                 return new MethodResult();
 
@@ -45,26 +55,18 @@ namespace DraconiusGoGUI.DracoManager
             {
                 LogCaller(new LoggerEventArgs($"You bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
                 await RecycleFilteredItems();
-                return new MethodResult();
             }
 
             if (Stats.isEggBagFull)
             {
                 LogCaller(new LoggerEventArgs($"You Egg bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
                 await RecycleFilteredItems();
-                return new MethodResult();
             }
 
             if (Stats.isArtifactsBagFull)
             {
                 LogCaller(new LoggerEventArgs($"You Artifacts bag if full skip {Building.id}. Recycling...", LoggerTypes.Warning));
                 await RecycleFilteredItems();
-                return new MethodResult();
-            }
-
-            if (!_client.LoggedIn)
-            {
-                return new MethodResult();
             }
 
             if (Building.pitstop != null && Building.pitstop.cooldown)
