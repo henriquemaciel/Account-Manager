@@ -1257,11 +1257,11 @@ namespace DraconiusGoGUI
 
         #region Fast Settings
 
-        private void ClaimLevelUpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenChestsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.OpenChests = !claimLevelUpToolStripMenuItem.Checked;
+                manager.UserSettings.OpenChests = !OpenChestsToolStripMenuItem.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1374,7 +1374,7 @@ namespace DraconiusGoGUI
             enableCatchCreatureToolStripMenuItem2.Checked = manager.UserSettings.CatchCreature;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
-            claimLevelUpToolStripMenuItem.Checked = manager.UserSettings.OpenChests;
+            OpenChestsToolStripMenuItem.Checked = manager.UserSettings.OpenChests;
 
             //Remove all
             schedulerToolStripMenuItem.DropDownItems.Clear();

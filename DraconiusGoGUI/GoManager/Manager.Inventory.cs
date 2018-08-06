@@ -366,6 +366,51 @@ namespace DraconiusGoGUI.DracoManager
             return new MethodResult();
         }
 
+        private async Task<MethodResult> UseDragonVision()
+        {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
+            if (DragonVisonActive)
+            {
+                return new MethodResult
+                {
+                    Message = "Dragon Vision already active"
+                };
+            }
+
+            var data = Items.FirstOrDefault(x => x.type == ItemType.SUPER_VISION);
+
+            if (data == null || data.count == 0)
+            {
+                LogCaller(new LoggerEventArgs("Dragon Vision's left", LoggerTypes.Info));
+
+                return new MethodResult
+                {
+                    Message = "Dragon Vision's"
+                };
+            }
+
+            var response = _client.DracoClient.Call(new ItemService().UseExperienceBooster());
+
+            if (response == null)
+                return new MethodResult();
+
+            LogCaller(new LoggerEventArgs(String.Format("Dragon Vision used. Remaining: {0}", data.count - 1), LoggerTypes.Success));
+            UseDragonVisiondateTime = DateTime.Now.AddMinutes(30);
+
+            return new MethodResult
+            {
+                Success = true
+            };
+        }
         private async Task<MethodResult> UseIncense(ItemType item = ItemType.INCENSE)
         {
             if (!_client.LoggedIn)

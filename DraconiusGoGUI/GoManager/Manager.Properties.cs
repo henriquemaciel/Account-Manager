@@ -413,7 +413,7 @@ namespace DraconiusGoGUI.DracoManager
             }
         }
 
-        public DateTime UseCristaldateTime { get; set; }
+        public DateTime UseCristaldateTime { get; set; } = DateTime.Now;
 
         [JsonIgnore]
         public bool CristalActive
@@ -429,6 +429,24 @@ namespace DraconiusGoGUI.DracoManager
                     return false;
             }
         }
+
+        public DateTime UseDragonVisiondateTime { get; set; } = DateTime.Now;
+
+        [JsonIgnore]
+        public bool DragonVisonActive
+        {
+            get
+            {
+                if (_client.LoggedIn)
+                {
+                    if (UseDragonVisiondateTime >= DateTime.Now)
+                        return true;
+
+                }
+                return false;
+            }
+        }
+
 
         private Stopwatch _runningStopwatch = new Stopwatch();
 

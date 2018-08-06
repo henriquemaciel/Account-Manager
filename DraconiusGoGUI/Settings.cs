@@ -104,7 +104,7 @@ namespace DraconiusGoGUI
         public bool OnlyUnlimitedIncubator { get; set; }
         public bool ShuffleBuildings { get; set; }
         public bool UseDungeons { get; set; }
-        public bool CompleteTutorial { get; set; }
+        public bool UseDragonVisionConst { get; set; }
         public bool TransferAtOnce { get; set; }
         public bool ShowDebugLogs { get; set; }
         public bool GetSpeedOfServer { get; set; }
@@ -167,14 +167,13 @@ namespace DraconiusGoGUI
             EncounterWhileWalking = true;
             EnableHumanization = false;
             InsideReticuleChance = 100;
-            MinCreatureBeforeEvolve = 0;
+            MinCreatureBeforeEvolve = 1;
             StopAtMinAccountState = AccountState.Unknown;
-            GeneralDelay = 400;
-            DelayBetweenPlayerActions = 400;
+            GeneralDelay = 200;
+            DelayBetweenPlayerActions = 800;
             DelayBetweenLocationUpdates = 1000;
             EnableHumanization = true;
             GetSpeedOfServer = true;
-            GeneralDelay = 800;
             MaxLogs = 1000;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
@@ -203,14 +202,14 @@ namespace DraconiusGoGUI
             RequestBuildingDetails = false;
             BallsToIgnoreStops = 80;
             IgnoreStopsIfTooBalls = false;
-            MinCreatureBeforeEvolve = 1;
             UseSoftBanBypass = true;
             SoftBanBypassTimes = 40;
             LevelForConstCristal = 9;
             UseCristalConst = false;
+            UseDragonVisionConst = true;
             UseCristal = true;
             UseIncense = true;
-            UseDungeons = true;
+            UseDungeons = false;
             OpenChests = true;
             EnablePGPool = false;
             PGPoolEndpoint = "http://127.0.0.1:4242/";

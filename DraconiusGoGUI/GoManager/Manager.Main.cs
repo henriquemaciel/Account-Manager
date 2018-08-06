@@ -759,12 +759,15 @@ namespace DraconiusGoGUI.DracoManager
                                 // NOTE: this toArray() force a new list object, this is needed because the real list changes at remove an element and breaks the loop
                                 foreach (var chest in chestsResult.Data.ToArray())
                                 {
-                                    MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
-                                    if (!walkToChestResult.Success)
+                                    if (!DragonVisonActive)
                                     {
-                                        LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
-                                        RemoveChest(chest);
-                                        continue;
+                                        MethodResult walkToChestResult = await GoToLocation(new GeoCoordinate(chest.coords.latitude, chest.coords.longitude));
+                                        if (!walkToChestResult.Success)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Faile going to the Chest. Result: " + walkToChestResult.Message, LoggerTypes.Debug));
+                                            RemoveChest(chest);
+                                            continue;
+                                        }
                                     }
 
                                     // We need do the two things, start opening and open the chest
@@ -1065,9 +1068,15 @@ namespace DraconiusGoGUI.DracoManager
                             break;
                         }
 
-                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit && Tracker.BuildingsFarmed >= UserSettings.SpinBuildingsDayLimit)
+                        if (Tracker.CreatureCaught >= UserSettings.CatchCreatureDayLimit)
                         {
-                            LogCaller(new LoggerEventArgs("Daily limits reached. Stoping ...", LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs("Daily limits catching reached. Stoping ...", LoggerTypes.Warning));
+                            Stop();
+                        }
+
+                        if (Tracker.BuildingsFarmed >= UserSettings.SpinBuildingsDayLimit)
+                        {
+                            LogCaller(new LoggerEventArgs("Daily limits buildings reached. Stoping ...", LoggerTypes.Warning));
                             Stop();
                         }
 
@@ -1076,6 +1085,16 @@ namespace DraconiusGoGUI.DracoManager
                             MethodResult cristalResult = await UseCristal();
 
                             if (cristalResult.Success)
+                            {
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                            }
+                        }
+                       
+                        if (UserSettings.UseDragonVisionConst && IsRunning)
+                        {
+                            MethodResult dragonvisionResult = await UseDragonVision();
+
+                            if (dragonvisionResult.Success)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }

@@ -61,8 +61,9 @@
             this.label48 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.cbTeam = new System.Windows.Forms.ComboBox();
-            this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseDragonVisionConst = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
+            this.checkBoxUseRoosts = new System.Windows.Forms.CheckBox();
             this.numericUpDownLvForConsLukky = new System.Windows.Forms.NumericUpDown();
             this.cbUseLuckEggConst = new System.Windows.Forms.CheckBox();
             this.checkBoxTooBalls = new System.Windows.Forms.CheckBox();
@@ -233,7 +234,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxUseRoosts = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -487,7 +487,6 @@
             this.tabPageActions.Controls.Add(this.label48);
             this.tabPageActions.Controls.Add(this.label47);
             this.tabPageActions.Controls.Add(this.cbTeam);
-            this.tabPageActions.Controls.Add(this.checkBoxCompleteTutorial);
             this.tabPageActions.Controls.Add(this.groupBoxPlayerActions);
             this.tabPageActions.Controls.Add(this.comboBoxMinAccountState);
             this.tabPageActions.Controls.Add(this.numericUpDownRunForHours);
@@ -594,7 +593,7 @@
             // 
             this.checkBoxReqBuildingDetails.AutoSize = true;
             this.checkBoxReqBuildingDetails.Enabled = false;
-            this.checkBoxReqBuildingDetails.Location = new System.Drawing.Point(460, 325);
+            this.checkBoxReqBuildingDetails.Location = new System.Drawing.Point(331, 325);
             this.checkBoxReqBuildingDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxReqBuildingDetails.Name = "checkBoxReqBuildingDetails";
             this.checkBoxReqBuildingDetails.Size = new System.Drawing.Size(184, 21);
@@ -678,17 +677,16 @@
             this.cbTeam.TabIndex = 75;
             this.cbTeam.TextChanged += new System.EventHandler(this.CbTeam_TextChanged);
             // 
-            // checkBoxCompleteTutorial
+            // checkBoxUseDragonVisionConst
             // 
-            this.checkBoxCompleteTutorial.AutoSize = true;
-            this.checkBoxCompleteTutorial.Enabled = false;
-            this.checkBoxCompleteTutorial.Location = new System.Drawing.Point(460, 299);
-            this.checkBoxCompleteTutorial.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxCompleteTutorial.Name = "checkBoxCompleteTutorial";
-            this.checkBoxCompleteTutorial.Size = new System.Drawing.Size(141, 21);
-            this.checkBoxCompleteTutorial.TabIndex = 74;
-            this.checkBoxCompleteTutorial.Text = "Complete Tutorial";
-            this.checkBoxCompleteTutorial.UseVisualStyleBackColor = true;
+            this.checkBoxUseDragonVisionConst.AutoSize = true;
+            this.checkBoxUseDragonVisionConst.Location = new System.Drawing.Point(15, 201);
+            this.checkBoxUseDragonVisionConst.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxUseDragonVisionConst.Name = "checkBoxUseDragonVisionConst";
+            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(189, 21);
+            this.checkBoxUseDragonVisionConst.TabIndex = 74;
+            this.checkBoxUseDragonVisionConst.Text = "Dragon Vision Constantly";
+            this.checkBoxUseDragonVisionConst.UseVisualStyleBackColor = true;
             // 
             // groupBoxPlayerActions
             // 
@@ -708,6 +706,7 @@
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseDungeons);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxCatchCreature);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseBerries);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseDragonVisionConst);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownForceEvolveAbove);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransfers);
             this.groupBoxPlayerActions.Controls.Add(this.label49);
@@ -728,6 +727,16 @@
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
+            // 
+            // checkBoxUseRoosts
+            // 
+            this.checkBoxUseRoosts.AutoSize = true;
+            this.checkBoxUseRoosts.Location = new System.Drawing.Point(197, 176);
+            this.checkBoxUseRoosts.Name = "checkBoxUseRoosts";
+            this.checkBoxUseRoosts.Size = new System.Drawing.Size(106, 21);
+            this.checkBoxUseRoosts.TabIndex = 90;
+            this.checkBoxUseRoosts.Text = "Use Roost\'s";
+            this.checkBoxUseRoosts.UseVisualStyleBackColor = true;
             // 
             // numericUpDownLvForConsLukky
             // 
@@ -2480,16 +2489,6 @@
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
             // 
-            // checkBoxUseRoosts
-            // 
-            this.checkBoxUseRoosts.AutoSize = true;
-            this.checkBoxUseRoosts.Location = new System.Drawing.Point(197, 176);
-            this.checkBoxUseRoosts.Name = "checkBoxUseRoosts";
-            this.checkBoxUseRoosts.Size = new System.Drawing.Size(106, 21);
-            this.checkBoxUseRoosts.TabIndex = 90;
-            this.checkBoxUseRoosts.Text = "Use Roost\'s";
-            this.checkBoxUseRoosts.UseVisualStyleBackColor = true;
-            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2661,7 +2660,7 @@
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.ComboBox cbTeam;
-        private System.Windows.Forms.CheckBox checkBoxCompleteTutorial;
+        private System.Windows.Forms.CheckBox checkBoxUseDragonVisionConst;
         private System.Windows.Forms.GroupBox groupBoxPlayerActions;
         private System.Windows.Forms.NumericUpDown numericUpDownLvForConsLukky;
         private System.Windows.Forms.CheckBox cbUseLuckEggConst;

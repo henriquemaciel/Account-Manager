@@ -160,14 +160,19 @@ namespace DraconiusGoGUI.UI
             numericUpDownDelayBetweenLocationUpdates.Value = new Decimal(settings.DelayBetweenLocationUpdates);
             numericUpDownLocationupdateDelayRandom.Value = new Decimal(settings.LocationupdateDelayRandom);
 
+
             if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
             {
+                /*
+                 * not released yet
+                 * 
                 checkBoxSpinGyms.Enabled = true;
                 checkBoxSpinGyms.Checked = settings.SpinGyms;
                 checkBoxDeployToGym.Enabled = true;
                 checkBoxDeployToGym.Checked = settings.DeployCreature;
                 checkBoxGoToGymsOnly.Enabled = true;
                 checkBoxGoToGymsOnly.Checked = settings.GoOnlyToGyms;
+                */
             }
             else
             {
@@ -207,7 +212,7 @@ namespace DraconiusGoGUI.UI
 
             checkBoxUseBerries.Checked = settings.UseBerries;
             checkBoxUseDungeons.Checked = settings.UseDungeons;
-            checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
+            checkBoxUseDragonVisionConst.Checked = settings.UseDragonVisionConst;
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
             checkBoxUpgradeCreatures.Checked = settings.UpgradeCreature;
             cbAutoUpdate.Checked = AutoUpdate;
@@ -404,7 +409,7 @@ namespace DraconiusGoGUI.UI
             //End device settings
 
             userSettings.UseDungeons = checkBoxUseDungeons.Checked;
-            userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
+            userSettings.UseDragonVisionConst = checkBoxUseDragonVisionConst.Checked;
             userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
             userSettings.GetSpeedOfServer = checkBoxGetSpeedServer.Checked;
 
@@ -890,9 +895,13 @@ namespace DraconiusGoGUI.UI
         {
             if (cbTeam.SelectedItem.ToString() != "Neutral")
             {
+                /*
+                 * not release yet
+                 * 
                 checkBoxSpinGyms.Enabled = true;
                 checkBoxDeployToGym.Enabled = true;
                 checkBoxGoToGymsOnly.Enabled = true;
+                */
             }
             else
             {
