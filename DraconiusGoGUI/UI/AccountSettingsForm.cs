@@ -189,6 +189,8 @@ namespace DraconiusGoGUI.UI
             checkBoxUseObelisks.Checked = settings.UseObelisks;
             checkBoxGetSpeedServer.Checked = settings.GetSpeedOfServer;
             checkBoxUseRoosts.Checked = settings.UseRoosts;
+            checkBoxPGPool.Checked = settings.EnablePGPool;
+            textBoxUrlPGPool.Text = settings.PGPoolEndpoint;
 
             numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
 
@@ -394,6 +396,8 @@ namespace DraconiusGoGUI.UI
             userSettings.ShowDebugLogs = checkBoxDevLogs.Checked;
             userSettings.EnableHumanization = checkBoxHumanise.Checked;
             userSettings.UseRoosts = checkBoxUseRoosts.Checked;
+            userSettings.EnablePGPool = checkBoxPGPool.Checked;
+            userSettings.PGPoolEndpoint = textBoxUrlPGPool.Text;
 
             userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
 

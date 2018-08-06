@@ -53,7 +53,6 @@
             this.textBoxMaxLevel = new System.Windows.Forms.TextBox();
             this.label56 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
-            this.checkBoxUseObelisks = new System.Windows.Forms.CheckBox();
             this.numericUpDownStopsDayLimit = new System.Windows.Forms.NumericUpDown();
             this.label52 = new System.Windows.Forms.Label();
             this.numericUpDownCreaturesDayLimit = new System.Windows.Forms.NumericUpDown();
@@ -70,6 +69,7 @@
             this.label54 = new System.Windows.Forms.Label();
             this.checkBoxSniperNoInPokedex = new System.Windows.Forms.CheckBox();
             this.checkBoxUpgradeCreatures = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseObelisks = new System.Windows.Forms.CheckBox();
             this.cbUseIncense = new System.Windows.Forms.CheckBox();
             this.numericUpDownDisableCatchDelay = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
@@ -234,6 +234,8 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxPGPool = new System.Windows.Forms.CheckBox();
+            this.textBoxUrlPGPool = new System.Windows.Forms.TextBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -333,6 +335,8 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.textBoxUrlPGPool);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxPGPool);
             this.tabPageSettingsGeneral.Controls.Add(this.cbAutoUpdate);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxMinimizeToTray);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxDevLogs);
@@ -588,17 +592,6 @@
             this.label55.TabIndex = 83;
             this.label55.Text = "% Transfer Creatures:";
             // 
-            // checkBoxUseObelisks
-            // 
-            this.checkBoxUseObelisks.AutoSize = true;
-            this.checkBoxUseObelisks.Location = new System.Drawing.Point(197, 201);
-            this.checkBoxUseObelisks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxUseObelisks.Name = "checkBoxUseObelisks";
-            this.checkBoxUseObelisks.Size = new System.Drawing.Size(87, 21);
-            this.checkBoxUseObelisks.TabIndex = 82;
-            this.checkBoxUseObelisks.Text = "Obelisk\'s";
-            this.checkBoxUseObelisks.UseVisualStyleBackColor = true;
-            // 
             // numericUpDownStopsDayLimit
             // 
             this.numericUpDownStopsDayLimit.Location = new System.Drawing.Point(513, 270);
@@ -815,6 +808,17 @@
             this.checkBoxUpgradeCreatures.Text = "Upgrade Creatures";
             this.checkBoxUpgradeCreatures.UseVisualStyleBackColor = true;
             // 
+            // checkBoxUseObelisks
+            // 
+            this.checkBoxUseObelisks.AutoSize = true;
+            this.checkBoxUseObelisks.Location = new System.Drawing.Point(197, 201);
+            this.checkBoxUseObelisks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxUseObelisks.Name = "checkBoxUseObelisks";
+            this.checkBoxUseObelisks.Size = new System.Drawing.Size(87, 21);
+            this.checkBoxUseObelisks.TabIndex = 82;
+            this.checkBoxUseObelisks.Text = "Obelisk\'s";
+            this.checkBoxUseObelisks.UseVisualStyleBackColor = true;
+            // 
             // cbUseIncense
             // 
             this.cbUseIncense.AutoSize = true;
@@ -908,9 +912,9 @@
             this.checkBoxUseDragonVisionConst.Location = new System.Drawing.Point(15, 201);
             this.checkBoxUseDragonVisionConst.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseDragonVisionConst.Name = "checkBoxUseDragonVisionConst";
-            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(189, 21);
+            this.checkBoxUseDragonVisionConst.Size = new System.Drawing.Size(185, 21);
             this.checkBoxUseDragonVisionConst.TabIndex = 74;
-            this.checkBoxUseDragonVisionConst.Text = "Dragon Vision Constantly";
+            this.checkBoxUseDragonVisionConst.Text = "DragonVision Constantly";
             this.checkBoxUseDragonVisionConst.UseVisualStyleBackColor = true;
             // 
             // numericUpDownForceEvolveAbove
@@ -2488,6 +2492,23 @@
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
             // 
+            // checkBoxPGPool
+            // 
+            this.checkBoxPGPool.AutoSize = true;
+            this.checkBoxPGPool.Location = new System.Drawing.Point(28, 197);
+            this.checkBoxPGPool.Name = "checkBoxPGPool";
+            this.checkBoxPGPool.Size = new System.Drawing.Size(126, 21);
+            this.checkBoxPGPool.TabIndex = 73;
+            this.checkBoxPGPool.Text = "Enable PGPool";
+            this.checkBoxPGPool.UseVisualStyleBackColor = true;
+            // 
+            // textBoxUrlPGPool
+            // 
+            this.textBoxUrlPGPool.Location = new System.Drawing.Point(187, 195);
+            this.textBoxUrlPGPool.Name = "textBoxUrlPGPool";
+            this.textBoxUrlPGPool.Size = new System.Drawing.Size(360, 22);
+            this.textBoxUrlPGPool.TabIndex = 74;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2763,5 +2784,7 @@
         private System.Windows.Forms.CheckBox checkBoxMinimizeToTray;
         private System.Windows.Forms.CheckBox cbAutoUpdate;
         private System.Windows.Forms.CheckBox checkBoxUseRoosts;
+        private System.Windows.Forms.CheckBox checkBoxPGPool;
+        private System.Windows.Forms.TextBox textBoxUrlPGPool;
     }
 }
