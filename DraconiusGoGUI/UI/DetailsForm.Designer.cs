@@ -76,6 +76,7 @@
             this.olvColumnCreatureCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPageCreature = new System.Windows.Forms.TabPage();
             this.fastObjectListViewCreature = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumncreadexIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCreatureName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -129,7 +130,6 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.olvColumncreadexIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPageDracoDex.SuspendLayout();
@@ -682,6 +682,12 @@
             this.fastObjectListViewCreature.VirtualMode = true;
             this.fastObjectListViewCreature.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewCreature_FormatCell);
             // 
+            // olvColumncreadexIndex
+            // 
+            this.olvColumncreadexIndex.AspectName = "creadexIndex";
+            this.olvColumncreadexIndex.Text = "# id";
+            this.olvColumncreadexIndex.Width = 43;
+            // 
             // olvColumnCreatureId
             // 
             this.olvColumnCreatureId.AspectName = "id";
@@ -1011,7 +1017,7 @@
             // 
             // olvColumnCandyFamily
             // 
-            this.olvColumnCandyFamily.AspectName = "candyType";
+            this.olvColumnCandyFamily.AspectName = "";
             this.olvColumnCandyFamily.Text = "Candy Type";
             this.olvColumnCandyFamily.Width = 212;
             // 
@@ -1116,12 +1122,6 @@
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(186, 24);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
-            // 
-            // olvColumncreadexIndex
-            // 
-            this.olvColumncreadexIndex.AspectName = "creadexIndex";
-            this.olvColumncreadexIndex.Text = "# id";
-            this.olvColumncreadexIndex.Width = 43;
             // 
             // DetailsForm
             // 
